@@ -5,7 +5,7 @@ import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon, iconOptions } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
-import { BRAND, addressLine } from '../brand-config.js';
+import { BRAND, contactLine } from '../brand-config.js';
 
 export default {
   id:'aushang',
@@ -60,23 +60,23 @@ export default {
   ],
 
   defaults:{
-    eyebrow:'Schön, sind Sie da',
-    title:'Gut zu wissen',
-    sub:'Das Wichtigste für Ihren Aufenthalt · Good to know during your stay',
+    eyebrow:'Herzlich willkommen',
+    title:'WLAN und Aufenthalt',
+    sub:'Alles Wichtige auf einen Blick · Everything at a glance',
     img:'', imgHoehe:0,
-    introDe:'Damit Sie sich rundum wohlfühlen, haben wir das Wichtigste kurz zusammengefasst. Bei Fragen ist die Rezeption jederzeit für Sie da.',
-    introEn:'To help you settle in, here is everything you need at a glance. If anything is unclear, reception is always happy to help.',
+    introDe:'Schön, dass Sie bei uns sind. Hier finden Sie das Wichtigste für Ihren Aufenthalt. Bei Fragen erreichen Sie uns jederzeit über die Rezeptionstaste am Telefon.',
+    introEn:'Welcome! Here you will find the essentials for your stay. For any questions, reach us anytime via the reception button on the phone.',
     rows:[
-      { icon:'wifi',  de:'WLAN · Netzwerk', en:'Wi-Fi network', val:'NsHotel-Gast' },
-      { icon:'key',   de:'WLAN · Passwort', en:'Wi-Fi password', val:'kerzers2024' },
-      { icon:'cup',   de:'Frühstück im Restaurant', en:'Breakfast in the restaurant', val:'07.00 – 10.00' },
-      { icon:'clock', de:'Check-out', en:'Check-out', val:'bis 11.00' },
+      { icon:'wifi',  de:'WLAN', en:'Wi-Fi network', val:'NsHotel-Gast' },
+      { icon:'key',   de:'Passwort', en:'Password', val:'willkommen' },
+      { icon:'clock', de:'Check-out', en:'until 11:00', val:'11:00' },
+      { icon:'cup',   de:'Frühstück', en:'Breakfast 07:30 – 10:00', val:'07:30' },
       { icon:'phone', de:'Rezeption vom Zimmer aus', en:'Reception from your room', val:'Taste 1' },
       { icon:'smoke', de:'Rauchen nur im Aussenbereich', en:'Smoking outside only', val:'' }
     ],
-    noteDe:'Wir wünschen Ihnen einen angenehmen Aufenthalt.',
-    noteEn:'We wish you a pleasant stay.',
-    footer: addressLine() + ' · ' + BRAND.phone + ' · ' + BRAND.web
+    noteDe:'Schön, dass Sie da sind — wir wünschen Ihnen einen angenehmen Aufenthalt.',
+    noteEn:'We are glad you are here and wish you a pleasant stay.',
+    footer: contactLine()
   },
 
   render(d){

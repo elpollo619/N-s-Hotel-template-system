@@ -5,7 +5,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo, pin } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumbLand } from '../lib/thumbs.js';
-import { BRAND, addressLine } from '../brand-config.js';
+import { BRAND, contactLine } from '../brand-config.js';
 
 function marker(kind, x, y, label){
   return `<div class="t-luft-pin" style="left:${x}%;top:${y}%">
@@ -64,7 +64,7 @@ export default {
     title:'Anfahrt und Parken',
     sub:'Luftbild mit Eingang und Gästeparkplatz · Aerial view with entrance and guest parking',
     adresse: BRAND.street + ', ' + BRAND.zip + ' ' + BRAND.city,
-    footer: addressLine() + ' · ' + BRAND.phone
+    footer: contactLine()
   },
 
   render(d){

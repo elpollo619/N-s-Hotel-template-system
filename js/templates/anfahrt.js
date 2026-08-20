@@ -5,7 +5,7 @@ import { logo } from '../lib/brand.js';
 import { icon, iconOptions } from '../lib/icons.js';
 import { siteMap } from '../lib/sitemap.js';
 import { thumbLand } from '../lib/thumbs.js';
-import { BRAND, addressLine } from '../brand-config.js';
+import { BRAND, contactLine } from '../brand-config.js';
 
 export default {
   id:'anfahrt-karte',
@@ -74,7 +74,7 @@ export default {
     strasseH:'Bahnhofstrasse', strasseV:'Seelandstrasse',
     hotel:"N's Hotel", parkplatz:'Gästeparkplatz', publik:'Öffentliches Parking',
     showPublik:'ja',
-    footer: addressLine() + ' · ' + BRAND.phone + ' · ' + BRAND.web
+    footer: contactLine()
   },
 
   render(d){

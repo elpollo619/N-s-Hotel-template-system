@@ -23,7 +23,12 @@ const P = {
   arrowR:  '<path d="M4 12h15.4"/><path d="m13.6 6.2 5.8 5.8-5.8 5.8"/>',
   check:   '<path d="m4.6 12.6 4.8 4.8L19.4 7.4"/>',
   warn:    '<path d="M12 3.6 21.4 20H2.6Z"/><path d="M12 10v4.4M12 17.4h.01"/>',
-  globe:   '<circle cx="12" cy="12" r="9"/><path d="M3.2 12h17.6"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/>'
+  globe:   '<circle cx="12" cy="12" r="9"/><path d="M3.2 12h17.6"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/>',
+  // Aus der Referenz-Umsetzung übernommen (Notruf-Aushang v6)
+  reception:'<path d="M4 18h16"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8V6"/><path d="M10 6h4"/>',
+  shield:   '<path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3Z"/>',
+  fire:     '<path d="M12 2c1 3-1 5-1 5s3 1 3 5a4 4 0 0 1-8 0c0-2 1-3 1-3s-1 4 2 4c2 0 2-2 1-4 2 1 4 4 4 7a6 6 0 0 1-12 0C5 12 12 8 12 2Z"/>',
+  ambulance:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/>'
 };
 
 export const ICON_KEYS = Object.keys(P);
@@ -43,7 +48,8 @@ export function iconOptions(){
     cup:'Frühstück', car:'Auto', walk:'zu Fuss', door:'Tür', stairs:'Treppe', lift:'Lift',
     parking:'Parkplatz', flag:'Fahne', tv:'TV', remote:'Fernbedienung', plug:'Steckdose',
     luggage:'Gepäck', mail:'Post', smoke:'Rauchen', arrowR:'Pfeil', check:'Haken',
-    warn:'Achtung', globe:'Sprache'
+    warn:'Achtung', globe:'Sprache', reception:'Rezeption', shield:'Polizei',
+    fire:'Feuerwehr', ambulance:'Ambulanz'
   };
   return ICON_KEYS.map(k => ({ v:k, t:label[k] || k }));
 }

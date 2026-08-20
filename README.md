@@ -36,7 +36,7 @@ Nützlich zu wissen:
 
 | Vorlage | Format | Wofür |
 |---|---|---|
-| **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon, mit Telefon-Zeichnung und Notrufnummern |
+| **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
@@ -52,8 +52,10 @@ Noch offen (Phase 3 des Briefings): interaktiver **Plan-Editor**,
 
 ## Marke
 
-Farben und Schriften kommen unverändert aus `parking.css` beziehungsweise dem
-Handbuch und stehen in `assets/brand-tokens.css`:
+Farben und Schriften kommen unverändert aus `parking.css` und stehen in
+`assets/brand-tokens.css`. Alle fünfzehn Farbwerte und die drei Schriftfamilien
+wurden gegen die echte Datei aus dem Google-Drive-Ordner
+«carteles Ns Hotel» abgeglichen — sie stimmen zeichengenau überein:
 
 * Navy `#2A3350` · Cyan `#01B1E2` · Grün `#1F9D57` · Fussweg `#12A150`
 * Gebäude `#B7D900` · Parkplatz aussen `#E5387E` · öffentliches Parking `#8E44EF`
@@ -89,8 +91,11 @@ npm run build
 Solange die Dateien fehlen, zeichnet die App eine saubere Platzhalter-Wortmarke
 — es entstehen **keine** Fehler in der Konsole.
 
-Stammdaten (Adresse, Telefon, Web) stehen zentral in `js/brand-config.js`;
-alle Vorlagen greifen darauf zu.
+Stammdaten stehen zentral in `js/brand-config.js`; alle Vorlagen greifen darauf zu.
+Die Adresse ist hinterlegt (Allmendstrasse 14, 3210 Kerzers), **Telefon, Mail und
+Web sind absichtlich leer** — erfundene Kontaktdaten gehören nicht auf einen
+Aushang. Sobald die echten Angaben dort eingetragen sind, erscheinen sie
+automatisch in allen Fusszeilen.
 
 ---
 
@@ -210,13 +215,18 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
 * La app está terminada y probada: **8 plantillas** (Fase 1 y Fase 2 del brief).
 * El equipo entra por un enlace, edita textos y exporta **PDF** o **PNG**.
   Sin login, sin backend; los borradores se guardan en el navegador de cada uno.
-* **Las fuentes Gotham/Caflisch y los logos reales no estaban en este entorno**
-  (viven en `H:\Meine Ablage\...`). Van como "drop-in": copia los ficheros a
-  `assets/fonts/` y `assets/brand/`, ejecuta `npm run fonts` y `npm run assets`,
+* Desde tu carpeta de Drive «carteles Ns Hotel» ya se incorporaron: el **SVG
+  exacto del teléfono v6**, los **tokens verificados** contra el `parking.css`
+  real, la **dirección correcta** (Allmendstrasse 14) y la **marca dibujada**
+  (pin teardrop + N's Hotel) de la implementación de referencia.
+* **Siguen faltando las fuentes Gotham/Caflisch y los logos reales**: las
+  carpetas `assets/fonts/` y `assets/brand/` de Drive están vacías. Van como
+  "drop-in": copia los ficheros, ejecuta `npm run fonts` y `npm run assets`,
   y toda la app cambia sola. Mientras tanto usa el respaldo previsto en el
-  manual (Montserrat + Dancing Script) y una marca dibujada en SVG.
-* Igual pasa con el **SVG exacto del teléfono v6** y la **foto aérea**: el
-  teléfono está redibujado en el mismo estilo, y el luftbild acepta la foto
+  manual (Montserrat + Dancing Script).
+* **Falta la foto aérea** `aerial-site.png`: la plantilla Luftbild la acepta
   subiéndola desde el editor.
+* **Teléfono, mail y web están vacíos** a propósito en `js/brand-config.js`.
+  Rellénalos y aparecen solos en todos los pies de página.
 * Falta la **Fase 3** del brief (Plan-Editor interactivo, Gästemappe, Reels).
   Necesita los ficheros originales `mapeditor.js` y las plantillas HTML.

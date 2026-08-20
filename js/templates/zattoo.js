@@ -4,7 +4,7 @@ import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
-import { BRAND, addressLine } from '../brand-config.js';
+import { BRAND, contactLine } from '../brand-config.js';
 
 function tvSvg(){
   return `<svg class="t-zattoo-tv" viewBox="0 0 360 220" role="img" aria-label="Fernseher mit Fernbedienung">
@@ -79,7 +79,7 @@ export default {
     tippEn:'The television always starts on the channel you watched last. If the screen stays black, switch the set off and on again.',
     sprachen:'Sender in Deutsch, Französisch, Italienisch und Englisch',
     hilfe:'Fragen? Die Rezeption hilft gerne weiter · Questions? Reception is happy to help',
-    footer: addressLine() + ' · ' + BRAND.phone
+    footer: contactLine()
   },
 
   render(d){

@@ -15,16 +15,26 @@ export const BRAND = {
 
   name:    "N's Hotel",
   company: "Hans Amonn AG",
-  street:  "Bahnhofstrasse 20",
+  street:  "Allmendstrasse 14",
   zip:     "3210",
   city:    "Kerzers",
   country: "Schweiz",
-  phone:   "+41 31 750 50 50",
-  mail:    "info@ns-hotel.ch",
-  web:     "www.ns-hotel.ch"
+
+  // Bewusst leer: erfundene Kontaktdaten dürfen nicht auf einen Aushang.
+  // Hier die echten Angaben eintragen — sie erscheinen dann in allen Fusszeilen.
+  phone:   "",
+  mail:    "",
+  web:     ""
 };
 
 /** Einzeilige Adresse für Fusszeilen. */
 export function addressLine(){
   return `${BRAND.name} · ${BRAND.street} · ${BRAND.zip} ${BRAND.city}`;
+}
+
+/** Adresse plus die Kontaktangaben, die wirklich hinterlegt sind. */
+export function contactLine(){
+  return [addressLine(), BRAND.phone, BRAND.mail, BRAND.web]
+    .filter(x => x && String(x).trim())
+    .join(' · ');
 }

@@ -5,7 +5,7 @@ import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { siteMap } from '../lib/sitemap.js';
 import { thumb } from '../lib/thumbs.js';
-import { BRAND, addressLine } from '../brand-config.js';
+import { BRAND, contactLine } from '../brand-config.js';
 
 export default {
   id:'parkplatz',
@@ -80,7 +80,7 @@ export default {
     textEn:'Our guest parking spaces are marked in pink and are free of charge throughout your stay. Please place the parking card from reception clearly visible behind your windscreen.',
     textFr:'Nos places pour les hôtes sont marquées en rose et sont gratuites pendant tout votre séjour. Merci de placer la carte de parking de la réception derrière le pare-brise.',
     textIt:'I nostri posteggi per gli ospiti sono segnati in rosa e sono gratuiti per tutto il soggiorno. Vi preghiamo di esporre la carta di parcheggio della reception dietro il parabrezza.',
-    footer: addressLine() + ' · ' + BRAND.phone
+    footer: contactLine()
   },
 
   render(d){

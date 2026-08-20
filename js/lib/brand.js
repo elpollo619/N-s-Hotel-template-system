@@ -16,21 +16,25 @@ export function logo(variant = 'color', height = 34){
   return wordmark(variant, height);
 }
 
-/** Inline-Wortmarke als Fallback: Mark + "N's Hotel". */
+/**
+ * Inline-Wortmarke als Fallback — übernommen aus der Referenz-Umsetzung:
+ * Teardrop-Pin mit dem N's-Mark, daneben "N's" in Navy und "Hotel" in Cyan.
+ */
 export function wordmark(variant = 'color', height = 34){
-  const ink  = variant === 'white' ? '#FFFFFF' : 'var(--navy)';
-  const acc  = variant === 'white' ? '#FFFFFF' : 'var(--cyan)';
-  const chip = variant === 'white' ? 'rgba(255,255,255,.16)' : 'var(--navy)';
-  const chipTxt = variant === 'white' ? '#FFFFFF' : '#FFFFFF';
-  return `<svg class="ns-logo" viewBox="0 0 210 48" height="${height}" role="img"
+  const navy = variant === 'white' ? '#FFFFFF' : '#2A3350';
+  const cyan = variant === 'white' ? '#FFFFFF' : '#01B1E2';
+  return `<svg class="ns-logo" viewBox="0 0 300 92" height="${height}" role="img"
       aria-label="${esc(BRAND.name)}" style="display:block;width:auto">
-    <rect x="0" y="2" width="44" height="44" rx="11" style="fill:${chip}"/>
-    <text x="22" y="33" text-anchor="middle"
-      style="fill:${chipTxt};font-family:var(--font-display);font-weight:700;font-size:19px">N's</text>
-    <text x="55" y="27"
-      style="fill:${ink};font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:.01em">N's Hotel</text>
-    <text x="56" y="41"
-      style="fill:${acc};font-family:var(--font-body);font-weight:600;font-size:10px;letter-spacing:.16em">KERZERS</text>
+    <g transform="translate(42,80) scale(0.78)">
+      <path d="${PIN_PATH}" style="fill:${navy}"/>
+      <circle cx="0" cy="-64" r="23" style="fill:#ffffff"/>
+      <text x="0" y="-54" text-anchor="middle"
+        style="fill:${navy};font-family:var(--font-display);font-weight:800;font-size:30px">N</text>
+    </g>
+    <text x="92" y="47"
+      style="fill:${navy};font-family:var(--font-display);font-weight:800;font-size:35px">N&#8217;s</text>
+    <text x="153" y="47"
+      style="fill:${cyan};font-family:var(--font-display);font-weight:600;font-size:35px">Hotel</text>
   </svg>`;
 }
 

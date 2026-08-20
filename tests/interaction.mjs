@@ -25,14 +25,21 @@ await page.reload({ waitUntil:'networkidle' });
 await page.waitForSelector('#vz-sheet h1');
 check(await page.locator('#vz-sheet h1').innerText() === 'Notfallnummern', 'Entwurf bleibt gespeichert');
 
-/* 3 · Wiederholbare Zeilen: hinzufügen und löschen */
-const vorher = await page.locator('.t-notruf-key').count();
-await page.click('[data-add="keys"]');
-await page.locator('#f-keys-4-de').fill('Taxi Kerzers');
-check(await page.locator('.t-notruf-key').count() === vorher + 1, 'Zeile hinzugefügt');
+/* 3 · Wiederholbare Zeilen: hinzufügen und löschen (Gäste-Info) */
+await page.goto(BASE + '/index.html#/t/aushang', { waitUntil:'networkidle' });
+await page.waitForSelector('.t-aushang-row');
+const vorher = await page.locator('.t-aushang-row').count();
+await page.click('[data-add="rows"]');
+await page.locator(`#f-rows-${vorher}-de`).fill('Taxi Kerzers');
+check(await page.locator('.t-aushang-row').count() === vorher + 1, 'Zeile hinzugefügt');
 check((await page.locator('#vz-sheet').innerText()).includes('Taxi Kerzers'), 'Neue Zeile erscheint im Blatt');
-await page.locator('[data-list="keys"] .vz-item').last().locator('[data-del]').click();
-check(await page.locator('.t-notruf-key').count() === vorher, 'Zeile gelöscht');
+await page.locator('[data-list="rows"] .vz-item').last().locator('[data-del]').click();
+check(await page.locator('.t-aushang-row').count() === vorher, 'Zeile gelöscht');
+page.on('dialog', d => d.accept());
+await page.click('#vz-reset');
+await page.waitForTimeout(200);
+await page.goto(BASE + '/index.html#/t/notruf', { waitUntil:'networkidle' });
+await page.waitForSelector('#vz-sheet h1');
 
 /* 4 · Seitenkontrolle meldet Überlauf */
 await page.locator('#f-ledeDe').fill('Sehr langer Text. '.repeat(120));
@@ -40,7 +47,6 @@ await page.waitForTimeout(150);
 check(await page.locator('#vz-fit.vz-fit--warn').count() === 1, 'Überlauf wird gemeldet');
 
 /* 5 · Zurücksetzen stellt das Original wieder her */
-page.on('dialog', d => d.accept());
 await page.click('#vz-reset');
 await page.waitForTimeout(250);
 check(await page.locator('#vz-sheet h1').innerText() === 'Welche Taste wofür?', 'Zurücksetzen stellt das Original her');
