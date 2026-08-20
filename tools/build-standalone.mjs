@@ -22,6 +22,7 @@ const MODULES = [
   'js/lib/brand.js',
   'js/lib/sitemap.js',
   'js/lib/export.js',
+  'js/lib/planeditor.js',
   'js/templates/notruf.js',
   'js/templates/rezeption.js',
   'js/templates/sticker.js',
@@ -30,6 +31,7 @@ const MODULES = [
   'js/templates/anfahrt.js',
   'js/templates/luftbild.js',
   'js/templates/zattoo.js',
+  'js/templates/planeditor.js',
   'js/templates/index.js',
   'js/app.js'
 ];
@@ -67,6 +69,8 @@ async function inlineCssUrls(css, cssFile){
 /** ES-Module zu einem klassischen Skript zusammenfügen. */
 async function bundle(){
   const exportsOf = new Map();   // Datei -> [Namen]
+  const declared  = new Map();   // Name -> Datei (Kollisionspruefung)
+  const clashes   = [];
   const parts = [];
 
   for (const rel of MODULES){
@@ -95,7 +99,23 @@ async function bundle(){
       ns += `const ${alias} = { ${targetNames.map(n => `${n}: ${n}`).join(', ')} };\n`;
     }
 
+    // Doppelte Namen auf oberster Ebene sammeln — beim Zusammenfuehren teilen
+    // sich alle Module einen Geltungsbereich, ein Name darf nur einmal fallen.
+    for (const m of src.matchAll(/^(?:async\s+)?(?:function|const|let|class)\s+([A-Za-z_$][\w$]*)/gm)){
+      const name = m[1];
+      if (declared.has(name)) clashes.push(`${name}  (${declared.get(name)} und ${rel})`);
+      else declared.set(name, rel);
+    }
+
     parts.push(`/* ===== ${rel} ===== */\n${ns}${src.trim()}\n`);
+  }
+
+  if (clashes.length){
+    console.error('\nAbbruch: dieselben Namen kommen in mehreren Modulen vor.');
+    console.error('Beim Zusammenfuehren teilen sie sich einen Geltungsbereich:');
+    clashes.forEach(c => console.error('  · ' + c));
+    console.error('Bitte umbenennen oder importieren statt neu deklarieren.\n');
+    process.exit(1);
   }
   return parts.join('\n');
 }

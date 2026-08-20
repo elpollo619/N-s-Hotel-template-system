@@ -392,3 +392,41 @@
   background:rgba(255,255,255,.85);border-radius:1.4mm;padding:.8mm 2.4mm;
   font-size:6.5pt;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;
 }
+
+/* ==========================================================================
+   t-plan · Plan-Editor (interaktiv)
+   ========================================================================== */
+.t-plan{display:flex;flex-direction:column;padding:9mm 10mm 7mm}
+.t-plan-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm}
+.t-plan-eyebrow{font-size:19pt;margin:0 0 -1mm}
+.t-plan h1{
+  font-family:var(--font-display);font-weight:700;font-size:20pt;line-height:1.02;
+  color:var(--navy);margin:0;letter-spacing:-.01em;
+}
+.t-plan h1 span{color:var(--muted);font-weight:600;font-size:15pt}
+.t-plan-logo{flex:0 0 auto}
+
+.t-plan-map{
+  position:relative;flex:1;margin-top:4mm;border-radius:3mm;overflow:hidden;
+  border:1pt solid var(--line);background:#E7ECE4;touch-action:none;min-height:0;
+}
+.t-plan-map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.t-plan-map svg text{font-family:var(--font-display),"Montserrat",sans-serif;user-select:none}
+.t-plan-credit{
+  position:absolute;right:2.5mm;bottom:2.5mm;
+  background:rgba(255,255,255,.85);border-radius:1.4mm;padding:.7mm 2.2mm;
+  font-size:6.5pt;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;
+}
+
+.t-plan-legend{display:flex;flex-wrap:wrap;gap:2mm 6mm;margin-top:4mm}
+.t-plan-key{display:inline-flex;align-items:center;gap:2mm;font-family:var(--font-display);
+  font-weight:700;font-size:9pt;color:var(--navy)}
+.t-plan-key i{width:4mm;height:4mm;border-radius:1.2mm;display:inline-block;
+  border:.6pt solid rgba(0,0,0,.14)}
+.t-plan-addr{
+  margin:3.5mm 0 0;text-align:center;font-size:8pt;letter-spacing:.06em;
+  color:var(--muted);text-transform:uppercase;
+}
+
+/* Im Druck verschwinden die Bearbeitungspunkte. */
+@media print{ .t-plan-map svg .om-handles{display:none} }

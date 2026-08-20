@@ -44,9 +44,16 @@ Nützlich zu wissen:
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Eigenes Luftbild hochladen, Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
+| **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen |
 
-Noch offen (Phase 3 des Briefings): interaktiver **Plan-Editor**,
-**Gästemappe** und **Reels** (9 × 16).
+**So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
+Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
+Punkt entfernt ihn. Links stehen Farbe, Deckkraft, Liniendicke und Grösse.
+Neue Elemente kommen über die Knöpfe oben links dazu, `↻ Alles drehen` dreht
+die Szene um 90°, und mit dem Zoom lässt sich der Hintergrund verschieben.
+Papierformat und Ausrichtung stellt man im Formular ein.
+
+Noch offen aus Phase 3: **Gästemappe** und **Reels** (9 × 16).
 
 ---
 
@@ -165,6 +172,18 @@ export default {
 
 Feldtypen: `text` · `textarea` · `number` · `select` · `color` · `image` ·
 `list` · `group` · `note`.
+
+**Interaktive Vorlagen** (wie der Plan-Editor) ergänzen zwei Haken:
+
+```js
+pageOf(d){ return 'a4-land'; },          // Papierformat aus dem Zustand
+mount({ sheet, panel, state, save, repaint }){
+  // nach jedem Zeichnen aufgerufen; gibt eine Aufräum-Funktion zurück
+}
+```
+
+`save()` sichert nur (ohne Neuzeichnen — wichtig, damit das Ziehen flüssig
+bleibt), `repaint()` zeichnet das ganze Blatt neu.
 
 `esc()` schützt vor HTML im Nutzertext, `fmt()` kann zusätzlich `**fett**` und
 Zeilenumbrüche. Danach in `js/templates/index.js` eintragen (`TEMPLATES`,

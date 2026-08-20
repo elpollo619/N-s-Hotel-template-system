@@ -10,7 +10,20 @@ import { t, getLang, setLang } from './lib/i18n.js';
 import * as store from './lib/storage.js';
 import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.js';
 
-const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559, 'a3':1587, 'a3-land':1123 };
+const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
+                     'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
+
+/* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
+   Aufraeum-Funktion zurueck. Sie wird vor dem naechsten Zeichnen aufgerufen. */
+let activeUnmount = null;
+function unmountActive(){
+  if (activeUnmount){ try{ activeUnmount(); }catch(err){ console.warn(err); } activeUnmount = null; }
+}
+
+/** Papierformat einer Vorlage — kann vom Zustand abhaengen (Plan-Editor). */
+function pageOf(tpl, state){
+  return (typeof tpl.pageOf === 'function' ? tpl.pageOf(state) : tpl.page) || 'a4';
+}
 const view = () => document.getElementById('vz-view');
 
 /* ---------- Zustand einer Vorlage ---------------------------------------- */
@@ -186,7 +199,8 @@ function renderEditor(id){
   if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
 
   const state = loadState(tpl);
-  setPageSize(tpl.page);
+  unmountActive();
+  setPageSize(pageOf(tpl, state));
 
   view().innerHTML = `
     <div class="vz-editor">
@@ -205,11 +219,12 @@ function renderEditor(id){
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
+        <div class="vz-extra" id="vz-extra"></div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
       <div class="vz-stage" id="vz-stage">
         <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(tpl.page)} ${esc(tpl.root)}" id="vz-sheet"></div>
+          <div class="sheet sheet--${esc(pageOf(tpl, state))} ${esc(tpl.root)}" id="vz-sheet"></div>
         </div>
       </div>
     </div>`;
@@ -220,7 +235,22 @@ function renderEditor(id){
   const fitBox = document.getElementById('vz-fit');
 
   function paint(){
+    unmountActive();
+    const page = pageOf(tpl, state);
+    sheet.className = `sheet sheet--${page} ${tpl.root}`;
+    setPageSize(page);
     sheet.innerHTML = tpl.render(state);
+    if (typeof tpl.mount === 'function'){
+      activeUnmount = tpl.mount({
+        sheet,
+        panel: document.getElementById('vz-extra'),
+        state,
+        /* Nur sichern — ohne Neuzeichnen, damit das Ziehen fluessig bleibt. */
+        save: () => saveState(tpl, state),
+        /* Alles neu zeichnen, z. B. nach einem Formatwechsel. */
+        repaint: () => { saveState(tpl, state); paint(); }
+      }) || null;
+    }
     fitScaler();
     checkFit();
   }
@@ -234,7 +264,7 @@ function renderEditor(id){
     scaler.style.width  = sheet.offsetWidth + 'px';
   }
   function checkFit(){
-    const max = PAGE_MAX_H[tpl.page] || 1123;
+    const max = PAGE_MAX_H[pageOf(tpl, state)] || 1123;
     const ok = sheet.offsetHeight <= max + 1;
     fitBox.className = 'vz-fit ' + (ok ? 'vz-fit--ok' : 'vz-fit--warn');
     fitBox.textContent = (ok ? '✓ ' : '⚠ ') + (ok ? t('fitOk') : t('fitWarn')) +
@@ -373,6 +403,7 @@ function toast(msg){
 
 /* ---------- Router -------------------------------------------------------- */
 function route(){
+  unmountActive();
   const hash = location.hash || '#/';
   const m = /^#\/t\/([\w-]+)/.exec(hash);
   window.scrollTo(0, 0);
