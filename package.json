@@ -1,0 +1,20 @@
+{
+  "name": "ns-hotel-vorlagen-zentrale",
+  "version": "1.0.0",
+  "private": true,
+  "description": "N's Hotel · Vorlagen-Zentrale — statisches Portal für Aushänge, Aufkleber und Karten.",
+  "scripts": {
+    "start": "http-server -p 8099 -c-1 .",
+    "build": "node tools/build-standalone.mjs",
+    "pretest": "node tools/build-standalone.mjs",
+    "test": "node tests/shot.mjs && node tests/print.mjs && node tests/export.mjs && node tests/interaction.mjs && node tests/standalone.mjs",
+    "test:blaetter": "node tests/shot.mjs",
+    "test:druck": "node tests/print.mjs",
+    "fonts": "node tools/install-brand-fonts.mjs",
+    "assets": "node tools/install-brand-assets.mjs"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "playwright": "^1.56.1"
+  }
+}

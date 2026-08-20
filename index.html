@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N's Hotel · Vorlagen-Zentrale</title>
+<meta name="description" content="Aushänge, Aufkleber und Karten für N's Hotel — immer in der gleichen Marke.">
+<meta name="theme-color" content="#2A3350">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232A3350'/><text x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='700' font-size='13' fill='white'>N's</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/brand-fonts.css">
+<link rel="stylesheet" href="assets/brand-tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/templates.css">
+<style id="vz-page-size">@page{size:A4;margin:0}</style>
+</head>
+<body>
+  <header class="vz-topbar no-print"></header>
+  <main id="vz-view"></main>
+  <noscript>
+    <p style="padding:24px;font-family:sans-serif">
+      Diese Seite braucht JavaScript. Bitte im Browser aktivieren.
+    </p>
+  </noscript>
+  <script type="module" src="js/app.js"></script>
+  <script>
+    /* Offline-Betrieb nur, wenn die Seite von einem Server kommt.
+       Als lokale Datei (file://) gibt es keinen Service-Worker — dafür ist
+       standalone.html da. */
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')){
+      addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+  </script>
+</body>
+</html>
