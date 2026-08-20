@@ -1,5 +1,6 @@
-/* Prüft den Druckweg: jede Vorlage muss GENAU EINE Seite im richtigen
-   Format ergeben — ohne Bedienleiste und ohne Formular. */
+/* Prüft den Druckweg: jede Vorlage muss genau so viele Seiten im richtigen
+   Format ergeben, wie sie im Blatt anlegt (einseitig = 1, Gästemappe = n) —
+   ohne Bedienleiste und ohne Formular. */
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 
@@ -33,8 +34,10 @@ for (const id of ids){
       const n = document.querySelector(sel);
       return !!n && getComputedStyle(n).display !== 'none';
     };
+    const s = document.getElementById('vz-sheet');
     return { leiste:zeigt('.vz-topbar'), panel:zeigt('.vz-panel'),
-             seite:(document.getElementById('vz-sheet').className.match(/sheet--([\w-]+)/) || [])[1] };
+             erwartet:Math.max(1, s.querySelectorAll('[data-page]').length),
+             seite:(s.className.match(/sheet--([\w-]+)/) || [])[1] };
   });
   if (sichtbar.leiste) problems.push(`${id}: Bedienleiste wäre mitgedruckt`);
   if (sichtbar.panel)  problems.push(`${id}: Formular wäre mitgedruckt`);
@@ -50,11 +53,12 @@ for (const id of ids){
   const soll = ERWARTET[sichtbar.seite] || ERWARTET['a4'];
   const formatOk = Math.abs(b - soll.b) <= 2 && Math.abs(h - soll.h) <= 2;
 
-  if (seiten !== 1) problems.push(`${id}: ${seiten} Seiten statt 1`);
-  if (!formatOk)    problems.push(`${id}: ${b}×${h} pt statt ${soll.b}×${soll.h} pt`);
-  console.log(`${seiten === 1 && formatOk ? '✓' : '✗'} ${id.padEnd(18)} ${seiten} Seite · ${b}×${h} pt · ${(buf.length / 1024).toFixed(0)} KB`);
+  const soll_n = sichtbar.erwartet;
+  if (seiten !== soll_n) problems.push(`${id}: ${seiten} Seiten statt ${soll_n}`);
+  if (!formatOk)         problems.push(`${id}: ${b}×${h} pt statt ${soll.b}×${soll.h} pt`);
+  console.log(`${seiten === soll_n && formatOk ? '✓' : '✗'} ${id.padEnd(18)} ${seiten}/${soll_n} Seiten · ${b}×${h} pt · ${(buf.length / 1024).toFixed(0)} KB`);
 }
 
 await browser.close();
 if (problems.length){ console.log('\nPROBLEME:'); problems.forEach(p => console.log(' · ' + p)); process.exit(1); }
-console.log('\nDruckweg in Ordnung: je eine saubere Seite im richtigen Format.');
+console.log('\nDruckweg in Ordnung: saubere Seiten im richtigen Format.');

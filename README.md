@@ -45,6 +45,7 @@ Nützlich zu wissen:
 | **Luftbild mit Pins** | A4 quer | Eigenes Luftbild hochladen, Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
 | **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen |
+| **Gästemappe** | A4 hoch, mehrseitig | Achtseitige Mappe fürs Zimmer: Willkommen, das Wichtigste, Parken und Einkaufen, Zug und Bus, Ausflüge, Essen, Notfall und Kontakt |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -53,7 +54,25 @@ Neue Elemente kommen über die Knöpfe oben links dazu, `↻ Alles drehen` dreht
 die Szene um 90°, und mit dem Zoom lässt sich der Hintergrund verschieben.
 Papierformat und Ausrichtung stellt man im Formular ein.
 
-Noch offen aus Phase 3: **Gästemappe** und **Reels** (9 × 16).
+**So funktioniert die Gästemappe:** sie ist die einzige mehrseitige Vorlage.
+Jedes Kapitel ist eine echte Druckseite; „Drucken / PDF" liefert die acht
+Seiten am Stück, „Als PNG" eine Bilddatei je Seite
+(`ns-hotel-gaestemappe-01.png` …). Der Browser fragt dabei einmal nach, ob er
+mehrere Dateien laden darf. Kapitel, die ein Haus nicht braucht, lassen sich
+im Formular auf „Nein" stellen — Inhaltsverzeichnis, Kapitelnummern und
+Seitenzahlen rücken automatisch nach. Die Höhenkontrolle links prüft jede
+Seite einzeln und nennt bei Überlauf die Seitennummer.
+
+Inhaltlich übernimmt sie die bestehende Gästemappe des Hauses — dieselben
+Adressen, Zeiten und Nummern —, aber ohne Leaflet-Karte, Wetter- und
+Fahrplanabfrage. Die brauchen ein Netz und einen fremden Server; die
+Vorlagen-Zentrale soll offline und aus einer einzelnen Datei laufen. Wer die
+Live-Fassung fürs Handy will, behält die bisherige HTML-Mappe daneben.
+
+Nicht übernommen: die **Reels** (9 × 16). Sie sind keine Druckvorlage, sondern
+zeitgesteuerte Videoszenen auf React und Babel aus dem CDN — beides steht im
+Widerspruch zu „kein Framework, kein CDN, läuft offline". Sie funktionieren
+als eigenständige Dateien bereits gut und bleiben deshalb, wo sie sind.
 
 ---
 
@@ -80,9 +99,14 @@ Zwei Dinge gehören deshalb **nicht** hinein und sind bewusst ausgeschlossen:
 * **Die Markenschriften.** Gotham (Hoefler & Co) und Caflisch Script Pro (Adobe)
   sind lizenzpflichtig; ihre Lizenzen verbieten die Weitergabe. `.gitignore`
   sperrt `assets/fonts/*.otf`. Jede Arbeitsstation legt die Dateien selbst ab.
-* **Echte Zugangsdaten.** Das WLAN-Passwort in der Gäste-Info ist ein
-  Platzhalter (`· · · · · · · ·`). Es wird im Editor eingetragen und bleibt im
-  Browser der jeweiligen Person — es wandert nie ins Repository.
+* **Echte Zugangsdaten.** Das WLAN-Passwort in der Gäste-Info und in der
+  Gästemappe ist ein Platzhalter (`· · · · · · · ·`). Es wird im Editor
+  eingetragen und bleibt im Browser der jeweiligen Person — es wandert nie ins
+  Repository.
+
+Telefon, WhatsApp, E-Mail und Web in `js/brand-config.js` sind dagegen die
+öffentlichen Kontaktangaben des Hauses; sie stehen ohnehin auf jedem Aushang
+und in der bestehenden Gästemappe.
 
 ### Echte Schriften und Logos nachrüsten
 
@@ -185,6 +209,13 @@ mount({ sheet, panel, state, save, repaint }){
 `save()` sichert nur (ohne Neuzeichnen — wichtig, damit das Ziehen flüssig
 bleibt), `repaint()` zeichnet das ganze Blatt neu.
 
+**Mehrseitige Vorlagen** (wie die Gästemappe) setzen `multipage:true` und
+geben in `render()` je Druckseite ein `<section data-page>` aus. Das Blatt
+selbst wird dann unsichtbar und ist nur noch der Stapel; Papier, Rand und
+Seitenumbruch trägt jede `[data-page]`. Höhenkontrolle, Druck und PNG-Export
+richten sich automatisch danach — geprüft wird jede Seite einzeln, und der
+PNG-Knopf legt eine Datei je Seite an.
+
 `esc()` schützt vor HTML im Nutzertext, `fmt()` kann zusätzlich `**fett**` und
 Zeilenumbrüche. Danach in `js/templates/index.js` eintragen (`TEMPLATES`,
 `ORDER`, `GROUPS`) und die Styles unter `.t-<id>` in `assets/templates.css`
@@ -204,11 +235,16 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 
 * **`tests/shot.mjs`** — jedes Blatt passt auf eine Seite (`offsetHeight`),
   keine Konsolenfehler, Screenshot je Vorlage nach `tests/out/`
-* **`tests/print.mjs`** — der Druck ergibt **genau eine** Seite im richtigen
-  Papierformat, ohne Bedienleiste und ohne Formular
-* **`tests/export.mjs`** — PNG-Export erzeugt eine echte Bilddatei
+* **`tests/print.mjs`** — der Druck ergibt **genau so viele** Seiten, wie die
+  Vorlage anlegt (einseitig eine, Gästemappe acht), im richtigen Papierformat,
+  ohne Bedienleiste und ohne Formular
+* **`tests/export.mjs`** — PNG-Export erzeugt echte Bilddateien, bei
+  mehrseitigen Vorlagen eine je Seite
 * **`tests/interaction.mjs`** — Live-Vorschau ohne Fokusverlust, wiederholbare
   Zeilen, Speicherung, Zurücksetzen, Sprachumschaltung
+* **`tests/planeditor.mjs`** — Auswählen, Ziehen, Umformen, Drehen, Formatwechsel
+* **`tests/gaestemappe.mjs`** — Seitenzahl, Höhe jeder einzelnen Seite,
+  Kapitel ab- und zuschalten, durchlaufende Nummerierung
 * **`tests/standalone.mjs`** — `standalone.html` läuft per `file://`, inklusive
   PNG-Export ohne Netz
 
@@ -263,5 +299,8 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   y `npm run assets`.
 * **Teléfono, mail y web están vacíos** a propósito en `js/brand-config.js`.
   Rellénalos y aparecen solos en todos los pies de página.
-* Falta la **Fase 3** del brief (Plan-Editor interactivo, Gästemappe, Reels).
+* La **Fase 3** está hecha: Plan-Editor interactivo y Gästemappe de ocho
+  páginas. Los **Reels** (9 × 16) se quedan fuera a propósito: son vídeo con
+  React y Babel desde un CDN, justo lo que esta app no puede llevar (sin
+  framework, sin CDN, funcionando sin internet). Ya funcionan solos.
   Necesita los ficheros originales `mapeditor.js` y las plantillas HTML.

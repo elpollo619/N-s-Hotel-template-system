@@ -24,6 +24,12 @@ function unmountActive(){
 function pageOf(tpl, state){
   return (typeof tpl.pageOf === 'function' ? tpl.pageOf(state) : tpl.page) || 'a4';
 }
+/** Die druckbaren Seiten eines Blattes — einseitig ist das Blatt selbst. */
+function sheetPages(sheet){
+  const pages = Array.from(sheet.querySelectorAll('[data-page]'));
+  return pages.length ? pages : [sheet];
+}
+
 const view = () => document.getElementById('vz-view');
 
 /* ---------- Zustand einer Vorlage ---------------------------------------- */
@@ -224,7 +230,7 @@ function renderEditor(id){
       </aside>
       <div class="vz-stage" id="vz-stage">
         <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(pageOf(tpl, state))} ${esc(tpl.root)}" id="vz-sheet"></div>
+          <div class="sheet sheet--${esc(pageOf(tpl, state))}${tpl.multipage ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
         </div>
       </div>
     </div>`;
@@ -237,7 +243,7 @@ function renderEditor(id){
   function paint(){
     unmountActive();
     const page = pageOf(tpl, state);
-    sheet.className = `sheet sheet--${page} ${tpl.root}`;
+    sheet.className = `sheet sheet--${page} ${tpl.multipage ? 'sheet--multi ' : ''}${tpl.root}`;
     setPageSize(page);
     sheet.innerHTML = tpl.render(state);
     if (typeof tpl.mount === 'function'){
@@ -265,10 +271,15 @@ function renderEditor(id){
   }
   function checkFit(){
     const max = PAGE_MAX_H[pageOf(tpl, state)] || 1123;
-    const ok = sheet.offsetHeight <= max + 1;
+    /* Mehrseitige Vorlagen: jede Seite einzeln pruefen, nicht die Gesamthoehe. */
+    const pages = sheetPages(sheet);
+    const worst = pages.reduce((acc, el, i) =>
+      (el.offsetHeight > acc.h ? { h: el.offsetHeight, i } : acc), { h: 0, i: 0 });
+    const ok = worst.h <= max + 1;
     fitBox.className = 'vz-fit ' + (ok ? 'vz-fit--ok' : 'vz-fit--warn');
+    const where = (pages.length > 1 && !ok) ? ` · ${t('pageWord')} ${worst.i + 1}` : '';
     fitBox.textContent = (ok ? '✓ ' : '⚠ ') + (ok ? t('fitOk') : t('fitWarn')) +
-      `  (${Math.round(sheet.offsetHeight)} / ${max} px)`;
+      `  (${Math.round(worst.h)} / ${max} px${where})`;
   }
   function commit(){ saveState(tpl, state); paint(); }
 
@@ -348,7 +359,18 @@ function renderEditor(id){
     const btn = ev.currentTarget; const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     try{
-      await sheetToPng(sheet, `ns-hotel-${tpl.id}.png`, 3);
+      const pages = sheetPages(sheet);
+      if (pages.length > 1){
+        /* Jede Seite als eigene Datei — ein Bild ueber neun Seiten waere unbrauchbar.
+           Der Browser fragt beim ersten Mal nach, ob mehrere Downloads erlaubt sind. */
+        for (let i = 0; i < pages.length; i++){
+          const nr = String(i + 1).padStart(2, '0');
+          btn.textContent = `… ${i + 1}/${pages.length}`;
+          await sheetToPng(pages[i], `ns-hotel-${tpl.id}-${nr}.png`, 3);
+        }
+      } else {
+        await sheetToPng(sheet, `ns-hotel-${tpl.id}.png`, 3);
+      }
       toast(t('pngDone'));
     }catch(err){
       console.warn(err);

@@ -430,3 +430,185 @@
 
 /* Im Druck verschwinden die Bearbeitungspunkte. */
 @media print{ .t-plan-map svg .om-handles{display:none} }
+
+/* ==========================================================================
+   t-gm · Gästemappe (mehrseitig)
+   Jede .gm-pg ist eine Druckseite. Der Rahmen (Kopf/Fuss) sitzt absolut,
+   der Inhalt in .gm-pad — so bleibt der Satzspiegel auf allen Seiten gleich.
+   ========================================================================== */
+.t-gm .gm-pg{display:flex;flex-direction:column;background:var(--bg)}
+.t-gm .gm-pad{flex:1;padding:26mm 18mm 20mm;display:flex;flex-direction:column}
+
+.t-gm .gm-head{
+  position:absolute;top:12mm;left:18mm;right:18mm;
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:3mm;border-bottom:.6pt solid var(--line);
+}
+.t-gm .gm-hl{display:flex;align-items:center;gap:3mm}
+.t-gm .gm-hl em{
+  font-style:normal;font-size:7pt;font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--muted);
+}
+.t-gm .gm-hr{font-size:7pt;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan)}
+
+.t-gm .gm-foot{
+  position:absolute;left:18mm;right:18mm;bottom:11mm;
+  display:flex;justify-content:space-between;
+  font-size:6.5pt;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+}
+
+/* ---- Titelseite ---- */
+.t-gm .gm-cover{
+  color:#fff;padding:0;
+  background:linear-gradient(163deg,#3d4a70 0%,var(--navy) 46%,var(--navy-2) 100%);
+}
+.t-gm .gm-cv-photo{position:relative;height:150mm;overflow:hidden}
+.t-gm .gm-cv-photo img{width:100%;height:100%;object-fit:cover;display:block}
+/* Ohne Foto: blasser Marken-Pin statt einer zweiten, sichtbar abgesetzten Flaeche. */
+.t-gm .gm-cv-empty{width:100%;height:100%;display:block;fill:#fff;opacity:.05}
+.t-gm .gm-cv-logo{position:absolute;top:16mm;left:18mm}
+.t-gm .gm-cv-body{flex:1;padding:16mm 18mm 18mm;display:flex;flex-direction:column}
+.t-gm .gm-cv-kick{font-size:44pt;line-height:.8;color:var(--cyan);margin:0}
+.t-gm .gm-cover h1{
+  font-family:var(--font-display);font-weight:700;font-size:30pt;line-height:1.05;
+  margin:6mm 0 0;letter-spacing:-.01em;color:#fff;
+}
+.t-gm .gm-cv-rule{display:block;width:22mm;height:1.6mm;border-radius:.8mm;background:var(--cyan);margin:7mm 0 5mm}
+.t-gm .gm-cv-sub{margin:0;font-size:9.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.t-gm .gm-cv-addr{margin:auto 0 0;font-size:7.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+
+/* ---- Kapitelkopf ---- */
+.t-gm .gm-open{display:flex;gap:6mm;align-items:flex-start;margin-bottom:6mm}
+.t-gm .gm-num{
+  font-family:var(--font-display);font-weight:700;font-size:26pt;line-height:.85;
+  color:transparent;-webkit-text-stroke:.5pt var(--cyan);flex:0 0 auto;
+}
+.t-gm .gm-kick{font-size:19pt;line-height:.95;color:var(--cyan);margin:0}
+.t-gm .gm-open h2{
+  font-family:var(--font-display);font-weight:700;font-size:20pt;line-height:1.06;
+  color:var(--navy);margin:1mm 0 0;letter-spacing:-.01em;
+}
+.t-gm .gm-h2en{margin:.8mm 0 0;font-size:9pt;font-weight:600;color:var(--muted);font-style:italic}
+.t-gm .gm-lead{margin:3mm 0 0;font-size:9pt;line-height:1.55;color:var(--ink-soft);max-width:145mm}
+.t-gm .gm-en{color:var(--muted);font-style:italic}
+
+.t-gm .gm-sub{
+  margin:7mm 0 3mm;font-size:7.5pt;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);
+}
+.t-gm .gm-note{
+  margin:4mm 0 0;padding:3.4mm 4.5mm;border-radius:2.6mm;background:var(--cyan-tint);
+  font-size:8.5pt;line-height:1.5;color:var(--ink);
+}
+.t-gm .gm-fine{margin:3mm 0 0;font-size:7.5pt;color:var(--muted);font-style:italic}
+
+/* ---- Inhaltsverzeichnis ---- */
+.t-gm .gm-toc{display:flex;flex-direction:column;gap:1.6mm}
+.t-gm .gm-ti{
+  display:grid;grid-template-columns:12mm 1fr auto;align-items:baseline;gap:3mm;
+  padding:3mm 4.5mm;border-radius:2.4mm;background:var(--bg-2);
+}
+.t-gm .gm-tn{font-family:var(--font-display);font-weight:700;font-size:9pt;color:var(--cyan)}
+.t-gm .gm-tt{font-size:10pt;font-weight:700;color:var(--navy)}
+.t-gm .gm-td{font-size:8pt;color:var(--muted);font-style:italic}
+
+/* ---- Das Wichtigste ---- */
+.t-gm .gm-facts{display:flex;flex-direction:column;gap:2mm}
+.t-gm .gm-fact{
+  display:flex;align-items:center;gap:4mm;min-height:11mm;
+  padding:2.8mm 4.5mm;border-radius:2.6mm;background:var(--bg-2);
+}
+.t-gm .gm-fact:nth-child(odd){background:var(--cyan-tint)}
+.t-gm .gm-fi{
+  flex:0 0 auto;width:8mm;height:8mm;border-radius:2.2mm;background:#fff;color:var(--cyan);
+  display:flex;align-items:center;justify-content:center;
+}
+.t-gm .gm-fl{flex:1;display:flex;flex-direction:column;gap:.4mm}
+.t-gm .gm-fl b{font-size:9.5pt;font-weight:700;color:var(--navy)}
+.t-gm .gm-fl i{font-size:8pt;color:var(--muted)}
+.t-gm .gm-fv{
+  flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  color:var(--navy);text-align:right;
+}
+
+.t-gm .gm-pull{
+  display:flex;align-items:center;gap:6mm;margin-top:6mm;
+  padding:5mm 6mm;border-radius:3mm;background:var(--navy);color:#fff;
+}
+.t-gm .gm-pn{flex:0 0 auto;text-align:center}
+.t-gm .gm-pn b{display:block;font-family:var(--font-display);font-size:20pt;line-height:1;color:var(--cyan)}
+.t-gm .gm-pn i{display:block;margin-top:1mm;font-size:7pt;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6);font-style:normal}
+.t-gm .gm-pt p{margin:0;font-size:9pt;line-height:1.5}
+.t-gm .gm-pt p.gm-en{color:rgba(255,255,255,.6);margin-top:1.4mm}
+
+.t-gm .gm-chips{display:flex;flex-wrap:wrap;gap:1.8mm}
+.t-gm .gm-chips span{
+  padding:1.8mm 4mm;border-radius:99px;border:.6pt solid var(--line);
+  font-size:8pt;font-weight:600;color:var(--ink-soft);
+}
+
+/* ---- Listen mit Kategorie-Fähnchen ---- */
+.t-gm .gm-rows{display:flex;flex-direction:column;gap:1.8mm}
+.t-gm .gm-row{display:grid;grid-template-columns:24mm 1fr;gap:4mm;align-items:start;
+  padding:3mm 4.5mm;border-radius:2.4mm;background:var(--bg-2)}
+.t-gm .gm-tag{
+  font-size:6.8pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);padding-top:.6mm;
+}
+.t-gm .gm-rn{margin:0;font-size:9.5pt;font-weight:700;color:var(--navy)}
+.t-gm .gm-rm{margin:.8mm 0 0;font-size:8pt;color:var(--ink-soft)}
+.t-gm .gm-rd{margin:1.2mm 0 0;font-size:8pt;line-height:1.45;color:var(--muted)}
+
+/* ---- Ziele ---- */
+.t-gm .gm-dests{display:flex;flex-direction:column;gap:0}
+.t-gm .gm-dest{
+  display:grid;grid-template-columns:1fr 26mm 26mm;align-items:baseline;gap:3mm;
+  padding:3mm 1mm;border-bottom:.6pt solid var(--line);
+}
+.t-gm .gm-dn{font-size:9.5pt;font-weight:700;color:var(--navy)}
+.t-gm .gm-dl{font-size:8pt;font-weight:700;color:var(--cyan);letter-spacing:.08em}
+.t-gm .gm-dt{font-size:8.5pt;color:var(--ink-soft);text-align:right}
+
+.t-gm .gm-trips{display:flex;flex-direction:column;gap:1.8mm}
+.t-gm .gm-trip{display:grid;grid-template-columns:20mm 1fr;gap:4mm;align-items:start;
+  padding:3mm 4.5mm;border-radius:2.4mm;background:var(--bg-2)}
+.t-gm .gm-tw{
+  font-family:var(--font-display);font-weight:700;font-size:9pt;color:var(--cyan);padding-top:.2mm;
+}
+
+/* ---- Essen ---- */
+.t-gm .gm-top{
+  padding:5mm 6mm;border-radius:3mm;background:var(--cyan-tint);
+  border-left:1.6mm solid var(--cyan);margin-bottom:4mm;
+}
+.t-gm .gm-topk{margin:0;font-size:7pt;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.t-gm .gm-topn{margin:2mm 0 0;font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy)}
+.t-gm .gm-topm{margin:1.2mm 0 0;font-size:8pt;color:var(--ink-soft)}
+.t-gm .gm-topd{margin:2.4mm 0 0;font-size:8.5pt;line-height:1.5;color:var(--ink)}
+
+/* ---- Notruf ---- */
+.t-gm .gm-em{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4mm}
+.t-gm .gm-emi{
+  padding:4mm 3mm;border-radius:2.6mm;background:var(--red-tint);text-align:center;
+}
+.t-gm .gm-emi b{display:block;font-family:var(--font-display);font-size:17pt;line-height:1;color:var(--red)}
+.t-gm .gm-emi span{display:block;margin-top:1.6mm;font-size:8.5pt;font-weight:700;color:var(--navy)}
+.t-gm .gm-emi i{display:block;font-size:7.5pt;color:var(--muted)}
+
+.t-gm .gm-contact{
+  display:flex;align-items:center;gap:6mm;margin-top:6mm;
+  padding:5mm 6mm;border-radius:3mm;background:var(--navy);color:#fff;
+}
+.t-gm .gm-cl{flex:0 0 auto}
+.t-gm .gm-cg{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:2.6mm 6mm}
+.t-gm .gm-cg i{display:block;font-size:6.8pt;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);font-style:normal}
+.t-gm .gm-cg b{display:block;font-size:9.5pt;font-weight:700;margin-top:.6mm}
+
+.t-gm .gm-tips{display:flex;flex-direction:column;gap:1.6mm}
+.t-gm .gm-tip{display:grid;grid-template-columns:20mm 1fr;gap:4mm;align-items:start}
+.t-gm .gm-tg{
+  font-size:6.8pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);padding-top:.6mm;
+}
+.t-gm .gm-tip p{margin:0;font-size:8pt;line-height:1.45;color:var(--ink-soft)}
+.t-gm .gm-tip p.gm-en{color:var(--muted);font-style:italic;margin-top:.4mm}

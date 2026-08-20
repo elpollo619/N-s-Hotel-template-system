@@ -28,7 +28,11 @@ for (const id of ids){
   await page.waitForTimeout(260);
   const info = await page.evaluate(() => {
     const s = document.getElementById('vz-sheet');
-    return { h:s.offsetHeight, w:s.offsetWidth, page:(s.className.match(/sheet--([\w-]+)/)||[])[1],
+    /* Mehrseitige Vorlagen: die hoechste Einzelseite zaehlt, nicht der Stapel. */
+    const pgs = Array.from(s.querySelectorAll('[data-page]'));
+    const hs = (pgs.length ? pgs : [s]).map(el => el.offsetHeight);
+    return { h:Math.max(...hs), seiten:hs.length, w:s.offsetWidth,
+             page:(s.className.match(/sheet--([\w-]+)/)||[])[1],
              fit:document.getElementById('vz-fit').textContent.trim() };
   });
   const max = MAXH[info.page] || 1123;
@@ -44,7 +48,7 @@ for (const id of ids){
   await page.locator('#vz-sheet').screenshot({ path:`${OUT}/${id}.png` });
 }
 
-console.table(rows.map(r => ({ Vorlage:r.id, Format:r.page, Höhe:r.h, Max:r.max, OK:r.ok ? '✓' : '✗' })));
+console.table(rows.map(r => ({ Vorlage:r.id, Format:r.page, Seiten:r.seiten, Höhe:r.h, Max:r.max, OK:r.ok ? '✓' : '✗' })));
 if (problems.length){ console.log('\nPROBLEME:'); problems.forEach(p => console.log(' · ' + p)); }
 else console.log('\nAlles sauber: keine Konsolenfehler, alle Blätter passen auf eine Seite.');
 await browser.close();

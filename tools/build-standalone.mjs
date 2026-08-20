@@ -32,6 +32,7 @@ const MODULES = [
   'js/templates/luftbild.js',
   'js/templates/zattoo.js',
   'js/templates/planeditor.js',
+  'js/templates/gaestemappe.js',
   'js/templates/index.js',
   'js/app.js'
 ];

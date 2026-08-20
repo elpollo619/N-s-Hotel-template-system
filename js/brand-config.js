@@ -23,11 +23,12 @@ export const BRAND = {
   city:    "Kerzers",
   country: "Schweiz",
 
-  // Bewusst leer: erfundene Kontaktdaten dürfen nicht auf einen Aushang.
-  // Hier die echten Angaben eintragen — sie erscheinen dann in allen Fusszeilen.
-  phone:   "",
-  mail:    "",
-  web:     ""
+  // Echte Angaben, übernommen aus der bestehenden Gästemappe des Hauses.
+  phone:    "+41 31 951 85 54",
+  whatsapp: "+41 31 951 85 53",
+  mail:     "info@ns-hotel.ch",
+  web:      "ns-hotel.ch",
+  youtube:  "youtube.com/@NsHotel-Self-Check-in"
 };
 
 /** Einzeilige Adresse für Fusszeilen. */
