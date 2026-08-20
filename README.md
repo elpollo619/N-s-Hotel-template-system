@@ -66,6 +66,17 @@ wurden gegen die echte Datei aus dem Google-Drive-Ordner
 Schweizer Schreibweise ist eingebaut: aus einem getippten «ß» wird beim
 Ausgeben automatisch «ss».
 
+### Wichtig: dieses Repository ist öffentlich
+
+Zwei Dinge gehören deshalb **nicht** hinein und sind bewusst ausgeschlossen:
+
+* **Die Markenschriften.** Gotham (Hoefler & Co) und Caflisch Script Pro (Adobe)
+  sind lizenzpflichtig; ihre Lizenzen verbieten die Weitergabe. `.gitignore`
+  sperrt `assets/fonts/*.otf`. Jede Arbeitsstation legt die Dateien selbst ab.
+* **Echte Zugangsdaten.** Das WLAN-Passwort in der Gäste-Info ist ein
+  Platzhalter (`· · · · · · · ·`). Es wird im Editor eingetragen und bleibt im
+  Browser der jeweiligen Person — es wandert nie ins Repository.
+
 ### Echte Schriften und Logos nachrüsten
 
 Gotham und Caflisch Script Pro sind lizenzpflichtig und deshalb **nicht** im
@@ -73,12 +84,15 @@ Repository. Ausgeliefert wird der im Handbuch vorgesehene Fallback
 (Montserrat und Dancing Script), lokal eingebunden — ohne CDN, damit die App
 auch offline funktioniert.
 
+Die Dateien liegen im Google-Drive-Ordner unter `assets/fonts` und
+`assets/brand`. Sie müssen von Hand in den lokalen Klon kopiert werden — die
+Schriften dürfen aus Lizenzgründen nicht über das Repository verteilt werden.
+
 ```bash
 # 1. Dateien ablegen
-#    assets/fonts/Gotham-Bold.otf
-#    assets/fonts/CaflischScriptPro-Regular.otf
+#    assets/fonts/Gotham-Bold.otf              (bleibt lokal, nicht versioniert)
+#    assets/fonts/CaflischScriptPro-Regular.otf (bleibt lokal, nicht versioniert)
 #    assets/brand/logo.png · logo-white.png · favicon.png
-#    assets/img/aerial-site.png · phone-yealink.jpg
 
 # 2. eintragen lassen
 npm run fonts     # schreibt assets/brand-fonts.css
@@ -219,13 +233,15 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   exacto del teléfono v6**, los **tokens verificados** contra el `parking.css`
   real, la **dirección correcta** (Allmendstrasse 14) y la **marca dibujada**
   (pin teardrop + N's Hotel) de la implementación de referencia.
-* **Siguen faltando las fuentes Gotham/Caflisch y los logos reales**: las
-  carpetas `assets/fonts/` y `assets/brand/` de Drive están vacías. Van como
-  "drop-in": copia los ficheros, ejecuta `npm run fonts` y `npm run assets`,
-  y toda la app cambia sola. Mientras tanto usa el respaldo previsto en el
-  manual (Montserrat + Dancing Script).
-* **Falta la foto aérea** `aerial-site.png`: la plantilla Luftbild la acepta
-  subiéndola desde el editor.
+* El **luftbild ya está**: lo generé desde swisstopo (swissimage, 10 cm/píxel)
+  para Allmendstrasse 14 y lleva la atribución «© swisstopo» que exige la
+  licencia. Está en `assets/img/aerial-site.jpg`.
+* La **marca de Zattoo** original está incrustada en la plantilla de TV.
+* **Las fuentes y los logos siguen pendientes.** Están en tu Drive, pero son
+  binarios y no pueden pasar por este canal sin riesgo de corromperse. Además,
+  este repositorio es **público**: Gotham y Caflisch son de pago y no pueden
+  publicarse aquí. Cópialos a mano en tu clon local y ejecuta `npm run fonts`
+  y `npm run assets`.
 * **Teléfono, mail y web están vacíos** a propósito en `js/brand-config.js`.
   Rellénalos y aparecen solos en todos los pies de página.
 * Falta la **Fase 3** del brief (Plan-Editor interactivo, Gästemappe, Reels).

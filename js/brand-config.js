@@ -10,8 +10,11 @@ export const BRAND = {
   logo:      null,   // "assets/brand/logo.png"        — farbig auf hell
   logoWhite: null,   // "assets/brand/logo-white.png"  — weiss auf dunkel/cyan
   favicon:   null,   // "assets/brand/favicon.png"     — der N's-"Mark" im Pin
-  aerial:    null,   // "assets/img/aerial-site.png"   — Luftbild swisstopo
+  aerial:    "assets/img/aerial-site.jpg",   // Luftbild swisstopo (swissimage, 10 cm)
   phonePhoto:null,   // "assets/img/phone-yealink.jpg" — Foto des Tischtelefons
+
+  // Pflichtangabe der Quelle beim Luftbild (Open Government Data des Bundes).
+  aerialCredit: "© swisstopo",
 
   name:    "N's Hotel",
   company: "Hans Amonn AG",

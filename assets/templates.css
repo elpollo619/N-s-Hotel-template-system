@@ -385,3 +385,10 @@
   font-size:8pt;letter-spacing:.06em;color:var(--navy);text-transform:uppercase;
   white-space:nowrap;box-shadow:0 1.5pt 6pt rgba(42,51,80,.15);
 }
+
+/* Quellenangabe beim Luftbild — Pflicht bei den Bilddaten des Bundes. */
+.t-luft-credit{
+  position:absolute;right:5mm;bottom:5mm;
+  background:rgba(255,255,255,.85);border-radius:1.4mm;padding:.8mm 2.4mm;
+  font-size:6.5pt;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;
+}

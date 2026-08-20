@@ -44,6 +44,7 @@ export default {
     { k:'introEn', label:'Text EN', type:'textarea' },
 
     { t:'group', label:'Infozeilen' },
+    { t:'note', label:'Das WLAN-Passwort steht als Platzhalter drin — bitte hier eintragen. Der Wert bleibt nur in diesem Browser und wird nie mitveröffentlicht.' },
     { k:'rows', label:'Zeilen', type:'list', itemLabel:'Zeile', max:9,
       defaultItem:{ icon:'info', de:'', en:'', val:'' },
       item:[
@@ -68,7 +69,9 @@ export default {
     introEn:'Welcome! Here you will find the essentials for your stay. For any questions, reach us anytime via the reception button on the phone.',
     rows:[
       { icon:'wifi',  de:'WLAN', en:'Wi-Fi network', val:'NsHotel-Gast' },
-      { icon:'key',   de:'Passwort', en:'Password', val:'willkommen' },
+      // Platzhalter: das echte Passwort gehoert nicht in ein oeffentliches
+      // Repository. Es wird im Editor eingetragen und bleibt im Browser.
+      { icon:'key',   de:'Passwort', en:'Password', val:'· · · · · · · ·' },
       { icon:'clock', de:'Check-out', en:'until 11:00', val:'11:00' },
       { icon:'cup',   de:'Frühstück', en:'Breakfast 07:30 – 10:00', val:'07:30' },
       { icon:'phone', de:'Rezeption vom Zimmer aus', en:'Reception from your room', val:'Taste 1' },

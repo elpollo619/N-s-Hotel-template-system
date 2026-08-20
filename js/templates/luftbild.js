@@ -53,7 +53,9 @@ export default {
     { k:'title',   label:'Titel', type:'text' },
     { k:'sub',     label:'Untertitel', type:'text' },
     { k:'adresse', label:'Adresse für das Navi', type:'text' },
-    { k:'footer',  label:'Adresszeile', type:'text' }
+    { k:'footer',  label:'Adresszeile', type:'text' },
+    { k:'credit',  label:'Bildquelle', type:'text',
+      hint:'Beim Luftbild des Bundes ist die Quellenangabe Pflicht.' }
   ],
 
   defaults:{
@@ -64,7 +66,8 @@ export default {
     title:'Anfahrt und Parken',
     sub:'Luftbild mit Eingang und Gästeparkplatz · Aerial view with entrance and guest parking',
     adresse: BRAND.street + ', ' + BRAND.zip + ' ' + BRAND.city,
-    footer: contactLine()
+    footer: contactLine(),
+    credit: BRAND.aerialCredit || ''
   },
 
   render(d){
@@ -94,6 +97,7 @@ export default {
         <div class="t-luft-logo">${logo('color', 32)}</div>
       </div>
       ${has(d.footer) ? `<p class="t-luft-addr">${esc(d.footer)}</p>` : ''}
+      ${has(d.credit) ? `<span class="t-luft-credit">${esc(d.credit)}</span>` : ''}
     </div>`;
   }
 };
