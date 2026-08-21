@@ -16,9 +16,10 @@ Er funktioniert auf jedem Gerät — Büro-PC, Handy, Tablet — und zeigt immer
 aktuellen Stand. Am besten einmal als Lesezeichen speichern; am Handy über
 «Zum Startbildschirm hinzufügen», dann liegt sie wie eine App auf dem Display.
 
-> **Einmalig einschalten:** Repository → **Settings → Pages → Source:
-> «GitHub Actions» → Save**. Danach veröffentlicht
-> `.github/workflows/pages.yml` bei jedem Push auf `main` von selbst.
+> **Einmalig einschalten:** Repository → **Settings → Pages** → unter
+> *Build and deployment* die Quelle auf **«GitHub Actions»** stellen. Die
+> Auswahl gilt sofort. Danach veröffentlicht `.github/workflows/pages.yml`
+> bei jedem Push auf `main` von selbst.
 >
 > Der Schalter lässt sich nicht aus dem Workflow heraus umlegen: das Anlegen
 > einer Pages-Seite verlangt Administrationsrechte am Repository, die der

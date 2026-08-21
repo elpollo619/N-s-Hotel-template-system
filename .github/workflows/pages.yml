@@ -1,7 +1,7 @@
 # Veröffentlicht die Vorlagen-Zentrale auf GitHub Pages.
 #
 # EINMALIG einschalten — das kann nur jemand mit Administrationsrechten:
-#   Repository → Settings → Pages → Source: "GitHub Actions" → Save
+#   Repository → Settings → Pages → Source: "GitHub Actions"
 # Danach läuft der Ablauf bei jedem Push auf main und die Seite steht unter
 #   https://elpollo619.github.io/N-s-Hotel-template-system/
 #
