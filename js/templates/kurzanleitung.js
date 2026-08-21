@@ -77,11 +77,13 @@ export default {
       { titel:'Vorlage wählen und Texte anpassen',
         text:'Beim Hinweis zuerst den fertigen Textbaustein wählen und «Baustein übernehmen» drücken. Danach die Liegenschaft wählen — Kürzel und Adresse setzen sich von selbst.' },
       { titel:'Drucken',
-        text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' }
+        text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' },
+      { titel:'Weitergeben',
+        text:'«Link teilen» kopiert den fertigen Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
     ],
     druckTitel:'Im Druckdialog einstellen',
     druckText:'Ränder: **keine** · Hintergrundgrafiken: **einschalten** · Skalierung: **100 %**',
-    hinweis:'Der grüne Balken links zeigt, ob das Blatt noch auf eine Seite passt. Wird er orange, sind die Texte zu lang. Änderungen bleiben im eigenen Browser gespeichert; «Zurücksetzen» stellt das Original wieder her.',
+    hinweis:'Der grüne Balken links zeigt, ob das Blatt noch auf eine Seite passt; bei Schildern steht darunter der Leseabstand. Änderungen bleiben im eigenen Browser; «Zurücksetzen» stellt das Original her.',
     kontakt:'Fragen an Cris'
   },
 

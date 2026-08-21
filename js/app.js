@@ -9,6 +9,8 @@ import { logo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
 import * as store from './lib/storage.js';
 import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.js';
+import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
+import { lesbarkeit } from './lib/lesbarkeit.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
@@ -106,7 +108,8 @@ function renderHub(){
           <b style="color:var(--navy)">3.</b> <b style="color:var(--navy)">Drucken / PDF</b> wählen.<br>
           Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen.
           Aenderungen bleiben im Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt —
-          jede Person am eigenen Gerät.
+          jede Person am eigenen Gerät. Ein fertiges Blatt geht mit
+          <b>Link teilen</b> an die anderen: die Adresse trägt den ganzen Aushang.
         </div>
       </section>
     </div>`;
@@ -209,9 +212,10 @@ function setPath(state, path, value){
 }
 
 /* ---------- Editor -------------------------------------------------------- */
-function renderEditor(id){
+function renderEditor(id, geteilt){
   const tpl = TEMPLATES[id];
   if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
+  if (geteilt){ uebernehmeGeteilt(tpl, geteilt); return; }
 
   const state = loadState(tpl);
   unmountActive();
@@ -228,12 +232,14 @@ function renderEditor(id){
         <div class="vz-actions">
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
+        ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
@@ -268,6 +274,7 @@ function renderEditor(id){
     }
     fitScaler();
     checkFit();
+    checkFern();
   }
   function fitScaler(){
     const stage = document.getElementById('vz-stage');
@@ -290,6 +297,17 @@ function renderEditor(id){
     fitBox.textContent = (ok ? '✓ ' : '⚠ ') + (ok ? t('fitOk') : t('fitWarn')) +
       `  (${Math.round(worst.h)} / ${max} px${where})`;
   }
+  /* Leseabstand der groessten Schrift — nur bei Vorlagen mit `fern:true`. */
+  function checkFern(){
+    const box = document.getElementById('vz-fern');
+    if (!box) return;
+    const b = lesbarkeit(sheetPages(sheet)[0]);
+    box.className = 'vz-fern vz-fern--' + b.stufe;
+    box.textContent = '\u2194 ' + b.text;
+    box.title = 'Faustregel der Beschilderung: n\u00f6tige x-H\u00f6he in mm = Leseabstand in m \u00d7 2,5. '
+              + 'Gilt f\u00fcr gutes Licht und geraden Blick.';
+  }
+
   function commit(){ saveState(tpl, state); paint(); }
 
   /* Live-Bindung: nur die Vorschau neu zeichnen, damit der Fokus bleibt. */
@@ -413,6 +431,26 @@ function renderEditor(id){
     downloadBlob(blob, `ns-hotel-${tpl.id}-entwurf.json`);
     toast(t('saved'));
   };
+  document.getElementById('vz-share').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '\u2026';
+    try{
+      const { payload, bilder } = await teilenKodieren(state);
+      const url = teilenAdresse(tpl.id, payload);
+      if (url.length > TEILEN_MAX){ alert(t('shareLong')); return; }
+      const ok = await teilenKopieren(url);
+      if (!ok){ window.prompt(t('shareManual'), url); return; }
+      let msg = t('shareCopied');
+      if (bilder) msg += ' \u00b7 ' + t('shareNoImg');
+      /* Eine Datei-Adresse zeigt auf diesen einen Rechner. */
+      if (location.protocol === 'file:') msg = t('shareLocal');
+      toast(msg);
+    }catch(err){
+      console.warn(err);
+      toast(t('shareFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; }
+  };
+
   const fileInput = document.getElementById('vz-json-file');
   document.getElementById('vz-json-load').onclick = () => fileInput.click();
   fileInput.onchange = () => {
@@ -435,6 +473,27 @@ function renderEditor(id){
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitScaler(); checkFit(); });
 }
 
+/* ---------- Geteilten Link uebernehmen ------------------------------------ */
+/* Der Zustand steckt in der Adresse. Er wird als Entwurf gespeichert und die
+   Adresse danach aufgeraeumt — sonst wuerde ein Neuladen den Entwurf immer
+   wieder ueberschreiben und "Zuruecksetzen" haette keine Wirkung. */
+async function uebernehmeGeteilt(tpl, payload){
+  let daten = null;
+  try{ daten = await teilenLesen(payload); }
+  catch(err){ console.warn(err); }
+
+  history.replaceState(null, '', location.href.split('#')[0] + '#/t/' + tpl.id);
+
+  if (!daten){ renderEditor(tpl.id); toast(t('shareBad')); return; }
+
+  const vorhanden = store.load(draftKey(tpl.id), null);
+  if (vorhanden && !confirm(t('shareAsk'))){ renderEditor(tpl.id); return; }
+
+  store.save(draftKey(tpl.id), Object.assign({}, structuredClone(tpl.defaults), daten));
+  renderEditor(tpl.id);
+  toast(t('shareGot'));
+}
+
 /* ---------- Toast --------------------------------------------------------- */
 let toastTimer = null;
 function toast(msg){
@@ -453,9 +512,10 @@ function toast(msg){
 function route(){
   unmountActive();
   const hash = location.hash || '#/';
-  const m = /^#\/t\/([\w-]+)/.exec(hash);
+  /* #/t/<vorlage> — optional mit geteiltem Zustand: ?d=<Nutzlast> */
+  const m = /^#\/t\/([\w-]+)(?:\?d=([A-Za-z0-9\-_]+))?/.exec(hash);
   window.scrollTo(0, 0);
-  if (m) renderEditor(m[1]); else renderHub();
+  if (m) renderEditor(m[1], m[2] || null); else renderHub();
 }
 
 window.addEventListener('hashchange', route);

@@ -86,6 +86,8 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | Vorlage | Format | Wofür |
 |---|---|---|
 | **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — rund 30 fertige Textbausteine, Kopfbalken navy / cyan / rot je nach Ton |
+| **Sicherheitszeichen** | A5/A4, mehrseitig | Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 3864-1 / ISO 7010 — 16 fertige Zeichen, eine Seite je Schild |
+| **Etikettenbogen** | A4 hoch, mehrseitig | Klebeetiketten auf Avery-Bogen (L7160, L7163, L7165, L7651) oder freiem Raster — Schlüssel, Schränke, Vorräte |
 | **Mieterbrief** | A4 hoch | Schreiben mit Briefkopf: Hauseingangstür, Besucherparkplatz, Brandmelder |
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
@@ -128,6 +130,62 @@ Nicht übernommen: die **Reels** (9 × 16). Sie sind keine Druckvorlage, sondern
 zeitgesteuerte Videoszenen auf React und Babel aus dem CDN — beides steht im
 Widerspruch zu „kein Framework, kein CDN, läuft offline". Sie funktionieren
 als eigenständige Dateien bereits gut und bleiben deshalb, wo sie sind.
+
+**So funktionieren die Sicherheitszeichen:** Form und Farbe folgen
+ISO 3864-1 — roter Ring und Schrägbalken je 0,08 des Durchmessers, Balken über
+dem Symbol, gelbes Dreieck mit schwarzem Rand, blauer Kreis für Gebote, grünes
+Quadrat für Rettungszeichen. **Die Piktogramme sind eigene Zeichnungen im Stil
+der Norm, nicht die amtlichen Symbole.** Für zertifizierte Kennzeichnung —
+Fluchtwege und Brandschutz nach Vorgabe der Feuerpolizei — gehören geprüfte
+Schilder an die Wand. Für den Hausgebrauch (Rauchverbot im Treppenhaus,
+«Tür geschlossen halten» an der Waschküche) ist der eigene Druck richtig.
+
+**So funktioniert der Etikettenbogen:** die Raster stammen von Avery Zweckform;
+die Etikettengrösse und die Anzahl je Bogen sind Herstellerangaben, die
+Randmasse daraus mittig berechnet. Vor dem ersten echten Bogen einmal auf
+normales Papier drucken, gegen den Etikettenbogen halten und bei Bedarf die
+Feinverschiebung setzen — Drucker versetzen gerne um ein bis zwei Millimeter.
+Im Druckdialog zwingend **Ränder: keine** und **Skalierung: 100 %**; sobald der
+Browser das Blatt einpasst, stimmt kein Etikett mehr.
+
+---
+
+## Aushang teilen — der Link
+
+Neben «Entwurf sichern» steht **«Link teilen»**. Er legt den ganzen Aushang in
+die Adresse und kopiert sie in die Zwischenablage:
+
+```
+https://elpollo619.github.io/N-s-Hotel-template-system/#/t/hinweis?d=zXQAAA…
+```
+
+Wer den Link anklickt, sieht denselben Aushang und kann ihn drucken. Es geht
+nichts an einen Server — die Daten stehen in der Adresse selbst.
+
+* Bilder bleiben draussen. Ein Foto sprengt jede Adresszeile; dafür gibt es
+  weiterhin «Entwurf sichern» und die Entwurfsdatei.
+* Wird der Entwurf zu lang, sagt das Werkzeug es und schlägt die Datei vor.
+* Beim Empfänger wird gefragt, bevor ein eigener Entwurf ersetzt wird.
+* Aus `standalone.html` heraus zeigt der Link auf die Datei auf **diesem**
+  Rechner. Zum Verschicken die Adresse im Internet nehmen.
+
+---
+
+## Lesbar aus wie weit?
+
+Bei den Schildern steht links unter der Höhenkontrolle, aus welcher
+Entfernung die grösste Schrift noch sicher lesbar ist. Gerechnet wird mit der
+Faustregel aus der Beschilderungspraxis:
+
+```
+nötige x-Höhe in mm  =  Leseabstand in m  ×  2,5
+```
+
+Die x-Höhe ist die Höhe des kleinen «x», nicht die Schriftgrösse — sie
+entscheidet über die Lesbarkeit, nicht die Punktzahl. Die Anzeige ist eine
+Orientierung: schlechtes Licht, schräger Blick und schwacher Kontrast
+verkürzen den Abstand zusätzlich. Wird die Zeile orange, ist das Blatt eher
+ein Merkblatt als ein Schild.
 
 ---
 
@@ -436,6 +494,12 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/planeditor.mjs`** — Auswählen, Ziehen, Umformen, Drehen, Formatwechsel
 * **`tests/gaestemappe.mjs`** — Seitenzahl, Höhe jeder einzelnen Seite,
   Kapitel ab- und zuschalten, durchlaufende Nummerierung
+* **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
+  räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
+  die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/etiketten.mjs`** — der Etikettenbogen sitzt millimetergenau auf den
+  Herstellermassen, Feinverschiebung und freies Raster greifen, ein voller
+  Bogen läuft auf die zweite Seite
 * **`tests/standalone.mjs`** — `standalone.html` läuft per `file://`, inklusive
   PNG-Export ohne Netz
 

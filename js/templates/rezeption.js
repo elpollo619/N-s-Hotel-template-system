@@ -21,6 +21,7 @@ export default {
   badgeCyan:true,
   page:'a4',
   root:'t-rezeption',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="16" y="14" width="60" height="7" rx="3.5" fill="#C9CFDA"/>
     <rect x="16" y="58" width="178" height="62" rx="7" fill="#2A3350"/>
