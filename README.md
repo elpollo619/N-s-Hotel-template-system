@@ -16,9 +16,9 @@ Er funktioniert auf jedem Gerät — Büro-PC, Handy, Tablet — und zeigt immer
 aktuellen Stand. Am besten einmal als Lesezeichen speichern; am Handy über
 «Zum Startbildschirm hinzufügen», dann liegt sie wie eine App auf dem Display.
 
-> Der Link lebt erst, wenn GitHub Pages eingeschaltet ist:
-> **Settings → Pages → Source: «GitHub Actions» → Save**. Der Ablauf dafür liegt
-> bereits im Repository (`.github/workflows/pages.yml`) und tut bis dahin nichts.
+> Veröffentlicht wird automatisch bei jedem Push auf `main`
+> (`.github/workflows/pages.yml`). Pages schaltet der Ablauf beim ersten Lauf
+> selbst ein — es ist kein Handgriff im Repository nötig.
 
 **Ohne Internet:** die Datei `standalone.html` herunterladen und doppelklicken.
 Sie enthält alles in einer einzigen Datei und läuft ohne Server. Nachteil: eine

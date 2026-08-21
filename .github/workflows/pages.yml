@@ -1,8 +1,7 @@
 # Veröffentlicht die Vorlagen-Zentrale auf GitHub Pages.
 #
-# Dieser Ablauf tut nichts, solange Pages nicht eingeschaltet ist. Einschalten:
-#   Repository → Settings → Pages → Source: "GitHub Actions" → Save
-# Danach läuft er bei jedem Push auf main und die Seite steht unter
+# Der Ablauf schaltet Pages beim ersten Lauf selbst ein (enablement: true).
+# Er läuft bei jedem Push auf main; die Seite steht danach unter
 #   https://elpollo619.github.io/N-s-Hotel-template-system/
 #
 # Veröffentlicht wird der Projektordner unverändert — es ist eine statische
@@ -33,7 +32,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # enablement: true schaltet Pages beim ersten Lauf selbst ein — dafür
+      # genügt die oben erteilte Berechtigung "pages: write". Ohne diesen
+      # Schalter bricht der Lauf mit "Get Pages site failed" ab, solange
+      # niemand den Schalter unter Settings → Pages von Hand umgelegt hat.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
