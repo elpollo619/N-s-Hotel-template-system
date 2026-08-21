@@ -10,9 +10,12 @@
      A4    "Besucher PP A4.docx"      → Allmendstrasse 4/4a
      A14   Gästemappe N's Hotel        → Allmendstrasse 14, 3210 Kerzers
      B4    Briefkopf HANS AMONN AG     → Blümlisalpstrasse 4, 3074 Muri b. Bern
+     B22   "Information gebrauch Waschmaschine B22.docx"
+           → Bernstrasse 22, 3053 Münchenbuchsee
      H8    Ordner Dossier Liegenschaften → Höheweg 8 (und 8a)
 
-   Bei allen übrigen Objekten steht die Adresse bewusst leer. Ein falscher
+   Offen bleiben A12, A12a, B7, I16, S17 und Casa Reto — dort steht die
+   Adresse bewusst leer. Ein falscher
    Strassenname auf einem Aushang wäre schlimmer als gar keiner. Sobald die
    Adresse bekannt ist, hier eintragen — alle Vorlagen ziehen automatisch nach.
    ========================================================================== */
@@ -57,7 +60,7 @@ export const OBJEKTE = [
   { id:'A14',      code:'A14',   name:"N's Hotel",        street:'Allmendstrasse 14',   zip:'3210', city:'Kerzers',     absender:'hotel' },
   { id:'B4',       code:'B4',    name:'Blümlisalpstr. 4', street:'Blümlisalpstrasse 4', zip:'3074', city:'Muri b. Bern',absender:'architektur' },
   { id:'B7',       code:'B7',    name:'B7',               street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'B22',      code:'B22',   name:'B22',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'B22',      code:'B22',   name:'Bernstrasse 22',   street:'Bernstrasse 22',      zip:'3053', city:'Münchenbuchsee',absender:'immobilien' },
   { id:'H8',       code:'H8',    name:'Höheweg 8',        street:'Höheweg 8',           zip:'',     city:'',            absender:'immobilien' },
   { id:'I16',      code:'I16',   name:'I16',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
   { id:'S17',      code:'S17',   name:'S17',              street:'',                    zip:'',     city:'',            absender:'immobilien' },

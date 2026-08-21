@@ -1008,7 +1008,7 @@ a{color:var(--cyan)}
 .t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
   padding:14mm 18mm}
 .t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
-.t-hinweis-p[lang="en"],.t-hinweis-p[lang="it"]{font-size:12pt;color:var(--ink-soft);font-style:italic}
+.t-hinweis-p:not([lang="de"]){font-size:12pt;color:var(--ink-soft);font-style:italic}
 
 .t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
 .t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
@@ -1092,6 +1092,29 @@ a{color:var(--cyan)}
 .t-mieterbrief-foot{margin-top:auto;padding-top:5mm;border-top:1px solid var(--line);
   font-size:7.5pt;line-height:1.5;color:var(--ink-faint)}
 
+/* ==========================================================================
+   Sammelstelle · eine Seite je Behälter
+   ========================================================================== */
+.t-sammel-page{display:flex;flex-direction:column;box-sizing:border-box}
+.t-sammel-band{height:10mm;background:var(--ton);flex:0 0 auto}
+.t-sammel-body{flex:1;display:flex;align-items:center;justify-content:space-between;
+  gap:8mm;padding:8mm 12mm}
+.t-sammel-txt{min-width:0}
+.t-sammel-txt h1{margin:0;font-family:var(--font-display);font-size:44pt;line-height:.98;
+  letter-spacing:-.02em;color:var(--ton)}
+.t-sammel-en{margin:2mm 0 0;font-size:13pt;font-style:italic;color:var(--ink-soft)}
+.t-sammel-ja,.t-sammel-nein{margin:5mm 0 0;font-size:11.5pt;line-height:1.4;
+  display:flex;gap:3mm;align-items:baseline}
+.t-sammel-ja span,.t-sammel-nein span{flex:0 0 auto;font-weight:700;font-size:14pt}
+.t-sammel-ja{color:var(--ink)}
+.t-sammel-ja span{color:#0B7A3B}
+.t-sammel-nein{color:var(--ink-soft)}
+.t-sammel-nein span{color:#C0271F}
+.t-sammel-ico{flex:0 0 auto;color:var(--ton);opacity:.42}
+.t-sammel-ico svg{display:block}
+.t-sammel-foot{display:flex;align-items:center;justify-content:space-between;gap:6mm;
+  padding:0 12mm 7mm;font-size:8pt;color:var(--ink-faint)}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -1134,6 +1157,7 @@ const BRAND = {
 
   // Echte Angaben, übernommen aus der bestehenden Gästemappe des Hauses.
   phone:    "+41 31 951 85 54",
+  mobile:   "+41 77 535 06 68",   // aus "Infos.docx" im Ordner A14/Plakate
   whatsapp: "+41 31 951 85 53",
   mail:     "info@ns-hotel.ch",
   web:      "ns-hotel.ch",
@@ -1165,9 +1189,12 @@ function contactLine(){
      A4    "Besucher PP A4.docx"      → Allmendstrasse 4/4a
      A14   Gästemappe N's Hotel        → Allmendstrasse 14, 3210 Kerzers
      B4    Briefkopf HANS AMONN AG     → Blümlisalpstrasse 4, 3074 Muri b. Bern
+     B22   "Information gebrauch Waschmaschine B22.docx"
+           → Bernstrasse 22, 3053 Münchenbuchsee
      H8    Ordner Dossier Liegenschaften → Höheweg 8 (und 8a)
 
-   Bei allen übrigen Objekten steht die Adresse bewusst leer. Ein falscher
+   Offen bleiben A12, A12a, B7, I16, S17 und Casa Reto — dort steht die
+   Adresse bewusst leer. Ein falscher
    Strassenname auf einem Aushang wäre schlimmer als gar keiner. Sobald die
    Adresse bekannt ist, hier eintragen — alle Vorlagen ziehen automatisch nach.
    ========================================================================== */
@@ -1212,7 +1239,7 @@ const OBJEKTE = [
   { id:'A14',      code:'A14',   name:"N's Hotel",        street:'Allmendstrasse 14',   zip:'3210', city:'Kerzers',     absender:'hotel' },
   { id:'B4',       code:'B4',    name:'Blümlisalpstr. 4', street:'Blümlisalpstrasse 4', zip:'3074', city:'Muri b. Bern',absender:'architektur' },
   { id:'B7',       code:'B7',    name:'B7',               street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'B22',      code:'B22',   name:'B22',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'B22',      code:'B22',   name:'Bernstrasse 22',   street:'Bernstrasse 22',      zip:'3053', city:'Münchenbuchsee',absender:'immobilien' },
   { id:'H8',       code:'H8',    name:'Höheweg 8',        street:'Höheweg 8',           zip:'',     city:'',            absender:'immobilien' },
   { id:'I16',      code:'I16',   name:'I16',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
   { id:'S17',      code:'S17',   name:'S17',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
@@ -1332,6 +1359,42 @@ const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'schluessel', cat:'hausordnung', ton:'info', icon:'key',
+    label:'Schlüssel nicht stecken lassen',
+    title:'Bitte Schlüssel nicht stecken lassen',
+    de:'', en:'Please remove the key', fr:'', it:'', pt:''
+  },
+  {
+    id:'ruhezeit', cat:'hausordnung', ton:'info', icon:'clock',
+    label:'Ruhezeiten',
+    title:'Ruhezeit',
+    de:'22:00 – 07:00 Uhr sowie am Sonntag den ganzen Tag. Bitte Rücksicht auf die Mitbewohner nehmen.',
+    en:'Quiet hours 22:00 – 07:00 and all day on Sunday.', fr:'', it:'', pt:''
+  },
+  {
+    id:'leise', cat:'hausordnung', ton:'info', icon:'info',
+    label:'Bitte leise',
+    title:'Bitte leise',
+    de:'Im Treppenhaus und auf den Gängen bitte leise sprechen. Die Wände sind dünner, als sie aussehen.',
+    en:'Please keep it quiet in the stairwell and hallways.', fr:'', it:'', pt:''
+  },
+  {
+    id:'fenster', cat:'hausordnung', ton:'info', icon:'info',
+    label:'Fenster geschlossen halten',
+    title:'Bitte Fenster geschlossen halten',
+    de:'Sämtliche Zimmer verfügen über eine mechanische Belüftung, welche das gesamte Raumvolumen pro Tag rund 15 Mal wechselt. Aus diesem Grund sollten die Fenster geschlossen bleiben. Die dreifach verglasten Scheiben halten zudem den Aussenlärm ab, damit Sie ruhig schlafen können.',
+    en:'All rooms have mechanical ventilation that exchanges the entire room volume about 15 times a day, so the windows should stay closed. The triple glazing also keeps out street noise so you can sleep peacefully.',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'besucher', cat:'hausordnung', ton:'info', icon:'door',
+    label:'Besucher anmelden',
+    title:'Besuch',
+    de:'Besucherinnen und Besucher sind willkommen. Bitte begleiten Sie Ihren Besuch beim Betreten und Verlassen des Hauses und melden Sie Übernachtungen vorher an.',
+    en:'', fr:'', it:'', pt:''
+  },
+
   /* ── Abfall und Recycling ────────────────────────────────────────────── */
   {
     id:'saecke', cat:'abfall', ton:'info', icon:'trash',
@@ -1361,6 +1424,14 @@ const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'papierkarton', cat:'abfall', ton:'info', icon:'trash',
+    label:'Sauberes Papier und Karton',
+    title:'Sauberes Papier + Karton',
+    de:'Kein beschichtetes Papier, keine Verbundverpackungen.',
+    en:'Clean paper and cardboard only', fr:'', it:'', pt:''
+  },
+
   /* ── Parkieren ───────────────────────────────────────────────────────── */
   {
     id:'privatpp', cat:'parken', ton:'verbot', icon:'car',
@@ -1384,6 +1455,17 @@ const PRESETS = [
     de:'Auf dem gesamten Areal gilt Parkverbot. Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
     en:'No parking. Vehicles parked illegally will be towed at the ownerʼs expense.',
     it:''
+  },
+
+  {
+    id:'fahrzeug', cat:'parken', ton:'warnung', icon:'car',
+    label:'Fahrzeug unberechtigt abgestellt (DE/FR/PT)',
+    title:'Unberechtigt abgestelltes Fahrzeug',
+    de:'Dieses Fahrzeug steht in der Zufahrt zu bzw. auf einem unberechtigten Platz unserer Liegenschaft {{adresse}}!\n\nFalls Sie Besucher eines Bewohners dieser Liegenschaft sind, erkundigen Sie sich bei dem betreffenden Bewohner, wo das Fahrzeug berechtigterweise abgestellt werden kann.\n\nWird das Fahrzeug erneut unberechtigt abgestellt, werden wir Anzeige bei der Polizei erstatten!',
+    en:'',
+    fr:'Ce véhicule est parqué dans une zone interdite de notre bien foncier {{adresse}}! Si vous êtes visiteur de ce bien foncier, nous vous prions de vous renseigner sur un lieu autorisé pour parquer votre véhicule. Si le véhicule est à nouveau garé sans autorisation, nous le signalons à la police!',
+    it:'',
+    pt:'Este veículo está estacionado em uma área proibida, qual pertence à propriedade {{adresse}}! Se você for um visitante desse endereço, solicitamos que informe-se sobre um local autorizado para estacionar seu veículo. Se o veículo for estacionado novamente sem autorização, será denunciado à polícia!'
   },
 
   /* ── Küche und Bad ───────────────────────────────────────────────────── */
@@ -1416,6 +1498,20 @@ const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'backofen', cat:'kueche', ton:'info', icon:'cup',
+    label:'Backofen nur mit Backpapier',
+    title:'Bitte Backofen nur mit Backtrennpapier benützen',
+    de:'Das Papier ist mehrmals benutzbar.',
+    en:'Please use the oven only with baking paper.', fr:'', it:'', pt:''
+  },
+  {
+    id:'geschirr', cat:'kueche', ton:'verbot', icon:'cup',
+    label:'Kein Geschirr entfernen',
+    title:'Kein Geschirr, Gläser, Pfannen und Küchengeräte aus diesem Raum entfernen',
+    de:'', en:'', fr:'', it:'', pt:''
+  },
+
   /* ── Waschen und Trocknen ────────────────────────────────────────────── */
   {
     id:'waschmaschine', cat:'waesche', ton:'info', icon:'info',
@@ -1429,7 +1525,16 @@ const PRESETS = [
     label:'Wäsche aufhängen',
     title:'Wäsche bitte im Trocknungsraum aufhängen',
     de:'Im Zimmer aufgehängte Wäsche führt zu Feuchtigkeit und Schimmel. Bitte den Trocknungsraum benutzen.',
-    en:'Please hang your laundry in the drying room, not in your room.', it:''
+    en:'Please hang your laundry in the drying room, not in your room.', fr:'', it:'', pt:''
+  },
+  {
+    id:'waeschehaenge', cat:'waesche', ton:'info', icon:'info',
+    label:'Trockene Wäsche abnehmen (DE/EN/FR)',
+    title:'Wäschehänge',
+    de:'Bitte nimm deine trockene Kleidung sofort von der Wäschehänge. Wenn du Kleidung aufhängen möchtest und keinen freien Platz findest, darfst du trockene Kleidung anderer Gäste vorsichtig von der Wäschehänge nehmen, ordentlich in den Korb legen und die Wäschehänge benutzen.',
+    en:'Please remove your dried clothes from the drying rack as soon as they are dry. If you would like to hang up clothes and there is no free space available, you may carefully remove dry clothes belonging to other guests from the drying rack, place them neatly in the basket, and use the rack.',
+    fr:'Merci de retirer tes vêtements de lʼétendoir dès quʼils sont secs. Si tu souhaites étendre des vêtements et quʼil nʼy a plus de place disponible, tu peux retirer soigneusement les vêtements secs des autres invités de lʼétendoir, les placer correctement dans le panier et utiliser lʼétendoir.',
+    it:'', pt:''
   },
 
   /* ── Vermietung ──────────────────────────────────────────────────────── */
@@ -1476,6 +1581,30 @@ const PRESETS = [
     title:'Gepäckraum · Storage',
     de:'Gepäck kann vor dem Check-in und nach dem Check-out hier abgestellt werden. Keine Haftung für Wertsachen.',
     en:'Luggage may be left here before check-in and after check-out. No liability for valuables.', it:''
+  },
+
+  {
+    id:'rauchhotel', cat:'hotel', ton:'verbot', icon:'smoke',
+    label:'Rauchverbot im Zimmer (mit Kostenfolge)',
+    title:'Rauchverbot',
+    de:'In sämtlichen Räumen ist das Rauchen strengstens untersagt. Das gesamte Gebäude ist zu Ihrer Sicherheit mit Rauchmeldern ausgestattet, welche bei der geringsten Rauchentwicklung Alarm auslösen. Der Alarm geht direkt zur örtlichen Feuerwehr. Ein Fehlalarm zieht automatisch hohe Kosten (über CHF 1ʼ800.–) nach sich, welche dem fehlbaren Gast weiterverrechnet werden.\n\nGästen, welche sich nicht an diese Weisung halten, wird eine Reinigungspauschale von CHF 300.– in Rechnung gestellt.',
+    en:'Smoking is strictly prohibited in all rooms. The entire building is equipped with smoke detectors that trigger an alarm at the slightest smoke. The alarm goes directly to the local fire department. A false alarm automatically incurs high costs (over CHF 1ʼ800), which will be charged to the responsible guest. Guests who do not comply will be charged a cleaning fee of CHF 300.–',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'checkoutkarte', cat:'hotel', ton:'info', icon:'key',
+    label:'Check-out mit Zimmerkarte',
+    title:'Check-out',
+    de:'Beim Verlassen des Zimmers lassen Sie bitte die physische Zimmerkarte auf dem Schreibtisch und senden uns eine Kurzmitteilung «check-out erfolgt». Besten Dank und einen angenehmen Aufenthalt.',
+    en:'When leaving the room, please leave the physical room card on the desk and send us a short message saying “check-out completed”. Thank you and have a pleasant stay.',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'wlan', cat:'hotel', ton:'info', icon:'wifi',
+    label:'WLAN',
+    title:'welcome to Nʼs HOTEL',
+    de:'WLAN: Gast\nPasswort: · · · · · · · ·\n\nDas Passwort im Editor eintragen — es bleibt in diesem Browser und wird nie mitveröffentlicht.',
+    en:'', fr:'', it:'', pt:''
   },
 
   /* ── Technik und Unterhalt ───────────────────────────────────────────── */
@@ -4298,9 +4427,11 @@ const hinweis = {
     { k:'datum', label:'Datum (für {{datum}})', type:'text' },
 
     { t:'group', label:'Text' },
-    { k:'de', label:'Deutsch',  type:'textarea', hint:'**fett** möglich' },
-    { k:'en', label:'English',  type:'textarea' },
-    { k:'it', label:'Italiano', type:'textarea' },
+    { k:'de', label:'Deutsch',   type:'textarea', hint:'**fett** möglich' },
+    { k:'en', label:'English',   type:'textarea' },
+    { k:'fr', label:'Français',  type:'textarea' },
+    { k:'it', label:'Italiano',  type:'textarea' },
+    { k:'pt', label:'Português', type:'textarea' },
 
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
@@ -4319,7 +4450,7 @@ const hinweis = {
     datum:'',
     de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
     en:'No smoking anywhere in the building.',
-    it:'',
+    fr:'', it:'', pt:'',
     gruss:'Die Verwaltung',
     footer:''
   },
@@ -4328,7 +4459,9 @@ const hinweis = {
   actions:{
     apply(d){
       const p = preset(d.presetId);
-      return { ...d, ton:p.ton, icon:p.icon, title:p.title, de:p.de, en:p.en, it:p.it };
+      return { ...d, ton:p.ton, icon:p.icon, title:p.title,
+               de:p.de || '', en:p.en || '', fr:p.fr || '',
+               it:p.it || '', pt:p.pt || '' };
     }
   },
 
@@ -4362,7 +4495,9 @@ const hinweis = {
     <section class="t-hinweis-body">
       ${block('de', d.de)}
       ${block('en', d.en)}
+      ${block('fr', d.fr)}
       ${block('it', d.it)}
+      ${block('pt', d.pt)}
     </section>
 
     <footer class="t-hinweis-foot">
@@ -4746,10 +4881,153 @@ const mieterbrief = {
   }
 };
 
+/* ===== js/templates/sammelstelle.js ===== */
+/* Sammelstelle · Beschriftung der Behälter, mehrseitig.
+   Ersetzt die Serie BeschriftungPET / -Altglas / -Altpapier / -Metall /
+   -Nespresso / -Kehricht / -Kompost / -Sperrmüll und die Liste aus
+   "A14 Recycling.docx" (Papier, Plastik-Gebinde, PET, Clean Plastik, Glas,
+   Alumetall).
+
+   Ein grosses Wort, ein Piktogramm, eine Zeile was hinein darf und eine was
+   nicht — aus zwei Metern Abstand lesbar. Angekreuzte Fraktionen ergeben je
+   eine Seite. */
+
+
+
+
+
+const SAMMEL_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
+
+/* Die Fraktionen, wie sie im Haus wirklich beschriftet sind. */
+const FRAKTIONEN = [
+  { id:'papier',   wort:'Papier',        en:'Paper',        icon:'trash',  farbe:'#2A3350',
+    ja:'Sauberes Papier und Karton', nein:'Kein beschichtetes Papier, keine Verbundverpackungen' },
+  { id:'karton',   wort:'Karton',        en:'Cardboard',    icon:'trash',  farbe:'#2A3350',
+    ja:'Flach gefaltet', nein:'Kein verschmutzter Karton' },
+  { id:'pet',      wort:'PET',           en:'PET bottles',  icon:'bottle', farbe:'#0B7A3B',
+    ja:'Nur PET-Getränkeflaschen — Luft rauslassen, Deckel wieder aufschrauben', nein:'Keine Milchflaschen, keine Shampooflaschen' },
+  { id:'plastik',  wort:'Clean Plastik', en:'Clean plastic',icon:'bottle', farbe:'#0B7A3B',
+    ja:'Saubere Kunststoffverpackungen', nein:'Keine verschmutzten Verpackungen' },
+  { id:'gebinde',  wort:'Plastik-Gebinde', en:'Plastic bottles', icon:'bottle', farbe:'#0B7A3B',
+    ja:'Shampoo-, Wasch- und Putzmittelflaschen', nein:'Kein PET' },
+  { id:'glas',     wort:'Glas',          en:'Glass',        icon:'bottle', farbe:'#0E6E5E',
+    ja:'Flaschen und Gläser, ohne Deckel', nein:'Kein Fensterglas, keine Keramik' },
+  { id:'metall',   wort:'Alumetall',     en:'Metal',        icon:'trash',  farbe:'#5A6474',
+    ja:'Dosen, Alu, Tuben', nein:'Keine Spraydosen mit Restinhalt' },
+  { id:'nespresso',wort:'Nespresso',     en:'Coffee capsules', icon:'cup', farbe:'#8A5A2B',
+    ja:'Nur Aluminium-Kapseln', nein:'Keine Kunststoff-Kapseln' },
+  { id:'kompost',  wort:'Kompost',       en:'Organic waste',icon:'trash',  farbe:'#6B7A2B',
+    ja:'Rüstabfälle, Kaffeesatz, Eierschalen', nein:'Keine Knochen, keine Plastiksäcke' },
+  { id:'kehricht', wort:'Kehricht',      en:'General waste',icon:'trash',  farbe:'#C0271F',
+    ja:'Nur im offiziellen Gebührensack', nein:'Nichts Recycelbares' },
+  { id:'sperrmuell',wort:'Sperrmüll',    en:'Bulky waste',  icon:'trash',  farbe:'#C0271F',
+    ja:'Nach Absprache mit der Verwaltung', nein:'Nicht einfach abstellen' }
+];
+
+const sammelstelle = {
+  id:'sammelstelle',
+  title:'Sammelstelle beschriften',
+  sub:'Papier, PET, Glas, Kehricht … · eine Seite je Behälter',
+  badge:'Abfall',
+  root:'t-sammel',
+  cat:'abfall',
+  multipage:true,
+  pageOf(d){ return SAMMEL_PAGES[d && d.format] || 'a5-land'; },
+
+  thumb: thumb(`
+    <rect x="12" y="26" width="186" height="106" rx="10" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="2"/>
+    <rect x="12" y="26" width="186" height="20" rx="10" fill="#0B7A3B"/>
+    <rect x="12" y="36" width="186" height="10" fill="#0B7A3B"/>
+    <rect x="30" y="62" width="70" height="22" rx="5" fill="#2A3350"/>
+    <rect x="30" y="94" width="110" height="7" rx="3.5" fill="#C9CFDA"/>
+    <rect x="30" y="108" width="86" height="7" rx="3.5" fill="#E5E8ED"/>
+    <circle cx="164" cy="86" r="22" fill="#fff" stroke="#0B7A3B" stroke-width="3"/>
+    <rect x="12" y="158" width="186" height="106" rx="10" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="2"/>
+    <rect x="12" y="158" width="186" height="20" rx="10" fill="#C0271F"/>
+    <rect x="12" y="168" width="186" height="10" fill="#C0271F"/>
+    <rect x="30" y="194" width="90" height="22" rx="5" fill="#2A3350"/>
+    <rect x="30" y="226" width="110" height="7" rx="3.5" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Format' },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
+      { v:'a4-land', t:'A4 quer' }, { v:'a4', t:'A4 hoch' }
+    ] },
+    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Behälter' },
+    { t:'note', label:'Jede Zeile ergibt eine Druckseite. Nicht benötigte Zeilen löschen.' },
+    { k:'rows', label:'Fraktionen', type:'list', itemLabel:'Behälter', max:12,
+      defaultItem:{ art:'papier', wort:'', ja:'', nein:'' },
+      item:[
+        { k:'art',  label:'Fraktion', type:'select',
+          options:FRAKTIONEN.map(f => ({ v:f.id, t:f.wort })) },
+        { k:'wort', label:'Wort (überschreibt)', type:'text' },
+        { k:'ja',   label:'Das gehört hinein', type:'text' },
+        { k:'nein', label:'Das gehört nicht hinein', type:'text' }
+      ] }
+  ],
+
+  defaults:{
+    format:'a5-land',
+    zweisprachig:'ja',
+    objekt:'-',
+    absender:'immobilien',
+    /* Die sechs Fraktionen aus "A14 Recycling.docx". */
+    rows:[
+      { art:'papier',  wort:'', ja:'', nein:'' },
+      { art:'gebinde', wort:'', ja:'', nein:'' },
+      { art:'pet',     wort:'', ja:'', nein:'' },
+      { art:'plastik', wort:'', ja:'', nein:'' },
+      { art:'glas',    wort:'', ja:'', nein:'' },
+      { art:'metall',  wort:'', ja:'', nein:'' }
+    ]
+  },
+
+  render(d){
+    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const en  = d.zweisprachig !== 'nein';
+
+    return (d.rows || []).map(r => {
+      const f = FRAKTIONEN.find(x => x.id === r.art) || FRAKTIONEN[0];
+      const wort = has(r.wort) ? r.wort : f.wort;
+      const ja   = has(r.ja)   ? r.ja   : f.ja;
+      const nein = has(r.nein) ? r.nein : f.nein;
+
+      return `
+      <article data-page class="t-sammel-page" style="--ton:${f.farbe}">
+        <div class="t-sammel-band"></div>
+        <div class="t-sammel-body">
+          <div class="t-sammel-txt">
+            <h1>${esc(wort)}</h1>
+            ${en && f.en ? `<p class="t-sammel-en">${esc(f.en)}</p>` : ''}
+            ${has(ja)   ? `<p class="t-sammel-ja"><span>✓</span>${esc(ja)}</p>` : ''}
+            ${has(nein) ? `<p class="t-sammel-nein"><span>×</span>${esc(nein)}</p>` : ''}
+          </div>
+          <div class="t-sammel-ico">${icon(f.icon, 120, 1.6)}</div>
+        </div>
+        <footer class="t-sammel-foot">
+          <span>${istHotel(d.absender) ? logo('color', 22) : esc(abs.legal)}</span>
+          <span>${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+        </footer>
+      </article>`;
+    }).join('');
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Der Hub gruppiert nach Kategorie — dieselbe Einteilung, nach der die
    Aushänge im Laufwerk sortiert sind. */
+
 
 
 
@@ -4769,6 +5047,7 @@ const TEMPLATES = {
   mieterbrief,
   parkschild,
   waschplan,
+  sammelstelle,
   notruf,
   rezeption,
   'rezeption-sticker': sticker,
@@ -4782,7 +5061,7 @@ const TEMPLATES = {
 };
 
 const ORDER = [
-  'hinweis', 'mieterbrief', 'parkschild', 'waschplan',
+  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -4795,6 +5074,10 @@ const GROUPS = [
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
     ids:['parkschild', 'parkplatz'] },
+
+  { id:'abfall', title:'Abfall und Recycling',
+    note:'Behälter beschriften — Papier, PET, Glas, Kehricht und die anderen Fraktionen.',
+    ids:['sammelstelle'] },
 
   { id:'waesche', title:'Waschen und Trocknen',
     note:'Waschplan zum Aushängen.',

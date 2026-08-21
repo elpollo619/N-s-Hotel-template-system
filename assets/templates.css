@@ -635,7 +635,7 @@
 .t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
   padding:14mm 18mm}
 .t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
-.t-hinweis-p[lang="en"],.t-hinweis-p[lang="it"]{font-size:12pt;color:var(--ink-soft);font-style:italic}
+.t-hinweis-p:not([lang="de"]){font-size:12pt;color:var(--ink-soft);font-style:italic}
 
 .t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
 .t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
@@ -718,3 +718,26 @@
 .t-mieterbrief-legal{color:var(--ink-soft)}
 .t-mieterbrief-foot{margin-top:auto;padding-top:5mm;border-top:1px solid var(--line);
   font-size:7.5pt;line-height:1.5;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Sammelstelle · eine Seite je Behälter
+   ========================================================================== */
+.t-sammel-page{display:flex;flex-direction:column;box-sizing:border-box}
+.t-sammel-band{height:10mm;background:var(--ton);flex:0 0 auto}
+.t-sammel-body{flex:1;display:flex;align-items:center;justify-content:space-between;
+  gap:8mm;padding:8mm 12mm}
+.t-sammel-txt{min-width:0}
+.t-sammel-txt h1{margin:0;font-family:var(--font-display);font-size:44pt;line-height:.98;
+  letter-spacing:-.02em;color:var(--ton)}
+.t-sammel-en{margin:2mm 0 0;font-size:13pt;font-style:italic;color:var(--ink-soft)}
+.t-sammel-ja,.t-sammel-nein{margin:5mm 0 0;font-size:11.5pt;line-height:1.4;
+  display:flex;gap:3mm;align-items:baseline}
+.t-sammel-ja span,.t-sammel-nein span{flex:0 0 auto;font-weight:700;font-size:14pt}
+.t-sammel-ja{color:var(--ink)}
+.t-sammel-ja span{color:#0B7A3B}
+.t-sammel-nein{color:var(--ink-soft)}
+.t-sammel-nein span{color:#C0271F}
+.t-sammel-ico{flex:0 0 auto;color:var(--ton);opacity:.42}
+.t-sammel-ico svg{display:block}
+.t-sammel-foot{display:flex;align-items:center;justify-content:space-between;gap:6mm;
+  padding:0 12mm 7mm;font-size:8pt;color:var(--ink-faint)}

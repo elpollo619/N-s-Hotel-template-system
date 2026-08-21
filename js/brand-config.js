@@ -25,6 +25,7 @@ export const BRAND = {
 
   // Echte Angaben, übernommen aus der bestehenden Gästemappe des Hauses.
   phone:    "+41 31 951 85 54",
+  mobile:   "+41 77 535 06 68",   // aus "Infos.docx" im Ordner A14/Plakate
   whatsapp: "+41 31 951 85 53",
   mail:     "info@ns-hotel.ch",
   web:      "ns-hotel.ch",
