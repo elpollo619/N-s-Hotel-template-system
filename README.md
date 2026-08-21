@@ -40,6 +40,7 @@ Nützlich zu wissen:
 | **Mieterbrief** | A4 hoch | Schreiben mit Briefkopf: Hauseingangstür, Besucherparkplatz, Brandmelder |
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
+| **Sammelstelle beschriften** | A5/A4, mehrseitig | Papier, PET, Glas, Kehricht … — eine Seite je Behälter, mit «gehört hinein / gehört nicht hinein» |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
@@ -108,6 +109,7 @@ Eingetragen ist nur, was in den Unterlagen im Laufwerk wirklich steht:
 | A4 | Allmendstrasse 4/4a | `02 Vermietung/Besucher PP A4.docx` |
 | A14 | Allmendstrasse 14, 3210 Kerzers | Gästemappe N's Hotel |
 | B4 | Blümlisalpstrasse 4, 3074 Muri b. Bern | Briefkopf HANS AMONN AG |
+| B22 | Bernstrasse 22, 3053 Münchenbuchsee | `Information gebrauch Waschmaschine B22.docx` |
 | H8 | Höheweg 8 | Ordner `Dossier Liegenschaften` |
 
 Bei **A12, A12a, B7, B22, I16, S17 und Casa Reto** steht die Adresse bewusst
@@ -129,16 +131,28 @@ nach Kategorie sortiert:
 Hausordnung und Verbote · Abfall und Recycling · Parkieren · Küche und Bad ·
 Waschen und Trocknen · Vermietung · Hotel und Gäste · Technik und Unterhalt
 
+Rund **40 Bausteine**, unter anderem: Rauchverbot (Haus und Hotel-Fassung mit
+Kostenfolge), Betäubungsmittel, Videoüberwachung, Ruhezeit, Fenster
+geschlossen halten, Schlüssel nicht stecken lassen, Abfall nur in Säcken, Nur
+PET, sauberes Papier und Karton, Privatparkplatz, unberechtigt abgestelltes
+Fahrzeug, Küche sauber hinterlassen, Kühlschrank, Backofen nur mit
+Backpapier, kein Geschirr entfernen, Wäschehänge, Check-in, Check-out mit
+Zimmerkarte, WLAN, Brandmelder und angekündigte Kontrollen.
+
 Im Editor Baustein wählen, **Baustein übernehmen** drücken, fertig. Danach ist
 jedes Feld frei überschreibbar. Drei Platzhalter werden beim Zeichnen ersetzt:
 `{{adresse}}`, `{{objekt}}` und `{{datum}}`.
 
-Mehrsprachig: DE immer, EN und IT optional — genau wie die Originale, von
-denen einige bereits dreisprachig waren.
+Mehrsprachig: **DE, EN, FR, IT und PT**. Deutsch steht immer oben, die
+übrigen Sprachen erscheinen nur, wenn etwas drinsteht. Das entspricht den
+Originalen — `Verbotene Substanzen.docx` ist DE/IT/EN, `Hinweis Parkverbot
+Kerzers.docx` DE/FR/PT, `Wäschehänge.docx` DE/EN/FR.
 
-**Nicht übernommen wurde ein WLAN-Passwort**, das in `Videoüberwachung.docx`
-im Klartext steht. Das Repository ist öffentlich; solche Angaben gehören
-nicht hinein. Wer es braucht, trägt es im Editor ein — es bleibt im Browser.
+**Nicht übernommen wurden zwei WLAN-Passwörter**, die in
+`Videoüberwachung.docx` und `Wifi.docx` im Klartext stehen. Das Repository ist
+öffentlich; solche Angaben gehören nicht hinein. Die Netznamen sind drin, das
+Passwort ist überall ein Platzhalter — wer es braucht, trägt es im Editor ein,
+und es bleibt im Browser der jeweiligen Person.
 
 ---
 

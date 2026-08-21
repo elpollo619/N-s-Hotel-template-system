@@ -39,6 +39,7 @@ const MODULES = [
   'js/templates/parkschild.js',
   'js/templates/waschplan.js',
   'js/templates/mieterbrief.js',
+  'js/templates/sammelstelle.js',
   'js/templates/index.js',
   'js/app.js'
 ];

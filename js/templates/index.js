@@ -15,12 +15,14 @@ import hinweis from './hinweis.js';
 import parkschild from './parkschild.js';
 import waschplan from './waschplan.js';
 import mieterbrief from './mieterbrief.js';
+import sammelstelle from './sammelstelle.js';
 
 export const TEMPLATES = {
   hinweis,
   mieterbrief,
   parkschild,
   waschplan,
+  sammelstelle,
   notruf,
   rezeption,
   'rezeption-sticker': sticker,
@@ -34,7 +36,7 @@ export const TEMPLATES = {
 };
 
 export const ORDER = [
-  'hinweis', 'mieterbrief', 'parkschild', 'waschplan',
+  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -47,6 +49,10 @@ export const GROUPS = [
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
     ids:['parkschild', 'parkplatz'] },
+
+  { id:'abfall', title:'Abfall und Recycling',
+    note:'Behälter beschriften — Papier, PET, Glas, Kehricht und die anderen Fraktionen.',
+    ids:['sammelstelle'] },
 
   { id:'waesche', title:'Waschen und Trocknen',
     note:'Waschplan zum Aushängen.',

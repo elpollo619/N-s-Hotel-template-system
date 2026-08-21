@@ -67,9 +67,11 @@ export default {
     { k:'datum', label:'Datum (für {{datum}})', type:'text' },
 
     { t:'group', label:'Text' },
-    { k:'de', label:'Deutsch',  type:'textarea', hint:'**fett** möglich' },
-    { k:'en', label:'English',  type:'textarea' },
-    { k:'it', label:'Italiano', type:'textarea' },
+    { k:'de', label:'Deutsch',   type:'textarea', hint:'**fett** möglich' },
+    { k:'en', label:'English',   type:'textarea' },
+    { k:'fr', label:'Français',  type:'textarea' },
+    { k:'it', label:'Italiano',  type:'textarea' },
+    { k:'pt', label:'Português', type:'textarea' },
 
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
@@ -88,7 +90,7 @@ export default {
     datum:'',
     de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
     en:'No smoking anywhere in the building.',
-    it:'',
+    fr:'', it:'', pt:'',
     gruss:'Die Verwaltung',
     footer:''
   },
@@ -97,7 +99,9 @@ export default {
   actions:{
     apply(d){
       const p = preset(d.presetId);
-      return { ...d, ton:p.ton, icon:p.icon, title:p.title, de:p.de, en:p.en, it:p.it };
+      return { ...d, ton:p.ton, icon:p.icon, title:p.title,
+               de:p.de || '', en:p.en || '', fr:p.fr || '',
+               it:p.it || '', pt:p.pt || '' };
     }
   },
 
@@ -131,7 +135,9 @@ export default {
     <section class="t-hinweis-body">
       ${block('de', d.de)}
       ${block('en', d.en)}
+      ${block('fr', d.fr)}
       ${block('it', d.it)}
+      ${block('pt', d.pt)}
     </section>
 
     <footer class="t-hinweis-foot">

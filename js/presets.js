@@ -72,6 +72,42 @@ export const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'schluessel', cat:'hausordnung', ton:'info', icon:'key',
+    label:'Schlüssel nicht stecken lassen',
+    title:'Bitte Schlüssel nicht stecken lassen',
+    de:'', en:'Please remove the key', fr:'', it:'', pt:''
+  },
+  {
+    id:'ruhezeit', cat:'hausordnung', ton:'info', icon:'clock',
+    label:'Ruhezeiten',
+    title:'Ruhezeit',
+    de:'22:00 – 07:00 Uhr sowie am Sonntag den ganzen Tag. Bitte Rücksicht auf die Mitbewohner nehmen.',
+    en:'Quiet hours 22:00 – 07:00 and all day on Sunday.', fr:'', it:'', pt:''
+  },
+  {
+    id:'leise', cat:'hausordnung', ton:'info', icon:'info',
+    label:'Bitte leise',
+    title:'Bitte leise',
+    de:'Im Treppenhaus und auf den Gängen bitte leise sprechen. Die Wände sind dünner, als sie aussehen.',
+    en:'Please keep it quiet in the stairwell and hallways.', fr:'', it:'', pt:''
+  },
+  {
+    id:'fenster', cat:'hausordnung', ton:'info', icon:'info',
+    label:'Fenster geschlossen halten',
+    title:'Bitte Fenster geschlossen halten',
+    de:'Sämtliche Zimmer verfügen über eine mechanische Belüftung, welche das gesamte Raumvolumen pro Tag rund 15 Mal wechselt. Aus diesem Grund sollten die Fenster geschlossen bleiben. Die dreifach verglasten Scheiben halten zudem den Aussenlärm ab, damit Sie ruhig schlafen können.',
+    en:'All rooms have mechanical ventilation that exchanges the entire room volume about 15 times a day, so the windows should stay closed. The triple glazing also keeps out street noise so you can sleep peacefully.',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'besucher', cat:'hausordnung', ton:'info', icon:'door',
+    label:'Besucher anmelden',
+    title:'Besuch',
+    de:'Besucherinnen und Besucher sind willkommen. Bitte begleiten Sie Ihren Besuch beim Betreten und Verlassen des Hauses und melden Sie Übernachtungen vorher an.',
+    en:'', fr:'', it:'', pt:''
+  },
+
   /* ── Abfall und Recycling ────────────────────────────────────────────── */
   {
     id:'saecke', cat:'abfall', ton:'info', icon:'trash',
@@ -101,6 +137,14 @@ export const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'papierkarton', cat:'abfall', ton:'info', icon:'trash',
+    label:'Sauberes Papier und Karton',
+    title:'Sauberes Papier + Karton',
+    de:'Kein beschichtetes Papier, keine Verbundverpackungen.',
+    en:'Clean paper and cardboard only', fr:'', it:'', pt:''
+  },
+
   /* ── Parkieren ───────────────────────────────────────────────────────── */
   {
     id:'privatpp', cat:'parken', ton:'verbot', icon:'car',
@@ -124,6 +168,17 @@ export const PRESETS = [
     de:'Auf dem gesamten Areal gilt Parkverbot. Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
     en:'No parking. Vehicles parked illegally will be towed at the ownerʼs expense.',
     it:''
+  },
+
+  {
+    id:'fahrzeug', cat:'parken', ton:'warnung', icon:'car',
+    label:'Fahrzeug unberechtigt abgestellt (DE/FR/PT)',
+    title:'Unberechtigt abgestelltes Fahrzeug',
+    de:'Dieses Fahrzeug steht in der Zufahrt zu bzw. auf einem unberechtigten Platz unserer Liegenschaft {{adresse}}!\n\nFalls Sie Besucher eines Bewohners dieser Liegenschaft sind, erkundigen Sie sich bei dem betreffenden Bewohner, wo das Fahrzeug berechtigterweise abgestellt werden kann.\n\nWird das Fahrzeug erneut unberechtigt abgestellt, werden wir Anzeige bei der Polizei erstatten!',
+    en:'',
+    fr:'Ce véhicule est parqué dans une zone interdite de notre bien foncier {{adresse}}! Si vous êtes visiteur de ce bien foncier, nous vous prions de vous renseigner sur un lieu autorisé pour parquer votre véhicule. Si le véhicule est à nouveau garé sans autorisation, nous le signalons à la police!',
+    it:'',
+    pt:'Este veículo está estacionado em uma área proibida, qual pertence à propriedade {{adresse}}! Se você for um visitante desse endereço, solicitamos que informe-se sobre um local autorizado para estacionar seu veículo. Se o veículo for estacionado novamente sem autorização, será denunciado à polícia!'
   },
 
   /* ── Küche und Bad ───────────────────────────────────────────────────── */
@@ -156,6 +211,20 @@ export const PRESETS = [
     en:'', it:''
   },
 
+  {
+    id:'backofen', cat:'kueche', ton:'info', icon:'cup',
+    label:'Backofen nur mit Backpapier',
+    title:'Bitte Backofen nur mit Backtrennpapier benützen',
+    de:'Das Papier ist mehrmals benutzbar.',
+    en:'Please use the oven only with baking paper.', fr:'', it:'', pt:''
+  },
+  {
+    id:'geschirr', cat:'kueche', ton:'verbot', icon:'cup',
+    label:'Kein Geschirr entfernen',
+    title:'Kein Geschirr, Gläser, Pfannen und Küchengeräte aus diesem Raum entfernen',
+    de:'', en:'', fr:'', it:'', pt:''
+  },
+
   /* ── Waschen und Trocknen ────────────────────────────────────────────── */
   {
     id:'waschmaschine', cat:'waesche', ton:'info', icon:'info',
@@ -169,7 +238,16 @@ export const PRESETS = [
     label:'Wäsche aufhängen',
     title:'Wäsche bitte im Trocknungsraum aufhängen',
     de:'Im Zimmer aufgehängte Wäsche führt zu Feuchtigkeit und Schimmel. Bitte den Trocknungsraum benutzen.',
-    en:'Please hang your laundry in the drying room, not in your room.', it:''
+    en:'Please hang your laundry in the drying room, not in your room.', fr:'', it:'', pt:''
+  },
+  {
+    id:'waeschehaenge', cat:'waesche', ton:'info', icon:'info',
+    label:'Trockene Wäsche abnehmen (DE/EN/FR)',
+    title:'Wäschehänge',
+    de:'Bitte nimm deine trockene Kleidung sofort von der Wäschehänge. Wenn du Kleidung aufhängen möchtest und keinen freien Platz findest, darfst du trockene Kleidung anderer Gäste vorsichtig von der Wäschehänge nehmen, ordentlich in den Korb legen und die Wäschehänge benutzen.',
+    en:'Please remove your dried clothes from the drying rack as soon as they are dry. If you would like to hang up clothes and there is no free space available, you may carefully remove dry clothes belonging to other guests from the drying rack, place them neatly in the basket, and use the rack.',
+    fr:'Merci de retirer tes vêtements de lʼétendoir dès quʼils sont secs. Si tu souhaites étendre des vêtements et quʼil nʼy a plus de place disponible, tu peux retirer soigneusement les vêtements secs des autres invités de lʼétendoir, les placer correctement dans le panier et utiliser lʼétendoir.',
+    it:'', pt:''
   },
 
   /* ── Vermietung ──────────────────────────────────────────────────────── */
@@ -216,6 +294,30 @@ export const PRESETS = [
     title:'Gepäckraum · Storage',
     de:'Gepäck kann vor dem Check-in und nach dem Check-out hier abgestellt werden. Keine Haftung für Wertsachen.',
     en:'Luggage may be left here before check-in and after check-out. No liability for valuables.', it:''
+  },
+
+  {
+    id:'rauchhotel', cat:'hotel', ton:'verbot', icon:'smoke',
+    label:'Rauchverbot im Zimmer (mit Kostenfolge)',
+    title:'Rauchverbot',
+    de:'In sämtlichen Räumen ist das Rauchen strengstens untersagt. Das gesamte Gebäude ist zu Ihrer Sicherheit mit Rauchmeldern ausgestattet, welche bei der geringsten Rauchentwicklung Alarm auslösen. Der Alarm geht direkt zur örtlichen Feuerwehr. Ein Fehlalarm zieht automatisch hohe Kosten (über CHF 1ʼ800.–) nach sich, welche dem fehlbaren Gast weiterverrechnet werden.\n\nGästen, welche sich nicht an diese Weisung halten, wird eine Reinigungspauschale von CHF 300.– in Rechnung gestellt.',
+    en:'Smoking is strictly prohibited in all rooms. The entire building is equipped with smoke detectors that trigger an alarm at the slightest smoke. The alarm goes directly to the local fire department. A false alarm automatically incurs high costs (over CHF 1ʼ800), which will be charged to the responsible guest. Guests who do not comply will be charged a cleaning fee of CHF 300.–',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'checkoutkarte', cat:'hotel', ton:'info', icon:'key',
+    label:'Check-out mit Zimmerkarte',
+    title:'Check-out',
+    de:'Beim Verlassen des Zimmers lassen Sie bitte die physische Zimmerkarte auf dem Schreibtisch und senden uns eine Kurzmitteilung «check-out erfolgt». Besten Dank und einen angenehmen Aufenthalt.',
+    en:'When leaving the room, please leave the physical room card on the desk and send us a short message saying “check-out completed”. Thank you and have a pleasant stay.',
+    fr:'', it:'', pt:''
+  },
+  {
+    id:'wlan', cat:'hotel', ton:'info', icon:'wifi',
+    label:'WLAN',
+    title:'welcome to Nʼs HOTEL',
+    de:'WLAN: Gast\nPasswort: · · · · · · · ·\n\nDas Passwort im Editor eintragen — es bleibt in diesem Browser und wird nie mitveröffentlicht.',
+    en:'', fr:'', it:'', pt:''
   },
 
   /* ── Technik und Unterhalt ───────────────────────────────────────────── */
