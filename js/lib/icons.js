@@ -28,7 +28,9 @@ const P = {
   reception:'<path d="M4 18h16"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8V6"/><path d="M10 6h4"/>',
   shield:   '<path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3Z"/>',
   fire:     '<path d="M12 2c1 3-1 5-1 5s3 1 3 5a4 4 0 0 1-8 0c0-2 1-3 1-3s-1 4 2 4c2 0 2-2 1-4 2 1 4 4 4 7a6 6 0 0 1-12 0C5 12 12 8 12 2Z"/>',
-  ambulance:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/>'
+  ambulance:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/>',
+  trash:    '<path d="M4.4 6.6h15.2"/><path d="M9.4 6.6V4.8a1.2 1.2 0 0 1 1.2-1.2h2.8a1.2 1.2 0 0 1 1.2 1.2v1.8"/><path d="M6.4 6.6 7.3 19a1.4 1.4 0 0 0 1.4 1.3h6.6a1.4 1.4 0 0 0 1.4-1.3l.9-12.4"/><path d="M10.4 10v6.4M13.6 10v6.4"/>',
+  bottle:   '<path d="M10.2 2.8h3.6v2.4l1.5 2.2a4 4 0 0 1 .7 2.3v9.1a2.4 2.4 0 0 1-2.4 2.4h-3.2a2.4 2.4 0 0 1-2.4-2.4v-9.1a4 4 0 0 1 .7-2.3l1.5-2.2Z"/><path d="M8.4 12.6h7.2"/>'
 };
 
 export const ICON_KEYS = Object.keys(P);
@@ -49,7 +51,7 @@ export function iconOptions(){
     parking:'Parkplatz', flag:'Fahne', tv:'TV', remote:'Fernbedienung', plug:'Steckdose',
     luggage:'Gepäck', mail:'Post', smoke:'Rauchen', arrowR:'Pfeil', check:'Haken',
     warn:'Achtung', globe:'Sprache', reception:'Rezeption', shield:'Polizei',
-    fire:'Feuerwehr', ambulance:'Ambulanz'
+    fire:'Feuerwehr', ambulance:'Ambulanz', trash:'Abfall', bottle:'PET-Flasche'
   };
   return ICON_KEYS.map(k => ({ v:k, t:label[k] || k }));
 }

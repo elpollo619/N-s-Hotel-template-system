@@ -172,6 +172,7 @@ a{color:var(--cyan)}
   margin:0 0 14px;display:flex;align-items:center;gap:12px;
 }
 .vz-group h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.vz-group-note{margin:-6px 0 14px;font-size:12.5px;line-height:1.6;color:var(--ink-soft);max-width:72ch}
 .vz-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px}
 .vz-card{
   display:flex;flex-direction:column;text-align:left;
@@ -985,6 +986,112 @@ a{color:var(--cyan)}
 .t-gm .gm-tip p{margin:0;font-size:8pt;line-height:1.45;color:var(--ink-soft)}
 .t-gm .gm-tip p.gm-en{color:var(--muted);font-style:italic;margin-top:.4mm}
 
+/* ==========================================================================
+   Hinweis · A4 — Arbeitsvorlage für die bestehenden Aushänge
+   ========================================================================== */
+.t-hinweis{display:flex;flex-direction:column;padding:0}
+.t-hinweis-todo{margin:0;padding:8px 14px;background:#FFF4E5;border-bottom:1px solid #F0D9B5;
+  font-size:11px;line-height:1.5;color:#8A5A00}
+.t-hinweis-todo code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px}
+
+.t-hinweis-head{display:flex;align-items:center;justify-content:space-between;gap:14mm;
+  padding:22mm 18mm 16mm}
+.t-hinweis-headtxt{min-width:0}
+.t-hinweis-abs{margin:0 0 6mm;font-size:10pt;letter-spacing:.26em;text-transform:uppercase;
+  font-weight:700;opacity:.7}
+.t-hinweis-head h1{margin:0;font-family:var(--font-display);font-size:34pt;line-height:1.03;
+  letter-spacing:-.015em;font-weight:700}
+.t-hinweis-obj{margin:6mm 0 0;font-size:11pt;letter-spacing:.12em;text-transform:uppercase;opacity:.72}
+.t-hinweis-ico{flex:0 0 auto;opacity:.9}
+.t-hinweis-ico svg{display:block}
+
+.t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:14mm 18mm}
+.t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
+.t-hinweis-p[lang="en"],.t-hinweis-p[lang="it"]{font-size:12pt;color:var(--ink-soft);font-style:italic}
+
+.t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
+.t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
+.t-hinweis-mark{opacity:.95}
+.t-hinweis-addr{margin:0;padding-top:4mm;border-top:1px solid var(--line);
+  font-size:8pt;line-height:1.5;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Parkplatz-Schild · eine Seite je Platz
+   ========================================================================== */
+.t-parkschild-page{display:flex;padding:10mm;box-sizing:border-box}
+.t-parkschild-frame{flex:1;display:flex;flex-direction:column;gap:6mm;
+  border:2.4mm solid var(--ton);border-radius:6mm;padding:9mm 10mm;box-sizing:border-box}
+.t-parkschild-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8mm}
+.t-parkschild-head h1{margin:0;font-family:var(--font-display);font-size:40pt;line-height:.98;
+  letter-spacing:.02em;color:var(--ton)}
+.t-parkschild-nr{margin:4mm 0 0;font-size:20pt;font-weight:700;color:var(--ink)}
+.t-parkschild-ico{color:var(--ton);opacity:.85}
+.t-parkschild-ico svg{display:block}
+.t-parkschild-obj{margin:0;font-size:11pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft)}
+.t-parkschild-warn{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2mm}
+.t-parkschild-warn p{margin:0;font-size:11.5pt;line-height:1.45;color:var(--ink)}
+.t-parkschild-warn p[lang="en"]{font-size:9.5pt;color:var(--ink-soft);font-style:italic}
+.t-parkschild-foot{display:flex;align-items:center;justify-content:space-between;gap:6mm;
+  padding-top:4mm;border-top:1px solid var(--line)}
+.t-parkschild-abs{font-size:7.5pt;color:var(--ink-faint);text-align:right}
+
+/* ==========================================================================
+   Waschplan · A4 hoch
+   ========================================================================== */
+.t-waschplan{display:flex;flex-direction:column;padding:16mm 14mm 12mm}
+.t-waschplan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;
+  padding-bottom:6mm;border-bottom:2px solid var(--navy)}
+.t-waschplan-head h1{margin:0;font-family:var(--font-display);font-size:28pt;line-height:1;
+  color:var(--navy)}
+.t-waschplan-sub{margin:3mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-waschplan-obj{margin:2mm 0 0;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint)}
+.t-waschplan-right{text-align:right;display:grid;gap:4mm;justify-items:end}
+.t-waschplan-woche{margin:0;font-size:11pt;font-weight:700;color:var(--ink)}
+
+.t-waschplan-grid{width:100%;border-collapse:collapse;margin-top:7mm;table-layout:fixed}
+.t-waschplan-grid th,.t-waschplan-grid td{border:1px solid var(--line);padding:0}
+.t-waschplan-grid thead th{background:var(--navy);color:#fff;font-size:10pt;font-weight:700;
+  padding:3mm 2mm;letter-spacing:.04em}
+.t-waschplan-corner{width:26mm}
+.t-waschplan-time{background:#F6F7FA;font-size:9pt;font-weight:700;color:var(--ink);
+  padding:3.5mm 2mm;white-space:nowrap}
+.t-waschplan-grid tbody td{height:18mm}
+.t-waschplan-grid tbody tr:nth-child(even) td{background:#FAFBFC}
+
+.t-waschplan-foot{margin-top:auto;padding-top:6mm}
+.t-waschplan-note{margin:0 0 4mm;font-size:9.5pt;line-height:1.55;color:var(--ink-soft)}
+.t-waschplan-addr{margin:0;padding-top:3mm;border-top:1px solid var(--line);
+  font-size:7.5pt;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Mieterbrief · A4 hoch
+   ========================================================================== */
+.t-mieterbrief{display:flex;flex-direction:column;padding:18mm 20mm 14mm}
+.t-mieterbrief-head{display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:5mm;border-bottom:1px solid var(--line)}
+.t-mieterbrief-abs{margin:0;font-family:var(--font-display);font-size:12pt;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--navy)}
+.t-mieterbrief-meta{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12mm;margin-top:14mm;min-height:24mm}
+.t-mieterbrief-to{font-size:11pt;line-height:1.6;color:var(--ink)}
+.t-mieterbrief-date{margin:0;font-size:10.5pt;color:var(--ink-soft);white-space:nowrap}
+.t-mieterbrief-obj{margin:6mm 0 0;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint)}
+.t-mieterbrief-betreff{margin:8mm 0 6mm;font-family:var(--font-display);font-size:16pt;
+  line-height:1.25;color:var(--navy)}
+.t-mieterbrief-anrede{margin:0 0 4mm;font-size:11pt;color:var(--ink)}
+.t-mieterbrief-text{font-size:11pt;line-height:1.68;color:var(--ink)}
+.t-mieterbrief-text p{margin:0 0 4mm}
+.t-mieterbrief-sign{margin-top:10mm;font-size:11pt;line-height:1.6;color:var(--ink)}
+.t-mieterbrief-sign p{margin:0}
+.t-mieterbrief-name{margin-top:8mm!important;font-weight:700}
+.t-mieterbrief-legal{color:var(--ink-soft)}
+.t-mieterbrief-foot{margin-top:auto;padding-top:5mm;border-top:1px solid var(--line);
+  font-size:7.5pt;line-height:1.5;color:var(--ink-faint)}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -1043,6 +1150,372 @@ function contactLine(){
   return [addressLine(), BRAND.phone, BRAND.mail, BRAND.web]
     .filter(x => x && String(x).trim())
     .join(' · ');
+}
+
+/* ===== js/objekte.js ===== */
+/* ==========================================================================
+   Liegenschaften und Absender
+   --------------------------------------------------------------------------
+   Abgebildet ist die Ordnerstruktur aus J:\Immobilien — jeder Ordner dort
+   ist hier ein Objekt mit demselben Kürzel (A14, B4, H8 …).
+
+   WICHTIG zu den Adressen
+   Eingetragen ist nur, was in den Unterlagen im Laufwerk wirklich belegt ist:
+
+     A4    "Besucher PP A4.docx"      → Allmendstrasse 4/4a
+     A14   Gästemappe N's Hotel        → Allmendstrasse 14, 3210 Kerzers
+     B4    Briefkopf HANS AMONN AG     → Blümlisalpstrasse 4, 3074 Muri b. Bern
+     H8    Ordner Dossier Liegenschaften → Höheweg 8 (und 8a)
+
+   Bei allen übrigen Objekten steht die Adresse bewusst leer. Ein falscher
+   Strassenname auf einem Aushang wäre schlimmer als gar keiner. Sobald die
+   Adresse bekannt ist, hier eintragen — alle Vorlagen ziehen automatisch nach.
+   ========================================================================== */
+
+/** Die drei Absender des Hauses. Alle am selben Sitz in Muri b. Bern. */
+const ABSENDER = {
+  hotel: {
+    id:'hotel',
+    name:"N's Hotel",
+    legal:"N's Hotel",
+    street:'Allmendstrasse 14',
+    zip:'3210', city:'Kerzers',
+    contact:'+41 31 951 85 54 · info@ns-hotel.ch · ns-hotel.ch',
+    foot:"N's Hotel · Allmendstrasse 14 · 3210 Kerzers · +41 31 951 85 54 · ns-hotel.ch"
+  },
+  immobilien: {
+    id:'immobilien',
+    name:'HANS AMONN IMMOBILIEN',
+    legal:'Hans Amonn Immobilien AG',
+    street:'Blümlisalpstrasse 4',
+    zip:'3074', city:'Muri b. Bern',
+    contact:'T +41 31 951 85 54 · office@reto-amonn.ch',
+    foot:'HANS AMONN IMMOBILIEN AG, Blümlisalpstrasse 4, 3074 Muri, T +41 31 951 85 54, office@reto-amonn.ch  UID: CHE-343.271.483'
+  },
+  architektur: {
+    id:'architektur',
+    name:'AMONN ARCHITEKTUR',
+    legal:'Hans Amonn AG Architektur',
+    street:'Blümlisalpstrasse 4',
+    zip:'3074', city:'Muri b. Bern',
+    contact:'T +41 31 951 85 54 · www.reto-amonn.ch',
+    foot:'HANS AMONN AG Architektur, Blümlisalpstrasse 4, 3074 Muri b. Bern, T +41 31 951 85 54, www.reto-amonn.ch  MWST: CHE-106.957.227'
+  }
+};
+
+/** Alle Liegenschaften. `street` leer = Adresse noch nicht belegt. */
+const OBJEKTE = [
+  { id:'-',        code:'',      name:'Ohne Objekt',      street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'A4',       code:'A4',    name:'Allmendstrasse 4', street:'Allmendstrasse 4/4a', zip:'',     city:'',            absender:'architektur' },
+  { id:'A12',      code:'A12',   name:'A12',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'A12a',     code:'A12a',  name:'A12a',             street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'A14',      code:'A14',   name:"N's Hotel",        street:'Allmendstrasse 14',   zip:'3210', city:'Kerzers',     absender:'hotel' },
+  { id:'B4',       code:'B4',    name:'Blümlisalpstr. 4', street:'Blümlisalpstrasse 4', zip:'3074', city:'Muri b. Bern',absender:'architektur' },
+  { id:'B7',       code:'B7',    name:'B7',               street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'B22',      code:'B22',   name:'B22',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'H8',       code:'H8',    name:'Höheweg 8',        street:'Höheweg 8',           zip:'',     city:'',            absender:'immobilien' },
+  { id:'I16',      code:'I16',   name:'I16',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'S17',      code:'S17',   name:'S17',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
+  { id:'CasaReto', code:'CR',    name:'Casa Reto',        street:'',                    zip:'',     city:'',            absender:'immobilien' }
+];
+
+/** Objekt nach id. Fällt auf "Ohne Objekt" zurück. */
+function objekt(id){
+  return OBJEKTE.find(o => o.id === id) || OBJEKTE[0];
+}
+
+/** Auswahlliste für Formularfelder vom Typ `select`. */
+function objektOptions(){
+  return OBJEKTE.map(o => ({
+    v:o.id,
+    t:o.code ? `${o.code} — ${o.name}` : o.name
+  }));
+}
+
+function absenderOptions(){
+  return Object.values(ABSENDER).map(a => ({ v:a.id, t:a.name }));
+}
+
+/** Adresszeile eines Objekts. Leere Teile fallen weg, nichts wird erfunden. */
+function objektAdresse(id){
+  const o = objekt(id);
+  return [o.street, [o.zip, o.city].filter(Boolean).join(' ')]
+    .filter(x => x && x.trim()).join(', ');
+}
+
+/** true, wenn zum Objekt noch keine Strasse hinterlegt ist. */
+function adresseFehlt(id){
+  const o = objekt(id);
+  return Boolean(o.code) && !o.street;
+}
+
+/* Bildmarke des Absenders.
+   Nur N's Hotel hat eine eigene Wortmarke im Repository. Für die beiden
+   Amonn-Firmen liegt kein Logo vor — dort erscheint nichts, statt fälschlich
+   das Hotel-Logo unter einen Immobilienaushang zu setzen. */
+function istHotel(absId){
+  return absId === 'hotel';
+}
+
+/* ===== js/presets.js ===== */
+/* ==========================================================================
+   Textbausteine der bestehenden Aushänge
+   --------------------------------------------------------------------------
+   Übernommen aus J:\Immobilien\Plakate — die Wortlaute stammen eins zu eins
+   aus den Word-Dateien, die im Haus seit Jahren im Einsatz sind. Nichts
+   umformuliert, nichts erfunden; nur Schweizer Schreibweise (ss statt ß)
+   und die Umlaute wurden geprüft.
+
+   Jeder Baustein füllt die Vorlage "Hinweis" aus. Wer etwas anderes braucht,
+   wählt "Frei" und schreibt selbst.
+   ========================================================================== */
+
+const KATEGORIEN = [
+  { id:'hausordnung', label:'Hausordnung und Verbote' },
+  { id:'abfall',      label:'Abfall und Recycling' },
+  { id:'parken',      label:'Parkieren' },
+  { id:'kueche',      label:'Küche und Bad' },
+  { id:'waesche',     label:'Waschen und Trocknen' },
+  { id:'vermietung',  label:'Vermietung' },
+  { id:'hotel',       label:'Hotel und Gäste' },
+  { id:'technik',     label:'Technik und Unterhalt' }
+];
+
+/* ton: 'info' | 'warnung' | 'verbot' — steuert die Farbe des Kopfbalkens. */
+const PRESETS = [
+  /* ── Hausordnung und Verbote ─────────────────────────────────────────── */
+  {
+    id:'frei', cat:'hausordnung', ton:'info', icon:'info',
+    label:'Frei — eigener Text',
+    title:'Titel eingeben', de:'', en:'', it:''
+  },
+  {
+    id:'rauchverbot', cat:'hausordnung', ton:'verbot', icon:'smoke',
+    label:'Rauchverbot im gesamten Gebäude',
+    title:'Rauchverbot im gesamten Gebäude',
+    de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
+    en:'No smoking anywhere in the building.',
+    it:''
+  },
+  {
+    id:'substanzen', cat:'hausordnung', ton:'verbot', icon:'warn',
+    label:'Verbotene Substanzen',
+    title:'Verbotene Substanzen',
+    de:'Das Konsumieren von verbotenen Substanzen ist untersagt. Bei Missbrauch wird sofort die Polizei informiert.',
+    en:'The consumption of prohibited substances is forbidden. In case of abuse, the police will be informed immediately.',
+    it:'È vietato il consumo di sostanze proibite. In caso di abuso, la polizia sarà immediatamente informata.'
+  },
+  {
+    id:'cannabis', cat:'hausordnung', ton:'warnung', icon:'warn',
+    label:'Cannabis und Betäubungsmittel',
+    title:'Betäubungsmittel',
+    de:'Bei uns sind von Mitbewohnern Reklamationen wegen Cannabis-Gestank eingegangen. Wir weisen Sie darauf hin, dass wir den Konsum von Cannabis, wie auch sonstigen Betäubungsmittel in und um unser Gebäude nicht dulden. Im Wiederholungsfall werden wir die Polizei einschalten.',
+    en:'', it:''
+  },
+  {
+    id:'video', cat:'hausordnung', ton:'warnung', icon:'warn',
+    label:'Videoüberwachung',
+    title:'Dieser Bereich wird videoüberwacht!',
+    de:'', en:'This area is under video surveillance!', it:''
+  },
+  {
+    id:'tuere', cat:'hausordnung', ton:'info', icon:'door',
+    label:'Bitte Türe schliessen',
+    title:'Bitte Türe schliessen!',
+    de:'', en:'Please close the door!', it:''
+  },
+  {
+    id:'abstellflaeche', cat:'hausordnung', ton:'verbot', icon:'warn',
+    label:'Hier ist keine Abstellfläche',
+    title:'Hier ist keine Abstellfläche!',
+    de:'Bitte entfernen Sie sämtliche persönliche Gegenstände. Wir werden alles wegräumen.\nVelos und Trottis dürfen Sie in die Einstellhalle parkieren.',
+    en:'', it:''
+  },
+
+  /* ── Abfall und Recycling ────────────────────────────────────────────── */
+  {
+    id:'saecke', cat:'abfall', ton:'info', icon:'trash',
+    label:'Abfall nur in Säcken',
+    title:'Abfall nur in Säcken',
+    de:'', en:'Waste in official bags only', it:''
+  },
+  {
+    id:'nurpet', cat:'abfall', ton:'info', icon:'bottle',
+    label:'Nur PET',
+    title:'Nur PET',
+    de:'Bitte hier ausschliesslich PET-Getränkeflaschen einwerfen. Übriger Abfall gehört in den Kehrichtsack.',
+    en:'PET drink bottles only', it:''
+  },
+  {
+    id:'petluft', cat:'abfall', ton:'info', icon:'bottle',
+    label:'PET — Luft rauslassen',
+    title:'Bitte die Luft rauslassen',
+    de:'Flasche zusammendrücken, Deckel wieder aufschrauben. So passt dreimal mehr in den Sack.',
+    en:'Please squeeze the bottle and screw the cap back on.', it:''
+  },
+  {
+    id:'sammelstelle', cat:'abfall', ton:'info', icon:'trash',
+    label:'Sammelstelle — Beschriftung',
+    title:'Sammelstelle',
+    de:'Karton · Altpapier · Altglas · Metall · Nespresso · PET · Kompost · Kehricht',
+    en:'', it:''
+  },
+
+  /* ── Parkieren ───────────────────────────────────────────────────────── */
+  {
+    id:'privatpp', cat:'parken', ton:'verbot', icon:'car',
+    label:'Privater Parkplatz',
+    title:'Privat',
+    de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+    en:'Private parking — vehicles parked illegally will be towed at the ownerʼs expense.',
+    it:''
+  },
+  {
+    id:'besucherpp', cat:'parken', ton:'info', icon:'car',
+    label:'Besucherparkplatz',
+    title:'Lieber Parkplatz-Benutzer',
+    de:'Sie parken Ihr Fahrzeug auf einem privaten Parkplatz, der für Besucher reserviert ist. Falls Sie kein Besucher der {{adresse}} sind, bitten wir Sie, Ihr Fahrzeug umgehend umzustellen.\n\nDieser Parkplatz ist ausschliesslich für Besucher vorgesehen.\n\nVielen Dank für Ihr Verständnis.',
+    en:'', it:''
+  },
+  {
+    id:'parkverbot', cat:'parken', ton:'verbot', icon:'car',
+    label:'Parkverbot',
+    title:'Parkverbot',
+    de:'Auf dem gesamten Areal gilt Parkverbot. Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+    en:'No parking. Vehicles parked illegally will be towed at the ownerʼs expense.',
+    it:''
+  },
+
+  /* ── Küche und Bad ───────────────────────────────────────────────────── */
+  {
+    id:'kuechesauber', cat:'kueche', ton:'info', icon:'cup',
+    label:'Küche sauber hinterlassen',
+    title:'Bitte Küche sauber hinterlassen!',
+    de:'Bitte Küche, Geräte, Küchenutensilien und Geschirr nach Gebrauch reinigen.',
+    en:'Please keep the kitchen clean!', it:''
+  },
+  {
+    id:'kuehlschrank', cat:'kueche', ton:'info', icon:'info',
+    label:'Kühlschrank in Ordnung halten',
+    title:'Kühlschrank',
+    de:'Abgelaufene Lebensmittel im Kühlschrank sind zu entsorgen. Der Kühlschrank ist sauber zu halten. Danke.',
+    en:'Expired food in the fridge must be disposed of. The fridge must be kept clean. Thank you.',
+    it:'Gli alimenti scaduti nel frigorifero devono essere smaltiti. Il frigorifero deve essere mantenuto pulito. Grazie.'
+  },
+  {
+    id:'haendewaschen', cat:'kueche', ton:'info', icon:'info',
+    label:'Bitte Hände waschen',
+    title:'Bitte Hände waschen',
+    de:'', en:'Please wash your hands', it:''
+  },
+  {
+    id:'duschen', cat:'kueche', ton:'info', icon:'info',
+    label:'Duschen statt baden',
+    title:'Bitte kurz duschen',
+    de:'Diese Dusche steht nur den Bewohnern des EGʼs zur Verfügung.\nEs darf nur kurz geduscht werden, damit genügend Warmwasser für alle Bewohner zur Verfügung steht.',
+    en:'', it:''
+  },
+
+  /* ── Waschen und Trocknen ────────────────────────────────────────────── */
+  {
+    id:'waschmaschine', cat:'waesche', ton:'info', icon:'info',
+    label:'Gebrauch der Waschmaschine',
+    title:'Waschmaschine',
+    de:'Bitte nach jedem Waschgang das Flusensieb reinigen und die Trommel offen stehen lassen. Waschmittel sparsam dosieren.',
+    en:'', it:''
+  },
+  {
+    id:'waeschehaengen', cat:'waesche', ton:'info', icon:'info',
+    label:'Wäsche aufhängen',
+    title:'Wäsche bitte im Trocknungsraum aufhängen',
+    de:'Im Zimmer aufgehängte Wäsche führt zu Feuchtigkeit und Schimmel. Bitte den Trocknungsraum benutzen.',
+    en:'Please hang your laundry in the drying room, not in your room.', it:''
+  },
+
+  /* ── Vermietung ──────────────────────────────────────────────────────── */
+  {
+    id:'zuvermieten', cat:'vermietung', ton:'info', icon:'key',
+    label:'Zu vermieten',
+    title:'Zu vermieten',
+    de:'Wohnung an ruhiger Lage, bezugsbereit. Anfragen über den QR-Code oder telefonisch.',
+    en:'Apartment for rent — scan the QR code or call us.', it:''
+  },
+  {
+    id:'reserviert', cat:'vermietung', ton:'info', icon:'key',
+    label:'Reserviert',
+    title:'RESERVIERT',
+    de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+    en:'', it:''
+  },
+
+  /* ── Hotel und Gäste ─────────────────────────────────────────────────── */
+  {
+    id:'checkin', cat:'hotel', ton:'info', icon:'key',
+    label:'Check-in Anleitung',
+    title:'Check-in',
+    de:'Ihren Zimmercode erhalten Sie per E-Mail und SMS. Am Eingang den Code eingeben und bestätigen.',
+    en:'You receive your room code by e-mail and SMS. Enter the code at the entrance and confirm.', it:''
+  },
+  {
+    id:'checkout', cat:'hotel', ton:'info', icon:'clock',
+    label:'Express Check-out',
+    title:'Express Check-out',
+    de:'Zimmerschlüssel in die Box legen und abreisen. Die Rechnung kommt per E-Mail.',
+    en:'Drop the key in the box and leave. The invoice follows by e-mail.', it:''
+  },
+  {
+    id:'fruehstueck', cat:'hotel', ton:'info', icon:'cup',
+    label:'Frühstück',
+    title:'Frühstück',
+    de:'Frühstück 07:30 – 10:00 im Aufenthaltsraum.',
+    en:'Breakfast 07:30 – 10:00 in the lounge.', it:''
+  },
+  {
+    id:'storage', cat:'hotel', ton:'info', icon:'info',
+    label:'Gepäckraum',
+    title:'Gepäckraum · Storage',
+    de:'Gepäck kann vor dem Check-in und nach dem Check-out hier abgestellt werden. Keine Haftung für Wertsachen.',
+    en:'Luggage may be left here before check-in and after check-out. No liability for valuables.', it:''
+  },
+
+  /* ── Technik und Unterhalt ───────────────────────────────────────────── */
+  {
+    id:'brandmelder', cat:'technik', ton:'warnung', icon:'warn',
+    label:'Brand- und Rauchmelder',
+    title:'Manipulation an Brand- und Rauchmeldern',
+    de:'Jede Manipulation an der Brandmeldeanlage hat zur Folge, dass im Brandfall die Alarmierung der Feuerwehr nicht funktioniert und dass Ihr und das Leben Ihrer Mitbewohner auf dem Spiel steht.\n\nDer Einsatz der Feuerwehr bei einem Fehlalarm wird mit CHF 1ʼ500.– geahndet und wird dem Verursacher in Rechnung gestellt.',
+    en:'', it:''
+  },
+  {
+    id:'kontrolle', cat:'technik', ton:'warnung', icon:'warn',
+    label:'Kontrolle angekündigt',
+    title:'ACHTUNG',
+    de:'Am {{datum}} findet eine Kontrolle in allen Zimmern statt.\nBitte alle Steckdosen freihalten!',
+    en:'On {{datum}} all rooms will be checked.\nPlease keep all plug sockets free!', it:''
+  },
+  {
+    id:'hauseingang', cat:'technik', ton:'info', icon:'door',
+    label:'Hauseingangstüre schliessen',
+    title:'Wichtiger Hinweis zur Hauseingangstür',
+    de:'Bitte achten Sie beim Betreten und Verlassen des Gebäudes darauf, dass die Tür richtig ins Schloss fällt und nicht offensteht.\n\nNur berechtigte Personen — also ausschliesslich Mieterinnen und Mieter sowie deren Gäste — sollen Zugang zum Haus haben.',
+    en:'', it:''
+  }
+];
+
+/** Alle Bausteine einer Kategorie. */
+function presetsOf(cat){
+  return PRESETS.filter(p => p.cat === cat);
+}
+
+/** Auswahlliste, nach Kategorie gruppiert beschriftet. */
+function presetOptions(){
+  return KATEGORIEN.flatMap(k =>
+    presetsOf(k.id).map(p => ({ v:p.id, t:`${k.label} · ${p.label}` }))
+  );
+}
+
+function preset(id){
+  return PRESETS.find(p => p.id === id) || PRESETS[0];
 }
 
 /* ===== js/lib/dom.js ===== */
@@ -1125,7 +1598,9 @@ const P = {
   reception:'<path d="M4 18h16"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8V6"/><path d="M10 6h4"/>',
   shield:   '<path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3Z"/>',
   fire:     '<path d="M12 2c1 3-1 5-1 5s3 1 3 5a4 4 0 0 1-8 0c0-2 1-3 1-3s-1 4 2 4c2 0 2-2 1-4 2 1 4 4 4 7a6 6 0 0 1-12 0C5 12 12 8 12 2Z"/>',
-  ambulance:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/>'
+  ambulance:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M12 9v5M9.5 11.5h5"/>',
+  trash:    '<path d="M4.4 6.6h15.2"/><path d="M9.4 6.6V4.8a1.2 1.2 0 0 1 1.2-1.2h2.8a1.2 1.2 0 0 1 1.2 1.2v1.8"/><path d="M6.4 6.6 7.3 19a1.4 1.4 0 0 0 1.4 1.3h6.6a1.4 1.4 0 0 0 1.4-1.3l.9-12.4"/><path d="M10.4 10v6.4M13.6 10v6.4"/>',
+  bottle:   '<path d="M10.2 2.8h3.6v2.4l1.5 2.2a4 4 0 0 1 .7 2.3v9.1a2.4 2.4 0 0 1-2.4 2.4h-3.2a2.4 2.4 0 0 1-2.4-2.4v-9.1a4 4 0 0 1 .7-2.3l1.5-2.2Z"/><path d="M8.4 12.6h7.2"/>'
 };
 
 const ICON_KEYS = Object.keys(P);
@@ -1146,7 +1621,7 @@ function iconOptions(){
     parking:'Parkplatz', flag:'Fahne', tv:'TV', remote:'Fernbedienung', plug:'Steckdose',
     luggage:'Gepäck', mail:'Post', smoke:'Rauchen', arrowR:'Pfeil', check:'Haken',
     warn:'Achtung', globe:'Sprache', reception:'Rezeption', shield:'Polizei',
-    fire:'Feuerwehr', ambulance:'Ambulanz'
+    fire:'Feuerwehr', ambulance:'Ambulanz', trash:'Abfall', bottle:'PET-Flasche'
   };
   return ICON_KEYS.map(k => ({ v:k, t:label[k] || k }));
 }
@@ -3755,8 +4230,530 @@ const gaestemappe = {
   }
 };
 
+/* ===== js/templates/hinweis.js ===== */
+/* Hinweis · A4 — die Arbeitsvorlage für die bestehenden Aushänge.
+   Statt für jeden der rund dreissig Zettel aus J:\Immobilien\Plakate eine
+   eigene Vorlage zu bauen, gibt es eine Vorlage und eine Liste fertiger
+   Textbausteine. Baustein wählen, Objekt wählen, drucken.
+
+   Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot. */
+
+
+
+
+
+
+const TONE = {
+  info:    { bg:'var(--navy)',  fg:'#fff' },
+  warnung: { bg:'var(--cyan)',  fg:'#fff' },
+  verbot:  { bg:'#C0271F',      fg:'#fff' }
+};
+
+/* Platzhalter, die der Baustein mitbringt: {{adresse}}, {{objekt}}, {{datum}} */
+function fill(text, d){
+  return String(text || '')
+    .replace(/\{\{adresse\}\}/g, objektAdresse(d.objekt) || objekt(d.objekt).name)
+    .replace(/\{\{objekt\}\}/g, objekt(d.objekt).name)
+    .replace(/\{\{datum\}\}/g, d.datum || '');
+}
+
+const hinweis = {
+  id:'hinweis',
+  title:'Hinweis / Aushang',
+  sub:'Rund 30 fertige Textbausteine aus dem Hausgebrauch · A4',
+  badge:'Hinweis',
+  page:'a4',
+  root:'t-hinweis',
+  cat:'hausordnung',
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="60" fill="#2A3350"/>
+    <rect x="18" y="20" width="120" height="12" rx="4" fill="#fff" opacity=".92"/>
+    <rect x="18" y="38" width="70" height="7" rx="3.5" fill="#01B1E2"/>
+    <circle cx="176" cy="30" r="15" fill="none" stroke="#fff" stroke-width="2.6" opacity=".8"/>
+    <path d="M176 23v9M176 35.4h.01" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".8"/>
+    <rect x="18" y="80" width="174" height="30" rx="6" fill="#F6F7FA"/>
+    ${lines(26, 90, 150, 2)}
+    ${lines(18, 128, 174, 4)}
+    ${lines(18, 176, 120, 3, 9, '#E5E8ED')}
+    <rect x="18" y="262" width="174" height="5" rx="2.5" fill="#E5E8ED"/>`),
+
+  fields:[
+    { t:'group', label:'Baustein' },
+    { k:'presetId', label:'Fertiger Text', type:'select', options:presetOptions(),
+      hint:'Wählt Titel und Text. Danach beliebig überschreibbar.' },
+    { k:'apply', label:'Baustein übernehmen', type:'action',
+      hint:'Überschreibt Titel und Texte mit dem gewählten Baustein.' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'zeigeAdresse', label:'Adresse im Kopf zeigen', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Kopf' },
+    { k:'ton',   label:'Ton', type:'select',
+      options:[{v:'info',t:'Info (navy)'},{v:'warnung',t:'Warnung (cyan)'},{v:'verbot',t:'Verbot (rot)'}] },
+    { k:'icon',  label:'Symbol', type:'select', options:iconOptions() },
+    { k:'title', label:'Titel', type:'text' },
+    { k:'datum', label:'Datum (für {{datum}})', type:'text' },
+
+    { t:'group', label:'Text' },
+    { k:'de', label:'Deutsch',  type:'textarea', hint:'**fett** möglich' },
+    { k:'en', label:'English',  type:'textarea' },
+    { k:'it', label:'Italiano', type:'textarea' },
+
+    { t:'group', label:'Fusszeile' },
+    { k:'gruss',  label:'Grussformel', type:'text' },
+    { k:'footer', label:'Absenderzeile', type:'text',
+      hint:'Leer lassen: nimmt automatisch die Zeile des gewählten Absenders.' }
+  ],
+
+  defaults:{
+    presetId:'rauchverbot',
+    objekt:'-',
+    absender:'immobilien',
+    zeigeAdresse:'ja',
+    ton:'verbot',
+    icon:'smoke',
+    title:'Rauchverbot im gesamten Gebäude',
+    datum:'',
+    de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
+    en:'No smoking anywhere in the building.',
+    it:'',
+    gruss:'Die Verwaltung',
+    footer:''
+  },
+
+  /* Der Knopf "Baustein übernehmen" im Formular. */
+  actions:{
+    apply(d){
+      const p = preset(d.presetId);
+      return { ...d, ton:p.ton, icon:p.icon, title:p.title, de:p.de, en:p.en, it:p.it };
+    }
+  },
+
+  render(d){
+    const t = TONE[d.ton] || TONE.info;
+    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+
+    const kopfAdresse = (d.zeigeAdresse !== 'nein' && obj.code)
+      ? `<p class="t-hinweis-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : '';
+
+    const warnung = adresseFehlt(d.objekt)
+      ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
+         in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
+
+    const block = (lang, text) => has(text)
+      ? `<p class="t-hinweis-p" lang="${lang}">${fmt(fill(text, d))}</p>` : '';
+
+    return `
+    ${warnung}
+    <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
+      <div class="t-hinweis-headtxt">
+        <p class="t-hinweis-abs">${esc(abs.name)}</p>
+        <h1>${esc(fill(d.title, d))}</h1>
+        ${kopfAdresse}
+      </div>
+      <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
+    </header>
+
+    <section class="t-hinweis-body">
+      ${block('de', d.de)}
+      ${block('en', d.en)}
+      ${block('it', d.it)}
+    </section>
+
+    <footer class="t-hinweis-foot">
+      ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
+      ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
+      <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
+    </footer>`;
+  }
+};
+
+/* Damit der Hub weiss, wie viele Bausteine dahinterstehen. */
+const PRESET_COUNT = PRESETS.length - 1;
+
+/* ===== js/templates/parkschild.js ===== */
+/* Parkplatz-Schild · A5 quer, mehrseitig.
+   Bildet die Serie aus "RESERVIERT.docx" ab: dasselbe Schild für Platz 1,
+   2, 3 … Statt sechs Seiten von Hand zu kopieren, gibt man den Bereich an
+   und bekommt pro Platz eine Seite.
+
+   Wortlaut aus dem Original:
+     RESERVIERT · Platz Nr. n
+     Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt */
+
+
+
+
+
+const PARK_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
+
+const ART = {
+  reserviert: { title:'RESERVIERT', ton:'#2A3350' },
+  privat:     { title:'PRIVAT',     ton:'#C0271F' },
+  besucher:   { title:'BESUCHER',   ton:'#01B1E2' }
+};
+
+const parkschild = {
+  id:'parkschild',
+  title:'Parkplatz-Schild',
+  sub:'Reserviert / Privat / Besucher · eine Seite je Platz',
+  badge:'Parkieren',
+  root:'t-parkschild',
+  cat:'parken',
+  multipage:true,
+  pageOf(d){ return PARK_PAGES[d && d.format] || 'a5-land'; },
+
+  thumb: thumb(`
+    <rect x="10" y="30" width="190" height="105" rx="8" fill="#2A3350"/>
+    <rect x="26" y="50" width="120" height="16" rx="5" fill="#fff" opacity=".95"/>
+    <rect x="26" y="76" width="74" height="10" rx="5" fill="#01B1E2"/>
+    <circle cx="172" cy="70" r="20" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
+    <path d="M165 80V60h8a6 6 0 0 1 0 12h-8" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/>
+    <rect x="26" y="100" width="150" height="6" rx="3" fill="#fff" opacity=".45"/>
+    <rect x="26" y="112" width="110" height="6" rx="3" fill="#fff" opacity=".45"/>
+    <rect x="10" y="160" width="190" height="105" rx="8" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="2"/>
+    <rect x="26" y="180" width="120" height="16" rx="5" fill="#C9CFDA"/>
+    <rect x="26" y="206" width="74" height="10" rx="5" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Art und Format' },
+    { k:'art', label:'Art', type:'select', options:[
+      { v:'reserviert', t:'Reserviert (navy)' },
+      { v:'privat',     t:'Privat (rot)' },
+      { v:'besucher',   t:'Besucher (cyan)' }
+    ] },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
+      { v:'a4-land', t:'A4 quer' }, { v:'a4', t:'A4 hoch' }
+    ] },
+
+    { t:'group', label:'Plätze' },
+    { k:'von', label:'von Platz Nr.', type:'number', min:1,  max:99, step:1 },
+    { k:'bis', label:'bis Platz Nr.', type:'number', min:1,  max:99, step:1,
+      hint:'Ergibt eine Seite je Platz. Gleiche Zahl = ein einzelnes Schild.' },
+    { k:'ohneNummer', label:'ohne Nummer', type:'select',
+      options:[{v:'nein',t:'nein'},{v:'ja',t:'ja — nur ein Schild ohne Platznummer'}] },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Text' },
+    { k:'titel',  label:'Titelzeile', type:'text',
+      hint:'Leer lassen: nimmt automatisch RESERVIERT / PRIVAT / BESUCHER.' },
+    { k:'label',  label:'Bezeichnung', type:'text' },
+    { k:'warnDe', label:'Warnhinweis DE', type:'textarea' },
+    { k:'warnEn', label:'Warnhinweis EN', type:'textarea' }
+  ],
+
+  defaults:{
+    art:'reserviert',
+    format:'a5-land',
+    von:1, bis:6,
+    ohneNummer:'nein',
+    objekt:'-',
+    absender:'immobilien',
+    titel:'',
+    label:'Platz Nr.',
+    warnDe:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt',
+    warnEn:'Vehicles parked illegally will be towed at the ownerʼs expense'
+  },
+
+  render(d){
+    const art = ART[d.art] || ART.reserviert;
+    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const titel = has(d.titel) ? d.titel : art.title;
+
+    const von = Math.max(1, Number(d.von) || 1);
+    const bis = Math.max(von, Number(d.bis) || von);
+    const nummern = d.ohneNummer === 'ja' ? [null] : [];
+    if (d.ohneNummer !== 'ja') for (let n = von; n <= bis; n++) nummern.push(n);
+
+    return nummern.map(n => `
+      <article data-page class="t-parkschild-page" style="--ton:${art.ton}">
+        <div class="t-parkschild-frame">
+          <header class="t-parkschild-head">
+            <div>
+              <h1>${esc(titel)}</h1>
+              ${n != null ? `<p class="t-parkschild-nr">${esc(d.label || 'Platz Nr.')} ${n}</p>` : ''}
+            </div>
+            <span class="t-parkschild-ico">${icon('car', 78, 2)}</span>
+          </header>
+
+          ${(obj.code || adr) ? `<p class="t-parkschild-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : ''}
+
+          <div class="t-parkschild-warn">
+            ${has(d.warnDe) ? `<p lang="de">${esc(d.warnDe)}</p>` : ''}
+            ${has(d.warnEn) ? `<p lang="en">${esc(d.warnEn)}</p>` : ''}
+          </div>
+
+          <footer class="t-parkschild-foot">
+            <span class="t-parkschild-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+            <span class="t-parkschild-abs">${esc(abs.legal)} · ${esc(abs.contact)}</span>
+          </footer>
+        </div>
+      </article>`).join('');
+  }
+};
+
+/* ===== js/templates/waschplan.js ===== */
+/* Waschplan · A4 hoch.
+   Nachbau von "Waschplan.docx": Montag bis Samstag, Zeitfenster von 07:00
+   bis 22:00, eine Spalte je Tag, freie Zeilen zum Eintragen des Namens.
+   Zeitraster und Tage sind einstellbar, weil nicht jedes Haus gleich wäscht. */
+
+
+
+
+const TAGE = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+
+/* "07:00-08:30, 08:30-10:00, …" → Liste. Trennzeichen: Komma oder Zeilenumbruch. */
+function slots(text){
+  return String(text || '')
+    .split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+}
+
+const waschplan = {
+  id:'waschplan',
+  title:'Waschplan',
+  sub:'Wochenraster zum Eintragen · A4 hoch',
+  badge:'Wäsche',
+  page:'a4',
+  root:'t-waschplan',
+  cat:'waesche',
+
+  thumb: thumb(`
+    <rect x="18" y="18" width="120" height="13" rx="4" fill="#2A3350"/>
+    <rect x="18" y="38" width="70" height="7" rx="3.5" fill="#01B1E2"/>
+    ${[0,1,2].map(c => `<rect x="${18 + c * 59}" y="60" width="55" height="16" rx="4" fill="#2A3350"/>`).join('')}
+    ${[0,1,2,3,4,5,6,7,8].map(r => [0,1,2].map(c =>
+      `<rect x="${18 + c * 59}" y="${82 + r * 20}" width="55" height="16" rx="3"
+         fill="${r % 2 ? '#F6F7FA' : '#fff'}" stroke="#E5E8ED" stroke-width="1"/>`).join('')).join('')}
+    ${lines(18, 268, 174, 1, 8, '#E5E8ED')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'title', label:'Titel', type:'text' },
+    { k:'sub',   label:'Untertitel', type:'text' },
+    { k:'woche', label:'Woche / Monat', type:'text' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Raster' },
+    { k:'tage', label:'Tage', type:'number', min:1, max:7, step:1,
+      hint:'1 = nur Montag, 6 = Montag bis Samstag.' },
+    { k:'zeiten', label:'Zeitfenster', type:'textarea',
+      hint:'Eines pro Zeile oder mit Komma getrennt.' },
+
+    { t:'group', label:'Fusszeile' },
+    { k:'note',   label:'Hinweis', type:'textarea' },
+    { k:'footer', label:'Absenderzeile', type:'text',
+      hint:'Leer lassen: nimmt die Zeile des gewählten Absenders.' }
+  ],
+
+  defaults:{
+    title:'Waschplan',
+    sub:'Bitte Namen und Zimmernummer eintragen',
+    woche:'Woche ______',
+    objekt:'-',
+    absender:'immobilien',
+    tage:6,
+    zeiten:'07:00 – 08:30\n08:30 – 10:00\n10:00 – 12:00\n13:00 – 14:30\n14:30 – 16:00\n16:00 – 17:30\n17:30 – 19:00\n19:00 – 20:30\n20:30 – 22:00',
+    note:'Nicht genutzte Zeitfenster bitte wieder streichen, damit andere waschen können. Waschmittel selbst mitbringen.',
+    footer:''
+  },
+
+  render(d){
+    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const tage = TAGE.slice(0, Math.min(7, Math.max(1, Number(d.tage) || 6)));
+    const zeit = slots(d.zeiten);
+
+    const head = tage.map(t => `<th>${esc(t)}</th>`).join('');
+    const body = zeit.map(z => `
+      <tr>
+        <th class="t-waschplan-time">${esc(z)}</th>
+        ${tage.map(() => '<td></td>').join('')}
+      </tr>`).join('');
+
+    return `
+    <header class="t-waschplan-head">
+      <div>
+        <h1>${esc(d.title)}</h1>
+        ${has(d.sub) ? `<p class="t-waschplan-sub">${esc(d.sub)}</p>` : ''}
+        ${(obj.code || adr) ? `<p class="t-waschplan-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : ''}
+      </div>
+      <div class="t-waschplan-right">
+        ${has(d.woche) ? `<p class="t-waschplan-woche">${esc(d.woche)}</p>` : ''}
+        ${istHotel(d.absender) ? logo('color', 32) : ''}
+      </div>
+    </header>
+
+    <table class="t-waschplan-grid">
+      <thead><tr><th class="t-waschplan-corner">Zeit</th>${head}</tr></thead>
+      <tbody>${body}</tbody>
+    </table>
+
+    <footer class="t-waschplan-foot">
+      ${has(d.note) ? `<p class="t-waschplan-note">${esc(d.note)}</p>` : ''}
+      <p class="t-waschplan-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
+    </footer>`;
+  }
+};
+
+/* ===== js/templates/mieterbrief.js ===== */
+/* Mieterbrief · A4 hoch.
+   Für die Schreiben, die im Laufwerk als Word-Dateien liegen und keinen
+   Aushang, sondern einen Brief mit Briefkopf brauchen — "Wichtiger Hinweis
+   zur Hauseingangstür", "Lieber Parkplatz-Benutzer", "Manipulation an
+   Brand- und Rauchmelder".
+
+   Aufbau nach der bestehenden Korrespondenz: Absenderzeile oben, Anrede,
+   Fliesstext, Grussformel, Rechtszeile unten. */
+
+
+
+
+const BRIEFE = {
+  frei: {
+    label:'Frei — eigener Text', betreff:'', text:''
+  },
+  hauseingang: {
+    label:'Hauseingangstür schliessen',
+    betreff:'Wichtiger Hinweis zur Hauseingangstür',
+    text:'aus aktuellem Anlass möchten wir Sie daran erinnern, dass die Hauseingangstür stets geschlossen zu halten ist. Bitte achten Sie beim Betreten und Verlassen des Gebäudes darauf, dass die Tür richtig ins Schloss fällt und nicht offensteht.\n\nDer Schutz Ihrer Sicherheit und die der anderen Hausbewohner hat höchste Priorität. Nur berechtigte Personen — also ausschliesslich Mieterinnen und Mieter sowie deren Gäste — sollen Zugang zum Haus haben. Unbefugten ist der Zutritt zu verwehren.\n\nVielen Dank für Ihr Verständnis und Ihre Mithilfe!'
+  },
+  besucherpp: {
+    label:'Besucherparkplatz',
+    betreff:'Lieber Parkplatz-Benutzer',
+    text:'Sie parken Ihr Fahrzeug auf einem privaten Parkplatz, der für Besucher reserviert ist. Falls Sie kein Besucher der {{adresse}} sind, bitten wir Sie, Ihr Fahrzeug umgehend umzustellen.\n\nDieser Parkplatz ist ausschliesslich für Besucher vorgesehen.\n\nVielen Dank für Ihr Verständnis.'
+  },
+  brandmelder: {
+    label:'Manipulation am Brandmelder',
+    betreff:'Manipulation an Brand- und Rauchmelder in Ihrem Zimmer',
+    text:'wie Sie den beiliegenden Unterlagen entnehmen können, löste die Brandmeldeanlage eine Störungsmeldung aus. Die Sirene bei der Brandmeldeanlage störte den Schlaf der Mitbewohner, wir mussten extra ausrücken und die Störung quittieren. Zudem musste der Techniker der Brandmeldeanlage vor Ort die Störung beheben.\n\nDer Grund für die Störungsmeldung war, dass Sie den Brandmelder manipuliert haben. Aus diesem Grund verrechnen wir Ihnen gem. beiliegender Rechnung unseren Aufwand.\n\nJede Manipulation an der Brandmeldeanlage hat zur Folge, dass im Brandfall die Alarmierung der Feuerwehr nicht funktioniert und dass Ihr und das Leben Ihrer Mitbewohner auf dem Spiel steht. Im Extremfall wird gegen Sie eine Strafuntersuchung wegen Gefährdung von Leib und Leben eingeleitet.\n\nWir weisen Sie nochmals darauf hin, dass das Rauchen im Zimmer auch bei geöffnetem Fenster strengstens untersagt ist.\n\nDer Einsatz der Feuerwehr bei einem Fehlalarm wird mit CHF 1ʼ500.– geahndet und wird dem Verursacher in Rechnung gestellt.'
+  }
+};
+
+const mieterbrief = {
+  id:'mieterbrief',
+  title:'Mieterbrief',
+  sub:'Schreiben mit Briefkopf · A4 hoch',
+  badge:'Brief',
+  page:'a4',
+  root:'t-mieterbrief',
+  cat:'hausordnung',
+
+  thumb: thumb(`
+    <rect x="18" y="18" width="60" height="10" rx="3" fill="#2A3350"/>
+    <rect x="18" y="70" width="90" height="6" rx="3" fill="#C9CFDA"/>
+    ${lines(18, 84, 70, 2, 9, '#E5E8ED')}
+    <rect x="18" y="120" width="120" height="10" rx="3" fill="#2A3350"/>
+    ${lines(18, 146, 174, 3)}
+    ${lines(18, 190, 174, 3)}
+    ${lines(18, 234, 100, 2)}
+    <rect x="18" y="268" width="90" height="6" rx="3" fill="#2A3350"/>
+    <rect x="18" y="286" width="174" height="4" rx="2" fill="#E5E8ED"/>`),
+
+  fields:[
+    { t:'group', label:'Vorlage' },
+    { k:'briefId', label:'Fertiger Brief', type:'select',
+      options:Object.entries(BRIEFE).map(([v, b]) => ({ v, t:b.label })) },
+    { k:'apply', label:'Brief übernehmen', type:'action',
+      hint:'Überschreibt Betreff und Text.' },
+
+    { t:'group', label:'Absender und Objekt' },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+
+    { t:'group', label:'Empfänger' },
+    { k:'empfaenger', label:'Anschrift', type:'textarea',
+      hint:'Leer lassen, wenn der Brief als Aushang im Treppenhaus hängt.' },
+    { k:'ort',    label:'Ort und Datum', type:'text' },
+
+    { t:'group', label:'Inhalt' },
+    { k:'betreff', label:'Betreff', type:'text' },
+    { k:'anrede',  label:'Anrede',  type:'text' },
+    { k:'text',    label:'Text',    type:'textarea', hint:'**fett** möglich' },
+    { k:'gruss',   label:'Grussformel', type:'text' },
+    { k:'signatur',label:'Unterschrift', type:'text' }
+  ],
+
+  defaults:{
+    briefId:'hauseingang',
+    absender:'architektur',
+    objekt:'-',
+    empfaenger:'',
+    ort:'Muri b. Bern, ',
+    betreff:'Wichtiger Hinweis zur Hauseingangstür',
+    anrede:'Liebe Mieterinnen und Mieter,',
+    text:BRIEFE.hauseingang.text,
+    gruss:'Freundliche Grüsse',
+    signatur:'Die Verwaltung'
+  },
+
+  actions:{
+    apply(d){
+      const b = BRIEFE[d.briefId] || BRIEFE.frei;
+      return { ...d, betreff:b.betreff, text:b.text };
+    }
+  },
+
+  render(d){
+    const abs = ABSENDER[d.absender] || ABSENDER.architektur;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const body = String(d.text || '')
+      .replace(/\{\{adresse\}\}/g, adr || obj.name)
+      .replace(/\{\{objekt\}\}/g, obj.name);
+
+    return `
+    <header class="t-mieterbrief-head">
+      <p class="t-mieterbrief-abs">${esc(abs.name)}</p>
+      <span class="t-mieterbrief-mark">${istHotel(d.absender) ? logo('color', 30) : ''}</span>
+    </header>
+
+    <div class="t-mieterbrief-meta">
+      <div class="t-mieterbrief-to">
+        ${has(d.empfaenger) ? esc(d.empfaenger).replace(/\n/g, '<br>') : ''}
+      </div>
+      <p class="t-mieterbrief-date">${esc(d.ort || '')}</p>
+    </div>
+
+    ${(obj.code || adr) ? `<p class="t-mieterbrief-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : ''}
+
+    <h1 class="t-mieterbrief-betreff">${esc(d.betreff)}</h1>
+    ${has(d.anrede) ? `<p class="t-mieterbrief-anrede">${esc(d.anrede)}</p>` : ''}
+    <div class="t-mieterbrief-text">${fmt(body)}</div>
+
+    <div class="t-mieterbrief-sign">
+      ${has(d.gruss) ? `<p>${esc(d.gruss)}</p>` : ''}
+      ${has(d.signatur) ? `<p class="t-mieterbrief-name">${esc(d.signatur)}</p>` : ''}
+      <p class="t-mieterbrief-legal">${esc(abs.legal)}</p>
+    </div>
+
+    <footer class="t-mieterbrief-foot">${esc(abs.foot)}</footer>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
-/* Registrierung aller Vorlagen — Reihenfolge und Gruppen im Hub. */
+/* Registrierung aller Vorlagen.
+   Der Hub gruppiert nach Kategorie — dieselbe Einteilung, nach der die
+   Aushänge im Laufwerk sortiert sind. */
+
+
+
+
 
 
 
@@ -3768,6 +4765,10 @@ const gaestemappe = {
 
 
 const TEMPLATES = {
+  hinweis,
+  mieterbrief,
+  parkschild,
+  waschplan,
   notruf,
   rezeption,
   'rezeption-sticker': sticker,
@@ -3781,16 +4782,35 @@ const TEMPLATES = {
 };
 
 const ORDER = [
+  'hinweis', 'mieterbrief', 'parkschild', 'waschplan',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
 
 const GROUPS = [
-  { title:'Aushänge und Telefon', ids:['notruf'] },
-  { title:'Aufkleber',            ids:['rezeption', 'rezeption-sticker'] },
-  { title:'Gäste-Infos',          ids:['aushang', 'gaestemappe'] },
-  { title:'Anfahrt und Parken',   ids:['parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor'] },
-  { title:'TV und Medien',        ids:['zattoo'] }
+  { id:'hausordnung', title:'Hausordnung und Verbote',
+    note:'Rauchverbot, Betäubungsmittel, Videoüberwachung, Türen — als Aushang oder als Brief.',
+    ids:['hinweis', 'mieterbrief'] },
+
+  { id:'parken', title:'Parkieren',
+    note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
+    ids:['parkschild', 'parkplatz'] },
+
+  { id:'waesche', title:'Waschen und Trocknen',
+    note:'Waschplan zum Aushängen.',
+    ids:['waschplan'] },
+
+  { id:'hotel', title:'Hotel und Gäste',
+    note:'Alles rund um Check-in, Zimmer und Aufenthalt.',
+    ids:['notruf', 'aushang', 'gaestemappe', 'zattoo'] },
+
+  { id:'wegweiser', title:'Wegweiser und Aufkleber',
+    note:'Pfeile und runde Aufkleber in Originalgrösse.',
+    ids:['rezeption', 'rezeption-sticker'] },
+
+  { id:'plaene', title:'Karten und Pläne',
+    note:'Anfahrt, Luftbild und der interaktive Lageplan.',
+    ids:['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor'] }
 ];
 
 /* ===== js/app.js ===== */
@@ -3879,7 +4899,10 @@ function renderHub(){
           </div>
         </button>`;
     }).join('');
-    return `<section class="vz-group"><h2>${esc(g.title)}</h2><div class="vz-cards">${cards}</div></section>`;
+    return `<section class="vz-group" id="kat-${esc(g.id || '')}">
+      <h2>${esc(g.title)}</h2>
+      ${g.note ? `<p class="vz-group-note">${esc(g.note)}</p>` : ''}
+      <div class="vz-cards">${cards}</div></section>`;
   }).join('');
 
   view().innerHTML = `
@@ -3935,6 +4958,12 @@ function fieldHtml(f, value, path){
         <input id="${id}" type="color" data-path="${esc(path)}" value="${esc(v || '#2A3350')}">${lbl}</div>`;
     case 'image':
       return imageFieldHtml(f, v, path, id);
+    case 'action':
+      /* Knopf, der eine in der Vorlage hinterlegte Funktion auf den Zustand
+         anwendet — z. B. einen fertigen Textbaustein übernehmen. */
+      return `<div class="vz-field">
+        <button type="button" class="vz-btn vz-btn--sm" data-action="${esc(f.k)}">${esc(f.label)}</button>
+        ${hint}</div>`;
     default:
       return `<div class="vz-field">${lbl}
         <input id="${id}" type="text" data-path="${esc(path)}" value="${esc(v)}">${hint}</div>`;
@@ -4105,6 +5134,23 @@ function renderEditor(id){
 
     const clear = ev.target.closest('[data-imgclear]');
     if (clear){ setPath(state, clear.dataset.imgclear, ''); commit(); rebuild(); return; }
+
+    /* Knopf einer Vorlagen-Aktion, z. B. "Baustein übernehmen". Die Funktion
+       gibt einen neuen Zustand zurück; das Formular wird danach neu gezeichnet,
+       damit die überschriebenen Felder sichtbar werden. */
+    const act = ev.target.closest('[data-action]');
+    if (act){
+      const fn = tpl.actions && tpl.actions[act.dataset.action];
+      if (typeof fn === 'function'){
+        const next = fn({ ...state });
+        if (next && typeof next === 'object'){
+          Object.keys(state).forEach(k => { delete state[k]; });
+          Object.assign(state, next);
+          commit(); rebuild();
+        }
+      }
+      return;
+    }
 
     const add = ev.target.closest('[data-add]');
     if (add){

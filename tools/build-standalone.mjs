@@ -14,6 +14,8 @@ const p = (...x) => path.join(ROOT, ...x);
 /* Reihenfolge: Abhängigkeiten zuerst. */
 const MODULES = [
   'js/brand-config.js',
+  'js/objekte.js',
+  'js/presets.js',
   'js/lib/dom.js',
   'js/lib/icons.js',
   'js/lib/thumbs.js',
@@ -33,6 +35,10 @@ const MODULES = [
   'js/templates/zattoo.js',
   'js/templates/planeditor.js',
   'js/templates/gaestemappe.js',
+  'js/templates/hinweis.js',
+  'js/templates/parkschild.js',
+  'js/templates/waschplan.js',
+  'js/templates/mieterbrief.js',
   'js/templates/index.js',
   'js/app.js'
 ];

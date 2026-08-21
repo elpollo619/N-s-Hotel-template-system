@@ -83,7 +83,10 @@ function renderHub(){
           </div>
         </button>`;
     }).join('');
-    return `<section class="vz-group"><h2>${esc(g.title)}</h2><div class="vz-cards">${cards}</div></section>`;
+    return `<section class="vz-group" id="kat-${esc(g.id || '')}">
+      <h2>${esc(g.title)}</h2>
+      ${g.note ? `<p class="vz-group-note">${esc(g.note)}</p>` : ''}
+      <div class="vz-cards">${cards}</div></section>`;
   }).join('');
 
   view().innerHTML = `
@@ -139,6 +142,12 @@ function fieldHtml(f, value, path){
         <input id="${id}" type="color" data-path="${esc(path)}" value="${esc(v || '#2A3350')}">${lbl}</div>`;
     case 'image':
       return imageFieldHtml(f, v, path, id);
+    case 'action':
+      /* Knopf, der eine in der Vorlage hinterlegte Funktion auf den Zustand
+         anwendet — z. B. einen fertigen Textbaustein übernehmen. */
+      return `<div class="vz-field">
+        <button type="button" class="vz-btn vz-btn--sm" data-action="${esc(f.k)}">${esc(f.label)}</button>
+        ${hint}</div>`;
     default:
       return `<div class="vz-field">${lbl}
         <input id="${id}" type="text" data-path="${esc(path)}" value="${esc(v)}">${hint}</div>`;
@@ -309,6 +318,23 @@ function renderEditor(id){
 
     const clear = ev.target.closest('[data-imgclear]');
     if (clear){ setPath(state, clear.dataset.imgclear, ''); commit(); rebuild(); return; }
+
+    /* Knopf einer Vorlagen-Aktion, z. B. "Baustein übernehmen". Die Funktion
+       gibt einen neuen Zustand zurück; das Formular wird danach neu gezeichnet,
+       damit die überschriebenen Felder sichtbar werden. */
+    const act = ev.target.closest('[data-action]');
+    if (act){
+      const fn = tpl.actions && tpl.actions[act.dataset.action];
+      if (typeof fn === 'function'){
+        const next = fn({ ...state });
+        if (next && typeof next === 'object'){
+          Object.keys(state).forEach(k => { delete state[k]; });
+          Object.assign(state, next);
+          commit(); rebuild();
+        }
+      }
+      return;
+    }
 
     const add = ev.target.closest('[data-add]');
     if (add){

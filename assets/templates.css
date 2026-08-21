@@ -612,3 +612,109 @@
 }
 .t-gm .gm-tip p{margin:0;font-size:8pt;line-height:1.45;color:var(--ink-soft)}
 .t-gm .gm-tip p.gm-en{color:var(--muted);font-style:italic;margin-top:.4mm}
+
+/* ==========================================================================
+   Hinweis · A4 — Arbeitsvorlage für die bestehenden Aushänge
+   ========================================================================== */
+.t-hinweis{display:flex;flex-direction:column;padding:0}
+.t-hinweis-todo{margin:0;padding:8px 14px;background:#FFF4E5;border-bottom:1px solid #F0D9B5;
+  font-size:11px;line-height:1.5;color:#8A5A00}
+.t-hinweis-todo code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px}
+
+.t-hinweis-head{display:flex;align-items:center;justify-content:space-between;gap:14mm;
+  padding:22mm 18mm 16mm}
+.t-hinweis-headtxt{min-width:0}
+.t-hinweis-abs{margin:0 0 6mm;font-size:10pt;letter-spacing:.26em;text-transform:uppercase;
+  font-weight:700;opacity:.7}
+.t-hinweis-head h1{margin:0;font-family:var(--font-display);font-size:34pt;line-height:1.03;
+  letter-spacing:-.015em;font-weight:700}
+.t-hinweis-obj{margin:6mm 0 0;font-size:11pt;letter-spacing:.12em;text-transform:uppercase;opacity:.72}
+.t-hinweis-ico{flex:0 0 auto;opacity:.9}
+.t-hinweis-ico svg{display:block}
+
+.t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:14mm 18mm}
+.t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
+.t-hinweis-p[lang="en"],.t-hinweis-p[lang="it"]{font-size:12pt;color:var(--ink-soft);font-style:italic}
+
+.t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
+.t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
+.t-hinweis-mark{opacity:.95}
+.t-hinweis-addr{margin:0;padding-top:4mm;border-top:1px solid var(--line);
+  font-size:8pt;line-height:1.5;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Parkplatz-Schild · eine Seite je Platz
+   ========================================================================== */
+.t-parkschild-page{display:flex;padding:10mm;box-sizing:border-box}
+.t-parkschild-frame{flex:1;display:flex;flex-direction:column;gap:6mm;
+  border:2.4mm solid var(--ton);border-radius:6mm;padding:9mm 10mm;box-sizing:border-box}
+.t-parkschild-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8mm}
+.t-parkschild-head h1{margin:0;font-family:var(--font-display);font-size:40pt;line-height:.98;
+  letter-spacing:.02em;color:var(--ton)}
+.t-parkschild-nr{margin:4mm 0 0;font-size:20pt;font-weight:700;color:var(--ink)}
+.t-parkschild-ico{color:var(--ton);opacity:.85}
+.t-parkschild-ico svg{display:block}
+.t-parkschild-obj{margin:0;font-size:11pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft)}
+.t-parkschild-warn{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2mm}
+.t-parkschild-warn p{margin:0;font-size:11.5pt;line-height:1.45;color:var(--ink)}
+.t-parkschild-warn p[lang="en"]{font-size:9.5pt;color:var(--ink-soft);font-style:italic}
+.t-parkschild-foot{display:flex;align-items:center;justify-content:space-between;gap:6mm;
+  padding-top:4mm;border-top:1px solid var(--line)}
+.t-parkschild-abs{font-size:7.5pt;color:var(--ink-faint);text-align:right}
+
+/* ==========================================================================
+   Waschplan · A4 hoch
+   ========================================================================== */
+.t-waschplan{display:flex;flex-direction:column;padding:16mm 14mm 12mm}
+.t-waschplan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;
+  padding-bottom:6mm;border-bottom:2px solid var(--navy)}
+.t-waschplan-head h1{margin:0;font-family:var(--font-display);font-size:28pt;line-height:1;
+  color:var(--navy)}
+.t-waschplan-sub{margin:3mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-waschplan-obj{margin:2mm 0 0;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint)}
+.t-waschplan-right{text-align:right;display:grid;gap:4mm;justify-items:end}
+.t-waschplan-woche{margin:0;font-size:11pt;font-weight:700;color:var(--ink)}
+
+.t-waschplan-grid{width:100%;border-collapse:collapse;margin-top:7mm;table-layout:fixed}
+.t-waschplan-grid th,.t-waschplan-grid td{border:1px solid var(--line);padding:0}
+.t-waschplan-grid thead th{background:var(--navy);color:#fff;font-size:10pt;font-weight:700;
+  padding:3mm 2mm;letter-spacing:.04em}
+.t-waschplan-corner{width:26mm}
+.t-waschplan-time{background:#F6F7FA;font-size:9pt;font-weight:700;color:var(--ink);
+  padding:3.5mm 2mm;white-space:nowrap}
+.t-waschplan-grid tbody td{height:18mm}
+.t-waschplan-grid tbody tr:nth-child(even) td{background:#FAFBFC}
+
+.t-waschplan-foot{margin-top:auto;padding-top:6mm}
+.t-waschplan-note{margin:0 0 4mm;font-size:9.5pt;line-height:1.55;color:var(--ink-soft)}
+.t-waschplan-addr{margin:0;padding-top:3mm;border-top:1px solid var(--line);
+  font-size:7.5pt;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Mieterbrief · A4 hoch
+   ========================================================================== */
+.t-mieterbrief{display:flex;flex-direction:column;padding:18mm 20mm 14mm}
+.t-mieterbrief-head{display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:5mm;border-bottom:1px solid var(--line)}
+.t-mieterbrief-abs{margin:0;font-family:var(--font-display);font-size:12pt;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--navy)}
+.t-mieterbrief-meta{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12mm;margin-top:14mm;min-height:24mm}
+.t-mieterbrief-to{font-size:11pt;line-height:1.6;color:var(--ink)}
+.t-mieterbrief-date{margin:0;font-size:10.5pt;color:var(--ink-soft);white-space:nowrap}
+.t-mieterbrief-obj{margin:6mm 0 0;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint)}
+.t-mieterbrief-betreff{margin:8mm 0 6mm;font-family:var(--font-display);font-size:16pt;
+  line-height:1.25;color:var(--navy)}
+.t-mieterbrief-anrede{margin:0 0 4mm;font-size:11pt;color:var(--ink)}
+.t-mieterbrief-text{font-size:11pt;line-height:1.68;color:var(--ink)}
+.t-mieterbrief-text p{margin:0 0 4mm}
+.t-mieterbrief-sign{margin-top:10mm;font-size:11pt;line-height:1.6;color:var(--ink)}
+.t-mieterbrief-sign p{margin:0}
+.t-mieterbrief-name{margin-top:8mm!important;font-weight:700}
+.t-mieterbrief-legal{color:var(--ink-soft)}
+.t-mieterbrief-foot{margin-top:auto;padding-top:5mm;border-top:1px solid var(--line);
+  font-size:7.5pt;line-height:1.5;color:var(--ink-faint)}

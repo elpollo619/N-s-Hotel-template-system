@@ -36,6 +36,10 @@ Nützlich zu wissen:
 
 | Vorlage | Format | Wofür |
 |---|---|---|
+| **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — rund 30 fertige Textbausteine, Kopfbalken navy / cyan / rot je nach Ton |
+| **Mieterbrief** | A4 hoch | Schreiben mit Briefkopf: Hauseingangstür, Besucherparkplatz, Brandmelder |
+| **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
+| **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
@@ -73,6 +77,68 @@ Nicht übernommen: die **Reels** (9 × 16). Sie sind keine Druckvorlage, sondern
 zeitgesteuerte Videoszenen auf React und Babel aus dem CDN — beides steht im
 Widerspruch zu „kein Framework, kein CDN, läuft offline". Sie funktionieren
 als eigenständige Dateien bereits gut und bleiben deshalb, wo sie sind.
+
+---
+
+## Liegenschaften und Absender
+
+Die Vorlagen kennen die Häuser aus `J:\Immobilien` — dieselben Kürzel wie die
+Ordner dort: **A4, A12, A12a, A14, B4, B7, B22, H8, I16, S17, Casa Reto**. Im
+Formular wählt man das Objekt, und Kürzel plus Adresse erscheinen auf dem Blatt.
+
+Dazu gibt es drei Absender, weil das Haus unter drei Namen schreibt:
+
+| Absender | Verwendung |
+|---|---|
+| **N's Hotel** | alles rund um Gäste und Zimmer |
+| **HANS AMONN IMMOBILIEN** | Vermietung, Hausordnung, Mieterkorrespondenz |
+| **AMONN ARCHITEKTUR** | Schreiben, die unter der Architektur-Firma laufen |
+
+Die Wortmarke mit dem Pin erscheint **nur** beim Absender N's Hotel. Für die
+beiden Amonn-Firmen liegt kein Logo im Repository; dort steht der Firmenname
+in der Display-Schrift. Ein Hotel-Logo unter einem Immobilienaushang wäre
+schlicht falsch.
+
+### Adressen — was belegt ist und was fehlt
+
+Eingetragen ist nur, was in den Unterlagen im Laufwerk wirklich steht:
+
+| Kürzel | Adresse | Quelle |
+|---|---|---|
+| A4 | Allmendstrasse 4/4a | `02 Vermietung/Besucher PP A4.docx` |
+| A14 | Allmendstrasse 14, 3210 Kerzers | Gästemappe N's Hotel |
+| B4 | Blümlisalpstrasse 4, 3074 Muri b. Bern | Briefkopf HANS AMONN AG |
+| H8 | Höheweg 8 | Ordner `Dossier Liegenschaften` |
+
+Bei **A12, A12a, B7, B22, I16, S17 und Casa Reto** steht die Adresse bewusst
+leer. Ein falscher Strassenname auf einem Aushang wäre schlimmer als gar
+keiner. Sobald sie bekannt sind, in `js/objekte.js` eintragen — alle Vorlagen
+ziehen automatisch nach. Solange etwas fehlt, zeigt der Editor einen Hinweis,
+der **nicht** mitgedruckt wird.
+
+---
+
+## Textbausteine
+
+`js/presets.js` enthält die Wortlaute der bestehenden Aushänge, eins zu eins
+aus den Word-Dateien übernommen — Rauchverbot, Betäubungsmittel,
+Videoüberwachung, Abfall nur in Säcken, Nur PET, Küche sauber hinterlassen,
+Kühlschrank, Parkverbot, Check-in, Express Check-out und weitere. Sie sind
+nach Kategorie sortiert:
+
+Hausordnung und Verbote · Abfall und Recycling · Parkieren · Küche und Bad ·
+Waschen und Trocknen · Vermietung · Hotel und Gäste · Technik und Unterhalt
+
+Im Editor Baustein wählen, **Baustein übernehmen** drücken, fertig. Danach ist
+jedes Feld frei überschreibbar. Drei Platzhalter werden beim Zeichnen ersetzt:
+`{{adresse}}`, `{{objekt}}` und `{{datum}}`.
+
+Mehrsprachig: DE immer, EN und IT optional — genau wie die Originale, von
+denen einige bereits dreisprachig waren.
+
+**Nicht übernommen wurde ein WLAN-Passwort**, das in `Videoüberwachung.docx`
+im Klartext steht. Das Repository ist öffentlich; solche Angaben gehören
+nicht hinein. Wer es braucht, trägt es im Editor ein — es bleibt im Browser.
 
 ---
 
