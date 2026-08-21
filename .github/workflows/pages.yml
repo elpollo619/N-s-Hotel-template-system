@@ -1,0 +1,41 @@
+# Veröffentlicht die Vorlagen-Zentrale auf GitHub Pages.
+#
+# Dieser Ablauf tut nichts, solange Pages nicht eingeschaltet ist. Einschalten:
+#   Repository → Settings → Pages → Source: "GitHub Actions" → Save
+# Danach läuft er bei jedem Push auf main und die Seite steht unter
+#   https://elpollo619.github.io/N-s-Hotel-template-system/
+#
+# Veröffentlicht wird der Projektordner unverändert — es ist eine statische
+# Seite ohne Bauschritt. Die lizenzpflichtigen Schriften liegen nicht im
+# Repository und werden folglich auch nicht mitveröffentlicht.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Ein Lauf nach dem anderen; ein laufender wird nicht abgebrochen.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -4,20 +4,19 @@
    Abgebildet ist die Ordnerstruktur aus J:\Immobilien — jeder Ordner dort
    ist hier ein Objekt mit demselben Kürzel (A14, B4, H8 …).
 
-   WICHTIG zu den Adressen
-   Eingetragen ist nur, was in den Unterlagen im Laufwerk wirklich belegt ist:
+   Adressen
+   Alle Adressen stammen von Cris (21.08.2026) und ersetzen die vorherigen
+   Lücken. Belegt sind sie zusätzlich in den Unterlagen im Laufwerk:
 
-     A4    "Besucher PP A4.docx"      → Allmendstrasse 4/4a
-     A14   Gästemappe N's Hotel        → Allmendstrasse 14, 3210 Kerzers
-     B4    Briefkopf HANS AMONN AG     → Blümlisalpstrasse 4, 3074 Muri b. Bern
-     B22   "Information gebrauch Waschmaschine B22.docx"
-           → Bernstrasse 22, 3053 Münchenbuchsee
-     H8    Ordner Dossier Liegenschaften → Höheweg 8 (und 8a)
+     A4    "Besucher PP A4.docx"        → Allmendstrasse 4/4a
+     A14   Gästemappe N's Hotel          → Allmendstrasse 14, 3210 Kerzers
+     B4    Briefkopf HANS AMONN AG       → Blümlisalpstrasse 4, 3074 Muri
+     B22   "Information Waschmaschine B22.docx" → Bernstrasse 22, Münchenbuchsee
+     H8    Ordner Dossier Liegenschaften → Höheweg 8
 
-   Offen bleiben A12, A12a, B7, I16, S17 und Casa Reto — dort steht die
-   Adresse bewusst leer. Ein falscher
-   Strassenname auf einem Aushang wäre schlimmer als gar keiner. Sobald die
-   Adresse bekannt ist, hier eintragen — alle Vorlagen ziehen automatisch nach.
+   Offen bleibt nur I16 — dafür liegt noch keine Adresse vor. Das Feld bleibt
+   leer, statt geraten zu werden; der Editor weist darauf hin, ohne dass es
+   mitgedruckt wird.
    ========================================================================== */
 
 /** Die drei Absender des Hauses. Alle am selben Sitz in Muri b. Bern. */
@@ -53,18 +52,18 @@ export const ABSENDER = {
 
 /** Alle Liegenschaften. `street` leer = Adresse noch nicht belegt. */
 export const OBJEKTE = [
-  { id:'-',        code:'',      name:'Ohne Objekt',      street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'A4',       code:'A4',    name:'Allmendstrasse 4', street:'Allmendstrasse 4/4a', zip:'',     city:'',            absender:'architektur' },
-  { id:'A12',      code:'A12',   name:'A12',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'A12a',     code:'A12a',  name:'A12a',             street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'A14',      code:'A14',   name:"N's Hotel",        street:'Allmendstrasse 14',   zip:'3210', city:'Kerzers',     absender:'hotel' },
-  { id:'B4',       code:'B4',    name:'Blümlisalpstr. 4', street:'Blümlisalpstrasse 4', zip:'3074', city:'Muri b. Bern',absender:'architektur' },
-  { id:'B7',       code:'B7',    name:'B7',               street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'B22',      code:'B22',   name:'Bernstrasse 22',   street:'Bernstrasse 22',      zip:'3053', city:'Münchenbuchsee',absender:'immobilien' },
-  { id:'H8',       code:'H8',    name:'Höheweg 8',        street:'Höheweg 8',           zip:'',     city:'',            absender:'immobilien' },
-  { id:'I16',      code:'I16',   name:'I16',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'S17',      code:'S17',   name:'S17',              street:'',                    zip:'',     city:'',            absender:'immobilien' },
-  { id:'CasaReto', code:'CR',    name:'Casa Reto',        street:'',                    zip:'',     city:'',            absender:'immobilien' }
+  { id:'-',        code:'',      name:'Ohne Objekt',       street:'',                     zip:'',     city:'',              absender:'immobilien' },
+  { id:'A4',       code:'A4',    name:'Allmendstrasse 4',  street:'Allmendstrasse 4/4a',  zip:'3210', city:'Kerzers',       absender:'architektur' },
+  { id:'A12',      code:'A12',   name:'Allmendstrasse 12', street:'Allmendstrasse 12',    zip:'3210', city:'Kerzers',       absender:'immobilien' },
+  { id:'A12a',     code:'A12a',  name:'Allmendstrasse 12a',street:'Allmendstrasse 12a',   zip:'3210', city:'Kerzers',       absender:'immobilien' },
+  { id:'A14',      code:'A14',   name:"N's Hotel",         street:'Allmendstrasse 14',    zip:'3210', city:'Kerzers',       absender:'hotel' },
+  { id:'B4',       code:'B4',    name:'Blümlisalpstr. 4',  street:'Blümlisalpstrasse 4',  zip:'3074', city:'Muri bei Bern', absender:'architektur' },
+  { id:'B7',       code:'B7',    name:'Burgstatt 7',       street:'Burgstatt 7',          zip:'3210', city:'Kerzers',       absender:'immobilien' },
+  { id:'B22',      code:'B22',   name:'Bernstrasse 22',    street:'Bernstrasse 22',       zip:'3053', city:'Münchenbuchsee',absender:'immobilien' },
+  { id:'H8',       code:'H8',    name:'Höheweg 8',         street:'Höheweg 8',            zip:'3074', city:'Muri bei Bern', absender:'immobilien' },
+  { id:'I16',      code:'I16',   name:'I16',               street:'',                     zip:'',     city:'',              absender:'immobilien' },
+  { id:'S17',      code:'S17',   name:'Sahlistrasse 17',   street:'Sahlistrasse 17',      zip:'3012', city:'Bern',          absender:'immobilien' },
+  { id:'CasaReto', code:'CR',    name:'Casa Reto',         street:'Via Loco Coste 51',    zip:'6596', city:'Gordola',       absender:'immobilien' }
 ];
 
 /** Objekt nach id. Fällt auf "Ohne Objekt" zurück. */
