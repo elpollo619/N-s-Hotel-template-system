@@ -16,9 +16,14 @@ Er funktioniert auf jedem Gerät — Büro-PC, Handy, Tablet — und zeigt immer
 aktuellen Stand. Am besten einmal als Lesezeichen speichern; am Handy über
 «Zum Startbildschirm hinzufügen», dann liegt sie wie eine App auf dem Display.
 
-> Veröffentlicht wird automatisch bei jedem Push auf `main`
-> (`.github/workflows/pages.yml`). Pages schaltet der Ablauf beim ersten Lauf
-> selbst ein — es ist kein Handgriff im Repository nötig.
+> **Einmalig einschalten:** Repository → **Settings → Pages → Source:
+> «GitHub Actions» → Save**. Danach veröffentlicht
+> `.github/workflows/pages.yml` bei jedem Push auf `main` von selbst.
+>
+> Der Schalter lässt sich nicht aus dem Workflow heraus umlegen: das Anlegen
+> einer Pages-Seite verlangt Administrationsrechte am Repository, die der
+> `GITHUB_TOKEN` eines Workflows nicht besitzt
+> (`Create Pages site failed. Resource not accessible by integration`).
 
 **Ohne Internet:** die Datei `standalone.html` herunterladen und doppelklicken.
 Sie enthält alles in einer einzigen Datei und läuft ohne Server. Nachteil: eine
