@@ -16,6 +16,7 @@ import parkschild from './parkschild.js';
 import waschplan from './waschplan.js';
 import mieterbrief from './mieterbrief.js';
 import sammelstelle from './sammelstelle.js';
+import kurzanleitung from './kurzanleitung.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -23,6 +24,7 @@ export const TEMPLATES = {
   parkschild,
   waschplan,
   sammelstelle,
+  kurzanleitung,
   notruf,
   rezeption,
   'rezeption-sticker': sticker,
@@ -36,7 +38,7 @@ export const TEMPLATES = {
 };
 
 export const ORDER = [
-  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
+  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle', 'kurzanleitung',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -65,6 +67,10 @@ export const GROUPS = [
   { id:'wegweiser', title:'Wegweiser und Aufkleber',
     note:'Pfeile und runde Aufkleber in Originalgrösse.',
     ids:['rezeption', 'rezeption-sticker'] },
+
+  { id:'hilfe', title:'Für das Team',
+    note:'Die Kurzanleitung zum Aufhängen — mit QR-Code auf die Zentrale.',
+    ids:['kurzanleitung'] },
 
   { id:'plaene', title:'Karten und Pläne',
     note:'Anfahrt, Luftbild und der interaktive Lageplan.',

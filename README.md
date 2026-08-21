@@ -90,6 +90,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
 | **Sammelstelle beschriften** | A5/A4, mehrseitig | Papier, PET, Glas, Kehricht … — eine Seite je Behälter, mit «gehört hinein / gehört nicht hinein» |
+| **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die drei Schritte, die Druckeinstellungen |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
@@ -223,6 +224,30 @@ Kerzers.docx` DE/FR/PT, `Wäschehänge.docx` DE/EN/FR.
 öffentlich; solche Angaben gehören nicht hinein. Die Netznamen sind drin, das
 Passwort ist überall ein Platzhalter — wer es braucht, trägt es im Editor ein,
 und es bleibt im Browser der jeweiligen Person.
+
+---
+
+## QR-Code
+
+`tools/make-qr.py` erzeugt den QR-Code auf die Zentrale — einmal als SVG
+(`assets/brand/qr-vorlagen.svg`) und einmal als ES-Modul
+(`js/lib/qr-vorlagen.js`), das die Kurzanleitung fest einbettet.
+
+```bash
+pip install segno
+python3 tools/make-qr.py
+```
+
+Zwei Entscheide dahinter:
+
+* **Kein QR-Dienst im Internet.** Die Adresse verlässt den eigenen Rechner
+  nicht, und die App fragt beim Zeichnen nichts nach draussen.
+* **Eingebettet statt nachgeladen.** `standalone.html` wird per Doppelklick
+  geöffnet; eine Datei mit `file://`-Adresse darf keine Nachbardateien
+  nachladen. Als Modul wandert der Code beim Bauen mit in die Einzeldatei.
+
+Wer die Adresse ändert: `URL` im Skript anpassen, Skript laufen lassen, und im
+Editor die Zeile zum Abtippen nachziehen — beide müssen zusammenpassen.
 
 ---
 
