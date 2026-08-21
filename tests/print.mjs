@@ -12,7 +12,8 @@ await fs.mkdir(OUT, { recursive:true });
 const ERWARTET = {
   'a4':      { b:595, h:842 },
   'a4-land': { b:842, h:595 },
-  'a5':      { b:420, h:595 }
+  'a5':      { b:420, h:595 },
+  'a5-land': { b:595, h:420 }
 };
 
 const browser = await chromium.launch();
