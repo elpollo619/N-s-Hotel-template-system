@@ -21,7 +21,7 @@
 
   --font-display:"Gotham","Montserrat",system-ui,sans-serif;  /* Titel / Bold */
   --font-body:"Montserrat",system-ui,sans-serif;              /* Fliesstext */
-  --font-script:"Caflisch Script Pro","Dancing Script",cursive; /* Eyebrow handschriftlich */
+  --font-script:"Caflisch Script Pro","Parisienne","Dancing Script",cursive; /* Eyebrow handschriftlich */
 
   /* Weitere Systemfarben (aus dem Handbuch) */
   --walk:#12A150;        /* Fussweg */

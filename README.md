@@ -8,6 +8,24 @@ Kein Login, keine Datenbank, kein Server: die App läuft vollständig im Browser
 
 ---
 
+## Wo finde ich die Vorlagen-Zentrale?
+
+**Der Link:** https://elpollo619.github.io/N-s-Hotel-template-system/
+
+Er funktioniert auf jedem Gerät — Büro-PC, Handy, Tablet — und zeigt immer den
+aktuellen Stand. Am besten einmal als Lesezeichen speichern; am Handy über
+«Zum Startbildschirm hinzufügen», dann liegt sie wie eine App auf dem Display.
+
+> Der Link lebt erst, wenn GitHub Pages eingeschaltet ist:
+> **Settings → Pages → Source: «GitHub Actions» → Save**. Der Ablauf dafür liegt
+> bereits im Repository (`.github/workflows/pages.yml`) und tut bis dahin nichts.
+
+**Ohne Internet:** die Datei `standalone.html` herunterladen und doppelklicken.
+Sie enthält alles in einer einzigen Datei und läuft ohne Server. Nachteil: eine
+heruntergeladene Kopie veraltet — für den täglichen Gebrauch ist der Link besser.
+
+---
+
 ## Für das Team — so geht's
 
 1. Den Link öffnen (oder `standalone.html` doppelklicken).
@@ -28,7 +46,32 @@ Nützlich zu wissen:
 * **Entwurf sichern** legt eine kleine Datei ab, die eine Kollegin mit
   **Entwurf laden** wieder öffnen kann.
 * Die Oberfläche gibt es auf Deutsch und Englisch (oben rechts). Der **Inhalt**
-  der Aushänge ist immer zweisprachig DE/EN, teils zusätzlich FR/IT.
+  der Aushänge ist immer zweisprachig DE/EN, je nach Baustein zusätzlich
+  FR, IT oder PT.
+* Beim **Hinweis** zuerst den fertigen Textbaustein wählen und
+  **Baustein übernehmen** drücken — danach ist alles frei überschreibbar.
+  Dann die **Liegenschaft** wählen: Kürzel und Adresse setzen sich von selbst.
+
+### Ankündigung fürs Team
+
+Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
+
+> **Neu: die Vorlagen-Zentrale**
+>
+> Aushänge, Parkplatzschilder, Waschpläne und die Beschriftung der
+> Sammelstelle machen wir ab sofort selber — ohne Word, ohne Grafiker, immer
+> im gleichen Auftritt.
+>
+> 👉 https://elpollo619.github.io/N-s-Hotel-template-system/
+>
+> Vorlage anklicken, links die Texte anpassen, «Drucken / PDF». Im Druckdialog
+> **Ränder: keine** und **Hintergrundgrafiken: ein**.
+>
+> Die gewohnten Texte sind schon drin — Rauchverbot, Parkverbot, Küche sauber
+> halten, Check-in und rund vierzig weitere. Baustein wählen, Liegenschaft
+> wählen, drucken.
+>
+> Fragen an Cris.
 
 ---
 
@@ -100,12 +143,33 @@ beiden Amonn-Firmen liegt kein Logo im Repository; dort steht der Firmenname
 in der Display-Schrift. Ein Hotel-Logo unter einem Immobilienaushang wäre
 schlicht falsch.
 
-### Adressen — was belegt ist und was fehlt
+### Adressen
 
-Eingetragen ist nur, was in den Unterlagen im Laufwerk wirklich steht:
+Alle Liegenschaften sind hinterlegt:
 
-| Kürzel | Adresse | Quelle |
-|---|---|---|
+| Kürzel | Adresse |
+|---|---|
+| A4 | Allmendstrasse 4/4a, 3210 Kerzers |
+| A12 | Allmendstrasse 12, 3210 Kerzers |
+| A12a | Allmendstrasse 12a, 3210 Kerzers |
+| A14 | Allmendstrasse 14, 3210 Kerzers — N's Hotel |
+| B4 | Blümlisalpstrasse 4, 3074 Muri bei Bern — Sitz der Firma |
+| B7 | Burgstatt 7, 3210 Kerzers |
+| B22 | Bernstrasse 22, 3053 Münchenbuchsee |
+| H8 | Höheweg 8, 3074 Muri bei Bern |
+| S17 | Sahlistrasse 17, 3012 Bern |
+| Casa Reto | Via Loco Coste 51, 6596 Gordola |
+
+Offen ist nur **I16**. Dort bleibt das Feld leer, statt geraten zu werden — ein
+falscher Strassenname auf einem Aushang wäre schlimmer als gar keiner. Der
+Editor weist darauf hin; auf dem Druck erscheint der Hinweis nicht. Sobald die
+Adresse bekannt ist, in `js/objekte.js` eintragen — alle Vorlagen ziehen
+automatisch nach.
+
+Casa Reto liegt im Tessin: dort ist Italienisch die naheliegende zweite
+Sprache, das Feld dafür ist im Hinweis vorhanden.
+
+---|---|---|
 | A4 | Allmendstrasse 4/4a | `02 Vermietung/Besucher PP A4.docx` |
 | A14 | Allmendstrasse 14, 3210 Kerzers | Gästemappe N's Hotel |
 | B4 | Blümlisalpstrasse 4, 3074 Muri b. Bern | Briefkopf HANS AMONN AG |
@@ -187,6 +251,22 @@ Zwei Dinge gehören deshalb **nicht** hinein und sind bewusst ausgeschlossen:
 Telefon, WhatsApp, E-Mail und Web in `js/brand-config.js` sind dagegen die
 öffentlichen Kontaktangaben des Hauses; sie stehen ohnehin auf jedem Aushang
 und in der bestehenden Gästemappe.
+
+### Ersatzschriften
+
+Gotham und Caflisch Script Pro sind lizenzpflichtig und dürfen nicht in einem
+öffentlichen Repository liegen. Solange sie fehlen, rendert die App mit den
+nächstliegenden frei lizenzierten Schriften — beide liegen lokal im Projekt,
+es wird kein CDN angefragt:
+
+| Marke | Ersatz | Warum |
+|---|---|---|
+| Gotham-Bold | **Montserrat** | geometrische Grotesk mit grosser x-Höhe, der gängige freie Gotham-Ersatz |
+| Caflisch Script Pro | **Parisienne** | verbundene, leicht geneigte Schreibschrift mit Federduktus — deutlich näher an Caflisch als Dancing Script, das runder und verspielter läuft |
+
+Dancing Script bleibt als zweiter Fallback in der Kette, falls Parisienne
+einmal fehlt. Sobald die echten Schriften im Ordner liegen, gewinnen sie
+automatisch — an den Vorlagen ändert sich nichts.
 
 ### Echte Schriften und Logos nachrüsten
 
