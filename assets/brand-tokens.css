@@ -1,0 +1,45 @@
+/* ==========================================================================
+   N's Hotel · Marken-Tokens
+   Verbatim aus parking.css (Hans Amonn AG, Kerzers). NICHT verändern.
+   ========================================================================== */
+:root{
+  --navy:#2A3350;        /* Haupttext, Fusszeilen, N's-Pin */
+  --navy-2:#20294a;
+  --ink:#2A3350;
+  --ink-soft:#5A6480;
+  --muted:#8B8F99;
+  --line:#E5E8ED;
+  --line-2:#EDF0F4;
+  --bg:#FFFFFF;          /* Papier */
+  --bg-2:#F6F7FA;
+  --cyan:#01B1E2;        /* Markenakzent, P-Pin, Autorouten */
+  --cyan-soft:#CFEFFA;
+  --cyan-tint:#E7F7FC;
+  --green:#1F9D57;       /* Grünzone; Fussweg oft #12A150 */
+  --green-tint:#E7F6EE;
+  --green-soft:#BFE6CD;
+
+  --font-display:"Gotham","Montserrat",system-ui,sans-serif;  /* Titel / Bold */
+  --font-body:"Montserrat",system-ui,sans-serif;              /* Fliesstext */
+  --font-script:"Caflisch Script Pro","Dancing Script",cursive; /* Eyebrow handschriftlich */
+
+  /* Weitere Systemfarben (aus dem Handbuch) */
+  --walk:#12A150;        /* Fussweg */
+  --lime:#B7D900;        /* Gebäude */
+  --lime-2:#8FA800;      /* Gebäude-Rand */
+  --pink:#E5387E;        /* Parkplatz aussen */
+  --purple:#8E44EF;      /* öffentliches Parking */
+  --red:#E23A2E;         /* Notfall */
+  --red-tint:#FDECEA;
+  --canvas:#EEF0F4;      /* Leinwand-Hintergrund */
+}
+
+/* Eyebrow-Regel (§3.2): andere Klassen erzwingen Grossbuchstaben. */
+.eyebrow{
+  font-family:var(--font-script)!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  font-weight:400;
+  color:var(--cyan);
+  line-height:1.1;
+}

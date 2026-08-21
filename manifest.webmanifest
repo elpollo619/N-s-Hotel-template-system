@@ -1,0 +1,19 @@
+{
+  "name": "N's Hotel · Vorlagen-Zentrale",
+  "short_name": "Vorlagen",
+  "description": "Aushänge, Aufkleber und Karten für N's Hotel — immer in der gleichen Marke.",
+  "start_url": "./index.html#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF0F4",
+  "theme_color": "#2A3350",
+  "lang": "de-CH",
+  "icons": [
+    {
+      "src": "assets/brand/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

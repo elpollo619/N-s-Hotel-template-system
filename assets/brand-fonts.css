@@ -1,0 +1,30 @@
+/* ==========================================================================
+   N's Hotel · ECHTE Markenschriften (Gotham-Bold, Caflisch Script Pro)
+   --------------------------------------------------------------------------
+   Diese Datei ist absichtlich leer ausgeliefert, damit die App ohne die
+   lizenzpflichtigen Schriftdateien keine 404-Fehler in der Konsole erzeugt.
+
+   SO AKTIVIEREN (einmalig):
+     1. Dateien nach assets/fonts/ kopieren:
+          Gotham-Bold.otf
+          CaflischScriptPro-Regular.otf
+     2. Im Terminal im Projektordner ausführen:
+          node tools/install-brand-fonts.mjs
+        (oder einfach die beiden Blöcke unten auskommentieren)
+
+   Ohne die echten Schriften greift automatisch der Fallback aus §3.2:
+   Montserrat (Display/Body) und Dancing Script (Script).
+   ========================================================================== */
+
+/*
+@font-face{
+  font-family:"Gotham";
+  src:url("fonts/Gotham-Bold.otf") format("opentype");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Caflisch Script Pro";
+  src:url("fonts/CaflischScriptPro-Regular.otf") format("opentype");
+  font-weight:400; font-style:normal; font-display:swap;
+}
+*/

@@ -1,0 +1,13 @@
+node_modules/
+tests/out/
+.DS_Store
+
+# Lizenzpflichtige Markenschriften gehoeren NICHT ins Repository.
+# Das Repository ist oeffentlich; Gotham (Hoefler & Co) und Caflisch Script Pro
+# (Adobe) duerfen nicht weitergegeben werden. Jede Arbeitsstation legt die
+# Dateien selbst ab und fuehrt danach "npm run fonts" aus.
+# Die erzeugte assets/brand-fonts.css bleibt versioniert (sie enthaelt nur
+# Verweise, keine Schriftdaten) - sie darf aber nicht mit aktiven Regeln
+# eingecheckt werden, solange die Dateien nicht ueberall liegen.
+assets/fonts/*.otf
+assets/fonts/*.ttf
