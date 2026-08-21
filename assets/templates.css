@@ -741,3 +741,46 @@
 .t-sammel-ico svg{display:block}
 .t-sammel-foot{display:flex;align-items:center;justify-content:space-between;gap:6mm;
   padding:0 12mm 7mm;font-size:8pt;color:var(--ink-faint)}
+
+/* ==========================================================================
+   Kurzanleitung · A4 — der Aushang für die eigene Bürowand
+   ========================================================================== */
+.t-kurz{display:flex;flex-direction:column;padding:0}
+
+.t-kurz-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;
+  padding:18mm 16mm 14mm;background:var(--navy);color:#fff}
+.t-kurz-headtxt{min-width:0}
+.t-kurz-eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1;color:var(--cyan)}
+.t-kurz-head h1{margin:0;font-family:var(--font-display);font-size:34pt;line-height:1.02;
+  letter-spacing:-.015em}
+.t-kurz-sub{margin:4mm 0 0;font-size:12pt;line-height:1.45;color:rgba(255,255,255,.78)}
+.t-kurz-url{margin:7mm 0 0;font-size:12.5pt;font-weight:700;letter-spacing:.01em;
+  color:var(--cyan);word-break:break-all}
+
+.t-kurz-qr{flex:0 0 auto;width:38mm;height:38mm;background:#fff;border-radius:3mm;padding:2.5mm;
+  box-sizing:border-box;display:flex}
+.t-kurz-qr svg{width:100%;height:100%;display:block;shape-rendering:crispEdges}
+.t-kurz-qr-leer{width:100%;height:100%;border:1px dashed var(--line);border-radius:1.5mm}
+
+.t-kurz-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10mm;
+  padding:12mm 0}
+.t-kurz-steps{list-style:none;margin:0;padding:0 16mm;display:grid;gap:8mm}
+.t-kurz-step{display:flex;align-items:flex-start;gap:6mm}
+.t-kurz-num{flex:0 0 auto;width:10mm;height:10mm;border-radius:50%;background:var(--cyan);
+  color:#fff;font-family:var(--font-display);font-size:14pt;font-weight:700;
+  display:flex;align-items:center;justify-content:center}
+.t-kurz-step h3{margin:0 0 2mm;font-family:var(--font-display);font-size:15pt;color:var(--navy)}
+.t-kurz-step p{margin:0;font-size:11.5pt;line-height:1.55;color:var(--ink-soft)}
+
+.t-kurz-druck{margin:0 16mm;display:flex;align-items:flex-start;gap:5mm;
+  background:#F6F7FA;border:1px solid var(--line);border-radius:4mm;padding:6mm 7mm}
+.t-kurz-druck-ico{flex:0 0 auto;color:var(--cyan)}
+.t-kurz-druck-ico svg{display:block}
+.t-kurz-druck h3{margin:0 0 2mm;font-family:var(--font-display);font-size:12.5pt;color:var(--navy)}
+.t-kurz-druck p{margin:0;font-size:11.5pt;line-height:1.55;color:var(--ink)}
+
+.t-kurz-foot{margin-top:auto;padding:0 16mm 14mm}
+.t-kurz-hinweis{margin:0 0 6mm;font-size:10pt;line-height:1.6;color:var(--ink-soft)}
+.t-kurz-foot-zeile{display:flex;align-items:center;justify-content:space-between;gap:6mm;
+  padding-top:4mm;border-top:1px solid var(--line)}
+.t-kurz-kontakt{font-size:10pt;font-weight:700;color:var(--navy)}

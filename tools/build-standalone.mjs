@@ -19,6 +19,7 @@ const MODULES = [
   'js/lib/dom.js',
   'js/lib/icons.js',
   'js/lib/thumbs.js',
+  'js/lib/qr-vorlagen.js',
   'js/lib/storage.js',
   'js/lib/i18n.js',
   'js/lib/brand.js',
@@ -40,6 +41,7 @@ const MODULES = [
   'js/templates/waschplan.js',
   'js/templates/mieterbrief.js',
   'js/templates/sammelstelle.js',
+  'js/templates/kurzanleitung.js',
   'js/templates/index.js',
   'js/app.js'
 ];
