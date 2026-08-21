@@ -33,6 +33,7 @@ export default {
   badge:'Hinweis',
   page:'a4',
   root:'t-hinweis',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'hausordnung',
   thumb: thumb(`
     <rect x="0" y="0" width="210" height="60" fill="#2A3350"/>

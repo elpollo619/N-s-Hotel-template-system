@@ -784,3 +784,99 @@
 .t-kurz-foot-zeile{display:flex;align-items:center;justify-content:space-between;gap:6mm;
   padding-top:4mm;border-top:1px solid var(--line)}
 .t-kurz-kontakt{font-size:10pt;font-weight:700;color:var(--navy)}
+
+/* ==========================================================================
+   Sicherheitszeichen — js/templates/sicherheit.js
+   Das Zeichen trägt die Seite; der Text erklärt es. Hoch: untereinander,
+   quer: nebeneinander.
+   ========================================================================== */
+.t-sicher{background:#fff}
+.t-sicher-page{
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:12mm 12mm 9mm;background:#fff;
+  border-top:3mm solid var(--sz-akzent);
+}
+.t-sicher-body{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:7mm;text-align:center;
+}
+.t-sicher-page.is-quer .t-sicher-body{
+  flex-direction:row;align-items:center;justify-content:flex-start;
+  gap:11mm;text-align:left;
+}
+.t-sicher-mark{flex:0 0 auto;display:grid;place-items:center}
+.t-sicher-mark .sz{display:block}
+.t-sicher-txt{min-width:0}
+.t-sicher-txt h1{
+  font-family:var(--font-display);font-weight:700;color:var(--navy);
+  font-size:26pt;line-height:1.06;letter-spacing:-.01em;margin:0;
+  hyphens:auto;
+}
+.t-sicher-en{
+  margin:2.5mm 0 0;font-style:italic;font-size:14pt;line-height:1.2;
+  color:var(--ink-soft);
+}
+.t-sicher-zusatz{
+  margin:4mm 0 0;font-size:11pt;line-height:1.35;font-weight:600;color:var(--ink);
+  border-left:1.2mm solid var(--sz-akzent);padding-left:3.5mm;
+  display:inline-block;text-align:left;
+}
+.t-sicher-foot{
+  display:flex;align-items:center;gap:4mm;flex-wrap:wrap;
+  border-top:.4pt solid var(--line);padding-top:3mm;
+  font-size:7.5pt;color:var(--muted);letter-spacing:.02em;
+}
+.t-sicher-abs{font-weight:700;color:var(--navy);display:flex;align-items:center}
+.t-sicher-ort{color:var(--ink-soft)}
+.t-sicher-note{margin-left:auto;font-style:italic}
+
+/* A4 verträgt deutlich mehr Schrift als A5. */
+.sheet--a4 .t-sicher-txt h1,
+.sheet--a4-land .t-sicher-txt h1{font-size:38pt}
+.sheet--a4 .t-sicher-en,
+.sheet--a4-land .t-sicher-en{font-size:19pt}
+.sheet--a4 .t-sicher-zusatz,
+.sheet--a4-land .t-sicher-zusatz{font-size:13pt}
+.sheet--a5-land .t-sicher-txt h1{font-size:21pt}
+.sheet--a5-land .t-sicher-en{font-size:12pt}
+
+/* ==========================================================================
+   Etikettenbogen — js/templates/etiketten.js
+   Die Felder sitzen absolut auf dem Blatt, in Millimetern. Nichts darf sie
+   verschieben — deshalb kein Innenabstand am Blatt selbst.
+   ========================================================================== */
+.t-etikett-page{position:relative;background:#fff;padding:0;box-sizing:border-box}
+.t-etikett-feld{
+  position:absolute;box-sizing:border-box;overflow:hidden;
+  display:flex;background:#fff;
+}
+.t-etikett-feld.is-hilfe{outline:.3pt dashed #C9CFDA;outline-offset:-.3pt}
+/* Am Bildschirm ist zu sehen, wo die Etiketten sitzen — auf dem Papier nicht.
+   Wer echte Hilfslinien drucken will, schaltet sie im Formular ein. */
+@media screen{
+  .t-etikett-feld{background:#FCFCFD;box-shadow:inset 0 0 0 .4pt #EDEFF3}
+}
+@media print{
+  .t-etikett-feld{box-shadow:none}
+}
+.t-etikett-balken{flex:0 0 auto;background:var(--farbe)}
+.t-etikett-feld.is-links{flex-direction:row}
+.t-etikett-feld.is-links .t-etikett-balken{width:1.8mm;height:100%}
+.t-etikett-feld.is-oben{flex-direction:column}
+.t-etikett-feld.is-oben .t-etikett-balken{height:1.6mm;width:100%}
+.t-etikett-inhalt{
+  flex:1;display:flex;align-items:center;gap:2mm;
+  padding:1.6mm 2.4mm;min-width:0;
+}
+.t-etikett-ico{flex:0 0 auto;color:var(--farbe);display:grid;place-items:center}
+.t-etikett-ico svg{width:4.6mm;height:4.6mm}
+.t-etikett-txt{display:flex;flex-direction:column;gap:.4mm;min-width:0}
+.t-etikett-txt b{
+  font-family:var(--font-display);font-weight:700;font-size:9.5pt;line-height:1.1;
+  color:var(--navy);overflow-wrap:anywhere;
+}
+.t-etikett-txt i{font-style:italic;font-size:6.8pt;line-height:1.2;color:var(--ink-soft)}
+.t-etikett-txt u{
+  text-decoration:none;font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-top:.4mm;
+}

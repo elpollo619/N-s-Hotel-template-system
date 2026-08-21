@@ -47,6 +47,7 @@ export default {
   sub:'Papier, PET, Glas, Kehricht … · eine Seite je Behälter',
   badge:'Abfall',
   root:'t-sammel',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'abfall',
   multipage:true,
   pageOf(d){ return SAMMEL_PAGES[d && d.format] || 'a5-land'; },

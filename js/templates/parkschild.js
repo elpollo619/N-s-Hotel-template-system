@@ -26,6 +26,7 @@ export default {
   sub:'Reserviert / Privat / Besucher · eine Seite je Platz',
   badge:'Parkieren',
   root:'t-parkschild',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'parken',
   multipage:true,
   pageOf(d){ return PARK_PAGES[d && d.format] || 'a5-land'; },

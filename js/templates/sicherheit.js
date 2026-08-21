@@ -1,0 +1,123 @@
+/* Sicherheitszeichen · eine Seite je Schild.
+   Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von
+   ISO 3864-1 / ISO 7010 — siehe js/lib/sicherheitszeichen.js, dort steht auch,
+   warum das keine zertifizierten Schilder sind.
+
+   Gedacht für das, was im Haus täglich gebraucht wird: Rauchverbot im
+   Treppenhaus, "Tür geschlossen halten" an der Waschküche, Rutschgefahr nach
+   dem Putzen. Das Zeichen ist bewusst gross — es soll aus dem Gang wirken,
+   nicht erst aus zwei Schritten Abstand. */
+import { esc, has } from '../lib/dom.js';
+import { logo } from '../lib/brand.js';
+import { thumb } from '../lib/thumbs.js';
+import { szSvg, szZeichen, szOptions, SZ_FARBEN } from '../lib/sicherheitszeichen.js';
+import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+
+const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
+/* Zeichengrösse je Papier — so gross wie möglich, ohne den Text zu verdrängen. */
+const SICHER_MASS = { 'a5-land':62, a5:78, a4:118, 'a4-land':92 };
+
+export default {
+  id:'sicherheit',
+  title:'Sicherheitszeichen',
+  sub:'Verbot, Warnung, Gebot, Rettung · eine Seite je Schild',
+  badge:'Sicherheit',
+  root:'t-sicher',
+  fern:true,   /* Schild — Leseabstand anzeigen */
+  cat:'sicherheit',
+  multipage:true,
+  pageOf(d){ return SICHER_PAGES[d && d.format] || 'a5-land'; },
+
+  thumb: thumb(`
+    <rect x="12" y="22" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    <circle cx="66" cy="70" r="34" fill="#fff"/>
+    <circle cx="66" cy="70" r="31" fill="none" stroke="#C8102E" stroke-width="5.5"/>
+    <path d="M44 48 88 92" stroke="#C8102E" stroke-width="5.5"/>
+    <rect x="50" y="66" width="26" height="7" rx="2" fill="#1A1A1A"/>
+    <rect x="112" y="56" width="70" height="12" rx="4" fill="#2A3350"/>
+    <rect x="112" y="76" width="52" height="8" rx="4" fill="#C9CFDA"/>
+    <rect x="12" y="150" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    <path d="M66 168 96 220H36Z" fill="#F9A800" stroke="#1A1A1A" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="63" y="188" width="6" height="16" rx="3" fill="#1A1A1A"/>
+    <circle cx="66" cy="210" r="3.5" fill="#1A1A1A"/>
+    <rect x="112" y="184" width="70" height="12" rx="4" fill="#2A3350"/>
+    <rect x="112" y="204" width="44" height="8" rx="4" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Format' },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
+      { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
+    ] },
+    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Schilder' },
+    { t:'note', label:'Jede Zeile ergibt eine Druckseite. Der Text darf überschrieben werden — das Zeichen bleibt.' },
+    { k:'rows', label:'Schilder', type:'list', itemLabel:'Schild', max:16,
+      defaultItem:{ zeichen:'rauchen-verboten', de:'', en:'', zusatz:'' },
+      item:[
+        { k:'zeichen', label:'Zeichen', type:'select', options:szOptions() },
+        { k:'de',      label:'Text (überschreibt)', type:'text' },
+        { k:'en',      label:'Englisch (überschreibt)', type:'text' },
+        { k:'zusatz',  label:'Zusatzzeile', type:'text',
+          hint:'z. B. «gilt im ganzen Treppenhaus» oder eine Bussenhöhe' }
+      ] },
+
+    { t:'group', label:'Fusszeile' },
+    { k:'fussnote', label:'Hinweis klein', type:'text' }
+  ],
+
+  defaults:{
+    format:'a5-land',
+    zweisprachig:'ja',
+    objekt:'-',
+    absender:'immobilien',
+    rows:[
+      { zeichen:'rauchen-verboten', de:'', en:'', zusatz:'Gilt im ganzen Treppenhaus' },
+      { zeichen:'abstellen-verboten', de:'', en:'', zusatz:'' }
+    ],
+    fussnote:'Danke für Ihr Verständnis.'
+  },
+
+  render(d){
+    const abs  = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj  = objekt(d.objekt);
+    const adr  = objektAdresse(d.objekt);
+    const en   = d.zweisprachig !== 'nein';
+    const page = SICHER_PAGES[d.format] || 'a5-land';
+    const mass = SICHER_MASS[page] || 62;
+    /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
+    const quer = page.endsWith('-land');
+
+    return (d.rows || []).map(r => {
+      const z    = szZeichen(r.zeichen);
+      const txt  = has(r.de) ? r.de : z.de;
+      const txtE = has(r.en) ? r.en : z.en;
+
+      return `
+      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
+               style="--sz-akzent:${z.art === 'rettung' ? SZ_FARBEN.gruen
+                                   : z.art === 'gebot' ? SZ_FARBEN.blau
+                                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+        <div class="t-sicher-body">
+          <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
+          <div class="t-sicher-txt">
+            <h1>${esc(txt)}</h1>
+            ${en && has(txtE) ? `<p class="t-sicher-en" lang="en">${esc(txtE)}</p>` : ''}
+            ${has(r.zusatz) ? `<p class="t-sicher-zusatz">${esc(r.zusatz)}</p>` : ''}
+          </div>
+        </div>
+        <footer class="t-sicher-foot">
+          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', 22) : esc(abs.legal)}</span>
+          <span class="t-sicher-ort">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+          ${has(d.fussnote) ? `<span class="t-sicher-note">${esc(d.fussnote)}</span>` : ''}
+        </footer>
+      </article>`;
+    }).join('');
+  }
+};

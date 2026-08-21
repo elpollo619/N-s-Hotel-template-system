@@ -12,6 +12,7 @@ export default {
   badgeCyan:true,
   page:'a4',
   root:'t-sticker',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="18" y="14" width="70" height="7" rx="3.5" fill="#C9CFDA"/>
     ${[0,1,2].map(r => [0,1,2].map(c => `

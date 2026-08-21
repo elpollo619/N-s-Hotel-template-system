@@ -105,6 +105,15 @@ a{color:var(--cyan)}
 .vz-fit--ok{background:var(--green-tint);color:#146c3c}
 .vz-fit--warn{background:#FFF4E0;color:#96591b}
 
+/* Leseabstand — nur bei Schildern, siehe js/lib/lesbarkeit.js */
+.vz-fern{
+  display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+  padding:8px 11px;border-radius:9px;margin:-10px 0 16px;
+  background:var(--bg-2);color:var(--ink-soft);cursor:help;
+}
+.vz-fern--nah{background:#FFF4E0;color:#96591b}
+.vz-fern--leer{opacity:.6}
+
 /* Formular */
 .vz-form{display:flex;flex-direction:column;gap:13px}
 .vz-fgroup{
@@ -167,6 +176,11 @@ a{color:var(--cyan)}
 .sheet--a4{width:210mm;min-height:297mm}
 .sheet--a4-land{width:297mm;min-height:210mm}
 .sheet--a5{width:148mm;min-height:210mm}
+/* Fehlte bis jetzt: Vorlagen in A5 quer (Parkschild, Sammelstelle,
+   Sicherheitszeichen) hatten in der Vorschau keine Blattbreite und
+   liefen deshalb auf Buehnenbreite. Der Ausdruck war korrekt, die
+   Vorschau und die Passt-auf-eine-Seite-Anzeige waren es nicht. */
+.sheet--a5-land{width:210mm;min-height:148mm}
 
 .vz-toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
@@ -215,6 +229,9 @@ a{color:var(--cyan)}
 .sheet--multi.sheet--a4 [data-page]{width:210mm;min-height:297mm}
 .sheet--multi.sheet--a4-land [data-page]{width:297mm;min-height:210mm}
 .sheet--multi.sheet--a5 [data-page]{width:148mm;min-height:210mm}
+.sheet--multi.sheet--a5-land [data-page]{width:210mm;min-height:148mm}
+.sheet--multi.sheet--a3 [data-page]{width:297mm;min-height:420mm}
+.sheet--multi.sheet--a3-land [data-page]{width:420mm;min-height:297mm}
 
 @media print{
   .sheet--multi{gap:0!important;display:block!important}

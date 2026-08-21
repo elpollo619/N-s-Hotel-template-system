@@ -217,6 +217,15 @@ a{color:var(--cyan)}
 .vz-fit--ok{background:var(--green-tint);color:#146c3c}
 .vz-fit--warn{background:#FFF4E0;color:#96591b}
 
+/* Leseabstand — nur bei Schildern, siehe js/lib/lesbarkeit.js */
+.vz-fern{
+  display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+  padding:8px 11px;border-radius:9px;margin:-10px 0 16px;
+  background:var(--bg-2);color:var(--ink-soft);cursor:help;
+}
+.vz-fern--nah{background:#FFF4E0;color:#96591b}
+.vz-fern--leer{opacity:.6}
+
 /* Formular */
 .vz-form{display:flex;flex-direction:column;gap:13px}
 .vz-fgroup{
@@ -279,6 +288,11 @@ a{color:var(--cyan)}
 .sheet--a4{width:210mm;min-height:297mm}
 .sheet--a4-land{width:297mm;min-height:210mm}
 .sheet--a5{width:148mm;min-height:210mm}
+/* Fehlte bis jetzt: Vorlagen in A5 quer (Parkschild, Sammelstelle,
+   Sicherheitszeichen) hatten in der Vorschau keine Blattbreite und
+   liefen deshalb auf Buehnenbreite. Der Ausdruck war korrekt, die
+   Vorschau und die Passt-auf-eine-Seite-Anzeige waren es nicht. */
+.sheet--a5-land{width:210mm;min-height:148mm}
 
 .vz-toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
@@ -327,6 +341,9 @@ a{color:var(--cyan)}
 .sheet--multi.sheet--a4 [data-page]{width:210mm;min-height:297mm}
 .sheet--multi.sheet--a4-land [data-page]{width:297mm;min-height:210mm}
 .sheet--multi.sheet--a5 [data-page]{width:148mm;min-height:210mm}
+.sheet--multi.sheet--a5-land [data-page]{width:210mm;min-height:148mm}
+.sheet--multi.sheet--a3 [data-page]{width:297mm;min-height:420mm}
+.sheet--multi.sheet--a3-land [data-page]{width:420mm;min-height:297mm}
 
 @media print{
   .sheet--multi{gap:0!important;display:block!important}
@@ -1161,6 +1178,102 @@ a{color:var(--cyan)}
   padding-top:4mm;border-top:1px solid var(--line)}
 .t-kurz-kontakt{font-size:10pt;font-weight:700;color:var(--navy)}
 
+/* ==========================================================================
+   Sicherheitszeichen — js/templates/sicherheit.js
+   Das Zeichen trägt die Seite; der Text erklärt es. Hoch: untereinander,
+   quer: nebeneinander.
+   ========================================================================== */
+.t-sicher{background:#fff}
+.t-sicher-page{
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:12mm 12mm 9mm;background:#fff;
+  border-top:3mm solid var(--sz-akzent);
+}
+.t-sicher-body{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:7mm;text-align:center;
+}
+.t-sicher-page.is-quer .t-sicher-body{
+  flex-direction:row;align-items:center;justify-content:flex-start;
+  gap:11mm;text-align:left;
+}
+.t-sicher-mark{flex:0 0 auto;display:grid;place-items:center}
+.t-sicher-mark .sz{display:block}
+.t-sicher-txt{min-width:0}
+.t-sicher-txt h1{
+  font-family:var(--font-display);font-weight:700;color:var(--navy);
+  font-size:26pt;line-height:1.06;letter-spacing:-.01em;margin:0;
+  hyphens:auto;
+}
+.t-sicher-en{
+  margin:2.5mm 0 0;font-style:italic;font-size:14pt;line-height:1.2;
+  color:var(--ink-soft);
+}
+.t-sicher-zusatz{
+  margin:4mm 0 0;font-size:11pt;line-height:1.35;font-weight:600;color:var(--ink);
+  border-left:1.2mm solid var(--sz-akzent);padding-left:3.5mm;
+  display:inline-block;text-align:left;
+}
+.t-sicher-foot{
+  display:flex;align-items:center;gap:4mm;flex-wrap:wrap;
+  border-top:.4pt solid var(--line);padding-top:3mm;
+  font-size:7.5pt;color:var(--muted);letter-spacing:.02em;
+}
+.t-sicher-abs{font-weight:700;color:var(--navy);display:flex;align-items:center}
+.t-sicher-ort{color:var(--ink-soft)}
+.t-sicher-note{margin-left:auto;font-style:italic}
+
+/* A4 verträgt deutlich mehr Schrift als A5. */
+.sheet--a4 .t-sicher-txt h1,
+.sheet--a4-land .t-sicher-txt h1{font-size:38pt}
+.sheet--a4 .t-sicher-en,
+.sheet--a4-land .t-sicher-en{font-size:19pt}
+.sheet--a4 .t-sicher-zusatz,
+.sheet--a4-land .t-sicher-zusatz{font-size:13pt}
+.sheet--a5-land .t-sicher-txt h1{font-size:21pt}
+.sheet--a5-land .t-sicher-en{font-size:12pt}
+
+/* ==========================================================================
+   Etikettenbogen — js/templates/etiketten.js
+   Die Felder sitzen absolut auf dem Blatt, in Millimetern. Nichts darf sie
+   verschieben — deshalb kein Innenabstand am Blatt selbst.
+   ========================================================================== */
+.t-etikett-page{position:relative;background:#fff;padding:0;box-sizing:border-box}
+.t-etikett-feld{
+  position:absolute;box-sizing:border-box;overflow:hidden;
+  display:flex;background:#fff;
+}
+.t-etikett-feld.is-hilfe{outline:.3pt dashed #C9CFDA;outline-offset:-.3pt}
+/* Am Bildschirm ist zu sehen, wo die Etiketten sitzen — auf dem Papier nicht.
+   Wer echte Hilfslinien drucken will, schaltet sie im Formular ein. */
+@media screen{
+  .t-etikett-feld{background:#FCFCFD;box-shadow:inset 0 0 0 .4pt #EDEFF3}
+}
+@media print{
+  .t-etikett-feld{box-shadow:none}
+}
+.t-etikett-balken{flex:0 0 auto;background:var(--farbe)}
+.t-etikett-feld.is-links{flex-direction:row}
+.t-etikett-feld.is-links .t-etikett-balken{width:1.8mm;height:100%}
+.t-etikett-feld.is-oben{flex-direction:column}
+.t-etikett-feld.is-oben .t-etikett-balken{height:1.6mm;width:100%}
+.t-etikett-inhalt{
+  flex:1;display:flex;align-items:center;gap:2mm;
+  padding:1.6mm 2.4mm;min-width:0;
+}
+.t-etikett-ico{flex:0 0 auto;color:var(--farbe);display:grid;place-items:center}
+.t-etikett-ico svg{width:4.6mm;height:4.6mm}
+.t-etikett-txt{display:flex;flex-direction:column;gap:.4mm;min-width:0}
+.t-etikett-txt b{
+  font-family:var(--font-display);font-weight:700;font-size:9.5pt;line-height:1.1;
+  color:var(--navy);overflow-wrap:anywhere;
+}
+.t-etikett-txt i{font-style:italic;font-size:6.8pt;line-height:1.2;color:var(--ink-soft)}
+.t-etikett-txt u{
+  text-decoration:none;font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-top:.4mm;
+}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -1825,6 +1938,245 @@ function lines(x, y, w, n, gap = 7, col = '#C9CFDA', h = 3.4){
    Inhalt: https://elpollo619.github.io/N-s-Hotel-template-system/ */
 const QR_VORLAGEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="segno"><path class="qrline" stroke="#2a3350" d="M0 0.5h7m1 0h2m1 0h3m1 0h2m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m1 0h1m1 0h2m1 0h1m2 0h3m4 0h1m2 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m2 0h2m1 0h1m2 0h1m2 0h2m4 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h3m1 0h2m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m7 0h1m3 0h2m6 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h3m1 0h1m2 0h1m5 0h2m-25 1h1m1 0h2m1 0h3m1 0h1m1 0h1m4 0h4m1 0h1m1 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m1 0h3m1 0h2m1 0h1m1 0h1m4 0h5m1 0h1m2 0h2m1 0h2m-31 1h2m1 0h5m1 0h1m1 0h1m2 0h1m1 0h3m3 0h4m1 0h3m1 0h2m-33 1h2m1 0h1m3 0h2m1 0h2m1 0h3m2 0h1m1 0h1m1 0h3m2 0h1m1 0h1m-29 1h2m1 0h1m1 0h2m2 0h2m5 0h2m1 0h1m1 0h4m1 0h3m1 0h2m-32 1h2m2 0h1m1 0h2m1 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h2m3 0h3m-32 1h2m1 0h4m8 0h2m2 0h3m4 0h1m1 0h1m-29 1h1m6 0h3m1 0h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h3m1 0h3m-31 1h4m2 0h1m1 0h1m5 0h2m2 0h1m1 0h2m1 0h1m1 0h2m1 0h3m-31 1h1m7 0h1m6 0h1m1 0h2m1 0h1m2 0h4m1 0h2m1 0h2m-33 1h1m5 0h1m1 0h3m1 0h6m3 0h2m1 0h2m1 0h2m1 0h1m-31 1h2m5 0h1m1 0h1m1 0h2m4 0h3m2 0h2m2 0h1m1 0h1m2 0h1m-31 1h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m4 0h3m-32 1h6m2 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m2 0h1m2 0h1m2 0h1m-31 1h1m1 0h1m1 0h1m1 0h4m1 0h2m1 0h3m2 0h7m2 0h3m-32 1h1m2 0h1m3 0h1m3 0h2m2 0h1m1 0h2m2 0h1m1 0h1m2 0h3m2 0h1m-33 1h1m2 0h1m2 0h1m5 0h4m1 0h1m1 0h1m3 0h7m1 0h1m-24 1h1m1 0h1m2 0h1m1 0h3m1 0h4m1 0h1m3 0h2m1 0h1m-32 1h7m1 0h1m2 0h3m2 0h1m2 0h2m2 0h2m1 0h1m1 0h1m-29 1h1m5 0h1m1 0h1m4 0h2m1 0h1m1 0h1m2 0h4m3 0h4m-32 1h1m1 0h3m1 0h1m5 0h4m1 0h1m1 0h1m1 0h8m1 0h2m-32 1h1m1 0h3m1 0h1m1 0h2m2 0h3m5 0h1m6 0h1m1 0h1m2 0h1m-33 1h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h2m1 0h2m1 0h1m2 0h2m2 0h1m-31 1h1m5 0h1m2 0h2m3 0h4m1 0h2m1 0h7m3 0h1m-33 1h7m1 0h4m1 0h5m1 0h5m4 0h1m1 0h1"/></svg>`;
 
+/* ===== js/lib/sicherheitszeichen.js ===== */
+/* ==========================================================================
+   Sicherheitszeichen
+   --------------------------------------------------------------------------
+   Form- und Farbsystem nach ISO 3864-1 / ISO 7010:
+
+     Verbot     weisser Kreis, roter Ring und Schrägbalken, Symbol schwarz
+     Warnung    gelbes Dreieck mit schwarzem Rand, Symbol schwarz
+     Gebot      blauer Kreis, Symbol weiss
+     Rettung    grünes Quadrat, Symbol weiss
+     Brandschutz rotes Quadrat, Symbol weiss
+
+   Die Massverhältnisse sind übernommen: der rote Ring und der Balken sind
+   je 0,08 des Durchmessers breit, der Balken läuft von links oben nach
+   rechts unten und liegt ÜBER dem Symbol.
+
+   WICHTIG — ehrlich gesagt: die Piktogramme hier sind eigene Zeichnungen im
+   Stil der Norm, nicht die amtlichen Symbole. Für zertifizierte
+   Sicherheitskennzeichnung (Fluchtwege, Brandschutz nach Vorgabe der
+   Feuerpolizei) gehören geprüfte Schilder an die Wand. Für den Hausgebrauch
+   — Rauchverbot im Treppenhaus, Hinweis an der Waschküchentür — ist ein
+   selbst gedrucktes Schild in der gewohnten Formensprache richtig.
+
+   Farben: Annäherung der Sicherheitsfarben für den Bürodrucker.
+   ========================================================================== */
+
+const SZ_FARBEN = {
+  rot:   '#C8102E',
+  gelb:  '#F9A800',
+  blau:  '#005387',
+  gruen: '#00843D',
+  schwarz:'#1A1A1A',
+  weiss: '#FFFFFF'
+};
+
+/* --------------------------------------------------------------------------
+   Piktogramme — alle im Koordinatenfeld 0…100, Farbe über currentColor.
+   -------------------------------------------------------------------------- */
+const SZ_PIKTO = {
+  /* Filter links, Glut rechts, Rauch darueber — wie im gewohnten Zeichen. */
+  rauchen:
+    '<rect x="10" y="58" width="14" height="13" rx="1.5"/>' +
+    '<rect x="27" y="58" width="53" height="13" rx="1.5"/>' +
+    '<path d="M58 50c9-6 1-13 7-20" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>' +
+    '<path d="M74 50c9-6 1-13 7-20" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>',
+
+  feuer:
+    /* Aussenflamme mit Einbuchtung links, dazu ein heller Kern — sonst
+       liest sich die Form wie ein Wassertropfen. */
+    '<path fill-rule="evenodd" d="M55 4c3 18 19 26 19 46a24 24 0 0 1-48 0'
+    + 'c0-12 5-19 11-26 -1 10 3 15 8 17 3-13-1-25 10-37Z'
+    + 'M50 48c5 8 9 12 9 18a9 9 0 0 1-18 0c0-6 4-10 9-18Z"/>',
+
+  person:
+    '<circle cx="50" cy="17" r="10"/>' +
+    '<path d="M38 31h24a6 6 0 0 1 6 6v22a5 5 0 0 1-10 0V45h-2v47a6 6 0 0 1-12 0V66h-2v26a6 6 0 0 1-12 0V45h-2v14a5 5 0 0 1-10 0V37a6 6 0 0 1 6-6Z"/>',
+
+  handy:
+    '<rect x="32" y="10" width="36" height="80" rx="7"/>' +
+    '<rect x="38" y="22" width="24" height="46" rx="2" fill="#fff"/>' +
+    '<rect x="43" y="15" width="14" height="3" rx="1.5" fill="#fff"/>' +
+    '<circle cx="50" cy="79" r="4.5" fill="#fff"/>',
+
+  pfote:
+    '<ellipse cx="50" cy="70" rx="22" ry="18"/>' +
+    '<ellipse cx="25" cy="45" rx="9" ry="12"/>' +
+    '<ellipse cx="42" cy="32" rx="9" ry="13"/>' +
+    '<ellipse cx="60" cy="32" rx="9" ry="13"/>' +
+    '<ellipse cx="76" cy="45" rx="9" ry="12"/>',
+
+  trinkwasser:
+    '<path d="M30 26h40l-5 62a6 6 0 0 1-6 5.5H41a6 6 0 0 1-6-5.5Z"/>' +
+    '<rect x="26" y="16" width="48" height="8" rx="3"/>' +
+    '<path d="M50 34c7 10 11 15 11 21a11 11 0 0 1-22 0c0-6 4-11 11-21Z" fill="#fff"/>',
+
+  kiste:
+    '<path d="M14 34h72v52H14Z"/>' +
+    '<path d="M14 34 26 16h48l12 18" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"/>' +
+    '<rect x="42" y="44" width="16" height="8" rx="2" fill="#fff"/>',
+
+  ausruf:
+    '<path d="M43 20h14l-2.6 44h-8.8Z"/>' +
+    '<circle cx="50" cy="77" r="7.5"/>',
+
+  blitz:
+    '<path d="M58 6 24 56h20l-8 40 38-52H52Z"/>',
+
+  rutsch:
+    '<circle cx="26" cy="16" r="9"/>' +
+    '<g fill="none" stroke="currentColor" stroke-linecap="round">' +
+    '<path d="M31 29 55 50" stroke-width="10"/>' +
+    '<path d="M31 29 14 19" stroke-width="8"/>' +
+    '<path d="M55 50 84 44" stroke-width="8"/>' +
+    '<path d="M55 50 58 72" stroke-width="8"/>' +
+    '<path d="M6 88c8-6 14-6 22 0s14 6 22 0 14-6 22 0 14 6 22 0" stroke-width="6"/>' +
+    '</g>',
+
+  fluchtweg:
+    '<path d="M56 10h28a4 4 0 0 1 4 4v72a4 4 0 0 1-4 4H56v-9h23V19H56Z"/>' +
+    '<circle cx="30" cy="17" r="8.5"/>' +
+    '<path d="M24 29c6-2 11 1 14 6l7 12 11 4-4 10-15-6-3-5-5 15 13 12-7 9-18-17 7-24-8 6-6 12-9-4 8-17Z"/>',
+
+  kreuz:
+    '<path d="M38 12h24v26h26v24H62v26H38V62H12V38h26Z"/>',
+
+  sammelplatz:
+    '<circle cx="34" cy="30" r="8"/><path d="M24 42h20l4 20h-7l-1 24h-12l-1-24h-7Z"/>' +
+    '<circle cx="62" cy="30" r="8"/><path d="M52 42h20l4 20h-7l-1 24H56l-1-24h-7Z"/>' +
+    '<path d="M6 8h18v6H12v10H6ZM94 8H76v6h12v10h6ZM6 92h18v-6H12V76H6ZM94 92H76v-6h12V76h6Z"/>',
+
+  loescher:
+    '<rect x="28" y="28" width="32" height="60" rx="8"/>' +
+    '<rect x="36" y="16" width="16" height="12" rx="3"/>' +
+    '<rect x="30" y="12" width="28" height="6" rx="3"/>' +
+    '<path d="M58 22h14a6 6 0 0 1 6 6v18" fill="none" stroke="currentColor"'
+    + ' stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<path d="M70 46h16l-6 8h-4Z"/>' +
+    '<rect x="34" y="44" width="20" height="24" rx="2" fill="#fff"/>',
+
+  /* Offene Hand mit Wassertropfen darueber. */
+  haende:
+    '<path d="M36 6c3 6 6 8 6 11a6 6 0 0 1-12 0c0-3 3-5 6-11Z"/>' +
+    '<path d="M53 4c3 6 6 8 6 11a6 6 0 0 1-12 0c0-3 3-5 6-11Z"/>' +
+    '<path d="M70 6c3 6 6 8 6 11a6 6 0 0 1-12 0c0-3 3-5 6-11Z"/>' +
+    '<rect x="31" y="34" width="9" height="30" rx="4.5"/>' +
+    '<rect x="43" y="30" width="9" height="34" rx="4.5"/>' +
+    '<rect x="55" y="32" width="9" height="32" rx="4.5"/>' +
+    '<rect x="67" y="38" width="9" height="26" rx="4.5"/>' +
+    '<path d="M29 56h49v10a24.5 24.5 0 0 1-49 0Z"/>' +
+    '<path d="M31 64 19 76a5.5 5.5 0 0 0 8 8l10-10Z"/>',
+
+  tuer:
+    '<path d="M24 8h52v84H24Z" fill="none" stroke="currentColor" stroke-width="8"/>' +
+    '<circle cx="64" cy="52" r="5"/>'
+};
+
+const SZ_PIKTO_KEYS = Object.keys(SZ_PIKTO);
+
+/* --------------------------------------------------------------------------
+   Fertige Zeichen — was im Haus wirklich gebraucht wird.
+   -------------------------------------------------------------------------- */
+const SZ_ZEICHEN = [
+  { id:'rauchen-verboten', art:'verbot',  pikto:'rauchen',
+    de:'Rauchen verboten', en:'No smoking' },
+  { id:'feuer-verboten', art:'verbot', pikto:'feuer',
+    de:'Feuer, offenes Licht und Rauchen verboten', en:'No open flame' },
+  { id:'zutritt-verboten', art:'verbot', pikto:'person',
+    de:'Zutritt für Unbefugte verboten', en:'No access for unauthorised persons' },
+  { id:'handy-verboten', art:'verbot', pikto:'handy',
+    de:'Mobiltelefone verboten', en:'No mobile phones' },
+  { id:'hunde-verboten', art:'verbot', pikto:'pfote',
+    de:'Hunde verboten', en:'No dogs' },
+  { id:'kein-trinkwasser', art:'verbot', pikto:'trinkwasser',
+    de:'Kein Trinkwasser', en:'Not drinking water' },
+  { id:'abstellen-verboten', art:'verbot', pikto:'kiste',
+    de:'Abstellen verboten — Fluchtweg freihalten', en:'Do not obstruct — keep escape route clear' },
+
+  { id:'warnung-allgemein', art:'warnung', pikto:'ausruf',
+    de:'Achtung', en:'Warning' },
+  { id:'warnung-strom', art:'warnung', pikto:'blitz',
+    de:'Warnung vor elektrischer Spannung', en:'Electricity hazard' },
+  { id:'warnung-rutsch', art:'warnung', pikto:'rutsch',
+    de:'Rutschgefahr', en:'Slippery surface' },
+
+  { id:'gebot-haende', art:'gebot', pikto:'haende',
+    de:'Hände waschen', en:'Wash your hands' },
+  { id:'gebot-tuer', art:'gebot', pikto:'tuer',
+    de:'Tür geschlossen halten', en:'Keep door closed' },
+
+  { id:'fluchtweg', art:'rettung', pikto:'fluchtweg',
+    de:'Notausgang', en:'Emergency exit' },
+  { id:'erste-hilfe', art:'rettung', pikto:'kreuz',
+    de:'Erste Hilfe', en:'First aid' },
+  { id:'sammelplatz', art:'rettung', pikto:'sammelplatz',
+    de:'Sammelplatz', en:'Assembly point' },
+
+  { id:'feuerloescher', art:'brand', pikto:'loescher',
+    de:'Feuerlöscher', en:'Fire extinguisher' }
+];
+
+function szZeichen(id){
+  return SZ_ZEICHEN.find(z => z.id === id) || SZ_ZEICHEN[0];
+}
+function szOptions(){
+  const gruppe = { verbot:'Verbot', warnung:'Warnung', gebot:'Gebot',
+                   rettung:'Rettung', brand:'Brandschutz' };
+  return SZ_ZEICHEN.map(z => ({ v:z.id, t:`${gruppe[z.art]} · ${z.de}` }));
+}
+
+/* --------------------------------------------------------------------------
+   Zeichnung
+   -------------------------------------------------------------------------- */
+function szSymbol(pikto, farbe, box){
+  const d = SZ_PIKTO[pikto] || SZ_PIKTO.ausruf;
+  const s = box.s;
+  return `<g transform="translate(${box.x} ${box.y}) scale(${s})" fill="${farbe}" color="${farbe}">${d}</g>`;
+}
+
+/**
+ * Ein Sicherheitszeichen als SVG.
+ * @param {string} art    verbot | warnung | gebot | rettung | brand
+ * @param {string} pikto  Schlüssel aus SZ_PIKTO
+ * @param {number} size   Kantenlänge in mm (wird als width/height gesetzt)
+ */
+function szSvg(art, pikto, size){
+  const mm = `${size}mm`;
+  const wrap = (vb, inner) =>
+    `<svg class="sz" viewBox="${vb}" width="${mm}" height="${mm}"
+      xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
+
+  if (art === 'warnung'){
+    /* Gleichseitiges Dreieck mit gerundeten Ecken, Rand 0,04 der Seite. */
+    return wrap('0 0 100 92', `
+      <path d="M50 5 95 87H5Z" fill="${SZ_FARBEN.gelb}" stroke="${SZ_FARBEN.schwarz}"
+        stroke-width="7" stroke-linejoin="round"/>
+      ${szSymbol(pikto, SZ_FARBEN.schwarz, { x:27, y:30, s:0.46 })}`);
+  }
+
+  if (art === 'gebot'){
+    return wrap('0 0 100 100', `
+      <circle cx="50" cy="50" r="50" fill="${SZ_FARBEN.blau}"/>
+      ${szSymbol(pikto, SZ_FARBEN.weiss, { x:22, y:22, s:0.56 })}`);
+  }
+
+  if (art === 'rettung' || art === 'brand'){
+    const bg = art === 'rettung' ? SZ_FARBEN.gruen : SZ_FARBEN.rot;
+    return wrap('0 0 100 100', `
+      <rect x="0" y="0" width="100" height="100" rx="4" fill="${bg}"/>
+      ${szSymbol(pikto, SZ_FARBEN.weiss, { x:19, y:19, s:0.62 })}`);
+  }
+
+  /* Verbot — Ring 0,08 d, Balken 0,08 d, Balken über dem Symbol. */
+  return wrap('0 0 100 100', `
+    <circle cx="50" cy="50" r="50" fill="${SZ_FARBEN.weiss}"/>
+    ${szSymbol(pikto, SZ_FARBEN.schwarz, { x:25, y:25, s:0.50 })}
+    <circle cx="50" cy="50" r="46" fill="none" stroke="${SZ_FARBEN.rot}" stroke-width="8"/>
+    <path d="M17.5 17.5 82.5 82.5" stroke="${SZ_FARBEN.rot}" stroke-width="8"/>`);
+}
+
 /* ===== js/lib/storage.js ===== */
 /* Persistenz per localStorage — Entwürfe, Bilder, Einstellungen. */
 const NS = 'nsvz:';
@@ -1863,6 +2215,207 @@ function keys(){
   return out;
 }
 
+/* ===== js/lib/teilen.js ===== */
+/* ==========================================================================
+   Teilen-Link
+   --------------------------------------------------------------------------
+   Ein fertiger Aushang steckt sonst nur im Browser der Person, die ihn
+   gemacht hat (localStorage). Wer ihn weitergeben will, musste bisher die
+   Entwurfsdatei verschicken.
+
+   Hier wird der ganze Zustand in die Adresse gepackt:
+
+       …/#/t/hinweis?d=zXQAAA…
+
+   Wer den Link anklickt, sieht denselben Aushang. Es geht nichts an einen
+   Server — die Daten stehen in der Adresse selbst, sonst nirgends.
+
+   Aufbau der Nutzlast:  1 Zeichen Kennung + Base64url
+     z…  mit deflate-raw gepackt (Normalfall)
+     p…  ungepackt, wenn der Browser CompressionStream nicht kennt
+
+   Bilder (Data-URIs) bleiben draussen. Ein einziges Foto sprengt jede
+   Adresszeile; dafür gibt es "Entwurf sichern".
+   ========================================================================== */
+
+/* Ab hier wird der Link für Mailprogramme und Chats unzuverlässig.
+   Erfahrungswert: Browser schlucken weit mehr, Outlook und WhatsApp
+   schneiden lange Adressen ab. */
+const TEILEN_MAX = 7000;
+
+function teilenB64enc(bytes){
+  let s = '';
+  for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function teilenB64dec(txt){
+  const s = atob(txt.replace(/-/g, '+').replace(/_/g, '/'));
+  const out = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i);
+  return out;
+}
+
+async function teilenPack(bytes){
+  if (typeof CompressionStream !== 'function') return null;
+  try{
+    const cs = new CompressionStream('deflate-raw');
+    const stream = new Blob([bytes]).stream().pipeThrough(cs);
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }catch(_){ return null; }
+}
+
+async function teilenUnpack(bytes){
+  const ds = new DecompressionStream('deflate-raw');
+  const stream = new Blob([bytes]).stream().pipeThrough(ds);
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
+/** Bilder aus dem Zustand nehmen. Gibt {rein, bilder} zurück. */
+function teilenOhneBilder(state){
+  let bilder = 0;
+  const gehe = v => {
+    if (typeof v === 'string') return v.startsWith('data:') ? (bilder++, '') : v;
+    if (Array.isArray(v)) return v.map(gehe);
+    if (v && typeof v === 'object'){
+      const o = {};
+      for (const k in v) o[k] = gehe(v[k]);
+      return o;
+    }
+    return v;
+  };
+  return { rein: gehe(state), bilder };
+}
+
+/**
+ * Zustand zu einer Nutzlast machen.
+ * @returns {Promise<{payload:string, bilder:number}>}
+ */
+async function teilenKodieren(state){
+  const { rein, bilder } = teilenOhneBilder(state);
+  const roh = new TextEncoder().encode(JSON.stringify(rein));
+  const packed = await teilenPack(roh);
+  /* Bei sehr kurzen Zuständen ist der Deflate-Kopf grösser als der Gewinn. */
+  const nimmPack = packed && packed.length < roh.length;
+  return {
+    payload: (nimmPack ? 'z' : 'p') + teilenB64enc(nimmPack ? packed : roh),
+    bilder
+  };
+}
+
+/** Nutzlast zurück in einen Zustand. Wirft bei kaputten Links. */
+async function teilenLesen(payload){
+  const art = payload[0];
+  const bytes = teilenB64dec(payload.slice(1));
+  const roh = art === 'z' ? await teilenUnpack(bytes) : bytes;
+  const obj = JSON.parse(new TextDecoder().decode(roh));
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)){
+    throw new Error('Kein Zustand');
+  }
+  return obj;
+}
+
+/** Vollständige Adresse zu einer Vorlage bauen. */
+function teilenAdresse(id, payload){
+  const basis = location.href.split('#')[0];
+  return `${basis}#/t/${id}?d=${payload}`;
+}
+
+/** In die Zwischenablage legen. Fällt auf das alte execCommand zurück. */
+async function teilenKopieren(text){
+  try{
+    if (navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(_){ /* weiter mit dem Notnagel */ }
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }catch(_){ return false; }
+}
+
+/* ===== js/lib/lesbarkeit.js ===== */
+/* ==========================================================================
+   Lesbarkeit auf Distanz
+   --------------------------------------------------------------------------
+   Ein Schild nützt nichts, wenn man erst davorstehen muss, um es zu lesen.
+   Die Faustregel aus der Beschilderungspraxis rechnet mit der x-Höhe —
+   der Höhe des kleinen "x", nicht der Schriftgrösse:
+
+       nötige x-Höhe in mm  =  Leseabstand in m  ×  2.5
+
+   Umgekehrt gelesen ergibt die grösste Schrift auf dem Blatt den Abstand,
+   aus dem sie noch sicher lesbar ist. Genau das zeigt der Editor an, damit
+   niemand ein Parkschild in 12 pt ausdruckt.
+
+   Die x-Höhe wird aus der Schriftgrösse geschätzt (Faktor 0.52 — der Wert
+   passt für Gotham und die hinterlegten Ersatzschriften). Es ist eine
+   Orientierung, keine Messung: schlechtes Licht, Blickwinkel und schwacher
+   Kontrast verkürzen den Abstand zusätzlich.
+   ========================================================================== */
+
+const MM_PRO_PX = 25.4 / 96;      // CSS-Pixel sind 1/96 Zoll
+const X_ANTEIL  = 0.52;           // x-Höhe im Verhältnis zur Schriftgrösse
+const MM_PRO_M  = 2.5;            // Faustregel
+
+/** Grösste tatsächlich sichtbare Schriftgrösse (px) in einem Element. */
+function groessteSchrift(root){
+  if (!root) return 0;
+  let max = 0;
+  const lauf = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      return n.nodeValue && n.nodeValue.trim()
+        ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  for (let n = lauf.nextNode(); n; n = lauf.nextNode()){
+    const el = n.parentElement;
+    if (!el) continue;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0) continue;
+    const px = parseFloat(cs.fontSize);
+    if (px > max) max = px;
+  }
+  return max;
+}
+
+/** Leseabstand in Metern für eine Schriftgrösse in px. */
+function abstandM(fontPx){
+  const xMm = fontPx * MM_PRO_PX * X_ANTEIL;
+  return xMm / MM_PRO_M;
+}
+
+/** Auf handliche Stufen runden: 0.5 / 1 / 1.5 … bzw. ganze Meter ab 5 m. */
+function rundeAbstand(m){
+  if (m >= 5) return Math.round(m);
+  return Math.round(m * 2) / 2;
+}
+
+/**
+ * Fertiger Befund für die Anzeige.
+ * @returns {{px:number, m:number, text:string, stufe:'ok'|'nah'|'leer'}}
+ */
+function lesbarkeit(root){
+  const px = groessteSchrift(root);
+  if (!px) return { px:0, m:0, text:'Noch kein Text auf dem Blatt', stufe:'leer' };
+  const m = rundeAbstand(abstandM(px));
+  const zahl = m < 1 ? m.toFixed(1).replace('.', ',') : String(m).replace('.', ',');
+  return {
+    px, m,
+    text: `Grösste Schrift aus ca. ${zahl} m lesbar`,
+    /* Unter zwei Metern ist es kein Schild mehr, sondern ein Merkblatt. */
+    stufe: m >= 2 ? 'ok' : 'nah'
+  };
+}
+
 /* ===== js/lib/i18n.js ===== */
 /* Sprache der OBERFLAECHE (nicht des Aushang-Inhalts — der ist immer DE/EN). */
 
@@ -1876,6 +2429,16 @@ const DICT = {
     print:'Drucken / PDF',
     png:'PNG speichern',
     reset:'Zurücksetzen',
+    share:'Link teilen',
+    shareCopied:'Link kopiert — jetzt einfügen und verschicken',
+    shareNoImg:'Bilder sind nicht im Link',
+    shareLocal:'Link kopiert. Achtung: er zeigt auf diese Datei auf diesem Rechner.',
+    shareLong:'Dieser Entwurf ist zu lang für einen Link. Bitte "Entwurf sichern" nehmen und die Datei verschicken.',
+    shareManual:'Kopieren geht in diesem Browser nicht automatisch. Link von Hand kopieren:',
+    shareFail:'Link konnte nicht erstellt werden',
+    shareGot:'Geteilter Entwurf übernommen',
+    shareBad:'Dieser Link ist unvollständig — das Original zeigt weiter',
+    shareAsk:'Der geteilte Entwurf ersetzt den eigenen für diese Vorlage. Fortfahren?',
     saveJson:'Entwurf sichern',
     loadJson:'Entwurf laden',
     resetAsk:'Alle Aenderungen dieser Vorlage verwerfen und zum Original zurück?',
@@ -1904,6 +2467,16 @@ const DICT = {
     print:'Print / PDF',
     png:'Save PNG',
     reset:'Reset',
+    share:'Copy share link',
+    shareCopied:'Link copied — paste it into a message',
+    shareNoImg:'images are not part of the link',
+    shareLocal:'Link copied. Careful: it points at this file on this computer.',
+    shareLong:'This draft is too long for a link. Use "Save draft" and send the file instead.',
+    shareManual:'This browser cannot copy automatically. Please copy the link by hand:',
+    shareFail:'Could not build the link',
+    shareGot:'Shared draft loaded',
+    shareBad:'This link is incomplete — the original is still shown',
+    shareAsk:'The shared draft will replace your own for this template. Continue?',
     saveJson:'Save draft',
     loadJson:'Load draft',
     resetAsk:'Discard all changes to this template and restore the original?',
@@ -3056,6 +3629,7 @@ const rezeption = {
   badgeCyan:true,
   page:'a4',
   root:'t-rezeption',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="16" y="14" width="60" height="7" rx="3.5" fill="#C9CFDA"/>
     <rect x="16" y="58" width="178" height="62" rx="7" fill="#2A3350"/>
@@ -3150,6 +3724,7 @@ const sticker = {
   badgeCyan:true,
   page:'a4',
   root:'t-sticker',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="18" y="14" width="70" height="7" rx="3.5" fill="#C9CFDA"/>
     ${[0,1,2].map(r => [0,1,2].map(c => `
@@ -3237,6 +3812,7 @@ const aushang = {
   badge:'Aushang',
   page:'a4',
   root:'t-aushang',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="18" y="16" width="80" height="9" rx="4.5" fill="#01B1E2"/>
     <rect x="18" y="32" width="140" height="14" rx="4" fill="#2A3350"/>
@@ -3363,6 +3939,7 @@ const parkplatz = {
   badgeCyan:true,
   page:'a4',
   root:'t-parkplatz',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="18" y="16" width="86" height="9" rx="4.5" fill="#01B1E2"/>
     <rect x="18" y="32" width="150" height="14" rx="4" fill="#2A3350"/>
@@ -4443,6 +5020,7 @@ const hinweis = {
   badge:'Hinweis',
   page:'a4',
   root:'t-hinweis',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'hausordnung',
   thumb: thumb(`
     <rect x="0" y="0" width="210" height="60" fill="#2A3350"/>
@@ -4589,6 +5167,7 @@ const parkschild = {
   sub:'Reserviert / Privat / Besucher · eine Seite je Platz',
   badge:'Parkieren',
   root:'t-parkschild',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'parken',
   multipage:true,
   pageOf(d){ return PARK_PAGES[d && d.format] || 'a5-land'; },
@@ -4980,6 +5559,7 @@ const sammelstelle = {
   sub:'Papier, PET, Glas, Kehricht … · eine Seite je Behälter',
   badge:'Abfall',
   root:'t-sammel',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'abfall',
   multipage:true,
   pageOf(d){ return SAMMEL_PAGES[d && d.format] || 'a5-land'; },
@@ -5073,6 +5653,303 @@ const sammelstelle = {
   }
 };
 
+/* ===== js/templates/sicherheit.js ===== */
+/* Sicherheitszeichen · eine Seite je Schild.
+   Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von
+   ISO 3864-1 / ISO 7010 — siehe js/lib/sicherheitszeichen.js, dort steht auch,
+   warum das keine zertifizierten Schilder sind.
+
+   Gedacht für das, was im Haus täglich gebraucht wird: Rauchverbot im
+   Treppenhaus, "Tür geschlossen halten" an der Waschküche, Rutschgefahr nach
+   dem Putzen. Das Zeichen ist bewusst gross — es soll aus dem Gang wirken,
+   nicht erst aus zwei Schritten Abstand. */
+
+
+
+
+
+const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
+/* Zeichengrösse je Papier — so gross wie möglich, ohne den Text zu verdrängen. */
+const SICHER_MASS = { 'a5-land':62, a5:78, a4:118, 'a4-land':92 };
+
+const sicherheit = {
+  id:'sicherheit',
+  title:'Sicherheitszeichen',
+  sub:'Verbot, Warnung, Gebot, Rettung · eine Seite je Schild',
+  badge:'Sicherheit',
+  root:'t-sicher',
+  fern:true,   /* Schild — Leseabstand anzeigen */
+  cat:'sicherheit',
+  multipage:true,
+  pageOf(d){ return SICHER_PAGES[d && d.format] || 'a5-land'; },
+
+  thumb: thumb(`
+    <rect x="12" y="22" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    <circle cx="66" cy="70" r="34" fill="#fff"/>
+    <circle cx="66" cy="70" r="31" fill="none" stroke="#C8102E" stroke-width="5.5"/>
+    <path d="M44 48 88 92" stroke="#C8102E" stroke-width="5.5"/>
+    <rect x="50" y="66" width="26" height="7" rx="2" fill="#1A1A1A"/>
+    <rect x="112" y="56" width="70" height="12" rx="4" fill="#2A3350"/>
+    <rect x="112" y="76" width="52" height="8" rx="4" fill="#C9CFDA"/>
+    <rect x="12" y="150" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    <path d="M66 168 96 220H36Z" fill="#F9A800" stroke="#1A1A1A" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="63" y="188" width="6" height="16" rx="3" fill="#1A1A1A"/>
+    <circle cx="66" cy="210" r="3.5" fill="#1A1A1A"/>
+    <rect x="112" y="184" width="70" height="12" rx="4" fill="#2A3350"/>
+    <rect x="112" y="204" width="44" height="8" rx="4" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Format' },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
+      { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
+    ] },
+    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Schilder' },
+    { t:'note', label:'Jede Zeile ergibt eine Druckseite. Der Text darf überschrieben werden — das Zeichen bleibt.' },
+    { k:'rows', label:'Schilder', type:'list', itemLabel:'Schild', max:16,
+      defaultItem:{ zeichen:'rauchen-verboten', de:'', en:'', zusatz:'' },
+      item:[
+        { k:'zeichen', label:'Zeichen', type:'select', options:szOptions() },
+        { k:'de',      label:'Text (überschreibt)', type:'text' },
+        { k:'en',      label:'Englisch (überschreibt)', type:'text' },
+        { k:'zusatz',  label:'Zusatzzeile', type:'text',
+          hint:'z. B. «gilt im ganzen Treppenhaus» oder eine Bussenhöhe' }
+      ] },
+
+    { t:'group', label:'Fusszeile' },
+    { k:'fussnote', label:'Hinweis klein', type:'text' }
+  ],
+
+  defaults:{
+    format:'a5-land',
+    zweisprachig:'ja',
+    objekt:'-',
+    absender:'immobilien',
+    rows:[
+      { zeichen:'rauchen-verboten', de:'', en:'', zusatz:'Gilt im ganzen Treppenhaus' },
+      { zeichen:'abstellen-verboten', de:'', en:'', zusatz:'' }
+    ],
+    fussnote:'Danke für Ihr Verständnis.'
+  },
+
+  render(d){
+    const abs  = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const obj  = objekt(d.objekt);
+    const adr  = objektAdresse(d.objekt);
+    const en   = d.zweisprachig !== 'nein';
+    const page = SICHER_PAGES[d.format] || 'a5-land';
+    const mass = SICHER_MASS[page] || 62;
+    /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
+    const quer = page.endsWith('-land');
+
+    return (d.rows || []).map(r => {
+      const z    = szZeichen(r.zeichen);
+      const txt  = has(r.de) ? r.de : z.de;
+      const txtE = has(r.en) ? r.en : z.en;
+
+      return `
+      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
+               style="--sz-akzent:${z.art === 'rettung' ? SZ_FARBEN.gruen
+                                   : z.art === 'gebot' ? SZ_FARBEN.blau
+                                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+        <div class="t-sicher-body">
+          <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
+          <div class="t-sicher-txt">
+            <h1>${esc(txt)}</h1>
+            ${en && has(txtE) ? `<p class="t-sicher-en" lang="en">${esc(txtE)}</p>` : ''}
+            ${has(r.zusatz) ? `<p class="t-sicher-zusatz">${esc(r.zusatz)}</p>` : ''}
+          </div>
+        </div>
+        <footer class="t-sicher-foot">
+          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', 22) : esc(abs.legal)}</span>
+          <span class="t-sicher-ort">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+          ${has(d.fussnote) ? `<span class="t-sicher-note">${esc(d.fussnote)}</span>` : ''}
+        </footer>
+      </article>`;
+    }).join('');
+  }
+};
+
+/* ===== js/templates/etiketten.js ===== */
+/* Etikettenbogen · A4 mit Klebeetiketten.
+   Für alles, was beschriftet werden muss und nicht die Grösse eines Aushangs
+   hat: Schlüsselanhänger, Schränke, Putzmittel, Vorratsdosen, Namensschilder
+   an der Bürotür, Inventar.
+
+   Die Raster folgen den gängigen Avery-Zweckform-Bögen. Die Etikettengrössen
+   und die Anzahl je Bogen stammen vom Hersteller; die Randmasse sind daraus
+   mittig berechnet — bei Avery sitzt das Raster zentriert auf dem A4-Blatt.
+   Vor dem ersten Bogen einen Probedruck auf normales Papier machen und
+   gegen den Etikettenbogen halten. Drucker verschieben gerne um ein bis zwei
+   Millimeter; dafür gibt es unten die Feinverschiebung.
+
+   Beim Drucken zwingend: Ränder "keine" und Skalierung 100 %. Sobald der
+   Browser das Blatt einpasst, stimmt kein Etikett mehr. */
+
+
+
+
+/* Alle Masse in Millimetern. rand* = Abstand zur Blattkante oben/links. */
+const ETIKETT_RASTER = {
+  'l7160': { name:'Avery L7160 · 63,5 × 38,1 mm · 21 Stück',
+             spalten:3, zeilen:7,  b:63.5, h:38.1, randL:7.25,  randO:15.15, lueckeX:2.5, lueckeY:0 },
+  'l7163': { name:'Avery L7163 · 99,1 × 38,1 mm · 14 Stück',
+             spalten:2, zeilen:7,  b:99.1, h:38.1, randL:4.65,  randO:15.15, lueckeX:2.5, lueckeY:0 },
+  'l7165': { name:'Avery L7165 · 99,1 × 67,7 mm · 8 Stück',
+             spalten:2, zeilen:4,  b:99.1, h:67.7, randL:4.65,  randO:13.10, lueckeX:2.5, lueckeY:0 },
+  'l7651': { name:'Avery L7651 · 38,1 × 21,2 mm · 65 Stück',
+             spalten:5, zeilen:13, b:38.1, h:21.2, randL:4.75,  randO:10.70, lueckeX:2.5, lueckeY:0 },
+  'frei':  { name:'Freies Raster — Masse selber setzen',
+             spalten:3, zeilen:8,  b:60,   h:32,   randL:9,     randO:10,    lueckeX:4,   lueckeY:2 }
+};
+
+function etikettRaster(d){
+  const basis = ETIKETT_RASTER[d && d.raster] || ETIKETT_RASTER.l7160;
+  if ((d && d.raster) !== 'frei') return basis;
+  const z = (v, f) => (v === '' || v == null || isNaN(Number(v))) ? f : Number(v);
+  return { ...basis,
+    spalten:Math.max(1, z(d.spalten, basis.spalten)),
+    zeilen: Math.max(1, z(d.zeilen,  basis.zeilen)),
+    b:z(d.breite, basis.b), h:z(d.hoehe, basis.h),
+    randL:z(d.randL, basis.randL), randO:z(d.randO, basis.randO),
+    lueckeX:z(d.lueckeX, basis.lueckeX), lueckeY:z(d.lueckeY, basis.lueckeY) };
+}
+
+const etiketten = {
+  id:'etiketten',
+  title:'Etikettenbogen',
+  sub:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte',
+  badge:'Etiketten',
+  root:'t-etikett',
+  cat:'etiketten',
+  multipage:true,
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="10" y="10" width="190" height="270" rx="6" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    ${[0,1,2,3,4,5].map(r => [0,1,2].map(c => `
+      <rect x="${20 + c * 60}" y="${26 + r * 42}" width="54" height="36" rx="4"
+            fill="#F6F7FA" stroke="#C9CFDA" stroke-width="1.4" stroke-dasharray="3 3"/>
+      <rect x="${20 + c * 60}" y="${26 + r * 42}" width="4" height="36" fill="${r % 2 ? '#01B1E2' : '#2A3350'}"/>
+      <rect x="${30 + c * 60}" y="${36 + r * 42}" width="34" height="7" rx="3.5" fill="#2A3350"/>
+      <rect x="${30 + c * 60}" y="${48 + r * 42}" width="24" height="5" rx="2.5" fill="#C9CFDA"/>`).join('')).join('')}`),
+
+  fields:[
+    { t:'group', label:'Bogen' },
+    { k:'raster', label:'Etikettenbogen', type:'select',
+      options:Object.entries(ETIKETT_RASTER).map(([v, r]) => ({ v, t:r.name })),
+      hint:'Die Nummer steht auf der Packung. Passt keine: «Freies Raster» nehmen und ausmessen.' },
+    { k:'hilfslinien', label:'Hilfslinien zeigen', type:'select',
+      options:[{v:'nein',t:'nein'},{v:'ja',t:'ja — nur zum Ausprobieren'}],
+      hint:'Gestrichelte Ränder für den Probedruck auf normalem Papier. Auf dem echten Bogen ausschalten.' },
+
+    { t:'group', label:'Feinverschiebung' },
+    { t:'note', label:'Wenn beim Probedruck alles um ein paar Millimeter daneben sitzt: hier gegensteuern. Plus verschiebt nach rechts bzw. nach unten.' },
+    { k:'schiebX', label:'links / rechts (mm)', type:'number', step:0.5, min:-10, max:10 },
+    { k:'schiebY', label:'oben / unten (mm)',  type:'number', step:0.5, min:-10, max:10 },
+
+    { t:'group', label:'Freies Raster', },
+    { t:'note', label:'Nur wirksam, wenn oben «Freies Raster» gewählt ist.' },
+    { k:'spalten', label:'Spalten', type:'number', min:1, max:12 },
+    { k:'zeilen',  label:'Zeilen',  type:'number', min:1, max:20 },
+    { k:'breite',  label:'Etikett breit (mm)', type:'number', step:0.1 },
+    { k:'hoehe',   label:'Etikett hoch (mm)',  type:'number', step:0.1 },
+    { k:'randL',   label:'Rand links (mm)', type:'number', step:0.1 },
+    { k:'randO',   label:'Rand oben (mm)',  type:'number', step:0.1 },
+    { k:'lueckeX', label:'Lücke waagrecht (mm)', type:'number', step:0.1 },
+    { k:'lueckeY', label:'Lücke senkrecht (mm)', type:'number', step:0.1 },
+
+    { t:'group', label:'Aussehen' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions(),
+      hint:'Setzt das Kürzel als kleine Zeile auf jedes Etikett.' },
+    { k:'kuerzel', label:'Kürzel mitdrucken', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+    { k:'balken', label:'Farbbalken', type:'select',
+      options:[{v:'links',t:'links'},{v:'oben',t:'oben'},{v:'nein',t:'kein Balken'}] },
+
+    { t:'group', label:'Etiketten' },
+    { t:'note', label:'«Anzahl» wiederholt dasselbe Etikett. Ein voller Bogen entsteht, wenn die Summe dem Bogen entspricht — der Rest bleibt leer.' },
+    { k:'rows', label:'Etiketten', type:'list', itemLabel:'Etikett', max:40,
+      defaultItem:{ titel:'', unter:'', anzahl:1, farbe:'#2A3350', ico:'key' },
+      item:[
+        { k:'titel',  label:'Grosse Zeile', type:'text' },
+        { k:'unter',  label:'Kleine Zeile', type:'text' },
+        { k:'anzahl', label:'Anzahl', type:'number', min:1, max:200 },
+        { k:'farbe',  label:'Farbe', type:'color' },
+        { k:'ico',    label:'Symbol', type:'select',
+          options:[{v:'',t:'kein Symbol'}].concat(iconOptions()) }
+      ] }
+  ],
+
+  defaults:{
+    raster:'l7160',
+    hilfslinien:'nein',
+    schiebX:0, schiebY:0,
+    spalten:3, zeilen:8, breite:60, hoehe:32,
+    randL:9, randO:10, lueckeX:4, lueckeY:2,
+    objekt:'-',
+    kuerzel:'nein',
+    balken:'links',
+    rows:[
+      { titel:'Zimmer 1', unter:'Hauptschlüssel', anzahl:2, farbe:'#2A3350', ico:'key' },
+      { titel:'Waschküche', unter:'Untergeschoss', anzahl:2, farbe:'#01B1E2', ico:'key' },
+      { titel:'Putzmittel', unter:'nicht in Griffhöhe lagern', anzahl:4, farbe:'#C0271F', ico:'warn' }
+    ]
+  },
+
+  render(d){
+    const r   = etikettRaster(d);
+    const obj = objekt(d.objekt);
+    const proBogen = r.spalten * r.zeilen;
+    const dx = Number(d.schiebX) || 0;
+    const dy = Number(d.schiebY) || 0;
+
+    /* Liste zu Einzeletiketten aufblasen (Anzahl je Zeile). */
+    const alle = [];
+    for (const row of (d.rows || [])){
+      const n = Math.max(1, Math.min(200, Number(row.anzahl) || 1));
+      for (let i = 0; i < n; i++) alle.push(row);
+    }
+    if (!alle.length) return '';
+
+    const bogen = Math.ceil(alle.length / proBogen);
+    const seiten = [];
+
+    for (let s = 0; s < bogen; s++){
+      const stueck = alle.slice(s * proBogen, (s + 1) * proBogen);
+      const felder = stueck.map((row, i) => {
+        const sp = i % r.spalten, ze = Math.floor(i / r.spalten);
+        const x = r.randL + sp * (r.b + r.lueckeX) + dx;
+        const y = r.randO + ze * (r.h + r.lueckeY) + dy;
+        const farbe = row.farbe || '#2A3350';
+        return `
+        <div class="t-etikett-feld${d.hilfslinien === 'ja' ? ' is-hilfe' : ''} is-${esc(d.balken || 'links')}"
+             style="left:${x}mm;top:${y}mm;width:${r.b}mm;height:${r.h}mm;--farbe:${esc(farbe)}">
+          ${d.balken === 'nein' ? '' : '<span class="t-etikett-balken"></span>'}
+          <div class="t-etikett-inhalt">
+            ${row.ico ? `<span class="t-etikett-ico">${icon(row.ico, 20, 1.8)}</span>` : ''}
+            <div class="t-etikett-txt">
+              ${has(row.titel) ? `<b>${esc(row.titel)}</b>` : ''}
+              ${has(row.unter) ? `<i>${esc(row.unter)}</i>` : ''}
+              ${d.kuerzel === 'ja' && obj.code ? `<u>${esc(obj.code)}</u>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      seiten.push(`<article data-page class="t-etikett-page">${felder}</article>`);
+    }
+    return seiten.join('');
+  }
+};
+
 /* ===== js/templates/kurzanleitung.js ===== */
 /* Kurzanleitung · A4 hoch — der Aushang für die eigene Bürowand.
    Beantwortet die zwei Fragen, die im Haus wirklich gestellt werden:
@@ -5152,11 +6029,13 @@ const kurzanleitung = {
       { titel:'Vorlage wählen und Texte anpassen',
         text:'Beim Hinweis zuerst den fertigen Textbaustein wählen und «Baustein übernehmen» drücken. Danach die Liegenschaft wählen — Kürzel und Adresse setzen sich von selbst.' },
       { titel:'Drucken',
-        text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' }
+        text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' },
+      { titel:'Weitergeben',
+        text:'«Link teilen» kopiert den fertigen Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
     ],
     druckTitel:'Im Druckdialog einstellen',
     druckText:'Ränder: **keine** · Hintergrundgrafiken: **einschalten** · Skalierung: **100 %**',
-    hinweis:'Der grüne Balken links zeigt, ob das Blatt noch auf eine Seite passt. Wird er orange, sind die Texte zu lang. Änderungen bleiben im eigenen Browser gespeichert; «Zurücksetzen» stellt das Original wieder her.',
+    hinweis:'Der grüne Balken links zeigt, ob das Blatt noch auf eine Seite passt; bei Schildern steht darunter der Leseabstand. Änderungen bleiben im eigenen Browser; «Zurücksetzen» stellt das Original her.',
     kontakt:'Fragen an Cris'
   },
 
@@ -5228,12 +6107,16 @@ const kurzanleitung = {
 
 
 
+
+
 const TEMPLATES = {
   hinweis,
   mieterbrief,
   parkschild,
   waschplan,
   sammelstelle,
+  sicherheit,
+  etiketten,
   kurzanleitung,
   notruf,
   rezeption,
@@ -5248,7 +6131,8 @@ const TEMPLATES = {
 };
 
 const ORDER = [
-  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle', 'kurzanleitung',
+  'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
+  'etiketten', 'kurzanleitung',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -5257,6 +6141,10 @@ const GROUPS = [
   { id:'hausordnung', title:'Hausordnung und Verbote',
     note:'Rauchverbot, Betäubungsmittel, Videoüberwachung, Türen — als Aushang oder als Brief.',
     ids:['hinweis', 'mieterbrief'] },
+
+  { id:'sicherheit', title:'Sicherheitszeichen',
+    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt.',
+    ids:['sicherheit'] },
 
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
@@ -5278,6 +6166,10 @@ const GROUPS = [
     note:'Pfeile und runde Aufkleber in Originalgrösse.',
     ids:['rezeption', 'rezeption-sticker'] },
 
+  { id:'etiketten', title:'Etiketten und Beschriftung',
+    note:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte, Namensschilder.',
+    ids:['etiketten'] },
+
   { id:'hilfe', title:'Für das Team',
     note:'Die Kurzanleitung zum Aufhängen — mit QR-Code auf die Zentrale.',
     ids:['kurzanleitung'] },
@@ -5294,6 +6186,8 @@ const store = { load: load, save: save, remove: remove, keys: keys };
    Router (Hash), Hub, Editor mit automatisch erzeugtem Formular,
    Live-Vorschau, Speicherung und Export.
    ========================================================================== */
+
+
 
 
 
@@ -5396,7 +6290,8 @@ function renderHub(){
           <b style="color:var(--navy)">3.</b> <b style="color:var(--navy)">Drucken / PDF</b> wählen.<br>
           Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen.
           Aenderungen bleiben im Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt —
-          jede Person am eigenen Gerät.
+          jede Person am eigenen Gerät. Ein fertiges Blatt geht mit
+          <b>Link teilen</b> an die anderen: die Adresse trägt den ganzen Aushang.
         </div>
       </section>
     </div>`;
@@ -5499,9 +6394,10 @@ function setPath(state, path, value){
 }
 
 /* ---------- Editor -------------------------------------------------------- */
-function renderEditor(id){
+function renderEditor(id, geteilt){
   const tpl = TEMPLATES[id];
   if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
+  if (geteilt){ uebernehmeGeteilt(tpl, geteilt); return; }
 
   const state = loadState(tpl);
   unmountActive();
@@ -5518,12 +6414,14 @@ function renderEditor(id){
         <div class="vz-actions">
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
+        ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
@@ -5558,6 +6456,7 @@ function renderEditor(id){
     }
     fitScaler();
     checkFit();
+    checkFern();
   }
   function fitScaler(){
     const stage = document.getElementById('vz-stage');
@@ -5580,6 +6479,17 @@ function renderEditor(id){
     fitBox.textContent = (ok ? '✓ ' : '⚠ ') + (ok ? t('fitOk') : t('fitWarn')) +
       `  (${Math.round(worst.h)} / ${max} px${where})`;
   }
+  /* Leseabstand der groessten Schrift — nur bei Vorlagen mit `fern:true`. */
+  function checkFern(){
+    const box = document.getElementById('vz-fern');
+    if (!box) return;
+    const b = lesbarkeit(sheetPages(sheet)[0]);
+    box.className = 'vz-fern vz-fern--' + b.stufe;
+    box.textContent = '\u2194 ' + b.text;
+    box.title = 'Faustregel der Beschilderung: n\u00f6tige x-H\u00f6he in mm = Leseabstand in m \u00d7 2,5. '
+              + 'Gilt f\u00fcr gutes Licht und geraden Blick.';
+  }
+
   function commit(){ saveState(tpl, state); paint(); }
 
   /* Live-Bindung: nur die Vorschau neu zeichnen, damit der Fokus bleibt. */
@@ -5703,6 +6613,26 @@ function renderEditor(id){
     downloadBlob(blob, `ns-hotel-${tpl.id}-entwurf.json`);
     toast(t('saved'));
   };
+  document.getElementById('vz-share').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '\u2026';
+    try{
+      const { payload, bilder } = await teilenKodieren(state);
+      const url = teilenAdresse(tpl.id, payload);
+      if (url.length > TEILEN_MAX){ alert(t('shareLong')); return; }
+      const ok = await teilenKopieren(url);
+      if (!ok){ window.prompt(t('shareManual'), url); return; }
+      let msg = t('shareCopied');
+      if (bilder) msg += ' \u00b7 ' + t('shareNoImg');
+      /* Eine Datei-Adresse zeigt auf diesen einen Rechner. */
+      if (location.protocol === 'file:') msg = t('shareLocal');
+      toast(msg);
+    }catch(err){
+      console.warn(err);
+      toast(t('shareFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; }
+  };
+
   const fileInput = document.getElementById('vz-json-file');
   document.getElementById('vz-json-load').onclick = () => fileInput.click();
   fileInput.onchange = () => {
@@ -5725,6 +6655,27 @@ function renderEditor(id){
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitScaler(); checkFit(); });
 }
 
+/* ---------- Geteilten Link uebernehmen ------------------------------------ */
+/* Der Zustand steckt in der Adresse. Er wird als Entwurf gespeichert und die
+   Adresse danach aufgeraeumt — sonst wuerde ein Neuladen den Entwurf immer
+   wieder ueberschreiben und "Zuruecksetzen" haette keine Wirkung. */
+async function uebernehmeGeteilt(tpl, payload){
+  let daten = null;
+  try{ daten = await teilenLesen(payload); }
+  catch(err){ console.warn(err); }
+
+  history.replaceState(null, '', location.href.split('#')[0] + '#/t/' + tpl.id);
+
+  if (!daten){ renderEditor(tpl.id); toast(t('shareBad')); return; }
+
+  const vorhanden = store.load(draftKey(tpl.id), null);
+  if (vorhanden && !confirm(t('shareAsk'))){ renderEditor(tpl.id); return; }
+
+  store.save(draftKey(tpl.id), Object.assign({}, structuredClone(tpl.defaults), daten));
+  renderEditor(tpl.id);
+  toast(t('shareGot'));
+}
+
 /* ---------- Toast --------------------------------------------------------- */
 let toastTimer = null;
 function toast(msg){
@@ -5743,9 +6694,10 @@ function toast(msg){
 function route(){
   unmountActive();
   const hash = location.hash || '#/';
-  const m = /^#\/t\/([\w-]+)/.exec(hash);
+  /* #/t/<vorlage> — optional mit geteiltem Zustand: ?d=<Nutzlast> */
+  const m = /^#\/t\/([\w-]+)(?:\?d=([A-Za-z0-9\-_]+))?/.exec(hash);
   window.scrollTo(0, 0);
-  if (m) renderEditor(m[1]); else renderHub();
+  if (m) renderEditor(m[1], m[2] || null); else renderHub();
 }
 
 window.addEventListener('hashchange', route);

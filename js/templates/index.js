@@ -17,6 +17,8 @@ import waschplan from './waschplan.js';
 import mieterbrief from './mieterbrief.js';
 import sammelstelle from './sammelstelle.js';
 import kurzanleitung from './kurzanleitung.js';
+import sicherheit from './sicherheit.js';
+import etiketten from './etiketten.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -24,6 +26,8 @@ export const TEMPLATES = {
   parkschild,
   waschplan,
   sammelstelle,
+  sicherheit,
+  etiketten,
   kurzanleitung,
   notruf,
   rezeption,
@@ -38,7 +42,8 @@ export const TEMPLATES = {
 };
 
 export const ORDER = [
-  'hinweis', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle', 'kurzanleitung',
+  'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
+  'etiketten', 'kurzanleitung',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -47,6 +52,10 @@ export const GROUPS = [
   { id:'hausordnung', title:'Hausordnung und Verbote',
     note:'Rauchverbot, Betäubungsmittel, Videoüberwachung, Türen — als Aushang oder als Brief.',
     ids:['hinweis', 'mieterbrief'] },
+
+  { id:'sicherheit', title:'Sicherheitszeichen',
+    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt.',
+    ids:['sicherheit'] },
 
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
@@ -67,6 +76,10 @@ export const GROUPS = [
   { id:'wegweiser', title:'Wegweiser und Aufkleber',
     note:'Pfeile und runde Aufkleber in Originalgrösse.',
     ids:['rezeption', 'rezeption-sticker'] },
+
+  { id:'etiketten', title:'Etiketten und Beschriftung',
+    note:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte, Namensschilder.',
+    ids:['etiketten'] },
 
   { id:'hilfe', title:'Für das Team',
     note:'Die Kurzanleitung zum Aufhängen — mit QR-Code auf die Zentrale.',

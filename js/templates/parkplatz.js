@@ -15,6 +15,7 @@ export default {
   badgeCyan:true,
   page:'a4',
   root:'t-parkplatz',
+  fern:true,   /* Schild — Leseabstand anzeigen */
   thumb: thumb(`
     <rect x="18" y="16" width="86" height="9" rx="4.5" fill="#01B1E2"/>
     <rect x="18" y="32" width="150" height="14" rx="4" fill="#2A3350"/>
