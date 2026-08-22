@@ -96,6 +96,20 @@ export function adresseFehlt(id){
   return Boolean(o.code) && !o.street;
 }
 
+/** Auswahlkästchen für eine Serie — ohne den Eintrag "Ohne Objekt". */
+export function objektCheckOptions(){
+  return OBJEKTE.filter(o => o.code).map(o => ({ v:o.id, t:`${o.code} — ${o.name}` }));
+}
+
+/**
+ * Die Objekte einer Serie, in der Reihenfolge dieser Datei.
+ * Unbekannte Kürzel fallen weg; "Ohne Objekt" gehört nie in eine Serie.
+ */
+export function objektListe(ids){
+  const gewaehlt = Array.isArray(ids) ? ids : [];
+  return OBJEKTE.filter(o => o.code && gewaehlt.includes(o.id));
+}
+
 /* Bildmarke des Absenders.
    Nur N's Hotel hat eine eigene Wortmarke im Repository. Für die beiden
    Amonn-Firmen liegt kein Logo vor — dort erscheint nichts, statt fälschlich

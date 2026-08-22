@@ -989,3 +989,33 @@
   font-size:7.5pt;letter-spacing:.04em;color:var(--muted);text-align:center;
   max-width:34mm;line-height:1.3;
 }
+
+/* Serie: eine Seite je Liegenschaft. Das Blatt selbst ist dann nur noch ein
+   Stapel — Papier und Rand tragen die einzelnen Seiten. */
+.t-hinweis-page{display:flex;flex-direction:column;background:#fff;overflow:hidden}
+
+/* --------------------------------------------------------------------------
+   Schneidebogen: mehrere Schilder auf einem A4, mit Schnittkanten.
+   Die gestrichelten Linien werden mitgedruckt — sie sind die Schere.
+   -------------------------------------------------------------------------- */
+.t-sicher-bogen{display:grid;background:#fff}
+.t-sicher-bogen.is-2{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+.t-sicher-bogen.is-4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.t-sicher-zelle{
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:8mm 8mm 6mm;min-width:0;overflow:hidden;
+  border-top:3mm solid var(--sz-akzent);
+  outline:.4pt dashed #B9C0CC;outline-offset:-.2pt;
+}
+.t-sicher-zelle.is-leer{border-top:0}
+.t-sicher-bogen.is-2 .t-sicher-zelle .t-sicher-body{flex-direction:row;text-align:left;gap:9mm;justify-content:flex-start}
+.t-sicher-bogen .t-sicher-txt h1{font-size:19pt}
+.t-sicher-bogen .t-sicher-mehr{font-size:10pt}
+.t-sicher-bogen .t-sicher-zusatz{font-size:9.5pt;margin-top:2.5mm}
+.t-sicher-bogen .t-sicher-foot{font-size:6.5pt;padding-top:2mm;gap:3mm}
+.t-sicher-bogen.is-4 .t-sicher-zelle{padding:6mm 6mm 4mm}
+.t-sicher-bogen.is-4 .t-sicher-txt h1{font-size:13pt}
+.t-sicher-bogen.is-4 .t-sicher-mehr{font-size:8pt;margin-top:1.2mm}
+.t-sicher-bogen.is-4 .t-sicher-zusatz{font-size:7.5pt;border-left-width:.9mm;padding-left:2.5mm}
+.t-sicher-bogen.is-4 .t-sicher-body{gap:4mm}
+.t-sicher-bogen.is-4 .t-sicher-foot{font-size:5.5pt}

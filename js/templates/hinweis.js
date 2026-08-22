@@ -5,6 +5,11 @@
 
    Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot.
 
+   Serie: derselbe Aushang für mehrere Liegenschaften auf einmal. Jede
+   bekommt eine eigene Seite mit ihrem Kürzel, ihrer Adresse und — wenn
+   gewünscht — ihrem eigenen Absender. Aus einem Blatt werden elf, ohne
+   elfmal dasselbe zu tippen.
+
    Sprachen: jeder Baustein liegt in sechs Sprachen vor (DE EN FR IT PT ES).
    Im Formular wird angehakt, welche davon aufs Blatt sollen — die Reihenfolge
    ist fest, damit zwei Aushänge nebeneinander gleich aussehen. Die erste
@@ -19,13 +24,18 @@ import { qrSvg } from '../lib/qr.js';
 import { SPRACHEN, sprachOptions, sprachSetOptions, sprachSet,
          sprachObjekte, sprachListe } from '../lib/sprachen.js';
 import { ABSENDER, objekt, objektAdresse, adresseFehlt, istHotel,
-         objektOptions, absenderOptions } from '../objekte.js';
+         objektOptions, absenderOptions, objektCheckOptions, objektListe } from '../objekte.js';
 
 const TONE = {
   info:    { bg:'var(--navy)',  fg:'#fff' },
   warnung: { bg:'var(--cyan)',  fg:'#fff' },
   verbot:  { bg:'#C0271F',      fg:'#fff' }
 };
+
+/** Die Liegenschaften der Serie — leer, wenn keine Serie gewählt ist. */
+function serieObjekte(d){
+  return (d && d.serie === 'auswahl') ? objektListe(d.serieObjekte) : [];
+}
 
 /* Platzhalter, die der Baustein mitbringt: {{adresse}}, {{objekt}}, {{datum}} */
 function fill(text, d){
@@ -44,6 +54,8 @@ export default {
   root:'t-hinweis',
   fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'hausordnung',
+  /* Erst mehrseitig, wenn wirklich mehr als eine Liegenschaft gewählt ist. */
+  multipage(d){ return serieObjekte(d).length > 1; },
   thumb: thumb(`
     <rect x="0" y="0" width="210" height="60" fill="#2A3350"/>
     <rect x="18" y="20" width="120" height="12" rx="4" fill="#fff" opacity=".92"/>
@@ -68,6 +80,19 @@ export default {
     { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
     { k:'zeigeAdresse', label:'Adresse im Kopf zeigen', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Serie über mehrere Liegenschaften' },
+    { t:'note', label:'Aus einem Blatt werden mehrere — je Liegenschaft eine Seite mit ihrem Kürzel und ihrer Adresse.' },
+    { k:'serie', label:'Serie drucken', type:'select', options:[
+      { v:'nein', t:'nein — nur die Liegenschaft oben' },
+      { v:'auswahl', t:'ja — die angehakten Liegenschaften' }
+    ] },
+    { k:'serieObjekte', label:'Liegenschaften', type:'checks', options:objektCheckOptions() },
+    { k:'serieAlle', label:'Alle anhaken', type:'action' },
+    { k:'serieAbsender', label:'Absender je Seite', type:'select', options:[
+      { v:'objekt', t:'der zur Liegenschaft gehörende' },
+      { v:'fest',   t:'für alle derselbe (oben gewählt)' }
+    ] },
 
     { t:'group', label:'Kopf' },
     { k:'ton',   label:'Ton', type:'select',
@@ -122,6 +147,9 @@ export default {
     objekt:'-',
     absender:'immobilien',
     zeigeAdresse:'ja',
+    serie:'nein',
+    serieObjekte:[],
+    serieAbsender:'objekt',
     ton:'verbot',
     icon:'smoke',
     title:'Rauchverbot im gesamten Gebäude',
@@ -164,6 +192,12 @@ export default {
       return next;
     },
 
+    /* "Alle anhaken" — spart elf Klicks. */
+    serieAlle(d){
+      return { ...d, serie:'auswahl',
+               serieObjekte:objektCheckOptions().map(o => o.v) };
+    },
+
     /* "Zusammenstellung übernehmen" — DE/FR/IT, DE/PT/ES und so weiter. */
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);
@@ -179,78 +213,95 @@ export default {
   },
 
   render(d){
-    const t = TONE[d.ton] || TONE.info;
-    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
-    const obj = objekt(d.objekt);
-    const adr = objektAdresse(d.objekt);
+    const serie = serieObjekte(d);
+    if (serie.length < 2) return blatt(d);
 
-    const kopfAdresse = (d.zeigeAdresse !== 'nein' && obj.code)
-      ? `<p class="t-hinweis-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : '';
-
-    const warnung = adresseFehlt(d.objekt)
-      ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
-         in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
-
-    const tags = d.sprachTags !== 'nein';
-    const gewaehlt = sprachObjekte(d.sprachen);
-
-    const bloecke = gewaehlt.map(sp => {
-      const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
-      const text = fill(d[sp.id], d);
-      const kopf = fill(d[K] || '', d);
-      /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
-         nicht noch einmal. */
-      const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
-      if (!has(text) && !zeigeKopf) return '';
-      return `
-      <article class="t-hinweis-block" lang="${sp.id}">
-        ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
-        <div class="t-hinweis-blocktxt">
-          ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
-          ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
-        </div>
-      </article>`;
-    }).join('');
-
-    /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
-       Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
-       bleibt die Stelle leer statt das Blatt zu zerschiessen. */
-    let qrBlock = '';
-    if (has(d.qrZiel)){
-      const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
-        ? d.qrZiel : 'https://' + d.qrZiel;
-      const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
-      try {
-        qrBlock = `<div class="t-hinweis-qr">
-          ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
-          ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
-        </div>`;
-      } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
-    }
-
-    return `
-    ${warnung}
-    <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
-      <div class="t-hinweis-headtxt">
-        <p class="t-hinweis-abs">${esc(abs.name)}</p>
-        <h1>${esc(fill(d.title, d))}</h1>
-        ${kopfAdresse}
-      </div>
-      <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
-    </header>
-
-    <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
-      ${bloecke}
-    </section>
-
-    <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
-      ${qrBlock}
-      ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
-      ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
-      <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
-    </footer>`;
+    /* Eine Seite je Liegenschaft. Kürzel, Adresse und — sofern gewünscht —
+       der Absender werden je Seite gesetzt; alles andere bleibt gleich. */
+    return serie.map(o => `<article data-page class="t-hinweis-page">${
+      blatt({ ...d,
+              objekt:o.id,
+              absender:d.serieAbsender === 'fest' ? d.absender : o.absender })
+    }</article>`).join('');
   }
 };
+
+/* --------------------------------------------------------------------------
+   Ein einzelnes Blatt. Einseitig ist das der ganze Aushang; in der Serie
+   wird es je Liegenschaft einmal erzeugt.
+   -------------------------------------------------------------------------- */
+function blatt(d){
+  const t = TONE[d.ton] || TONE.info;
+  const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+  const obj = objekt(d.objekt);
+  const adr = objektAdresse(d.objekt);
+
+  const kopfAdresse = (d.zeigeAdresse !== 'nein' && obj.code)
+    ? `<p class="t-hinweis-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : '';
+
+  const warnung = adresseFehlt(d.objekt)
+    ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
+       in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
+
+  const tags = d.sprachTags !== 'nein';
+  const gewaehlt = sprachObjekte(d.sprachen);
+
+  const bloecke = gewaehlt.map(sp => {
+    const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+    const text = fill(d[sp.id], d);
+    const kopf = fill(d[K] || '', d);
+    /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
+       nicht noch einmal. */
+    const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
+    if (!has(text) && !zeigeKopf) return '';
+    return `
+    <article class="t-hinweis-block" lang="${sp.id}">
+      ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
+      <div class="t-hinweis-blocktxt">
+        ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
+        ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
+      </div>
+    </article>`;
+  }).join('');
+
+  /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
+     Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
+     bleibt die Stelle leer statt das Blatt zu zerschiessen. */
+  let qrBlock = '';
+  if (has(d.qrZiel)){
+    const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
+      ? d.qrZiel : 'https://' + d.qrZiel;
+    const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
+    try {
+      qrBlock = `<div class="t-hinweis-qr">
+        ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
+        ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
+      </div>`;
+    } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
+  }
+
+  return `
+  ${warnung}
+  <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
+    <div class="t-hinweis-headtxt">
+      <p class="t-hinweis-abs">${esc(abs.name)}</p>
+      <h1>${esc(fill(d.title, d))}</h1>
+      ${kopfAdresse}
+    </div>
+    <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
+  </header>
+
+  <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
+    ${bloecke}
+  </section>
+
+  <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
+    ${qrBlock}
+    ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
+    ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
+    <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
+  </footer>`;
+}
 
 /* Damit der Hub weiss, wie viele Bausteine dahinterstehen. */
 export const PRESET_COUNT = PRESETS.length - 1;

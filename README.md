@@ -149,6 +149,22 @@ Feinverschiebung setzen — Drucker versetzen gerne um ein bis zwei Millimeter.
 Im Druckdialog zwingend **Ränder: keine** und **Skalierung: 100 %**; sobald der
 Browser das Blatt einpasst, stimmt kein Etikett mehr.
 
+**So funktioniert die Serie:** beim Hinweis-Aushang lassen sich mehrere
+Liegenschaften anhaken — dann wird aus einem Blatt eine Seite je Liegenschaft,
+jede mit ihrem Kürzel, ihrer Adresse und wahlweise ihrem eigenen Absender
+(A4 und B4 gehören zur Architektur, A14 zum Hotel, der Rest zur Immobilien AG).
+«Alle anhaken» nimmt alle elf auf einmal. Die Reihenfolge folgt `js/objekte.js`,
+nicht dem Anklicken. Für die Hauseingangstür oder eine angekündigte Kontrolle
+ist das ein Klick statt elf Durchgängen.
+
+**So funktioniert der Schneidebogen:** bei den Sicherheitszeichen lassen sich
+statt einem Schild je Blatt auch **2 oder 4 Schilder auf ein A4** setzen. Die
+gestrichelten Linien sind die Schnittkanten und werden mitgedruckt. Nicht
+gefüllte Plätze bleiben leer — geschnitten wird trotzdem an der Linie. Das ist
+nicht dasselbe wie «2 Seiten pro Blatt» im Druckertreiber: der verkleinert das
+ganze Blatt samt Rändern, hier ist jedes Feld von Anfang an für seine Grösse
+gesetzt.
+
 ---
 
 ## Sprachen auf dem Aushang
@@ -596,6 +612,9 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
   räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
   die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/serie.mjs`** — Serie über mehrere Liegenschaften (Seitenzahl,
+  Reihenfolge, Absender je Objekt, unbekannte Kürzel) und Schneidebogen
+  (Felder je Bogen, leere Plätze, Schnittkanten, Papierformat im Ausdruck)
 * **`tests/qr.mjs`** — ein eigenständiger Leser liest jede erzeugte Matrix
   wieder ein; alle 48 Kombinationen aus Version und Fehlerkorrekturstufe
   randvoll; Grenzfälle (leer, zu lang, unbekannte Stufe); der QR-Aushang im
