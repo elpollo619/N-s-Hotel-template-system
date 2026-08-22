@@ -1339,6 +1339,71 @@ a{color:var(--cyan)}
   color:var(--ink-soft);margin-right:1.2mm;
 }
 
+/* ==========================================================================
+   QR-Aushang — js/templates/qrplakat.js
+   Der Code trägt die Seite: gross, mittig, mit Luft ringsum. Die Ruhezone
+   steckt schon im SVG; das Weiss darunter darf nichts überlagern.
+   ========================================================================== */
+.t-qrp{display:flex;flex-direction:column;padding:0;background:#fff}
+.t-qrp-todo{
+  margin:0;padding:8px 14px;background:#FFF4E5;border-bottom:1px solid #F0D9B5;
+  font-size:11.5px;color:#8a5a12;
+}
+.t-qrp-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;
+  background:var(--navy);color:#fff;padding:16mm 18mm 14mm;
+}
+.t-qrp-eyebrow{margin:0 0 4mm;font-size:16pt;color:var(--cyan)}
+.t-qrp-head h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:44pt;
+  line-height:1;letter-spacing:-.015em;
+}
+.t-qrp-unter{margin:5mm 0 0;font-size:12.5pt;line-height:1.45;opacity:.86;max-width:52ch}
+.t-qrp-logo{flex:0 0 auto}
+
+.t-qrp-mitte{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6mm;padding:10mm 18mm;
+}
+.t-qrp-code{
+  display:grid;place-items:center;padding:5mm;background:#fff;
+  border:.5pt solid var(--line);border-radius:4mm;
+}
+.t-qrp-code .qr{display:block}
+.t-qrp-klar{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:15pt;
+  color:var(--navy);letter-spacing:.01em;text-align:center;overflow-wrap:anywhere;
+}
+
+.t-qrp-sprachen{
+  list-style:none;margin:0;padding:0 18mm;display:flex;flex-direction:column;gap:2.4mm;
+}
+.t-qrp-sprachen li{
+  display:flex;gap:4mm;align-items:baseline;font-size:10.5pt;line-height:1.4;
+  color:var(--ink-soft);
+}
+.t-qrp-sprachen li:first-child{font-size:12pt;color:var(--ink);font-weight:600}
+.t-qrp-sprachen span{
+  flex:0 0 9mm;font-family:var(--font-display);font-weight:700;font-size:8.5pt;
+  letter-spacing:.08em;color:var(--muted);
+}
+.t-qrp-foot{
+  display:flex;justify-content:space-between;gap:6mm;flex-wrap:wrap;
+  margin:8mm 18mm 12mm;padding-top:4mm;border-top:.5pt solid var(--line);
+  font-size:8pt;letter-spacing:.04em;color:var(--muted);
+}
+.t-qrp-foot span:first-child{font-weight:700;color:var(--navy)}
+
+/* Freiwilliger QR-Code in der Fusszeile des Hinweis-Aushangs. */
+.t-hinweis-foot.has-qr{grid-template-columns:auto 1fr;align-items:end;column-gap:7mm}
+.t-hinweis-foot.has-qr .t-hinweis-qr{grid-row:1 / span 3}
+.t-hinweis-qr{display:flex;flex-direction:column;align-items:center;gap:1.6mm}
+.t-hinweis-qr svg{display:block}
+.t-hinweis-qr span{
+  font-size:7.5pt;letter-spacing:.04em;color:var(--muted);text-align:center;
+  max-width:34mm;line-height:1.3;
+}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -2365,10 +2430,473 @@ function lines(x, y, w, n, gap = 7, col = '#C9CFDA', h = 3.4){
   return out;
 }
 
-/* ===== js/lib/qr-vorlagen.js ===== */
-/* Erzeugt von tools/make-qr.py — nicht von Hand aendern.
-   Inhalt: https://elpollo619.github.io/N-s-Hotel-template-system/ */
-const QR_VORLAGEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="segno"><path class="qrline" stroke="#2a3350" d="M0 0.5h7m1 0h2m1 0h3m1 0h2m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m1 0h1m1 0h2m1 0h1m2 0h3m4 0h1m2 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m2 0h2m1 0h1m2 0h1m2 0h2m4 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h3m1 0h2m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m7 0h1m3 0h2m6 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h3m1 0h1m2 0h1m5 0h2m-25 1h1m1 0h2m1 0h3m1 0h1m1 0h1m4 0h4m1 0h1m1 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m1 0h3m1 0h2m1 0h1m1 0h1m4 0h5m1 0h1m2 0h2m1 0h2m-31 1h2m1 0h5m1 0h1m1 0h1m2 0h1m1 0h3m3 0h4m1 0h3m1 0h2m-33 1h2m1 0h1m3 0h2m1 0h2m1 0h3m2 0h1m1 0h1m1 0h3m2 0h1m1 0h1m-29 1h2m1 0h1m1 0h2m2 0h2m5 0h2m1 0h1m1 0h4m1 0h3m1 0h2m-32 1h2m2 0h1m1 0h2m1 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h2m3 0h3m-32 1h2m1 0h4m8 0h2m2 0h3m4 0h1m1 0h1m-29 1h1m6 0h3m1 0h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h3m1 0h3m-31 1h4m2 0h1m1 0h1m5 0h2m2 0h1m1 0h2m1 0h1m1 0h2m1 0h3m-31 1h1m7 0h1m6 0h1m1 0h2m1 0h1m2 0h4m1 0h2m1 0h2m-33 1h1m5 0h1m1 0h3m1 0h6m3 0h2m1 0h2m1 0h2m1 0h1m-31 1h2m5 0h1m1 0h1m1 0h2m4 0h3m2 0h2m2 0h1m1 0h1m2 0h1m-31 1h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h1m4 0h3m1 0h1m4 0h3m-32 1h6m2 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m2 0h1m2 0h1m2 0h1m-31 1h1m1 0h1m1 0h1m1 0h4m1 0h2m1 0h3m2 0h7m2 0h3m-32 1h1m2 0h1m3 0h1m3 0h2m2 0h1m1 0h2m2 0h1m1 0h1m2 0h3m2 0h1m-33 1h1m2 0h1m2 0h1m5 0h4m1 0h1m1 0h1m3 0h7m1 0h1m-24 1h1m1 0h1m2 0h1m1 0h3m1 0h4m1 0h1m3 0h2m1 0h1m-32 1h7m1 0h1m2 0h3m2 0h1m2 0h2m2 0h2m1 0h1m1 0h1m-29 1h1m5 0h1m1 0h1m4 0h2m1 0h1m1 0h1m2 0h4m3 0h4m-32 1h1m1 0h3m1 0h1m5 0h4m1 0h1m1 0h1m1 0h8m1 0h2m-32 1h1m1 0h3m1 0h1m1 0h2m2 0h3m5 0h1m6 0h1m1 0h1m2 0h1m-33 1h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h2m1 0h2m1 0h1m2 0h2m2 0h1m-31 1h1m5 0h1m2 0h2m3 0h4m1 0h2m1 0h7m3 0h1m-33 1h7m1 0h4m1 0h5m1 0h5m4 0h1m1 0h1"/></svg>`;
+/* ===== js/lib/qr.js ===== */
+/* ==========================================================================
+   QR-Code — eigener Erzeuger, ohne fremde Bibliothek
+   --------------------------------------------------------------------------
+   Warum selbst geschrieben? Die Vorlagen-Zentrale darf nichts nachladen:
+   sie läuft auf GitHub Pages, aber auch als standalone.html per Doppelklick
+   ohne Netz. Ein QR-Dienst im Internet fiele damit aus — und er bekäme
+   nebenbei jedes WLAN-Passwort zu sehen, das jemand eintippt. Hier verlässt
+   nichts den eigenen Rechner.
+
+   Umfang: Byte-Modus (UTF-8), Versionen 1 bis 12, alle vier Fehlerkorrektur-
+   stufen. Das reicht für Adressen, WLAN-Zugänge und Telefonnummern — bis
+   rund 460 Zeichen. Wer mehr braucht, bekommt eine klare Fehlermeldung
+   statt eines stillen Fehldrucks.
+
+   Aufbau nach ISO/IEC 18004. Die Zahlentafeln stehen unten; jede einzelne
+   Kombination aus Version und Stufe wird in tests/qr.mjs erzeugt und mit
+   einem echten Lesegerät (OpenCV) wieder eingelesen — eine falsche Zahl in
+   einer Tafel fällt damit auf, statt im Aushang zu landen.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Galois-Feld GF(256) — die Rechengrundlage der Reed-Solomon-Korrektur.
+   -------------------------------------------------------------------------- */
+const QR_EXP = new Uint8Array(512);
+const QR_LOG = new Uint8Array(256);
+(function qrFeldAufbauen(){
+  let x = 1;
+  for (let i = 0; i < 255; i++){
+    QR_EXP[i] = x;
+    QR_LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11D;          // Generatorpolynom x^8+x^4+x^3+x^2+1
+  }
+  for (let i = 255; i < 512; i++) QR_EXP[i] = QR_EXP[i - 255];
+})();
+
+function qrMal(a, b){
+  return (a === 0 || b === 0) ? 0 : QR_EXP[QR_LOG[a] + QR_LOG[b]];
+}
+
+/** Generatorpolynom für n Korrekturzeichen.
+    Zurückgegeben mit dem führenden Koeffizienten (immer 1) an Position 0 —
+    so wie die Divisionsschleife in qrKorrektur() es erwartet. */
+function qrGenerator(n){
+  let poly = [1];
+  for (let i = 0; i < n; i++){
+    const naechste = new Array(poly.length + 1).fill(0);
+    for (let j = 0; j < poly.length; j++){
+      naechste[j]     ^= qrMal(poly[j], QR_EXP[i]);
+      naechste[j + 1] ^= poly[j];
+    }
+    poly = naechste;
+  }
+  return poly.reverse();
+}
+
+/** Korrekturzeichen zu einem Datenblock. */
+function qrKorrektur(daten, anzahl){
+  const gen = qrGenerator(anzahl);
+  const rest = new Array(anzahl).fill(0);
+  for (const wert of daten){
+    const faktor = wert ^ rest[0];
+    rest.shift();
+    rest.push(0);
+    if (faktor !== 0){
+      for (let i = 0; i < anzahl; i++) rest[i] ^= qrMal(gen[i + 1], faktor);
+    }
+  }
+  return rest;
+}
+
+/* --------------------------------------------------------------------------
+   Zahlentafeln aus der Norm.
+   Je Version und Stufe: [Korrekturzeichen je Block,
+                          Blöcke Gruppe 1, Datenzeichen je Block Gruppe 1,
+                          Blöcke Gruppe 2, Datenzeichen je Block Gruppe 2]
+   -------------------------------------------------------------------------- */
+const QR_STUFEN = { L:0, M:1, Q:2, H:3 };
+
+const QR_BLOECKE = {
+   1:{ L:[ 7,1, 19,0,  0], M:[10,1, 16,0,  0], Q:[13,1, 13,0,  0], H:[17,1,  9,0,  0] },
+   2:{ L:[10,1, 34,0,  0], M:[16,1, 28,0,  0], Q:[22,1, 22,0,  0], H:[28,1, 16,0,  0] },
+   3:{ L:[15,1, 55,0,  0], M:[26,1, 44,0,  0], Q:[18,2, 17,0,  0], H:[22,2, 13,0,  0] },
+   4:{ L:[20,1, 80,0,  0], M:[18,2, 32,0,  0], Q:[26,2, 24,0,  0], H:[16,4,  9,0,  0] },
+   5:{ L:[26,1,108,0,  0], M:[24,2, 43,0,  0], Q:[18,2, 15,2, 16], H:[22,2, 11,2, 12] },
+   6:{ L:[18,2, 68,0,  0], M:[16,4, 27,0,  0], Q:[24,4, 19,0,  0], H:[28,4, 15,0,  0] },
+   7:{ L:[20,2, 78,0,  0], M:[18,4, 31,0,  0], Q:[18,2, 14,4, 15], H:[26,4, 13,1, 14] },
+   8:{ L:[24,2, 97,0,  0], M:[22,2, 38,2, 39], Q:[22,4, 18,2, 19], H:[26,4, 14,2, 15] },
+   9:{ L:[30,2,116,0,  0], M:[22,3, 36,2, 37], Q:[20,4, 16,4, 17], H:[24,4, 12,4, 13] },
+  10:{ L:[18,2, 68,2, 69], M:[26,4, 43,1, 44], Q:[24,6, 19,2, 20], H:[28,6, 15,2, 16] },
+  11:{ L:[20,4, 81,0,  0], M:[30,1, 50,4, 51], Q:[28,4, 22,4, 23], H:[24,3, 12,8, 13] },
+  12:{ L:[24,2, 92,2, 93], M:[22,6, 36,2, 37], Q:[26,4, 20,6, 21], H:[28,7, 14,4, 15] }
+};
+
+/** Mittelpunkte der Ausrichtungsmuster je Version. */
+const QR_AUSRICHTUNG = {
+   1:[], 2:[6,18], 3:[6,22], 4:[6,26], 5:[6,30], 6:[6,34],
+   7:[6,22,38], 8:[6,24,42], 9:[6,26,46], 10:[6,28,50], 11:[6,30,54], 12:[6,32,58]
+};
+
+const QR_MAX_VERSION = 12;
+
+/** Datenzeichen, die in eine Version bei einer Stufe passen. */
+function qrKapazitaet(version, stufe){
+  const [, b1, d1, b2, d2] = QR_BLOECKE[version][stufe];
+  return b1 * d1 + b2 * d2;
+}
+
+/* --------------------------------------------------------------------------
+   Bitfolge aus dem Text
+   -------------------------------------------------------------------------- */
+function qrBits(bytes, version, stufe){
+  const kapazitaet = qrKapazitaet(version, stufe);
+  const laengenBits = version <= 9 ? 8 : 16;
+  const bits = [];
+  const schreibe = (wert, anzahl) => {
+    for (let i = anzahl - 1; i >= 0; i--) bits.push((wert >> i) & 1);
+  };
+
+  schreibe(0b0100, 4);                    // Byte-Modus
+  schreibe(bytes.length, laengenBits);
+  for (const b of bytes) schreibe(b, 8);
+
+  /* Abschluss: bis zu vier Nullen, dann auf volle Zeichen auffüllen. */
+  const maxBits = kapazitaet * 8;
+  for (let i = 0; i < 4 && bits.length < maxBits; i++) bits.push(0);
+  while (bits.length % 8 !== 0) bits.push(0);
+
+  const zeichen = [];
+  for (let i = 0; i < bits.length; i += 8){
+    let byte = 0;
+    for (let j = 0; j < 8; j++) byte = (byte << 1) | bits[i + j];
+    zeichen.push(byte);
+  }
+  /* Auffüllzeichen im Wechsel, wie die Norm es vorschreibt. */
+  const fueller = [0xEC, 0x11];
+  for (let i = 0; zeichen.length < kapazitaet; i++) zeichen.push(fueller[i % 2]);
+  return zeichen;
+}
+
+/** Daten- und Korrekturzeichen verschränken. */
+function qrVerschraenken(zeichen, version, stufe){
+  const [ec, b1, d1, b2, d2] = QR_BLOECKE[version][stufe];
+  const bloecke = [];
+  let pos = 0;
+  for (let i = 0; i < b1; i++){ bloecke.push(zeichen.slice(pos, pos + d1)); pos += d1; }
+  for (let i = 0; i < b2; i++){ bloecke.push(zeichen.slice(pos, pos + d2)); pos += d2; }
+
+  const korrektur = bloecke.map(b => qrKorrektur(b, ec));
+  const aus = [];
+  const maxDaten = Math.max(d1, d2);
+  for (let i = 0; i < maxDaten; i++){
+    for (const b of bloecke) if (i < b.length) aus.push(b[i]);
+  }
+  for (let i = 0; i < ec; i++){
+    for (const k of korrektur) aus.push(k[i]);
+  }
+  return aus;
+}
+
+/* --------------------------------------------------------------------------
+   Muster ins Raster setzen
+   -------------------------------------------------------------------------- */
+function qrLeeresRaster(groesse){
+  return { feld: Array.from({ length:groesse }, () => new Array(groesse).fill(null)),
+           belegt: Array.from({ length:groesse }, () => new Array(groesse).fill(false)),
+           n: groesse };
+}
+
+function qrSetze(r, y, x, wert, funktion){
+  if (y < 0 || x < 0 || y >= r.n || x >= r.n) return;
+  r.feld[y][x] = wert ? 1 : 0;
+  if (funktion) r.belegt[y][x] = true;
+}
+
+function qrSucher(r, y0, x0){
+  for (let y = -1; y <= 7; y++){
+    for (let x = -1; x <= 7; x++){
+      const innen = y >= 0 && y <= 6 && x >= 0 && x <= 6;
+      const rand  = y === 0 || y === 6 || x === 0 || x === 6;
+      const kern  = y >= 2 && y <= 4 && x >= 2 && x <= 4;
+      qrSetze(r, y0 + y, x0 + x, innen && (rand || kern), true);
+    }
+  }
+}
+
+function qrAusrichtung(r, version){
+  const mitten = QR_AUSRICHTUNG[version];
+  for (const my of mitten){
+    for (const mx of mitten){
+      /* Nicht über die Suchermuster legen. */
+      const beiSucher = (my <= 8 && mx <= 8)
+        || (my <= 8 && mx >= r.n - 9) || (my >= r.n - 9 && mx <= 8);
+      if (beiSucher) continue;
+      for (let y = -2; y <= 2; y++){
+        for (let x = -2; x <= 2; x++){
+          const an = Math.max(Math.abs(y), Math.abs(x)) !== 1;
+          qrSetze(r, my + y, mx + x, an, true);
+        }
+      }
+    }
+  }
+}
+
+function qrTakt(r){
+  for (let i = 8; i < r.n - 8; i++){
+    const an = i % 2 === 0;
+    qrSetze(r, 6, i, an, true);
+    qrSetze(r, i, 6, an, true);
+  }
+}
+
+/** Die 15 Bits der Formatangabe, BCH-gesichert. */
+function qrFormatBits(stufe, maske){
+  const stufenBits = { L:0b01, M:0b00, Q:0b11, H:0b10 }[stufe];
+  let daten = (stufenBits << 3) | maske;
+  let rest = daten << 10;
+  for (let i = 14; i >= 10; i--){
+    if ((rest >> i) & 1) rest ^= 0b10100110111 << (i - 10);
+  }
+  return ((daten << 10) | rest) ^ 0b101010000010010;
+}
+
+function qrFormatSetzen(r, stufe, maske){
+  const bits = qrFormatBits(stufe, maske);
+  const b = i => (bits >> i) & 1;
+
+  /* Erste Kopie: senkrecht neben dem linken oberen Sucher, dann waagrecht
+     darunter. Zeile und Spalte nicht vertauschen — genau daran scheitert
+     sonst jedes Lesegerät, ohne dass das Muster falsch aussieht. */
+  for (let i = 0; i <= 5; i++) qrSetze(r, i, 8, b(i), true);
+  qrSetze(r, 7, 8, b(6), true);
+  qrSetze(r, 8, 8, b(7), true);
+  qrSetze(r, 8, 7, b(8), true);
+  for (let i = 9; i <= 14; i++) qrSetze(r, 8, 14 - i, b(i), true);
+
+  /* Zweite Kopie: waagrecht am rechten Rand, senkrecht unten links. */
+  for (let i = 0; i <= 7; i++)  qrSetze(r, 8, r.n - 1 - i, b(i), true);
+  for (let i = 8; i <= 14; i++) qrSetze(r, r.n - 15 + i, 8, b(i), true);
+  qrSetze(r, r.n - 8, 8, 1, true);            // immer dunkles Feld
+}
+
+/** Ab Version 7 zusätzlich die Versionsangabe. */
+function qrVersionSetzen(r, version){
+  if (version < 7) return;
+  let rest = version << 12;
+  for (let i = 17; i >= 12; i--){
+    if ((rest >> i) & 1) rest ^= 0b1111100100101 << (i - 12);
+  }
+  const bits = (version << 12) | rest;
+  for (let i = 0; i < 18; i++){
+    const an = (bits >> i) & 1;
+    const y = Math.floor(i / 3), x = i % 3;
+    qrSetze(r, y, r.n - 11 + x, an, true);
+    qrSetze(r, r.n - 11 + x, y, an, true);
+  }
+}
+
+const QR_MASKEN = [
+  (y, x) => (y + x) % 2 === 0,
+  (y, x) => y % 2 === 0,
+  (y, x) => x % 3 === 0,
+  (y, x) => (y + x) % 3 === 0,
+  (y, x) => (Math.floor(y / 2) + Math.floor(x / 3)) % 2 === 0,
+  (y, x) => ((y * x) % 2) + ((y * x) % 3) === 0,
+  (y, x) => (((y * x) % 2) + ((y * x) % 3)) % 2 === 0,
+  (y, x) => (((y + x) % 2) + ((y * x) % 3)) % 2 === 0
+];
+
+/** Datenbits im Zickzack von rechts unten nach links oben einsetzen. */
+function qrDatenSetzen(r, zeichen, maske){
+  const maskeFn = QR_MASKEN[maske];
+  let bitIndex = 0;
+  const naechstesBit = () => {
+    if (bitIndex >= zeichen.length * 8) return 0;
+    const bit = (zeichen[bitIndex >> 3] >> (7 - (bitIndex & 7))) & 1;
+    bitIndex++;
+    return bit;
+  };
+
+  let aufwaerts = true;
+  for (let rechts = r.n - 1; rechts >= 1; rechts -= 2){
+    if (rechts === 6) rechts = 5;             // die Taktspalte überspringen
+    for (let schritt = 0; schritt < r.n; schritt++){
+      const y = aufwaerts ? r.n - 1 - schritt : schritt;
+      for (const x of [rechts, rechts - 1]){
+        if (r.belegt[y][x]) continue;
+        const bit = naechstesBit();
+        r.feld[y][x] = maskeFn(y, x) ? bit ^ 1 : bit;
+      }
+    }
+    aufwaerts = !aufwaerts;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Maskenbewertung — die Norm nennt vier Strafregeln.
+   -------------------------------------------------------------------------- */
+function qrStrafe(r){
+  const n = r.n, f = r.feld;
+  let strafe = 0;
+
+  /* 1. Reihen aus fünf und mehr gleichen Feldern. */
+  const reihe = (holen) => {
+    for (let a = 0; a < n; a++){
+      let lauf = 1;
+      for (let b = 1; b < n; b++){
+        if (holen(a, b) === holen(a, b - 1)) lauf++;
+        else { if (lauf >= 5) strafe += 3 + (lauf - 5); lauf = 1; }
+      }
+      if (lauf >= 5) strafe += 3 + (lauf - 5);
+    }
+  };
+  reihe((a, b) => f[a][b]);
+  reihe((a, b) => f[b][a]);
+
+  /* 2. Gleichfarbige Zweierblöcke. */
+  for (let y = 0; y < n - 1; y++){
+    for (let x = 0; x < n - 1; x++){
+      const v = f[y][x];
+      if (v === f[y][x + 1] && v === f[y + 1][x] && v === f[y + 1][x + 1]) strafe += 3;
+    }
+  }
+
+  /* 3. Sucher-ähnliche Folgen. */
+  const muster1 = [1,0,1,1,1,0,1,0,0,0,0];
+  const muster2 = [0,0,0,0,1,0,1,1,1,0,1];
+  const passt = (holen, a, b, muster) => {
+    for (let i = 0; i < 11; i++) if (holen(a, b + i) !== muster[i]) return false;
+    return true;
+  };
+  for (let a = 0; a < n; a++){
+    for (let b = 0; b <= n - 11; b++){
+      if (passt((p, q) => f[p][q], a, b, muster1)) strafe += 40;
+      if (passt((p, q) => f[p][q], a, b, muster2)) strafe += 40;
+      if (passt((p, q) => f[q][p], a, b, muster1)) strafe += 40;
+      if (passt((p, q) => f[q][p], a, b, muster2)) strafe += 40;
+    }
+  }
+
+  /* 4. Abweichung von der Hälfte dunkler Felder. */
+  let dunkel = 0;
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (f[y][x]) dunkel++;
+  const anteil = (dunkel * 100) / (n * n);
+  strafe += Math.floor(Math.abs(anteil - 50) / 5) * 10;
+
+  return strafe;
+}
+
+/* --------------------------------------------------------------------------
+   Öffentlich
+   -------------------------------------------------------------------------- */
+
+/**
+ * QR-Code als Matrix aus 0 und 1 erzeugen.
+ * @param {string} text     der Inhalt (wird als UTF-8 kodiert)
+ * @param {string} stufe    'L' | 'M' | 'Q' | 'H' — Fehlerkorrektur
+ * @returns {{feld:number[][], n:number, version:number, stufe:string}}
+ */
+function qrMatrix(text, stufe = 'M'){
+  if (!(stufe in QR_STUFEN)) throw new Error(`Unbekannte Fehlerkorrekturstufe: ${stufe}`);
+  const bytes = Array.from(new TextEncoder().encode(String(text ?? '')));
+  if (!bytes.length) throw new Error('Der QR-Code braucht einen Inhalt.');
+
+  let version = 0;
+  for (let v = 1; v <= QR_MAX_VERSION; v++){
+    const laengenBits = v <= 9 ? 8 : 16;
+    const noetig = Math.ceil((4 + laengenBits + bytes.length * 8) / 8);
+    if (noetig <= qrKapazitaet(v, stufe)){ version = v; break; }
+  }
+  if (!version){
+    throw new Error(`Der Text ist zu lang für einen QR-Code dieser Stufe `
+      + `(${bytes.length} Zeichen, möglich sind rund ${qrKapazitaet(QR_MAX_VERSION, stufe)}). `
+      + `Kürzer fassen oder eine niedrigere Fehlerkorrektur wählen.`);
+  }
+
+  const zeichen = qrVerschraenken(qrBits(bytes, version, stufe), version, stufe);
+  const groesse = version * 4 + 17;
+
+  /* Alle acht Masken durchrechnen und die ruhigste behalten. */
+  let beste = null;
+  for (let maske = 0; maske < 8; maske++){
+    const r = qrLeeresRaster(groesse);
+    qrSucher(r, 0, 0);
+    qrSucher(r, 0, groesse - 7);
+    qrSucher(r, groesse - 7, 0);
+    qrAusrichtung(r, version);
+    qrTakt(r);
+    qrFormatSetzen(r, stufe, maske);
+    qrVersionSetzen(r, version);
+    qrDatenSetzen(r, zeichen, maske);
+    const strafe = qrStrafe(r);
+    if (!beste || strafe < beste.strafe) beste = { r, strafe };
+  }
+
+  return { feld:beste.r.feld, n:groesse, version, stufe };
+}
+
+/**
+ * QR-Code als SVG-Zeichenkette.
+ * @param {string} text
+ * @param {object} opt  {stufe, groesse (CSS-Mass), farbe, rand (Module)}
+ */
+function qrSvg(text, opt = {}){
+  const { stufe = 'M', groesse = '30mm', farbe = '#1A1A1A', rand = 4 } = opt;
+  const m = qrMatrix(text, stufe);
+  const kante = m.n + rand * 2;
+
+  /* Zusammenhängende dunkle Felder je Zeile zu einem Rechteck verbinden —
+     das spart im Ausdruck und in standalone.html eine Menge Zeichen. */
+  let pfad = '';
+  for (let y = 0; y < m.n; y++){
+    let x = 0;
+    while (x < m.n){
+      if (!m.feld[y][x]){ x++; continue; }
+      let breite = 1;
+      while (x + breite < m.n && m.feld[y][x + breite]) breite++;
+      pfad += `M${x + rand} ${y + rand}h${breite}v1h-${breite}z`;
+      x += breite;
+    }
+  }
+
+  return `<svg class="qr" viewBox="0 0 ${kante} ${kante}" width="${groesse}" height="${groesse}"
+    xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">`
+    + `<rect width="${kante}" height="${kante}" fill="#fff"/>`
+    + `<path d="${pfad}" fill="${farbe}"/></svg>`;
+}
+
+/* --------------------------------------------------------------------------
+   Fertige Inhalte
+   -------------------------------------------------------------------------- */
+
+/** Sonderzeichen im WLAN-Format maskieren: \ ; , : " */
+function qrWlanEscape(s){
+  return String(s ?? '').replace(/([\;,:"])/g, '\\$1');
+}
+
+/**
+ * WLAN-Zugang. Handys verbinden sich damit ohne Abtippen.
+ * @param {string} netz    SSID
+ * @param {string} pass    Passwort ('' bei offenem Netz)
+ * @param {string} art     'WPA' | 'WEP' | 'nopass'
+ * @param {boolean} versteckt
+ */
+function qrWlan(netz, pass, art = 'WPA', versteckt = false){
+  const typ = pass ? art : 'nopass';
+  return `WIFI:T:${typ};S:${qrWlanEscape(netz)};`
+    + (pass ? `P:${qrWlanEscape(pass)};` : '')
+    + (versteckt ? 'H:true;' : '') + ';';
+}
+
+/** Telefonnummer zum Antippen. */
+function qrTelefon(nummer){
+  return 'tel:' + String(nummer ?? '').replace(/[^\d+]/g, '');
+}
+
+/** E-Mail-Adresse. */
+function qrMail(adresse, betreff){
+  const a = 'mailto:' + String(adresse ?? '').trim();
+  return betreff ? a + '?subject=' + encodeURIComponent(betreff) : a;
+}
+
+/** Adresse in der Karten-App. */
+function qrOrt(adresse){
+  return 'geo:0,0?q=' + encodeURIComponent(String(adresse ?? '').trim());
+}
 
 /* ===== js/lib/sicherheitszeichen.js ===== */
 /* ==========================================================================
@@ -5641,6 +6169,7 @@ const gaestemappe = {
 
 
 
+
 const TONE = {
   info:    { bg:'var(--navy)',  fg:'#fff' },
   warnung: { bg:'var(--cyan)',  fg:'#fff' },
@@ -5725,6 +6254,12 @@ const hinweis = {
     { k:'titelEs', label:'Überschrift Español', type:'text' },
     { k:'es', label:'Text Español', type:'textarea' },
 
+    { t:'group', label:'QR-Code (freiwillig)' },
+    { t:'note', label:'Zum Beispiel beim Baustein «Zu vermieten»: die Adresse des Inserats. Leer lassen heisst kein Code.' },
+    { k:'qrZiel',   label:'Adresse oder Text im Code', type:'text' },
+    { k:'qrMass',   label:'Kantenlänge in mm', type:'number', min:15, max:60, step:1 },
+    { k:'qrLegende',label:'Zeile unter dem Code', type:'text' },
+
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
     { k:'footer', label:'Absenderzeile', type:'text',
@@ -5755,6 +6290,9 @@ const hinweis = {
     it:'Se accertiamo che lʼimpianto di rilevazione incendi è stato manomesso, il contratto di locazione verrà risolto con effetto immediato per messa in pericolo dellʼincolumità delle persone.',
     pt:'Se constatarmos que o sistema de deteção de incêndio foi manipulado, o contrato de arrendamento será rescindido de imediato por colocar vidas em perigo.',
     es:'Si comprobamos que se ha manipulado el sistema de detección de incendios, el contrato de arrendamiento se rescindirá de inmediato por poner en peligro la vida de las personas.',
+    qrZiel:'',
+    qrMass:26,
+    qrLegende:'',
     gruss:'Die Verwaltung',
     footer:''
   },
@@ -5823,6 +6361,22 @@ const hinweis = {
       </article>`;
     }).join('');
 
+    /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
+       Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
+       bleibt die Stelle leer statt das Blatt zu zerschiessen. */
+    let qrBlock = '';
+    if (has(d.qrZiel)){
+      const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
+        ? d.qrZiel : 'https://' + d.qrZiel;
+      const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
+      try {
+        qrBlock = `<div class="t-hinweis-qr">
+          ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
+          ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
+        </div>`;
+      } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
+    }
+
     return `
     ${warnung}
     <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
@@ -5838,7 +6392,8 @@ const hinweis = {
       ${bloecke}
     </section>
 
-    <footer class="t-hinweis-foot">
+    <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
+      ${qrBlock}
       ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
       ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
       <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
@@ -6789,15 +7344,245 @@ const etiketten = {
   }
 };
 
+/* ===== js/templates/qrplakat.js ===== */
+/* QR-Aushang · A4 hoch — ein grosser Code und eine kurze Anleitung.
+   Für alles, was sonst abgetippt werden muss: WLAN-Zugang, Gästemappe,
+   Wohnungsinserat, Telefonnummer, Adresse fürs Navi.
+
+   Der Code wird im Browser gerechnet (js/lib/qr.js). Es wird kein Dienst im
+   Internet gefragt — das ist beim WLAN-Passwort keine Kleinigkeit: es bleibt
+   im eigenen Browser und geht nirgendwohin. Gespeichert wird es wie jeder
+   andere Entwurf im localStorage dieses Geräts; wer das nicht will, tippt es
+   vor dem Drucken ein und drückt danach «Zurücksetzen».
+
+   ACHTUNG beim Verschicken: der Teilen-Link trägt den ganzen Entwurf in der
+   Adresse — also auch das Passwort. Für einen WLAN-Aushang lieber das
+   fertige PDF weitergeben. */
+
+
+
+
+
+
+/** Aus dem Formular die Zeile bauen, die im Code steckt. */
+function qrInhalt(d){
+  switch (d.art){
+    case 'wlan':
+      return has(d.wlanNetz) ? qrWlan(d.wlanNetz, d.wlanPass || '', d.wlanArt || 'WPA') : '';
+    case 'telefon':
+      return has(d.telefon) ? qrTelefon(d.telefon) : '';
+    case 'mail':
+      return has(d.mail) ? qrMail(d.mail, d.mailBetreff) : '';
+    case 'ort':
+      return has(d.ort) ? qrOrt(d.ort) : '';
+    case 'text':
+      return String(d.freitext || '');
+    default: {
+      if (!has(d.url)) return '';
+      return /^[a-z]+:\/\//i.test(d.url) ? d.url : 'https://' + d.url;
+    }
+  }
+}
+
+/** Was unter dem Code zum Abtippen steht — nie das Passwort. */
+function qrKlartext(d){
+  switch (d.art){
+    case 'wlan':    return has(d.wlanNetz) ? 'WLAN: ' + d.wlanNetz : '';
+    case 'telefon': return d.telefon || '';
+    case 'mail':    return d.mail || '';
+    case 'ort':     return d.ort || '';
+    case 'text':    return '';
+    default:        return d.url || '';
+  }
+}
+
+const qrplakat = {
+  id:'qrplakat',
+  title:'QR-Aushang',
+  sub:'WLAN, Link, Telefon oder Adresse als grosser Code · A4 hoch',
+  badge:'QR-Code',
+  badgeCyan:true,
+  page:'a4',
+  root:'t-qrp',
+  fern:true,   /* Schild — Leseabstand anzeigen */
+  cat:'hilfe',
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="62" fill="#2A3350"/>
+    <rect x="18" y="18" width="118" height="14" rx="4" fill="#fff" opacity=".92"/>
+    <rect x="18" y="40" width="76" height="8" rx="4" fill="#01B1E2"/>
+    <rect x="43" y="86" width="124" height="124" rx="6" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    ${[0,1,2,3,4,5,6,7,8,9].map(r => [0,1,2,3,4,5,6,7,8,9].map(c =>
+      ((r * 5 + c * 3 + (r * c) % 4) % 3 < 2)
+        ? `<rect x="${51 + c * 11}" y="${94 + r * 11}" width="9" height="9" fill="#2A3350"/>` : '').join('')).join('')}
+    <rect x="51" y="94" width="31" height="31" fill="#fff"/>
+    <rect x="51" y="94" width="31" height="31" fill="none" stroke="#2A3350" stroke-width="7"/>
+    <rect x="128" y="94" width="31" height="31" fill="#fff"/>
+    <rect x="128" y="94" width="31" height="31" fill="none" stroke="#2A3350" stroke-width="7"/>
+    <rect x="51" y="171" width="31" height="31" fill="#fff"/>
+    <rect x="51" y="171" width="31" height="31" fill="none" stroke="#2A3350" stroke-width="7"/>
+    <rect x="55" y="226" width="100" height="9" rx="4.5" fill="#2A3350"/>
+    <rect x="40" y="248" width="130" height="6" rx="3" fill="#C9CFDA"/>
+    <rect x="58" y="262" width="94" height="6" rx="3" fill="#E5E8ED"/>`),
+
+  fields:[
+    { t:'group', label:'Was steckt im Code' },
+    { k:'art', label:'Art', type:'select', options:[
+      { v:'adresse', t:'Internetadresse' },
+      { v:'wlan',    t:'WLAN-Zugang' },
+      { v:'telefon', t:'Telefonnummer' },
+      { v:'mail',    t:'E-Mail-Adresse' },
+      { v:'ort',     t:'Adresse für die Karten-App' },
+      { v:'text',    t:'Freier Text' }
+    ] },
+    { t:'note', label:'Nur die Felder der gewählten Art werden verwendet — die übrigen dürfen stehen bleiben.' },
+
+    { k:'url', label:'Internetadresse', type:'text',
+      hint:'Ohne «https://» geht auch; es wird ergänzt.' },
+
+    { k:'wlanNetz', label:'WLAN-Name (SSID)', type:'text' },
+    { k:'wlanPass', label:'WLAN-Passwort', type:'text',
+      hint:'Bleibt in diesem Browser und geht an keinen Dienst. Es steht aber im gedruckten Code und im Teilen-Link — den Aushang deshalb als PDF weitergeben, nicht als Link.' },
+    { k:'wlanArt', label:'Verschlüsselung', type:'select',
+      options:[{v:'WPA',t:'WPA / WPA2 / WPA3'},{v:'WEP',t:'WEP'},{v:'nopass',t:'offen'}] },
+
+    { k:'telefon',    label:'Telefonnummer', type:'text' },
+    { k:'mail',       label:'E-Mail-Adresse', type:'text' },
+    { k:'mailBetreff',label:'Betreff (freiwillig)', type:'text' },
+    { k:'ort',        label:'Adresse', type:'text' },
+    { k:'freitext',   label:'Freier Text', type:'textarea' },
+
+    { t:'group', label:'Code' },
+    { k:'stufe', label:'Fehlerkorrektur', type:'select', options:[
+      { v:'L', t:'L — klein, wenig Reserve' },
+      { v:'M', t:'M — normal' },
+      { v:'Q', t:'Q — robust (empfohlen für Aushänge)' },
+      { v:'H', t:'H — sehr robust, grösstes Muster' }
+    ], hint:'Höhere Stufe verzeiht Knicke und Fingerabdrücke, macht das Muster aber feiner.' },
+    { k:'qrMass', label:'Kantenlänge in mm', type:'number', min:20, max:150, step:5 },
+    { k:'zeigeText', label:'Zeile zum Abtippen zeigen', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text' },
+    { k:'unter',   label:'Untertitel', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen der Anleitung', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
+    { k:'de', label:'Anleitung Deutsch',   type:'text' },
+    { k:'en', label:'Anleitung English',   type:'text' },
+    { k:'fr', label:'Anleitung Français',  type:'text' },
+    { k:'it', label:'Anleitung Italiano',  type:'text' },
+    { k:'pt', label:'Anleitung Português', type:'text' },
+    { k:'es', label:'Anleitung Español',   type:'text' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() }
+  ],
+
+  defaults:{
+    art:'wlan',
+    url:'elpollo619.github.io/N-s-Hotel-template-system',
+    wlanNetz:'Gast',
+    wlanPass:'',
+    wlanArt:'WPA',
+    telefon:'+41 31 951 85 54',
+    mail:'info@ns-hotel.ch',
+    mailBetreff:'',
+    ort:'Allmendstrasse 14, 3210 Kerzers',
+    freitext:'',
+    stufe:'Q',
+    qrMass:88,
+    zeigeText:'ja',
+    eyebrow:'Einfach scannen',
+    titel:'WLAN',
+    unter:'Kamera auf den Code halten — das Handy verbindet sich von selbst.',
+    sprachen:['de','en','fr','it'],
+    sprachSet:'',
+    de:'Kamera öffnen, auf den Code halten, auf die Meldung tippen.',
+    en:'Open the camera, point it at the code, tap the message.',
+    fr:'Ouvrez lʼappareil photo, visez le code, touchez le message.',
+    it:'Aprite la fotocamera, inquadrate il codice, toccate il messaggio.',
+    pt:'Abra a câmara, aponte para o código, toque na mensagem.',
+    es:'Abra la cámara, apunte al código y toque el mensaje.',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  actions:{
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const inhalt = qrInhalt(d);
+    const mass = Math.max(20, Math.min(150, Number(d.qrMass) || 88));
+
+    let code = '';
+    let warnung = '';
+    if (!inhalt){
+      warnung = 'Für diese Art fehlt noch die Angabe — der Code bleibt leer.';
+    } else {
+      try {
+        code = qrSvg(inhalt, { stufe:d.stufe || 'Q', groesse:mass + 'mm', farbe:'#1A1A1A' });
+      } catch (err){
+        warnung = err.message;
+      }
+    }
+
+    const klartext = d.zeigeText !== 'nein' ? qrKlartext(d) : '';
+    const zeilen = sprachObjekte(d.sprachen)
+      .map(sp => has(d[sp.id])
+        ? `<li lang="${sp.id}"><span>${esc(sp.kurz)}</span>${esc(d[sp.id])}</li>` : '')
+      .join('');
+
+    return `
+    ${warnung ? `<p class="t-qrp-todo no-print">${esc(warnung)}</p>` : ''}
+    <header class="t-qrp-head">
+      <div>
+        ${has(d.eyebrow) ? `<p class="eyebrow t-qrp-eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(d.titel)}</h1>
+        ${has(d.unter) ? `<p class="t-qrp-unter">${fmt(d.unter)}</p>` : ''}
+      </div>
+      ${istHotel(d.absender) ? `<div class="t-qrp-logo">${logo('white', 34)}</div>` : ''}
+    </header>
+
+    <div class="t-qrp-mitte">
+      <div class="t-qrp-code">${code}</div>
+      ${has(klartext) ? `<p class="t-qrp-klar">${esc(klartext)}</p>` : ''}
+    </div>
+
+    ${zeilen ? `<ul class="t-qrp-sprachen">${zeilen}</ul>` : ''}
+
+    <footer class="t-qrp-foot">
+      <span>${istHotel(d.absender) ? esc(abs.name) : esc(abs.legal)}</span>
+      <span>${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+    </footer>`;
+  }
+};
+
 /* ===== js/templates/kurzanleitung.js ===== */
 /* Kurzanleitung · A4 hoch — der Aushang für die eigene Bürowand.
    Beantwortet die zwei Fragen, die im Haus wirklich gestellt werden:
    wo finde ich das Ding, und wie drucke ich damit etwas aus.
 
-   Der QR-Code ist fest eingebettet (js/lib/qr-vorlagen.js, erzeugt von
-   tools/make-qr.py). Kein QR-Dienst im Internet, kein Nachladen — so
-   erscheint er auch in standalone.html, das per file:// nichts nachladen
-   dürfte. Wenn sich die Adresse ändert: Skript neu laufen lassen. */
+   Der QR-Code entsteht beim Zeichnen aus genau der Adresse, die im Feld
+   darüber steht (js/lib/qr.js). Damit können Code und abgetippte Adresse
+   nicht mehr auseinanderlaufen — früher lag der Code als erzeugte Datei
+   daneben und musste von Hand nachgeführt werden.
+
+   Kein QR-Dienst im Internet: der Code wird im Browser gerechnet. Das ist
+   nötig, weil standalone.html per file:// nichts nachladen dürfte — und
+   nebenbei sieht kein fremder Server, was hier kodiert wird. */
 
 
 
@@ -6835,7 +7620,7 @@ const kurzanleitung = {
 
     { t:'group', label:'Adresse' },
     { k:'url',     label:'Adresse zum Abtippen', type:'text',
-      hint:'Der QR-Code daneben zeigt immer die in tools/make-qr.py hinterlegte Adresse. Beide müssen zusammenpassen.' },
+      hint:'Der QR-Code daneben wird aus genau dieser Adresse erzeugt — die beiden können nicht auseinanderlaufen.' },
     { k:'zeigeQr', label:'QR-Code zeigen', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
 
@@ -6889,8 +7674,15 @@ const kurzanleitung = {
         </div>
       </li>`).join('');
 
-    const qrBlock = d.zeigeQr === 'nein' ? ''
-      : `<div class="t-kurz-qr">${QR_VORLAGEN}</div>`;
+    /* Fehlerkorrektur Q: ein Aushang bekommt Fingerabdrücke und Knicke ab.
+       Schlägt die Erzeugung fehl (leeres oder zu langes Feld), bleibt die
+       Stelle leer statt das Blatt zu zerschiessen. */
+    let qrBlock = '';
+    if (d.zeigeQr !== 'nein' && has(d.url)){
+      const ziel = /^[a-z]+:\/\//i.test(d.url) ? d.url : 'https://' + d.url;
+      try { qrBlock = `<div class="t-kurz-qr">${qrSvg(ziel, { stufe:'Q', groesse:'34mm', farbe:'#2A3350' })}</div>`; }
+      catch (err){ console.warn('[Kurzanleitung] QR-Code:', err.message); }
+    }
 
     return `
     <header class="t-kurz-head">
@@ -6948,6 +7740,7 @@ const kurzanleitung = {
 
 
 
+
 const TEMPLATES = {
   hinweis,
   mieterbrief,
@@ -6956,6 +7749,7 @@ const TEMPLATES = {
   sammelstelle,
   sicherheit,
   etiketten,
+  qrplakat,
   kurzanleitung,
   notruf,
   rezeption,
@@ -6971,7 +7765,7 @@ const TEMPLATES = {
 
 const ORDER = [
   'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
-  'etiketten', 'kurzanleitung',
+  'etiketten', 'qrplakat', 'kurzanleitung',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -7009,9 +7803,9 @@ const GROUPS = [
     note:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte, Namensschilder.',
     ids:['etiketten'] },
 
-  { id:'hilfe', title:'Für das Team',
-    note:'Die Kurzanleitung zum Aufhängen — mit QR-Code auf die Zentrale.',
-    ids:['kurzanleitung'] },
+  { id:'hilfe', title:'QR-Codes und Anleitung',
+    note:'WLAN, Links und Telefonnummern als Code zum Scannen — und die Kurzanleitung fürs Team.',
+    ids:['qrplakat', 'kurzanleitung'] },
 
   { id:'plaene', title:'Karten und Pläne',
     note:'Anfahrt, Luftbild und der interaktive Lageplan.',

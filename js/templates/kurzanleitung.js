@@ -2,15 +2,19 @@
    Beantwortet die zwei Fragen, die im Haus wirklich gestellt werden:
    wo finde ich das Ding, und wie drucke ich damit etwas aus.
 
-   Der QR-Code ist fest eingebettet (js/lib/qr-vorlagen.js, erzeugt von
-   tools/make-qr.py). Kein QR-Dienst im Internet, kein Nachladen — so
-   erscheint er auch in standalone.html, das per file:// nichts nachladen
-   dürfte. Wenn sich die Adresse ändert: Skript neu laufen lassen. */
+   Der QR-Code entsteht beim Zeichnen aus genau der Adresse, die im Feld
+   darüber steht (js/lib/qr.js). Damit können Code und abgetippte Adresse
+   nicht mehr auseinanderlaufen — früher lag der Code als erzeugte Datei
+   daneben und musste von Hand nachgeführt werden.
+
+   Kein QR-Dienst im Internet: der Code wird im Browser gerechnet. Das ist
+   nötig, weil standalone.html per file:// nichts nachladen dürfte — und
+   nebenbei sieht kein fremder Server, was hier kodiert wird. */
 import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
-import { QR_VORLAGEN } from '../lib/qr-vorlagen.js';
+import { qrSvg } from '../lib/qr.js';
 
 export default {
   id:'kurzanleitung',
@@ -44,7 +48,7 @@ export default {
 
     { t:'group', label:'Adresse' },
     { k:'url',     label:'Adresse zum Abtippen', type:'text',
-      hint:'Der QR-Code daneben zeigt immer die in tools/make-qr.py hinterlegte Adresse. Beide müssen zusammenpassen.' },
+      hint:'Der QR-Code daneben wird aus genau dieser Adresse erzeugt — die beiden können nicht auseinanderlaufen.' },
     { k:'zeigeQr', label:'QR-Code zeigen', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
 
@@ -98,8 +102,15 @@ export default {
         </div>
       </li>`).join('');
 
-    const qrBlock = d.zeigeQr === 'nein' ? ''
-      : `<div class="t-kurz-qr">${QR_VORLAGEN}</div>`;
+    /* Fehlerkorrektur Q: ein Aushang bekommt Fingerabdrücke und Knicke ab.
+       Schlägt die Erzeugung fehl (leeres oder zu langes Feld), bleibt die
+       Stelle leer statt das Blatt zu zerschiessen. */
+    let qrBlock = '';
+    if (d.zeigeQr !== 'nein' && has(d.url)){
+      const ziel = /^[a-z]+:\/\//i.test(d.url) ? d.url : 'https://' + d.url;
+      try { qrBlock = `<div class="t-kurz-qr">${qrSvg(ziel, { stufe:'Q', groesse:'34mm', farbe:'#2A3350' })}</div>`; }
+      catch (err){ console.warn('[Kurzanleitung] QR-Code:', err.message); }
+    }
 
     return `
     <header class="t-kurz-head">

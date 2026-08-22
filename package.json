@@ -7,7 +7,7 @@
     "start": "http-server -p 8099 -c-1 .",
     "build": "node tools/build-standalone.mjs",
     "pretest": "node tools/build-standalone.mjs",
-    "test": "node tests/shot.mjs && node tests/print.mjs && node tests/export.mjs && node tests/interaction.mjs && node tests/teilen.mjs && node tests/sprachen.mjs && node tests/etiketten.mjs && node tests/planeditor.mjs && node tests/gaestemappe.mjs && node tests/standalone.mjs",
+    "test": "node tests/shot.mjs && node tests/print.mjs && node tests/export.mjs && node tests/interaction.mjs && node tests/teilen.mjs && node tests/sprachen.mjs && node tests/qr.mjs && node tests/etiketten.mjs && node tests/planeditor.mjs && node tests/gaestemappe.mjs && node tests/standalone.mjs",
     "test:blaetter": "node tests/shot.mjs",
     "test:druck": "node tests/print.mjs",
     "fonts": "node tools/install-brand-fonts.mjs",
@@ -16,7 +16,8 @@
     "test:mappe": "node tests/gaestemappe.mjs",
     "test:teilen": "node tests/teilen.mjs",
     "test:etiketten": "node tests/etiketten.mjs",
-    "test:sprachen": "node tests/sprachen.mjs"
+    "test:sprachen": "node tests/sprachen.mjs",
+    "test:qr": "node tests/qr.mjs"
   },
   "devDependencies": {
     "http-server": "^14.1.1",

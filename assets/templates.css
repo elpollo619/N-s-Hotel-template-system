@@ -924,3 +924,68 @@
   font-family:var(--font-display);font-weight:700;letter-spacing:.06em;
   color:var(--ink-soft);margin-right:1.2mm;
 }
+
+/* ==========================================================================
+   QR-Aushang — js/templates/qrplakat.js
+   Der Code trägt die Seite: gross, mittig, mit Luft ringsum. Die Ruhezone
+   steckt schon im SVG; das Weiss darunter darf nichts überlagern.
+   ========================================================================== */
+.t-qrp{display:flex;flex-direction:column;padding:0;background:#fff}
+.t-qrp-todo{
+  margin:0;padding:8px 14px;background:#FFF4E5;border-bottom:1px solid #F0D9B5;
+  font-size:11.5px;color:#8a5a12;
+}
+.t-qrp-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;
+  background:var(--navy);color:#fff;padding:16mm 18mm 14mm;
+}
+.t-qrp-eyebrow{margin:0 0 4mm;font-size:16pt;color:var(--cyan)}
+.t-qrp-head h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:44pt;
+  line-height:1;letter-spacing:-.015em;
+}
+.t-qrp-unter{margin:5mm 0 0;font-size:12.5pt;line-height:1.45;opacity:.86;max-width:52ch}
+.t-qrp-logo{flex:0 0 auto}
+
+.t-qrp-mitte{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6mm;padding:10mm 18mm;
+}
+.t-qrp-code{
+  display:grid;place-items:center;padding:5mm;background:#fff;
+  border:.5pt solid var(--line);border-radius:4mm;
+}
+.t-qrp-code .qr{display:block}
+.t-qrp-klar{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:15pt;
+  color:var(--navy);letter-spacing:.01em;text-align:center;overflow-wrap:anywhere;
+}
+
+.t-qrp-sprachen{
+  list-style:none;margin:0;padding:0 18mm;display:flex;flex-direction:column;gap:2.4mm;
+}
+.t-qrp-sprachen li{
+  display:flex;gap:4mm;align-items:baseline;font-size:10.5pt;line-height:1.4;
+  color:var(--ink-soft);
+}
+.t-qrp-sprachen li:first-child{font-size:12pt;color:var(--ink);font-weight:600}
+.t-qrp-sprachen span{
+  flex:0 0 9mm;font-family:var(--font-display);font-weight:700;font-size:8.5pt;
+  letter-spacing:.08em;color:var(--muted);
+}
+.t-qrp-foot{
+  display:flex;justify-content:space-between;gap:6mm;flex-wrap:wrap;
+  margin:8mm 18mm 12mm;padding-top:4mm;border-top:.5pt solid var(--line);
+  font-size:8pt;letter-spacing:.04em;color:var(--muted);
+}
+.t-qrp-foot span:first-child{font-weight:700;color:var(--navy)}
+
+/* Freiwilliger QR-Code in der Fusszeile des Hinweis-Aushangs. */
+.t-hinweis-foot.has-qr{grid-template-columns:auto 1fr;align-items:end;column-gap:7mm}
+.t-hinweis-foot.has-qr .t-hinweis-qr{grid-row:1 / span 3}
+.t-hinweis-qr{display:flex;flex-direction:column;align-items:center;gap:1.6mm}
+.t-hinweis-qr svg{display:block}
+.t-hinweis-qr span{
+  font-size:7.5pt;letter-spacing:.04em;color:var(--muted);text-align:center;
+  max-width:34mm;line-height:1.3;
+}

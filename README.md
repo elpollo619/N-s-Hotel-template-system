@@ -92,7 +92,8 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
 | **Sammelstelle beschriften** | A5/A4, mehrseitig | Papier, PET, Glas, Kehricht … — eine Seite je Behälter, mit «gehört hinein / gehört nicht hinein» |
-| **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die drei Schritte, die Druckeinstellungen |
+| **QR-Aushang** | A4 hoch | WLAN-Zugang, Link, Telefonnummer oder Adresse als grosser Code — mit Anleitung in bis zu sechs Sprachen |
+| **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die vier Schritte, die Druckeinstellungen |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
@@ -361,27 +362,49 @@ und es bleibt im Browser der jeweiligen Person.
 
 ---
 
-## QR-Code
+## QR-Codes
 
-`tools/make-qr.py` erzeugt den QR-Code auf die Zentrale — einmal als SVG
-(`assets/brand/qr-vorlagen.svg`) und einmal als ES-Modul
-(`js/lib/qr-vorlagen.js`), das die Kurzanleitung fest einbettet.
+`js/lib/qr.js` erzeugt QR-Codes **im Browser**, beim Zeichnen des Blattes.
+Eigener Code, keine fremde Bibliothek. Byte-Modus, Versionen 1 bis 12, alle
+vier Fehlerkorrekturstufen — bis rund 460 Zeichen. Wird es mehr, kommt eine
+klare Meldung statt eines stillen Fehldrucks.
+
+Drei Entscheide dahinter:
+
+* **Kein QR-Dienst im Internet.** Beim WLAN-Aushang ist das keine
+  Kleinigkeit: das Passwort bliebe sonst bei einem fremden Server liegen.
+  Hier verlässt es den eigenen Browser nicht.
+* **Nichts nachladen.** `standalone.html` wird per Doppelklick geöffnet, und
+  eine Datei mit `file://`-Adresse darf keine Nachbardateien holen. Gerechnet
+  wird deshalb zur Laufzeit.
+* **Keine erzeugten Dateien mehr.** Früher lag der Code als Datei daneben und
+  musste von Hand nachgeführt werden, wenn sich die Adresse änderte. Jetzt
+  entsteht er aus genau dem Feld, das im Formular steht — auseinanderlaufen
+  können die beiden nicht mehr.
+
+Fertige Inhalte gibt es für WLAN (`WIFI:…`, Sonderzeichen maskiert),
+Telefon (`tel:`), E-Mail (`mailto:`) und Adresse für die Karten-App (`geo:`).
+
+### Wie das geprüft wird
+
+Ein QR-Code, der falsch aussieht, fällt niemandem auf — er fällt erst auf,
+wenn hundert Gäste ihn nicht scannen können. Deshalb doppelt:
+
+* **`tests/qr.mjs`** (Teil von `npm test`, reines Node) enthält einen
+  eigenständig geschriebenen **Leser**: er nimmt die fertige Matrix, holt die
+  Formatangabe heraus, entfernt die Maske, liest im Zickzack und setzt die
+  Nutzdaten zusammen. Kommt der Ausgangstext zurück, stimmt die ganze Kette.
+  Geprüft werden zehn Texte in vier Stufen und zusätzlich **alle 48
+  Kombinationen** aus Version 1–12 und Stufe, jeweils randvoll — dort fällt
+  eine falsche Zahl in den Blocktafeln der Norm am ehesten auf.
+* **`tools/pruefe-qr.py`** (von Hand, braucht Python) rendert dieselben
+  Matrizen als Bild und liest sie mit einem **echten Lesegerät** (OpenCV)
+  wieder ein.
 
 ```bash
-pip install segno
-python3 tools/make-qr.py
+pip install opencv-python-headless segno numpy
+python3 tools/pruefe-qr.py
 ```
-
-Zwei Entscheide dahinter:
-
-* **Kein QR-Dienst im Internet.** Die Adresse verlässt den eigenen Rechner
-  nicht, und die App fragt beim Zeichnen nichts nach draussen.
-* **Eingebettet statt nachgeladen.** `standalone.html` wird per Doppelklick
-  geöffnet; eine Datei mit `file://`-Adresse darf keine Nachbardateien
-  nachladen. Als Modul wandert der Code beim Bauen mit in die Einzeldatei.
-
-Wer die Adresse ändert: `URL` im Skript anpassen, Skript laufen lassen, und im
-Editor die Zeile zum Abtippen nachziehen — beide müssen zusammenpassen.
 
 ---
 
@@ -573,6 +596,10 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
   räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
   die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/qr.mjs`** — ein eigenständiger Leser liest jede erzeugte Matrix
+  wieder ein; alle 48 Kombinationen aus Version und Fehlerkorrekturstufe
+  randvoll; Grenzfälle (leer, zu lang, unbekannte Stufe); der QR-Aushang im
+  Browser
 * **`tests/sprachen.mjs`** — kein Loch im sechssprachigen Bestand
   (Bausteine, Sicherheitszeichen, Abfallfraktionen), feste Reihenfolge,
   Kästchen und fertige Zusammenstellungen, dazu die Kontrastprüfung

@@ -15,6 +15,7 @@ import { logo } from '../lib/brand.js';
 import { icon, iconOptions } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
 import { PRESETS, preset, presetOptions } from '../presets.js';
+import { qrSvg } from '../lib/qr.js';
 import { SPRACHEN, sprachOptions, sprachSetOptions, sprachSet,
          sprachObjekte, sprachListe } from '../lib/sprachen.js';
 import { ABSENDER, objekt, objektAdresse, adresseFehlt, istHotel,
@@ -104,6 +105,12 @@ export default {
     { k:'titelEs', label:'Überschrift Español', type:'text' },
     { k:'es', label:'Text Español', type:'textarea' },
 
+    { t:'group', label:'QR-Code (freiwillig)' },
+    { t:'note', label:'Zum Beispiel beim Baustein «Zu vermieten»: die Adresse des Inserats. Leer lassen heisst kein Code.' },
+    { k:'qrZiel',   label:'Adresse oder Text im Code', type:'text' },
+    { k:'qrMass',   label:'Kantenlänge in mm', type:'number', min:15, max:60, step:1 },
+    { k:'qrLegende',label:'Zeile unter dem Code', type:'text' },
+
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
     { k:'footer', label:'Absenderzeile', type:'text',
@@ -134,6 +141,9 @@ export default {
     it:'Se accertiamo che lʼimpianto di rilevazione incendi è stato manomesso, il contratto di locazione verrà risolto con effetto immediato per messa in pericolo dellʼincolumità delle persone.',
     pt:'Se constatarmos que o sistema de deteção de incêndio foi manipulado, o contrato de arrendamento será rescindido de imediato por colocar vidas em perigo.',
     es:'Si comprobamos que se ha manipulado el sistema de detección de incendios, el contrato de arrendamiento se rescindirá de inmediato por poner en peligro la vida de las personas.',
+    qrZiel:'',
+    qrMass:26,
+    qrLegende:'',
     gruss:'Die Verwaltung',
     footer:''
   },
@@ -202,6 +212,22 @@ export default {
       </article>`;
     }).join('');
 
+    /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
+       Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
+       bleibt die Stelle leer statt das Blatt zu zerschiessen. */
+    let qrBlock = '';
+    if (has(d.qrZiel)){
+      const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
+        ? d.qrZiel : 'https://' + d.qrZiel;
+      const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
+      try {
+        qrBlock = `<div class="t-hinweis-qr">
+          ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
+          ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
+        </div>`;
+      } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
+    }
+
     return `
     ${warnung}
     <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
@@ -217,7 +243,8 @@ export default {
       ${bloecke}
     </section>
 
-    <footer class="t-hinweis-foot">
+    <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
+      ${qrBlock}
       ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
       ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
       <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
