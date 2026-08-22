@@ -1019,3 +1019,153 @@
 .t-sicher-bogen.is-4 .t-sicher-zusatz{font-size:7.5pt;border-left-width:.9mm;padding-left:2.5mm}
 .t-sicher-bogen.is-4 .t-sicher-body{gap:4mm}
 .t-sicher-bogen.is-4 .t-sicher-foot{font-size:5.5pt}
+
+/* ==========================================================================
+   Foto-Aushang — js/templates/foto.js
+   Das Bild sitzt oben und randabfallend; der Text steht darunter oder,
+   bei «ganzes Blatt», darüber.
+   ========================================================================== */
+.t-foto{padding:0;background:#fff}
+.t-foto-blatt{
+  position:absolute;inset:calc(-1 * var(--bs, 0mm));
+  display:flex;flex-direction:column;background:#fff;
+}
+.t-foto-rahmen{
+  position:relative;flex:0 0 var(--anteil,55%);overflow:hidden;background:var(--bg-2);
+}
+.t-foto-blatt.is-voll .t-foto-rahmen{position:absolute;inset:0;flex:none}
+.t-foto-bild{width:100%;height:100%;object-fit:cover;display:block}
+.t-foto-leer{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--muted);font-size:11pt;letter-spacing:.06em;
+}
+.t-foto-blatt.is-dunkel-wenig .t-foto-rahmen::after,
+.t-foto-blatt.is-dunkel-viel .t-foto-rahmen::after{
+  content:"";position:absolute;inset:0;
+}
+.t-foto-blatt.is-dunkel-wenig .t-foto-rahmen::after{background:rgba(42,51,80,.28)}
+.t-foto-blatt.is-dunkel-viel  .t-foto-rahmen::after{background:rgba(42,51,80,.55)}
+
+.t-foto-txt{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:11mm calc(14mm + var(--bs,0mm)) 4mm;
+}
+.t-foto-eyebrow{margin:0 0 3mm;font-size:19pt;color:var(--cyan)}
+.t-foto-txt h1{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  font-size:30pt;line-height:1.06;letter-spacing:-.015em;color:var(--navy);
+}
+.t-foto-unter{margin:5mm 0 0;font-size:13pt;line-height:1.5;color:var(--ink);max-width:56ch}
+.t-foto-unter b{color:var(--navy)}
+.t-foto-sprachen{list-style:none;margin:7mm 0 0;padding:0;display:flex;flex-direction:column;gap:2mm}
+.t-foto-sprachen li{
+  display:flex;gap:4mm;align-items:baseline;font-size:10pt;line-height:1.4;color:var(--ink-soft);
+}
+.t-foto-sprachen span{
+  flex:0 0 8mm;font-family:var(--font-display);font-weight:700;font-size:8pt;
+  letter-spacing:.08em;color:var(--muted);
+}
+
+/* Ganzes Blatt: Text liegt über dem Bild. */
+.t-foto-ueber{
+  position:relative;z-index:2;margin-top:auto;
+  padding:14mm calc(14mm + var(--bs,0mm)) 4mm;
+  background:linear-gradient(to bottom,rgba(42,51,80,0),rgba(42,51,80,.86) 38%);
+  color:#fff;
+}
+.t-foto-ueber .t-foto-txt{padding:0}
+.t-foto-ueber h1{color:#fff}
+.t-foto-ueber .t-foto-unter{color:rgba(255,255,255,.92)}
+.t-foto-ueber .t-foto-unter b{color:#fff}
+.t-foto-ueber .t-foto-sprachen li{color:rgba(255,255,255,.8)}
+.t-foto-ueber .t-foto-sprachen span{color:rgba(255,255,255,.6)}
+
+.t-foto-foot{
+  position:relative;z-index:2;display:flex;justify-content:space-between;gap:6mm;
+  align-items:center;flex-wrap:wrap;
+  padding:0 calc(14mm + var(--bs,0mm)) calc(11mm + var(--bs,0mm));
+  font-size:8pt;letter-spacing:.04em;color:var(--muted);
+}
+.t-foto-blatt.is-voll .t-foto-foot{color:rgba(255,255,255,.72)}
+
+/* Schnittmarken für die Druckerei — Ecken, ausserhalb des Beschnitts. */
+.t-foto-marken i{
+  position:absolute;width:8mm;height:8mm;pointer-events:none;
+}
+.t-foto-marken i::before,.t-foto-marken i::after{
+  content:"";position:absolute;background:#1A1A1A;
+}
+.t-foto-marken i::before{width:.25pt;height:5mm}
+.t-foto-marken i::after{height:.25pt;width:5mm}
+.t-foto-marken .m-lo{top:0;left:0}
+.t-foto-marken .m-lo::before{left:0;bottom:0}
+.t-foto-marken .m-lo::after{top:0;left:0}
+.t-foto-marken .m-ro{top:0;right:0}
+.t-foto-marken .m-ro::before{right:0;bottom:0}
+.t-foto-marken .m-ro::after{top:0;right:0}
+.t-foto-marken .m-lu{bottom:0;left:0}
+.t-foto-marken .m-lu::before{left:0;top:0}
+.t-foto-marken .m-lu::after{bottom:0;left:0}
+.t-foto-marken .m-ru{bottom:0;right:0}
+.t-foto-marken .m-ru::before{right:0;top:0}
+.t-foto-marken .m-ru::after{bottom:0;right:0}
+
+/* ==========================================================================
+   Grossflächenplakat — js/templates/grossplakat.js
+   Jedes Blatt ist ein Fenster auf ein grosses Plakat. Das Plakat selbst
+   wird einmal gebaut und je Blatt verschoben.
+   ========================================================================== */
+.t-gross-blatt{position:relative;overflow:hidden;background:#fff}
+.t-gross-fenster{position:absolute}
+.t-gross-welt{
+  position:relative;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3%;
+  padding:5% 6%;text-align:center;overflow:hidden;
+}
+.t-gross-welt h1{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  line-height:.98;letter-spacing:-.02em;white-space:nowrap;
+}
+.t-gross-unter{margin:0;font-weight:600;line-height:1.15;opacity:.92}
+.t-gross-sprachen{
+  list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6em;
+  opacity:.82;line-height:1.25;
+}
+.t-gross-zeichen{display:grid;place-items:center}
+.t-gross-zeichen .sz{display:block}
+.t-gross-foot{
+  position:absolute;left:6%;right:6%;bottom:3%;
+  display:flex;justify-content:space-between;gap:4%;
+  opacity:.72;letter-spacing:.04em;
+}
+
+/* Klebekante: dort beginnt das nächste Blatt. */
+.t-gross-kante{position:absolute;pointer-events:none}
+.t-gross-kante.is-rechts{top:0;bottom:0;width:0;border-left:.4pt dashed rgba(0,0,0,.45)}
+.t-gross-kante.is-unten{left:0;right:0;height:0;border-top:.4pt dashed rgba(0,0,0,.45)}
+.t-gross-nr{
+  position:absolute;right:2mm;bottom:2mm;z-index:3;
+  background:#fff;border:.4pt solid #C9CFDA;border-radius:2mm;
+  padding:1.4mm 2.4mm;font:700 8pt/1.2 var(--font-display);color:var(--navy);
+  display:flex;flex-direction:column;gap:.6mm;text-align:right;
+}
+.t-gross-nr em{font:500 6pt/1.2 var(--font-body);font-style:normal;color:var(--muted)}
+
+/* Bauanleitung */
+.t-gross-plan{background:#fff;padding:16mm 16mm 12mm;display:flex;flex-direction:column;gap:6mm}
+.t-gross-plan h2{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:24pt;color:var(--navy);
+}
+.t-gross-mass{margin:0;font-size:11pt;color:var(--ink-soft)}
+.t-gross-mass b{color:var(--navy)}
+.t-gross-vorschau{position:relative;align-self:center;border:.5pt solid var(--line)}
+.t-gross-mini{position:absolute;top:0;left:0;transform-origin:top left}
+.t-gross-feld{
+  position:absolute;display:grid;place-items:center;
+  border:.5pt dashed rgba(255,255,255,.85);
+  font:700 16pt/1 var(--font-display);color:rgba(255,255,255,.9);
+  text-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.t-gross-schritte{margin:0;padding-left:5mm;display:flex;flex-direction:column;gap:2.5mm}
+.t-gross-schritte li{font-size:10.5pt;line-height:1.5;color:var(--ink)}
+.t-gross-schritte b{color:var(--navy)}

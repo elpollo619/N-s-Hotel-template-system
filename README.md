@@ -110,6 +110,8 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
 | **Sammelstelle beschriften** | A5/A4, mehrseitig | Papier, PET, Glas, Kehricht … — eine Seite je Behälter, mit «gehört hinein / gehört nicht hinein» |
+| **Foto-Aushang** | A4/A5 | Ein Bild und ein Satz — Frühstück, Hausregeln, Hinweise. Wahlweise randabfallend mit Text darüber; für die Druckerei mit Schnittmarken und Beschnitt |
+| **Grossflächenplakat** | mehrere A4 | Ein grosses Plakat aus 2 × 2 bis 4 × 4 A4-Blättern zum Zusammenkleben — mit Bauanleitung als erster Seite |
 | **QR-Aushang** | A4 hoch | WLAN-Zugang, Link, Telefonnummer oder Adresse als grosser Code — mit Anleitung in bis zu sechs Sprachen |
 | **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die vier Schritte, die Druckeinstellungen |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
@@ -182,6 +184,51 @@ gefüllte Plätze bleiben leer — geschnitten wird trotzdem an der Linie. Das i
 nicht dasselbe wie «2 Seiten pro Blatt» im Druckertreiber: der verkleinert das
 ganze Blatt samt Rändern, hier ist jedes Feld von Anfang an für seine Grösse
 gesetzt.
+
+**So funktioniert der Foto-Aushang:** Bild hochladen, Zeile schreiben,
+drucken. Das Bild bleibt im Browser — es wird als Data-URI im Entwurf
+gespeichert und geht an keinen Dienst. Vier Bildanteile von «klein» bis
+«ganzes Blatt»; beim ganzen Blatt liegt der Text auf dem Bild, mit
+einstellbarer Abdunklung darunter. **Schnittmarken und Beschnitt** sind nur
+für den Fall gedacht, dass ein Aushang einmal in eine richtige Druckerei
+geht — auf dem Bürodrucker bleiben beide aus, sonst stehen die Marken mit
+auf dem Blatt.
+
+**So funktioniert das Grossflächenplakat:** 2 × 2 Blätter ergeben rund A2,
+3 × 3 rund A1. Jedes Blatt zeigt einen Ausschnitt; die Blätter überlappen
+sich (Vorgabe 10 mm), damit sie sich sauber überkleben lassen. Die
+gestrichelte Linie markiert, wo das nächste Blatt beginnt, und jedes Blatt
+trägt seine Nummer samt Reihe und Spalte. Die **erste Seite ist eine
+Bauanleitung**: das ganze Plakat verkleinert, mit numerierten Feldern —
+ohne sie liegen nachher zwölf gleich aussehende Blätter auf dem Tisch. Ist
+das grosse Wort zu lang für die Breite, wird die Schrifthöhe automatisch
+eingepasst statt abgeschnitten; mehr Blätter nebeneinander schaffen wieder
+Platz.
+
+---
+
+## Eigene Textbausteine
+
+Die 42 mitgelieferten Bausteine sind die Wortlaute, die im Haus seit Jahren
+hängen. Was neu dazukommt — ein Aushang zur Baustelle, eine Regelung für den
+Sommer — soll niemand ins Repository schreiben müssen.
+
+Im Hinweis-Aushang gibt es dafür das Kapitel **Eigene Bausteine**:
+
+* **Aktuellen Text als eigenen Baustein sichern** nimmt Titel, alle sechs
+  Sprachen, Ton und Symbol so, wie sie gerade eingestellt sind. Ist bereits
+  ein eigener Baustein gewählt, wird er überschrieben — sonst entsteht ein
+  neuer.
+* Eigene stehen in der Auswahlliste **hinter** den mitgelieferten und sind
+  dort als «Eigene Bausteine · …» erkennbar. Die **Suche findet sie
+  ebenfalls**.
+* **Sammlung sichern** legt alles in eine Datei; **Sammlung laden** holt sie
+  bei den anderen wieder herein. Bausteine mit gleichem Kürzel werden
+  ersetzt, die übrigen kommen dazu — jede Person behält also ihre eigenen.
+* Mitgelieferte Bausteine lassen sich nicht löschen; sie liegen im Code.
+
+Alles liegt im Browser der jeweiligen Person (`nsvz:eigene`). Es gibt keinen
+Server, der die Sammlung verteilt — dafür ist die Datei da.
 
 ---
 
@@ -518,6 +565,46 @@ npm run build
 Solange die Dateien fehlen, zeichnet die App eine saubere Platzhalter-Wortmarke
 — es entstehen **keine** Fehler in der Konsole.
 
+#### Woran man sieht, welche Schrift läuft
+
+Ein Aushang in Montserrat sieht ordentlich aus, ist aber nicht die Marke. Wer
+ihn druckt und aufhängt, merkt es womöglich nie. Deshalb sagt die Zentrale es
+von sich aus: läuft die Ersatzschrift, steht auf der Startseite ein Hinweis
+mit den Namen der fehlenden Schriften. Sind die echten da, verschwindet er.
+
+Geprüft wird durch **Messen**, nicht mit `document.fonts.check()` — das meldet
+für eine unbekannte Familie in den meisten Browsern `true`, weil ohnehin auf
+den nächsten Eintrag zurückgefallen wird. Verlässlich ist nur der Vergleich:
+derselbe Text einmal mit «Gotham, monospace» und einmal mit «monospace»
+ausgemessen. Gleiche Breite heisst: es gibt kein Gotham. Steht in
+`js/lib/schrift.js`.
+
+#### Warum die Schriften nicht einfach mitgeliefert werden
+
+Das ist keine technische, sondern eine rechtliche Grenze. Gotham (Hoefler &
+Co) und Caflisch Script Pro (Adobe) sind gekaufte Schriften; ihre Lizenzen
+verbieten die Weitergabe. Dieses Repository ist **öffentlich**, und GitHub
+Pages liefert alles aus, was darin liegt — die Schriftdateien gingen also an
+jeden Besucher. Das wäre Weitergabe.
+
+Damit bleiben drei ehrliche Wege:
+
+1. **Lokal einrichten** (kostet nichts, geht heute). Die beiden Dateien nach
+   `assets/fonts/`, `npm run fonts`, `npm run build`. Auf diesem Rechner und
+   in der so gebauten `standalone.html` steht dann die echte Hausschrift.
+   Diese eine Datei lässt sich intern weitergeben — ob das die Lizenz deckt,
+   steht in der Lizenz und sollte einmal nachgelesen werden.
+2. **Webfont-Lizenz kaufen.** Typography.com verkauft Gotham als Webfont;
+   Adobe Fonts erlaubt Caflisch Script Pro im Web über die eigene
+   Einbindung. Damit dürfte die öffentliche Seite die echte Schrift zeigen.
+   Adobe Fonts lädt allerdings von einem fremden Server — das widerspricht
+   dem Grundsatz «läuft offline», also nur für die Webseite, nicht für
+   `standalone.html`.
+3. **Beim Ersatz bleiben.** Montserrat kommt Gotham nahe genug, dass es im
+   Alltag niemandem auffällt. Bei der Handschrift-Zeile ist der Abstand
+   grösser — dort liesse sich eine andere freie Schrift wählen, wenn
+   Parisienne nicht gefällt.
+
 Stammdaten stehen zentral in `js/brand-config.js`; alle Vorlagen greifen darauf zu.
 Die Adresse ist hinterlegt (Allmendstrasse 14, 3210 Kerzers), **Telefon, Mail und
 Web sind absichtlich leer** — erfundene Kontaktdaten gehören nicht auf einen
@@ -653,6 +740,9 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
   räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
   die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/eigene.mjs`** — eigene Bausteine anlegen, wiederfinden,
+  überschreiben, löschen, als Datei sichern und laden; kaputter
+  Speicherinhalt wirft die App nicht um
 * **`tests/navigation.mjs`** — Startseite, jede Kapitelseite, die Suche
   (quer durch alle Arten und Sprachen, Sprung mit übernommenem Baustein),
   Kapitel im Editor, Massstab, Seitenzähler, Tastatur und Verlauf

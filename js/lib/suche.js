@@ -21,6 +21,7 @@ import { PRESETS, KATEGORIEN } from '../presets.js';
 import { SZ_ZEICHEN } from './sicherheitszeichen.js';
 import { FRAKTIONEN } from '../templates/sammelstelle.js';
 import { SPRACH_IDS } from './sprachen.js';
+import { eigeneBausteine } from './eigene.js';
 
 /** Klein schreiben und Umlaute/Akzente abstreifen — «Grösse» findet «grosse». */
 export function normal(s){
@@ -80,6 +81,15 @@ export const BESTAND = (() => {
   return aus;
 })();
 
+/* Selbst angelegte Bausteine kommen und gehen waehrend der Arbeit — sie
+   werden deshalb bei jeder Suche frisch dazugenommen, nicht einmal beim
+   Laden eingebacken. Es sind wenige; das faellt nicht ins Gewicht. */
+function eigeneEintraege(){
+  return eigeneBausteine().map(p => eintrag('baustein', p.id, p.titel.de || p.label,
+    'Eigener Baustein', 'hinweis', p.id,
+    `${p.label} ` + SPRACH_IDS.map(s => `${p.titel[s]} ${p.text[s]}`).join(' ')));
+}
+
 /* Vorlagen zuerst, dann Bausteine, dann Zeichen, dann Abfall. */
 const ART_RANG = { vorlage:0, baustein:1, zeichen:2, abfall:3 };
 
@@ -93,7 +103,7 @@ export function suche(frage, max = 12){
   if (!woerter.length) return [];
 
   const treffer = [];
-  for (const e of BESTAND){
+  for (const e of BESTAND.concat(eigeneEintraege())){
     let punkte = 0;
     let alle = true;
     for (const w of woerter){

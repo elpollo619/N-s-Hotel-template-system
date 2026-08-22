@@ -488,3 +488,12 @@ a{color:var(--cyan)}
   .vz-nav-zeile{padding:7px 11px}
   .vz-inhalt{padding:22px 18px 60px}
 }
+
+/* Hinweis, wenn die Ersatzschrift läuft — leise, aber sichtbar. */
+.vz-schriftwarnung{
+  margin-top:26px;padding:13px 16px;border-radius:12px;
+  background:#FFF9E8;border:1px solid #F0E2B5;
+  font-size:12.5px;line-height:1.65;color:#7a5c12;max-width:86ch;
+}
+.vz-schriftwarnung b{color:#5d4409}
+.vz-schriftwarnung span{display:block;margin-top:4px;color:#8a6b1c}
