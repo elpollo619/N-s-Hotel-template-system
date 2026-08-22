@@ -77,13 +77,15 @@ export default {
     zeigeQr:'ja',
     steps:[
       { titel:'Öffnen',
-        text:'Den QR-Code scannen oder die Adresse eintippen. Am Handy über «Zum Startbildschirm hinzufügen» — dann liegt sie wie eine App auf dem Display.' },
-      { titel:'Vorlage wählen und Texte anpassen',
-        text:'Beim Hinweis zuerst den fertigen Textbaustein wählen und «Baustein übernehmen» drücken. Danach die Liegenschaft wählen — Kürzel und Adresse setzen sich von selbst.' },
+        text:'QR-Code scannen oder die Adresse eintippen. Am Handy «Zum Startbildschirm hinzufügen» — dann liegt sie wie eine App auf dem Display.' },
+      { titel:'Finden',
+        text:'Oben ins Suchfeld tippen — «Rauchverbot», «PET», «Notausgang» — oder links ein Kapitel anklicken.' },
+      { titel:'Anpassen',
+        text:'Links Kapitel für Kapitel. Die Vorschau ändert sich sofort mit.' },
       { titel:'Drucken',
         text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' },
       { titel:'Weitergeben',
-        text:'«Link teilen» kopiert den fertigen Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
+        text:'«Link teilen» kopiert den Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
     ],
     druckTitel:'Im Druckdialog einstellen',
     druckText:'Ränder: **keine** · Hintergrundgrafiken: **einschalten** · Skalierung: **100 %**',

@@ -35,25 +35,42 @@ heruntergeladene Kopie veraltet — für den täglichen Gebrauch ist der Link be
 ## Für das Team — so geht's
 
 1. Den Link öffnen (oder `standalone.html` doppelklicken).
-2. Eine Vorlage anklicken.
-3. Links die Texte anpassen — die Vorschau rechts ändert sich sofort mit.
+2. Vorlage suchen — **oben ins Suchfeld tippen** oder links ein **Kapitel**
+   anklicken.
+3. Links die Texte anpassen, Kapitel für Kapitel. Die Vorschau rechts ändert
+   sich sofort mit.
 4. **Drucken / PDF** wählen. Im Druckdialog:
    * **Ränder: keine**
    * **Hintergrundgrafiken: einschalten**
    * **Skalierung: 100 %**
-5. Fertig. Wer lieber ein Bild braucht: **PNG speichern**.
+5. Fertig. Wer lieber ein Bild braucht: **PNG speichern**. Wer es
+   weitergeben will: **Link teilen**.
 
 Nützlich zu wissen:
 
-* Der grüne Balken oben links zeigt, ob das Blatt noch **auf eine Seite passt**.
+* Die **Suche** geht quer durch alles: Vorlagen, die 42 Textbausteine, die
+  16 Sicherheitszeichen und die Abfallfraktionen — und durch alle sechs
+  Aushangsprachen. «no smoking» findet das Rauchverbot ebenso wie «Rauchen».
+  Ein Treffer auf einen Baustein öffnet die Vorlage **mit genau diesem
+  Baustein**; man muss ihn nicht noch einmal suchen.
+* Mit **`/`** springt der Cursor ins Suchfeld, mit **Esc** geht es aus dem
+  Editor zurück.
+* Das Formular ist in **Kapitel** geteilt. Offen ist zu Beginn nur das erste;
+  **Alle aufklappen** zeigt alles. Welche Kapitel offen sind, merkt sich die
+  Vorlage.
+* Über der Vorschau stehen **Papierformat**, bei mehrseitigen Vorlagen ein
+  **Seitenzähler** und rechts der **Massstab** (Einpassen, 50 %, 100 %, 200 %).
+  Auch der Massstab bleibt je Vorlage gemerkt.
+* Der grüne Balken links zeigt, ob das Blatt noch **auf eine Seite passt**.
   Wird er orange, sind die Texte zu lang.
+* Auf der Startseite stehen die **zuletzt benutzten** Vorlagen zuoberst.
 * Änderungen bleiben im Browser gespeichert — bei jeder Person am eigenen Gerät.
   **Zurücksetzen** stellt das Original wieder her.
 * **Entwurf sichern** legt eine kleine Datei ab, die eine Kollegin mit
   **Entwurf laden** wieder öffnen kann.
 * Die Oberfläche gibt es auf Deutsch und Englisch (oben rechts). Der **Inhalt**
-  der Aushänge ist immer zweisprachig DE/EN, je nach Baustein zusätzlich
-  FR, IT oder PT.
+  der Aushänge lässt sich in sechs Sprachen setzen — siehe
+  [Sprachen auf dem Aushang](#sprachen-auf-dem-aushang).
 * Beim **Hinweis** zuerst den fertigen Textbaustein wählen und
   **Baustein übernehmen** drücken — danach ist alles frei überschreibbar.
   Dann die **Liegenschaft** wählen: Kürzel und Adresse setzen sich von selbst.
@@ -70,12 +87,13 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 >
 > 👉 https://elpollo619.github.io/N-s-Hotel-template-system/
 >
-> Vorlage anklicken, links die Texte anpassen, «Drucken / PDF». Im Druckdialog
-> **Ränder: keine** und **Hintergrundgrafiken: ein**.
+> Oben ins Suchfeld tippen, was du brauchst — «Rauchverbot», «PET»,
+> «Notausgang» — oder links ein Kapitel anklicken. Dann links die Texte
+> anpassen und «Drucken / PDF». Im Druckdialog **Ränder: keine** und
+> **Hintergrundgrafiken: ein**.
 >
 > Die gewohnten Texte sind schon drin — Rauchverbot, Parkverbot, Küche sauber
-> halten, Check-in und rund vierzig weitere. Baustein wählen, Liegenschaft
-> wählen, drucken.
+> halten, Check-in und 42 weitere, jeder in sechs Sprachen.
 >
 > Fragen an Cris.
 
@@ -508,6 +526,29 @@ automatisch in allen Fusszeilen.
 
 ---
 
+## Aufbau der Oberfläche
+
+Drei Ebenen, damit nichts auf einem einzigen Bildschirm landet:
+
+```
+#/              Startseite — Suche, zuletzt benutzt, die Kapitel als Kacheln
+#/k/<kapitel>   ein Kapitel mit seinen Vorlagen
+#/t/<vorlage>   der Editor
+```
+
+Warum überhaupt Kapitel? Neunzehn Vorlagen auf einer Seite sind eine Wand.
+Wer den Waschplan sucht, will nicht an Sicherheitszeichen und Etikettenbogen
+vorbeiscrollen. Dieselbe Überlegung im Editor: das Formular ist in
+aufklappbare Kapitel geteilt, statt in einer Kolonne von vierzig Feldern zu
+enden. Die Suche ist die Abkürzung für alle, die schon wissen, was sie wollen.
+
+Der Suchbestand steht in `js/lib/suche.js` und wird aus den vorhandenen Daten
+gebaut — Vorlagen, Textbausteine, Sicherheitszeichen, Abfallfraktionen. Es
+gibt keine zweite Liste, die man nachführen müsste: eine neue Vorlage ist
+automatisch auffindbar.
+
+---
+
 ## Aufbau
 
 ```
@@ -612,6 +653,9 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
   räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
   die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/navigation.mjs`** — Startseite, jede Kapitelseite, die Suche
+  (quer durch alle Arten und Sprachen, Sprung mit übernommenem Baustein),
+  Kapitel im Editor, Massstab, Seitenzähler, Tastatur und Verlauf
 * **`tests/serie.mjs`** — Serie über mehrere Liegenschaften (Seitenzahl,
   Reihenfolge, Absender je Objekt, unbekannte Kürzel) und Schneidebogen
   (Felder je Bogen, leere Plätze, Schnittkanten, Papierformat im Ausdruck)

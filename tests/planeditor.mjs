@@ -10,6 +10,15 @@ page.on('pageerror', e => problems.push('JS-FEHLER: ' + e.message));
 page.on('console', m => { if (m.type() === 'error') problems.push('KONSOLE: ' + m.text()); });
 const check = (ok, was) => { console.log(`${ok ? '✓' : '✗'} ${was}`); if (!ok) problems.push(was); };
 
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   für Playwright unsichtbar. Vor dem Bedienen also alles aufklappen. */
+async function alleKapitelOeffnen(){
+  const knopf = page.locator('#vz-alle-kap');
+  if (!(await knopf.count())) return;
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
 const draft = () => page.evaluate(() => JSON.parse(localStorage.getItem('nsvz:draft:plan-editor') || '{}'));
 const box = async sel => (await page.locator(sel).boundingBox());
 
@@ -97,6 +106,7 @@ await page.waitForTimeout(200);
 check((await draft()).view.rot === 0, 'Viermal drehen ergibt wieder den Anfang');
 
 /* 9 · Format wechselt das Papier */
+await alleKapitelOeffnen();
 await page.selectOption('#f-format', 'A3-quer');
 await page.waitForTimeout(300);
 check(await page.locator('#vz-sheet.sheet--a3-land').count() === 1, 'Format A3 quer greift');

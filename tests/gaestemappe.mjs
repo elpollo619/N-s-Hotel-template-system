@@ -12,6 +12,15 @@ page.on('pageerror', e => problems.push('JS-FEHLER: ' + e.message));
 page.on('console', m => { if (m.type() === 'error') problems.push('KONSOLE: ' + m.text()); });
 const check = (ok, was) => { console.log(`${ok ? '✓' : '✗'} ${was}`); if (!ok) problems.push(was); };
 
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   für Playwright unsichtbar. Vor dem Bedienen also alles aufklappen. */
+async function alleKapitelOeffnen(){
+  const knopf = page.locator('#vz-alle-kap');
+  if (!(await knopf.count())) return;
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
 // Mit sauberem Zustand starten, sonst haengt das Ergebnis vom letzten Lauf ab.
 await page.goto(BASE + '/index.html', { waitUntil:'domcontentloaded' });
 await page.evaluate(() => localStorage.clear());
@@ -40,6 +49,7 @@ check(stapel.schatten === 'none' && /rgba\(0, 0, 0, 0\)|transparent/.test(stapel
       'Der Stapel selbst ist unsichtbar — nur die Seiten tragen Papier');
 
 /* 4 · Kapitel abschalten entfernt genau eine Seite */
+await alleKapitelOeffnen();
 const wahl = async (feld, wert) => {
   await page.selectOption(`select[data-path="${feld}"]`, wert);
   await page.waitForTimeout(250);
@@ -67,6 +77,8 @@ check(fuss.join(',') === '02,03,04,05,06', `Seitenzahlen laufen durch (${fuss.jo
 
 /* 7 · Alles uebersteht das Neuladen */
 await page.reload({ waitUntil:'networkidle' });
+await page.waitForSelector('#vz-sheet');
+await alleKapitelOeffnen();
 await page.waitForSelector('#vz-sheet [data-page]');
 await page.waitForTimeout(250);
 check(await seiten() === 6, 'Auswahl bleibt nach dem Neuladen erhalten');

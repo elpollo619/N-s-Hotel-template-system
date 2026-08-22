@@ -208,6 +208,12 @@ export default {
     ]
   },
 
+  /* Aus der Suche: die gefundene Fraktion als einzige Zeile setzen. */
+  ausSuche(d, wert){
+    return FRAKTIONEN.some(f => f.id === wert)
+      ? { ...d, rows:[{ art:wert, wort:'', ja:'', nein:'' }] } : d;
+  },
+
   actions:{
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);

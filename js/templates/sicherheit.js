@@ -102,6 +102,12 @@ export default {
     fussnote:'Danke für Ihr Verständnis.'
   },
 
+  /* Aus der Suche: das gefundene Zeichen als erste Zeile setzen. */
+  ausSuche(d, wert){
+    return szZeichen(wert).id === wert
+      ? { ...d, rows:[{ zeichen:wert, de:'', zusatz:'' }] } : d;
+  },
+
   actions:{
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);

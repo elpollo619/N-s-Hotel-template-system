@@ -16,6 +16,15 @@ function pruefe(name, ok, dazu){
   if (!ok) fehler.push(name + (dazu ? ': ' + dazu : ''));
 }
 
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   für Playwright unsichtbar. Vor dem Bedienen also alles aufklappen. */
+async function alleKapitelOeffnen(){
+  const knopf = page.locator('#vz-alle-kap');
+  if (!(await knopf.count())) return;
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
 await page.goto(BASE + '/index.html', { waitUntil:'networkidle' });
 
 /* ---------- 1. Datenbestand ---------------------------------------------- */
@@ -81,6 +90,7 @@ async function hinweisMit(zustand){
   if (page.url().includes('#/t/hinweis')) await page.reload({ waitUntil:'networkidle' });
   else await page.goto(`${BASE}/index.html#/t/hinweis`, { waitUntil:'networkidle' });
   await page.waitForSelector('#vz-sheet');
+  await alleKapitelOeffnen();
   await page.waitForTimeout(150);
   return page.evaluate(() =>
     Array.from(document.querySelectorAll('.t-hinweis-block')).map(b => b.getAttribute('lang')));
@@ -148,6 +158,7 @@ async function schild(id, zustand, sel){
   if (page.url().includes('#/t/' + id)) await page.reload({ waitUntil:'networkidle' });
   else await page.goto(`${BASE}/index.html#/t/${id}`, { waitUntil:'networkidle' });
   await page.waitForSelector('#vz-sheet');
+  await alleKapitelOeffnen();
   await page.waitForTimeout(150);
   return page.evaluate(s => Array.from(document.querySelectorAll(s)).map(e => e.textContent.trim()), sel);
 }

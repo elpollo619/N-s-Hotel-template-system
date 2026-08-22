@@ -48,7 +48,7 @@ function fill(text, d){
 export default {
   id:'hinweis',
   title:'Hinweis / Aushang',
-  sub:'Rund 30 fertige Textbausteine aus dem Hausgebrauch · A4',
+  sub:'42 fertige Textbausteine in sechs Sprachen · A4',
   badge:'Hinweis',
   page:'a4',
   root:'t-hinweis',
@@ -174,6 +174,12 @@ export default {
     qrLegende:'',
     gruss:'Die Verwaltung',
     footer:''
+  },
+
+  /* Aus der Suche: den gefundenen Baustein gleich übernehmen. */
+  ausSuche(d, wert){
+    const p = preset(wert);
+    return p.id === wert ? this.actions.apply({ ...d, presetId:wert }) : d;
   },
 
   /* Die beiden Knöpfe im Formular. */
