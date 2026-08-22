@@ -19,6 +19,7 @@ import sammelstelle from './sammelstelle.js';
 import kurzanleitung from './kurzanleitung.js';
 import sicherheit from './sicherheit.js';
 import etiketten from './etiketten.js';
+import qrplakat from './qrplakat.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -28,6 +29,7 @@ export const TEMPLATES = {
   sammelstelle,
   sicherheit,
   etiketten,
+  qrplakat,
   kurzanleitung,
   notruf,
   rezeption,
@@ -43,7 +45,7 @@ export const TEMPLATES = {
 
 export const ORDER = [
   'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
-  'etiketten', 'kurzanleitung',
+  'etiketten', 'qrplakat', 'kurzanleitung',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -81,9 +83,9 @@ export const GROUPS = [
     note:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte, Namensschilder.',
     ids:['etiketten'] },
 
-  { id:'hilfe', title:'Für das Team',
-    note:'Die Kurzanleitung zum Aufhängen — mit QR-Code auf die Zentrale.',
-    ids:['kurzanleitung'] },
+  { id:'hilfe', title:'QR-Codes und Anleitung',
+    note:'WLAN, Links und Telefonnummern als Code zum Scannen — und die Kurzanleitung fürs Team.',
+    ids:['qrplakat', 'kurzanleitung'] },
 
   { id:'plaene', title:'Karten und Pläne',
     note:'Anfahrt, Luftbild und der interaktive Lageplan.',

@@ -20,7 +20,7 @@ const MODULES = [
   'js/lib/dom.js',
   'js/lib/icons.js',
   'js/lib/thumbs.js',
-  'js/lib/qr-vorlagen.js',
+  'js/lib/qr.js',
   'js/lib/sicherheitszeichen.js',
   'js/lib/storage.js',
   'js/lib/teilen.js',
@@ -48,6 +48,7 @@ const MODULES = [
   'js/templates/sammelstelle.js',
   'js/templates/sicherheit.js',
   'js/templates/etiketten.js',
+  'js/templates/qrplakat.js',
   'js/templates/kurzanleitung.js',
   'js/templates/index.js',
   'js/app.js'
