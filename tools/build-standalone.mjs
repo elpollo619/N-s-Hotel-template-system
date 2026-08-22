@@ -14,6 +14,7 @@ const p = (...x) => path.join(ROOT, ...x);
 /* Reihenfolge: Abhängigkeiten zuerst. */
 const MODULES = [
   'js/brand-config.js',
+  'js/lib/sprachen.js',
   'js/objekte.js',
   'js/presets.js',
   'js/lib/dom.js',
@@ -24,6 +25,7 @@ const MODULES = [
   'js/lib/storage.js',
   'js/lib/teilen.js',
   'js/lib/lesbarkeit.js',
+  'js/lib/kontrast.js',
   'js/lib/i18n.js',
   'js/lib/brand.js',
   'js/lib/sitemap.js',

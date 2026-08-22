@@ -85,8 +85,8 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 
 | Vorlage | Format | Wofür |
 |---|---|---|
-| **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — rund 30 fertige Textbausteine, Kopfbalken navy / cyan / rot je nach Ton |
-| **Sicherheitszeichen** | A5/A4, mehrseitig | Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 3864-1 / ISO 7010 — 16 fertige Zeichen, eine Seite je Schild |
+| **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — 42 fertige Textbausteine in sechs Sprachen, Kopfbalken navy / cyan / rot je nach Ton |
+| **Sicherheitszeichen** | A5/A4, mehrseitig | Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 3864-1 / ISO 7010 — 16 fertige Zeichen in sechs Sprachen, eine Seite je Schild |
 | **Etikettenbogen** | A4 hoch, mehrseitig | Klebeetiketten auf Avery-Bogen (L7160, L7163, L7165, L7651) oder freiem Raster — Schlüssel, Schränke, Vorräte |
 | **Mieterbrief** | A4 hoch | Schreiben mit Briefkopf: Hauseingangstür, Besucherparkplatz, Brandmelder |
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
@@ -97,7 +97,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
-| **Parkplatz-Info** | A4 hoch | Lageplan plus Text in vier Sprachen |
+| **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Eigenes Luftbild hochladen, Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
@@ -147,6 +147,80 @@ normales Papier drucken, gegen den Etikettenbogen halten und bei Bedarf die
 Feinverschiebung setzen — Drucker versetzen gerne um ein bis zwei Millimeter.
 Im Druckdialog zwingend **Ränder: keine** und **Skalierung: 100 %**; sobald der
 Browser das Blatt einpasst, stimmt kein Etikett mehr.
+
+---
+
+## Sprachen auf dem Aushang
+
+Nicht zu verwechseln mit der Sprache der Bedienoberfläche (DE/EN oben rechts).
+Hier geht es um die Sprachen, die auf dem **gedruckten Blatt** stehen.
+
+Sechs Sprachen sind hinterlegt:
+
+| | | |
+|---|---|---|
+| **DE** Deutsch | **EN** English | **FR** Français |
+| **IT** Italiano | **PT** Português | **ES** Español |
+
+Vollständig sechssprachig sind:
+
+* die **42 Textbausteine** des Hinweis-Aushangs — Überschrift *und* Text
+* die **16 Sicherheitszeichen**
+* die **11 Abfallfraktionen** der Sammelstelle — Wort, «gehört hinein»
+  und «gehört nicht hinein»
+* die **Parkplatz-Info** (dort werden leere Sprachfelder einfach weggelassen)
+
+Im Formular wird angehakt, was aufs Blatt soll. **Die Reihenfolge ist fest** —
+DE, EN, FR, IT, PT, ES — und nicht die des Anklickens, damit zwei Aushänge
+nebeneinander gleich aussehen. Die **erste** gewählte Sprache ist die
+Hauptsprache: ihre Überschrift steht gross im Kopfbalken, die übrigen
+erscheinen kleiner darunter, jede mit ihrem Kürzel.
+
+Fertige Zusammenstellungen sparen das Anhaken:
+
+| Zusammenstellung | Sprachen | Wofür |
+|---|---|---|
+| Nur Deutsch | DE | der Normalfall im Haus |
+| Deutsch + Englisch | DE EN | Hotelgäste |
+| Schweiz | DE FR IT | Amtssprachen |
+| Gäste international | DE EN FR IT | Aushänge im Hotelbereich |
+| Handwerk und Reinigung | DE PT ES | Baustelle, Reinigung, Unterhalt |
+| Alle sechs | DE EN FR IT PT ES | wenn es niemand übersehen darf |
+
+Sechs Sprachen passen auf eine A4-Seite — die Vorlage setzt ab vier Sprachen
+automatisch enger, und der grüne Balken links sagt weiterhin, wenn es doch zu
+lang wird.
+
+### Woher die Übersetzungen stammen
+
+Die **deutschen** Wortlaute sind unverändert die aus `J:\Immobilien\Plakate`.
+Ebenfalls unverändert übernommen sind drei Fassungen, die dort schon vorlagen:
+Französisch und Portugiesisch bei «Fahrzeug unberechtigt abgestellt» und
+Französisch bei «Wäschehänge».
+
+**Alle übrigen Fassungen sind hier neu erstellt.** Sie sind sorgfältig gemacht
+und sinngetreu — aber es sind Übersetzungen. Wo ein Aushang Rechtsfolgen
+androht (Kündigung, Anzeige, Kostenfolge), **gilt im Zweifel die deutsche
+Fassung**. Bei diesen Texten lohnt sich ein Gegenlesen durch eine
+muttersprachliche Person, bevor der Aushang jahrelang hängt.
+
+---
+
+## Kontrastprüfung
+
+Bei den Schildern prüft der Editor still mit, ob Schrift und Grund weit genug
+auseinanderliegen — nach der Kontrastformel der WCAG, Stufe AA: 3:1 für grosse
+Schrift, 4.5:1 für den Rest. Gemeldet wird nur, was **darunter** liegt; solange
+alles passt, bleibt die Zeile leer.
+
+Zwei Dinge sind bewusst ausgenommen:
+
+* **Schrift unter 14 pt.** Fusszeilen, Sprachkürzel und Massangaben sind als
+  Nebeninformation in Grau gesetzt. Sie liessen sich im Editor gar nicht
+  ändern — eine Dauerwarnung darüber wäre Rauschen.
+* **Die Handschrift-Zeile** (Cyan auf Weiss, rund 2,5:1). Sie ist ein
+  Zierelement der Marke und wiederholt, was direkt darunter gross und dunkel
+  noch einmal steht. Wer sie ändern wollte, müsste die Markenfarbe ändern.
 
 ---
 
@@ -260,7 +334,7 @@ nach Kategorie sortiert:
 Hausordnung und Verbote · Abfall und Recycling · Parkieren · Küche und Bad ·
 Waschen und Trocknen · Vermietung · Hotel und Gäste · Technik und Unterhalt
 
-Rund **40 Bausteine**, unter anderem: Rauchverbot (Haus und Hotel-Fassung mit
+**42 Bausteine**, unter anderem: Rauchverbot (Haus und Hotel-Fassung mit
 Kostenfolge), Betäubungsmittel, Videoüberwachung, Ruhezeit, Fenster
 geschlossen halten, Schlüssel nicht stecken lassen, Abfall nur in Säcken, Nur
 PET, sauberes Papier und Karton, Privatparkplatz, unberechtigt abgestelltes
@@ -272,10 +346,12 @@ Im Editor Baustein wählen, **Baustein übernehmen** drücken, fertig. Danach is
 jedes Feld frei überschreibbar. Drei Platzhalter werden beim Zeichnen ersetzt:
 `{{adresse}}`, `{{objekt}}` und `{{datum}}`.
 
-Mehrsprachig: **DE, EN, FR, IT und PT**. Deutsch steht immer oben, die
-übrigen Sprachen erscheinen nur, wenn etwas drinsteht. Das entspricht den
-Originalen — `Verbotene Substanzen.docx` ist DE/IT/EN, `Hinweis Parkverbot
-Kerzers.docx` DE/FR/PT, `Wäschehänge.docx` DE/EN/FR.
+Jeder Baustein liegt vollständig in **sechs Sprachen** vor — Überschrift und
+Text: DE, EN, FR, IT, PT, ES. Welche davon aufs Blatt kommen, wird im Formular
+angehakt; siehe [Sprachen auf dem Aushang](#sprachen-auf-dem-aushang). Die
+Originale waren uneinheitlich mehrsprachig (`Verbotene Substanzen.docx` DE/IT/EN,
+`Hinweis Parkverbot Kerzers.docx` DE/FR/PT, `Wäschehänge.docx` DE/EN/FR) — die
+Lücken sind jetzt geschlossen, die vorhandenen Fassungen unverändert.
 
 **Nicht übernommen wurden zwei WLAN-Passwörter**, die in
 `Videoüberwachung.docx` und `Wifi.docx` im Klartext stehen. Das Repository ist
@@ -497,6 +573,9 @@ Die Prüfungen laufen headless in Chromium und decken ab:
 * **`tests/teilen.mjs`** — der Teilen-Link kommt in einem fremden Browser an,
   räumt die Adresse auf, übersteht das Neuladen, lässt Bilder draussen; dazu
   die Rechnung hinter der Leseabstand-Anzeige
+* **`tests/sprachen.mjs`** — kein Loch im sechssprachigen Bestand
+  (Bausteine, Sicherheitszeichen, Abfallfraktionen), feste Reihenfolge,
+  Kästchen und fertige Zusammenstellungen, dazu die Kontrastprüfung
 * **`tests/etiketten.mjs`** — der Etikettenbogen sitzt millimetergenau auf den
   Herstellermassen, Feinverschiebung und freies Raster greifen, ein voller
   Bogen läuft auf die zweite Seite
@@ -536,7 +615,7 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
 
 ## Para Cris (resumen en español)
 
-* La app está terminada y probada: **8 plantillas** (Fase 1 y Fase 2 del brief).
+* La app está terminada y probada: **18 plantillas**, 131 comprobaciones automáticas.
 * El equipo entra por un enlace, edita textos y exporta **PDF** o **PNG**.
   Sin login, sin backend; los borradores se guardan en el navegador de cada uno.
 * Desde tu carpeta de Drive «carteles Ns Hotel» ya se incorporaron: el **SVG
@@ -559,3 +638,15 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   React y Babel desde un CDN, justo lo que esta app no puede llevar (sin
   framework, sin CDN, funcionando sin internet). Ya funcionan solos.
   Necesita los ficheros originales `mapeditor.js` y las plantillas HTML.
+* **Seis idiomas en los carteles**: DE, EN, FR, IT, PT, ES. Están completos los
+  42 bloques de texto, las 16 señales de seguridad y las 11 fracciones de
+  residuos. En el formulario se marca con casillas qué idiomas se imprimen; el
+  orden es fijo para que dos carteles se parezcan. Hay combinaciones hechas
+  (solo alemán · DE+EN · Suiza DE/FR/IT · internacional DE/EN/FR/IT · obra y
+  limpieza DE/PT/ES · los seis).
+  **Los textos en alemán son los originales de la empresa.** Las traducciones
+  al FR y PT de dos carteles también venían del Drive. **El resto las hice
+  yo**: son fieles, pero son traducciones. Donde el cartel amenaza con
+  consecuencias legales (rescisión, denuncia, coste), manda la versión
+  alemana — y conviene que alguien nativo lea el texto antes de colgarlo
+  durante años. El español lo puedes revisar tú mismo.

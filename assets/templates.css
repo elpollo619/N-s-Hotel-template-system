@@ -212,6 +212,12 @@
 .t-park-code{font-family:var(--font-display);font-weight:700;font-size:10pt;color:var(--cyan);letter-spacing:.08em}
 .t-park-code em{font-style:normal;font-family:var(--font-body);font-weight:600;font-size:8pt;color:var(--muted)}
 .t-park-lang p{margin:0;font-size:8.5pt;line-height:1.48;color:var(--ink)}
+/* Fuenf oder sechs Sprachen: enger setzen, damit das Blatt eine Seite bleibt. */
+.t-park-langs.is-eng{gap:2.2mm;margin-top:3mm}
+.t-park-langs.is-eng .t-park-lang{padding:2mm 2.6mm}
+.t-park-langs.is-eng .t-park-code{margin-bottom:.8mm;font-size:8.5pt}
+.t-park-langs.is-eng .t-park-code em{font-size:7pt}
+.t-park-langs.is-eng .t-park-lang p{font-size:7pt;line-height:1.32}
 .t-park-addr{
   margin:5mm 0 0;text-align:center;font-size:8pt;letter-spacing:.06em;
   color:var(--muted);text-transform:uppercase;
@@ -634,8 +640,34 @@
 
 .t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
   padding:14mm 18mm}
-.t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
-.t-hinweis-p:not([lang="de"]){font-size:12pt;color:var(--ink-soft);font-style:italic}
+
+/* Sprachblöcke: Kürzel links, Text rechts. Die erste Sprache trägt das Blatt,
+   die weiteren stehen kleiner darunter — so bleibt klar, welche Fassung im
+   Zweifel gilt, ohne dass die anderen wie eine Fussnote wirken. */
+.t-hinweis-block{display:flex;gap:5mm;align-items:flex-start;margin:0 0 7mm}
+.t-hinweis-block:last-child{margin-bottom:0}
+.t-hinweis-tag{
+  flex:0 0 auto;min-width:9mm;text-align:center;
+  font-family:var(--font-display);font-weight:700;font-size:9pt;letter-spacing:.08em;
+  color:var(--navy);background:var(--bg-2);border-radius:2mm;padding:1.4mm 1.8mm;
+  margin-top:1mm;
+}
+.t-hinweis-blocktxt{min-width:0;flex:1}
+.t-hinweis-blocktxt h2{
+  margin:0 0 2mm;font-family:var(--font-display);font-weight:700;
+  font-size:13pt;line-height:1.15;color:var(--navy);
+}
+.t-hinweis-p{margin:0;font-size:14.5pt;line-height:1.5;color:var(--ink)}
+/* Ab der zweiten Sprache kleiner — sonst passt kein viersprachiger Aushang
+   mehr auf eine Seite. */
+.t-hinweis-block:not(:first-child) .t-hinweis-p{font-size:11.5pt;color:var(--ink-soft)}
+.t-hinweis-block:not(:first-child) .t-hinweis-blocktxt h2{font-size:11pt}
+.t-hinweis-block:not(:first-child) .t-hinweis-tag{color:var(--muted);font-size:8pt}
+
+/* Vier Sprachen und mehr: enger setzen, sonst läuft das Blatt über. */
+.t-hinweis-body.is-eng .t-hinweis-block{margin-bottom:4.5mm}
+.t-hinweis-body.is-eng .t-hinweis-p{font-size:12pt;line-height:1.4}
+.t-hinweis-body.is-eng .t-hinweis-block:not(:first-child) .t-hinweis-p{font-size:10pt;line-height:1.35}
 
 .t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
 .t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
@@ -812,10 +844,13 @@
   font-size:26pt;line-height:1.06;letter-spacing:-.01em;margin:0;
   hyphens:auto;
 }
-.t-sicher-en{
-  margin:2.5mm 0 0;font-style:italic;font-size:14pt;line-height:1.2;
+/* Weitere Sprachen unter der Hauptsprache — kleiner, aber nicht kursiv:
+   ein Verbot bleibt ein Verbot, auch auf Portugiesisch. */
+.t-sicher-mehr{
+  margin:2mm 0 0;font-size:13pt;line-height:1.2;font-weight:600;
   color:var(--ink-soft);
 }
+.t-sicher-mehr + .t-sicher-mehr{margin-top:1.2mm}
 .t-sicher-zusatz{
   margin:4mm 0 0;font-size:11pt;line-height:1.35;font-weight:600;color:var(--ink);
   border-left:1.2mm solid var(--sz-akzent);padding-left:3.5mm;
@@ -833,12 +868,12 @@
 /* A4 verträgt deutlich mehr Schrift als A5. */
 .sheet--a4 .t-sicher-txt h1,
 .sheet--a4-land .t-sicher-txt h1{font-size:38pt}
-.sheet--a4 .t-sicher-en,
-.sheet--a4-land .t-sicher-en{font-size:19pt}
+.sheet--a4 .t-sicher-mehr,
+.sheet--a4-land .t-sicher-mehr{font-size:17pt}
 .sheet--a4 .t-sicher-zusatz,
 .sheet--a4-land .t-sicher-zusatz{font-size:13pt}
 .sheet--a5-land .t-sicher-txt h1{font-size:21pt}
-.sheet--a5-land .t-sicher-en{font-size:12pt}
+.sheet--a5-land .t-sicher-mehr{font-size:10.5pt}
 
 /* ==========================================================================
    Etikettenbogen — js/templates/etiketten.js
@@ -879,4 +914,13 @@
 .t-etikett-txt u{
   text-decoration:none;font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);margin-top:.4mm;
+}
+
+/* Sammelstelle: die weiteren Sprachen als kurze Zeile unter dem Hinweis. */
+.t-sammel-mehr{
+  margin:1.6mm 0 0;font-size:8pt;line-height:1.3;color:var(--muted);
+}
+.t-sammel-mehr b{
+  font-family:var(--font-display);font-weight:700;letter-spacing:.06em;
+  color:var(--ink-soft);margin-right:1.2mm;
 }

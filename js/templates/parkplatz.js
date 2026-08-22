@@ -1,5 +1,7 @@
 /* Parkplatz-Info · mehrsprachig mit Lageplan, A4 hoch.
-   Portiert aus "Parkplatz-Info - Mehrsprachig.html". */
+   Portiert aus "Parkplatz-Info - Mehrsprachig.html", inzwischen auf sechs
+   Sprachen erweitert. Leere Sprachfelder fallen weg — wer nur DE/EN will,
+   löscht die übrigen Texte. */
 import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
@@ -10,7 +12,7 @@ import { BRAND, contactLine } from '../brand-config.js';
 export default {
   id:'parkplatz',
   title:'Parkplatz-Info',
-  sub:'Lageplan und Text in vier Sprachen · A4 hoch',
+  sub:'Lageplan und Text in bis zu sechs Sprachen · A4 hoch',
   badge:'Anfahrt',
   badgeCyan:true,
   page:'a4',
@@ -56,11 +58,14 @@ export default {
     { k:'walkMin', label:'Fussweg Parkplatz — Eingang', type:'text' },
     { k:'adresse', label:'Adresse für das Navi', type:'text' },
 
-    { t:'group', label:'Texte in vier Sprachen' },
+    { t:'group', label:'Texte in bis zu sechs Sprachen' },
+    { t:'note', label:'Was leer bleibt, erscheint nicht auf dem Blatt.' },
     { k:'textDe', label:'Deutsch', type:'textarea', rows:3 },
     { k:'textEn', label:'English', type:'textarea', rows:3 },
     { k:'textFr', label:'Français', type:'textarea', rows:3 },
     { k:'textIt', label:'Italiano', type:'textarea', rows:3 },
+    { k:'textPt', label:'Português', type:'textarea', rows:3 },
+    { k:'textEs', label:'Español', type:'textarea', rows:3 },
 
     { t:'group', label:'Fusszeile' },
     { k:'footer', label:'Adresszeile', type:'text' }
@@ -81,6 +86,8 @@ export default {
     textEn:'Our guest parking spaces are marked in pink and are free of charge throughout your stay. Please place the parking card from reception clearly visible behind your windscreen.',
     textFr:'Nos places pour les hôtes sont marquées en rose et sont gratuites pendant tout votre séjour. Merci de placer la carte de parking de la réception derrière le pare-brise.',
     textIt:'I nostri posteggi per gli ospiti sono segnati in rosa e sono gratuiti per tutto il soggiorno. Vi preghiamo di esporre la carta di parcheggio della reception dietro il parabrezza.',
+    textPt:'Os nossos lugares para hóspedes estão marcados a cor-de-rosa e são gratuitos durante toda a estadia. Coloque o cartão de estacionamento da receção bem visível atrás do para-brisas.',
+    textEs:'Nuestras plazas para huéspedes están marcadas en rosa y son gratuitas durante toda la estancia. Coloque la tarjeta de aparcamiento de recepción bien visible tras el parabrisas.',
     footer: contactLine()
   },
 
@@ -99,7 +106,9 @@ export default {
       { code:'DE', name:'Deutsch',   text:d.textDe },
       { code:'EN', name:'English',   text:d.textEn },
       { code:'FR', name:'Français',  text:d.textFr },
-      { code:'IT', name:'Italiano',  text:d.textIt }
+      { code:'IT', name:'Italiano',  text:d.textIt },
+      { code:'PT', name:'Português', text:d.textPt },
+      { code:'ES', name:'Español',   text:d.textEs }
     ].filter(l => has(l.text));
 
     return `
@@ -128,7 +137,7 @@ export default {
       ${has(d.adresse) ? `<span class="t-park-chip t-park-chip--navy">${icon('flag', 18)}${esc(d.adresse)}</span>` : ''}
     </div>
 
-    <div class="t-park-langs">
+    <div class="t-park-langs${langs.length > 4 ? ' is-eng' : ''}">
       ${langs.map(l => `<div class="t-park-lang">
         <span class="t-park-code">${esc(l.code)}<em>${esc(l.name)}</em></span>
         <p>${fmt(l.text)}</p>

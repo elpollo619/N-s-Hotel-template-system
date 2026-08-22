@@ -390,6 +390,27 @@ a{color:var(--cyan)}
   border:1px solid var(--line);border-radius:8px;padding:10px 11px;margin:0;
 }
 
+/* Mehrfachauswahl (Sprachen eines Aushangs) */
+.vz-checks{display:flex;flex-wrap:wrap;gap:6px}
+.vz-check{
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  border:1px solid var(--line);border-radius:8px;padding:6px 10px;
+  font-size:12px;font-weight:600;color:var(--ink-soft);background:#fff;
+  transition:.14s background,.14s border-color,.14s color;
+}
+.vz-check:hover{border-color:var(--cyan)}
+.vz-check.is-on{background:var(--navy);border-color:var(--navy);color:#fff}
+.vz-check input{accent-color:var(--cyan);margin:0}
+.vz-check.is-on input{accent-color:#fff}
+
+/* Kontrastwarnung — erscheint nur, wenn etwas zu blass ist. */
+.vz-kontrast{display:none}
+.vz-kontrast.is-warn{
+  display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+  padding:8px 11px;border-radius:9px;margin:-10px 0 16px;
+  background:#FFF4E0;color:#96591b;cursor:help;
+}
+
 /* ===== assets/templates.css ===== */
 /* ==========================================================================
    N's Hotel · Vorlagen-Styles
@@ -605,6 +626,12 @@ a{color:var(--cyan)}
 .t-park-code{font-family:var(--font-display);font-weight:700;font-size:10pt;color:var(--cyan);letter-spacing:.08em}
 .t-park-code em{font-style:normal;font-family:var(--font-body);font-weight:600;font-size:8pt;color:var(--muted)}
 .t-park-lang p{margin:0;font-size:8.5pt;line-height:1.48;color:var(--ink)}
+/* Fuenf oder sechs Sprachen: enger setzen, damit das Blatt eine Seite bleibt. */
+.t-park-langs.is-eng{gap:2.2mm;margin-top:3mm}
+.t-park-langs.is-eng .t-park-lang{padding:2mm 2.6mm}
+.t-park-langs.is-eng .t-park-code{margin-bottom:.8mm;font-size:8.5pt}
+.t-park-langs.is-eng .t-park-code em{font-size:7pt}
+.t-park-langs.is-eng .t-park-lang p{font-size:7pt;line-height:1.32}
 .t-park-addr{
   margin:5mm 0 0;text-align:center;font-size:8pt;letter-spacing:.06em;
   color:var(--muted);text-transform:uppercase;
@@ -1027,8 +1054,34 @@ a{color:var(--cyan)}
 
 .t-hinweis-body{flex:1;display:flex;flex-direction:column;justify-content:center;
   padding:14mm 18mm}
-.t-hinweis-p{margin:0 0 8mm;font-size:14.5pt;line-height:1.5;color:var(--ink)}
-.t-hinweis-p:not([lang="de"]){font-size:12pt;color:var(--ink-soft);font-style:italic}
+
+/* Sprachblöcke: Kürzel links, Text rechts. Die erste Sprache trägt das Blatt,
+   die weiteren stehen kleiner darunter — so bleibt klar, welche Fassung im
+   Zweifel gilt, ohne dass die anderen wie eine Fussnote wirken. */
+.t-hinweis-block{display:flex;gap:5mm;align-items:flex-start;margin:0 0 7mm}
+.t-hinweis-block:last-child{margin-bottom:0}
+.t-hinweis-tag{
+  flex:0 0 auto;min-width:9mm;text-align:center;
+  font-family:var(--font-display);font-weight:700;font-size:9pt;letter-spacing:.08em;
+  color:var(--navy);background:var(--bg-2);border-radius:2mm;padding:1.4mm 1.8mm;
+  margin-top:1mm;
+}
+.t-hinweis-blocktxt{min-width:0;flex:1}
+.t-hinweis-blocktxt h2{
+  margin:0 0 2mm;font-family:var(--font-display);font-weight:700;
+  font-size:13pt;line-height:1.15;color:var(--navy);
+}
+.t-hinweis-p{margin:0;font-size:14.5pt;line-height:1.5;color:var(--ink)}
+/* Ab der zweiten Sprache kleiner — sonst passt kein viersprachiger Aushang
+   mehr auf eine Seite. */
+.t-hinweis-block:not(:first-child) .t-hinweis-p{font-size:11.5pt;color:var(--ink-soft)}
+.t-hinweis-block:not(:first-child) .t-hinweis-blocktxt h2{font-size:11pt}
+.t-hinweis-block:not(:first-child) .t-hinweis-tag{color:var(--muted);font-size:8pt}
+
+/* Vier Sprachen und mehr: enger setzen, sonst läuft das Blatt über. */
+.t-hinweis-body.is-eng .t-hinweis-block{margin-bottom:4.5mm}
+.t-hinweis-body.is-eng .t-hinweis-p{font-size:12pt;line-height:1.4}
+.t-hinweis-body.is-eng .t-hinweis-block:not(:first-child) .t-hinweis-p{font-size:10pt;line-height:1.35}
 
 .t-hinweis-foot{padding:0 18mm 14mm;display:grid;gap:5mm}
 .t-hinweis-gruss{margin:0;font-size:12pt;font-weight:700;color:var(--navy)}
@@ -1205,10 +1258,13 @@ a{color:var(--cyan)}
   font-size:26pt;line-height:1.06;letter-spacing:-.01em;margin:0;
   hyphens:auto;
 }
-.t-sicher-en{
-  margin:2.5mm 0 0;font-style:italic;font-size:14pt;line-height:1.2;
+/* Weitere Sprachen unter der Hauptsprache — kleiner, aber nicht kursiv:
+   ein Verbot bleibt ein Verbot, auch auf Portugiesisch. */
+.t-sicher-mehr{
+  margin:2mm 0 0;font-size:13pt;line-height:1.2;font-weight:600;
   color:var(--ink-soft);
 }
+.t-sicher-mehr + .t-sicher-mehr{margin-top:1.2mm}
 .t-sicher-zusatz{
   margin:4mm 0 0;font-size:11pt;line-height:1.35;font-weight:600;color:var(--ink);
   border-left:1.2mm solid var(--sz-akzent);padding-left:3.5mm;
@@ -1226,12 +1282,12 @@ a{color:var(--cyan)}
 /* A4 verträgt deutlich mehr Schrift als A5. */
 .sheet--a4 .t-sicher-txt h1,
 .sheet--a4-land .t-sicher-txt h1{font-size:38pt}
-.sheet--a4 .t-sicher-en,
-.sheet--a4-land .t-sicher-en{font-size:19pt}
+.sheet--a4 .t-sicher-mehr,
+.sheet--a4-land .t-sicher-mehr{font-size:17pt}
 .sheet--a4 .t-sicher-zusatz,
 .sheet--a4-land .t-sicher-zusatz{font-size:13pt}
 .sheet--a5-land .t-sicher-txt h1{font-size:21pt}
-.sheet--a5-land .t-sicher-en{font-size:12pt}
+.sheet--a5-land .t-sicher-mehr{font-size:10.5pt}
 
 /* ==========================================================================
    Etikettenbogen — js/templates/etiketten.js
@@ -1272,6 +1328,15 @@ a{color:var(--cyan)}
 .t-etikett-txt u{
   text-decoration:none;font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);margin-top:.4mm;
+}
+
+/* Sammelstelle: die weiteren Sprachen als kurze Zeile unter dem Hinweis. */
+.t-sammel-mehr{
+  margin:1.6mm 0 0;font-size:8pt;line-height:1.3;color:var(--muted);
+}
+.t-sammel-mehr b{
+  font-family:var(--font-display);font-weight:700;letter-spacing:.06em;
+  color:var(--ink-soft);margin-right:1.2mm;
 }
 
 </style>
@@ -1333,6 +1398,80 @@ function contactLine(){
   return [addressLine(), BRAND.phone, BRAND.mail, BRAND.web]
     .filter(x => x && String(x).trim())
     .join(' · ');
+}
+
+/* ===== js/lib/sprachen.js ===== */
+/* ==========================================================================
+   Sprachen der Aushänge
+   --------------------------------------------------------------------------
+   Nicht zu verwechseln mit js/lib/i18n.js — das ist die Sprache der
+   BEDIENOBERFLÄCHE. Hier geht es um die Sprachen, die auf dem gedruckten
+   Blatt stehen.
+
+   Sechs Sprachen, in dieser Reihenfolge. Deutsch steht immer zuoberst: es
+   ist die Amtssprache am Ort und die Fassung, die im Zweifel gilt. Die
+   anderen folgen in der Reihenfolge, in der sie im Haus gebraucht werden.
+
+   Warum eine feste Reihenfolge? Damit zwei Aushänge nebeneinander gleich
+   aussehen. Wer die Reihenfolge selbst bestimmen will, schreibt die Texte
+   von Hand.
+   ========================================================================== */
+
+const SPRACHEN = [
+  { id:'de', kurz:'DE', name:'Deutsch',       eigen:'Deutsch'    },
+  { id:'en', kurz:'EN', name:'Englisch',      eigen:'English'    },
+  { id:'fr', kurz:'FR', name:'Französisch',   eigen:'Français'   },
+  { id:'it', kurz:'IT', name:'Italienisch',   eigen:'Italiano'   },
+  { id:'pt', kurz:'PT', name:'Portugiesisch', eigen:'Português'  },
+  { id:'es', kurz:'ES', name:'Spanisch',      eigen:'Español'    }
+];
+
+const SPRACH_IDS = SPRACHEN.map(s => s.id);
+
+function sprache(id){
+  return SPRACHEN.find(s => s.id === id) || SPRACHEN[0];
+}
+
+/** Auswahlkästchen für das Formular. */
+function sprachOptions(){
+  return SPRACHEN.map(s => ({ v:s.id, t:`${s.kurz} · ${s.eigen}` }));
+}
+
+/**
+ * Auswahl bereinigen: nur bekannte Sprachen, immer in fester Reihenfolge,
+ * nie leer. Ein Aushang ohne Sprache wäre ein leeres Blatt.
+ */
+function sprachListe(auswahl){
+  const gewaehlt = Array.isArray(auswahl) ? auswahl : [auswahl].filter(Boolean);
+  const rein = SPRACH_IDS.filter(id => gewaehlt.includes(id));
+  return rein.length ? rein : ['de'];
+}
+
+/** Die Sprachen als Objekte, in Reihenfolge. */
+function sprachObjekte(auswahl){
+  return sprachListe(auswahl).map(sprache);
+}
+
+/* --------------------------------------------------------------------------
+   Fertige Zusammenstellungen — was im Haus wirklich vorkommt.
+   -------------------------------------------------------------------------- */
+const SPRACH_SETS = [
+  { id:'de',     label:'Nur Deutsch',                       ids:['de'] },
+  { id:'de-en',  label:'Deutsch + Englisch',                ids:['de','en'] },
+  { id:'ch',     label:'Schweiz — DE/FR/IT',                ids:['de','fr','it'] },
+  { id:'gaeste', label:'Gäste international — DE/EN/FR/IT', ids:['de','en','fr','it'] },
+  { id:'bau',    label:'Handwerk und Reinigung — DE/PT/ES', ids:['de','pt','es'] },
+  { id:'alle',   label:'Alle sechs',                        ids:SPRACH_IDS.slice() }
+];
+
+function sprachSetOptions(){
+  return [{ v:'', t:'— auswählen —' }]
+    .concat(SPRACH_SETS.map(s => ({ v:s.id, t:s.label })));
+}
+
+function sprachSet(id){
+  const s = SPRACH_SETS.find(x => x.id === id);
+  return s ? s.ids.slice() : null;
 }
 
 /* ===== js/objekte.js ===== */
@@ -1444,15 +1583,31 @@ function istHotel(absId){
 
 /* ===== js/presets.js ===== */
 /* ==========================================================================
-   Textbausteine der bestehenden Aushänge
+   Textbausteine der bestehenden Aushänge — sechssprachig
    --------------------------------------------------------------------------
-   Übernommen aus J:\Immobilien\Plakate — die Wortlaute stammen eins zu eins
-   aus den Word-Dateien, die im Haus seit Jahren im Einsatz sind. Nichts
-   umformuliert, nichts erfunden; nur Schweizer Schreibweise (ss statt ß)
-   und die Umlaute wurden geprüft.
+   Übernommen aus J:\Immobilien\Plakate. Die DEUTSCHEN Wortlaute stammen eins
+   zu eins aus den Word-Dateien, die im Haus seit Jahren im Einsatz sind:
+   nichts umformuliert, nichts erfunden; nur Schweizer Schreibweise (ss statt
+   ß) und die Umlaute wurden geprüft. Ebenso verbatim übernommen sind die
+   französische und die portugiesische Fassung von "Fahrzeug unberechtigt
+   abgestellt" und die französische von "Wäschehänge" — die lagen im
+   Laufwerk bereits vor.
 
-   Jeder Baustein füllt die Vorlage "Hinweis" aus. Wer etwas anderes braucht,
-   wählt "Frei" und schreibt selbst.
+   Alle übrigen Fassungen in EN, FR, IT, PT und ES sind hier neu erstellt.
+   Sie sind sorgfältig gemacht und sinngetreu, aber sie sind Übersetzungen:
+   Wo ein Aushang Rechtsfolgen androht — Kündigung, Anzeige, Kostenfolge —,
+   gilt im Zweifel die deutsche Fassung. Wer ganz sicher gehen will, lässt
+   den betreffenden Text von einer muttersprachlichen Person gegenlesen.
+
+   Aufbau eines Bausteins:
+
+     titel: { de, en, fr, it, pt, es }   die Überschrift je Sprache
+     text:  { de, en, fr, it, pt, es }   der Fliesstext je Sprache
+
+   Ein leerer Text ist Absicht: manche Aushänge bestehen nur aus der
+   Überschrift, und die wirkt grösser, wenn nichts darunter steht.
+
+   Platzhalter: {{adresse}} {{objekt}} {{datum}} — die Vorlage setzt sie ein.
    ========================================================================== */
 
 const KATEGORIEN = [
@@ -1466,326 +1621,603 @@ const KATEGORIEN = [
   { id:'technik',     label:'Technik und Unterhalt' }
 ];
 
+const LEER = { de:'', en:'', fr:'', it:'', pt:'', es:'' };
+
 /* ton: 'info' | 'warnung' | 'verbot' — steuert die Farbe des Kopfbalkens. */
 const PRESETS = [
   /* ── Hausordnung und Verbote ─────────────────────────────────────────── */
   {
     id:'frei', cat:'hausordnung', ton:'info', icon:'info',
     label:'Frei — eigener Text',
-    title:'Titel eingeben', de:'', en:'', it:''
+    titel:{ de:'Titel eingeben', en:'Enter a title', fr:'Saisir un titre',
+            it:'Inserire un titolo', pt:'Introduzir um título', es:'Escriba un título' },
+    text:{ ...LEER }
   },
   {
     id:'rauchverbot', cat:'hausordnung', ton:'verbot', icon:'smoke',
     label:'Rauchverbot im gesamten Gebäude',
-    title:'Rauchverbot im gesamten Gebäude',
-    de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
-    en:'No smoking anywhere in the building.',
-    it:''
+    titel:{
+      de:'Rauchverbot im gesamten Gebäude',
+      en:'No smoking anywhere in the building',
+      fr:'Interdiction de fumer dans tout le bâtiment',
+      it:'Divieto di fumare in tutto lʼedificio',
+      pt:'Proibido fumar em todo o edifício',
+      es:'Prohibido fumar en todo el edificio' },
+    text:{
+      de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
+      en:'If we find that the fire alarm system has been tampered with, the tenancy will be terminated with immediate effect for endangering life and limb.',
+      fr:'Si nous constatons que le système de détection dʼincendie a été manipulé, le bail sera résilié avec effet immédiat pour mise en danger de la vie dʼautrui.',
+      it:'Se accertiamo che lʼimpianto di rilevazione incendi è stato manomesso, il contratto di locazione verrà risolto con effetto immediato per messa in pericolo dellʼincolumità delle persone.',
+      pt:'Se constatarmos que o sistema de deteção de incêndio foi manipulado, o contrato de arrendamento será rescindido de imediato por colocar vidas em perigo.',
+      es:'Si comprobamos que se ha manipulado el sistema de detección de incendios, el contrato de arrendamiento se rescindirá de inmediato por poner en peligro la vida de las personas.' }
   },
   {
     id:'substanzen', cat:'hausordnung', ton:'verbot', icon:'warn',
     label:'Verbotene Substanzen',
-    title:'Verbotene Substanzen',
-    de:'Das Konsumieren von verbotenen Substanzen ist untersagt. Bei Missbrauch wird sofort die Polizei informiert.',
-    en:'The consumption of prohibited substances is forbidden. In case of abuse, the police will be informed immediately.',
-    it:'È vietato il consumo di sostanze proibite. In caso di abuso, la polizia sarà immediatamente informata.'
+    titel:{
+      de:'Verbotene Substanzen', en:'Prohibited substances', fr:'Substances interdites',
+      it:'Sostanze proibite', pt:'Substâncias proibidas', es:'Sustancias prohibidas' },
+    text:{
+      de:'Das Konsumieren von verbotenen Substanzen ist untersagt. Bei Missbrauch wird sofort die Polizei informiert.',
+      en:'The consumption of prohibited substances is forbidden. In case of abuse, the police will be informed immediately.',
+      fr:'La consommation de substances interdites est prohibée. En cas dʼabus, la police sera immédiatement informée.',
+      it:'È vietato il consumo di sostanze proibite. In caso di abuso, la polizia sarà immediatamente informata.',
+      pt:'É proibido o consumo de substâncias ilícitas. Em caso de abuso, a polícia será imediatamente informada.',
+      es:'Está prohibido el consumo de sustancias ilegales. En caso de infracción se avisará de inmediato a la policía.' }
   },
   {
     id:'cannabis', cat:'hausordnung', ton:'warnung', icon:'warn',
     label:'Cannabis und Betäubungsmittel',
-    title:'Betäubungsmittel',
-    de:'Bei uns sind von Mitbewohnern Reklamationen wegen Cannabis-Gestank eingegangen. Wir weisen Sie darauf hin, dass wir den Konsum von Cannabis, wie auch sonstigen Betäubungsmittel in und um unser Gebäude nicht dulden. Im Wiederholungsfall werden wir die Polizei einschalten.',
-    en:'', it:''
+    titel:{
+      de:'Betäubungsmittel', en:'Narcotics', fr:'Stupéfiants',
+      it:'Stupefacenti', pt:'Estupefacientes', es:'Estupefacientes' },
+    text:{
+      de:'Bei uns sind von Mitbewohnern Reklamationen wegen Cannabis-Gestank eingegangen. Wir weisen Sie darauf hin, dass wir den Konsum von Cannabis, wie auch sonstigen Betäubungsmittel in und um unser Gebäude nicht dulden. Im Wiederholungsfall werden wir die Polizei einschalten.',
+      en:'We have received complaints from other residents about the smell of cannabis. Please note that we do not tolerate the consumption of cannabis or any other narcotics in or around our building. If it happens again, we will involve the police.',
+      fr:'Des habitants se sont plaints dʼodeurs de cannabis. Nous vous rendons attentifs au fait que nous ne tolérons ni la consommation de cannabis ni celle dʼautres stupéfiants dans et autour de notre bâtiment. En cas de récidive, nous ferons appel à la police.',
+      it:'Abbiamo ricevuto reclami da altri inquilini per lʼodore di cannabis. Vi informiamo che non tolleriamo il consumo di cannabis né di altri stupefacenti dentro e attorno al nostro edificio. In caso di recidiva ci rivolgeremo alla polizia.',
+      pt:'Recebemos queixas de outros moradores por causa do cheiro a canábis. Informamos que não toleramos o consumo de canábis nem de outros estupefacientes dentro e à volta do nosso edifício. Em caso de reincidência, chamaremos a polícia.',
+      es:'Hemos recibido quejas de otros residentes por el olor a cannabis. Le informamos de que no toleramos el consumo de cannabis ni de otros estupefacientes dentro ni alrededor de nuestro edificio. Si se repite, avisaremos a la policía.' }
   },
   {
     id:'video', cat:'hausordnung', ton:'warnung', icon:'warn',
     label:'Videoüberwachung',
-    title:'Dieser Bereich wird videoüberwacht!',
-    de:'', en:'This area is under video surveillance!', it:''
+    titel:{
+      de:'Dieser Bereich wird videoüberwacht!',
+      en:'This area is under video surveillance!',
+      fr:'Cette zone est sous vidéosurveillance !',
+      it:'Questʼarea è sorvegliata da videocamere!',
+      pt:'Esta área está sob videovigilância!',
+      es:'¡Esta zona está videovigilada!' },
+    text:{ ...LEER }
   },
   {
     id:'tuere', cat:'hausordnung', ton:'info', icon:'door',
     label:'Bitte Türe schliessen',
-    title:'Bitte Türe schliessen!',
-    de:'', en:'Please close the door!', it:''
+    titel:{
+      de:'Bitte Türe schliessen!', en:'Please close the door!',
+      fr:'Merci de fermer la porte !', it:'Si prega di chiudere la porta!',
+      pt:'Por favor, feche a porta!', es:'¡Cierre la puerta, por favor!' },
+    text:{ ...LEER }
   },
   {
     id:'abstellflaeche', cat:'hausordnung', ton:'verbot', icon:'warn',
     label:'Hier ist keine Abstellfläche',
-    title:'Hier ist keine Abstellfläche!',
-    de:'Bitte entfernen Sie sämtliche persönliche Gegenstände. Wir werden alles wegräumen.\nVelos und Trottis dürfen Sie in die Einstellhalle parkieren.',
-    en:'', it:''
+    titel:{
+      de:'Hier ist keine Abstellfläche!', en:'This is not a storage area!',
+      fr:'Cet espace nʼest pas une zone de dépôt !', it:'Questo non è un deposito!',
+      pt:'Este espaço não é uma zona de arrumação!', es:'¡Esto no es una zona de almacenaje!' },
+    text:{
+      de:'Bitte entfernen Sie sämtliche persönliche Gegenstände. Wir werden alles wegräumen.\nVelos und Trottis dürfen Sie in die Einstellhalle parkieren.',
+      en:'Please remove all personal belongings. Anything left behind will be cleared away.\nBicycles and scooters may be parked in the underground garage.',
+      fr:'Merci de retirer tous vos objets personnels. Tout ce qui reste sera évacué.\nLes vélos et les trottinettes peuvent être garés dans le garage souterrain.',
+      it:'Vi preghiamo di rimuovere tutti gli oggetti personali. Tutto ciò che resta verrà sgomberato.\nBiciclette e monopattini possono essere posteggiati nellʼautorimessa.',
+      pt:'Retire todos os objetos pessoais. Tudo o que ficar será removido.\nBicicletas e trotinetes podem ser estacionados na garagem.',
+      es:'Retire todos sus objetos personales. Todo lo que quede será retirado.\nLas bicicletas y los patinetes pueden aparcarse en el garaje.' }
   },
-
   {
     id:'schluessel', cat:'hausordnung', ton:'info', icon:'key',
     label:'Schlüssel nicht stecken lassen',
-    title:'Bitte Schlüssel nicht stecken lassen',
-    de:'', en:'Please remove the key', fr:'', it:'', pt:''
+    titel:{
+      de:'Bitte Schlüssel nicht stecken lassen', en:'Please do not leave the key in the lock',
+      fr:'Merci de ne pas laisser la clé sur la porte', it:'Non lasciare la chiave nella serratura',
+      pt:'Não deixe a chave na fechadura', es:'No deje la llave puesta' },
+    text:{ ...LEER }
   },
   {
     id:'ruhezeit', cat:'hausordnung', ton:'info', icon:'clock',
     label:'Ruhezeiten',
-    title:'Ruhezeit',
-    de:'22:00 – 07:00 Uhr sowie am Sonntag den ganzen Tag. Bitte Rücksicht auf die Mitbewohner nehmen.',
-    en:'Quiet hours 22:00 – 07:00 and all day on Sunday.', fr:'', it:'', pt:''
+    titel:{
+      de:'Ruhezeit', en:'Quiet hours', fr:'Heures de repos',
+      it:'Ore di silenzio', pt:'Horário de silêncio', es:'Horario de silencio' },
+    text:{
+      de:'22:00 – 07:00 Uhr sowie am Sonntag den ganzen Tag. Bitte Rücksicht auf die Mitbewohner nehmen.',
+      en:'22:00 – 07:00 and all day on Sunday. Please be considerate of the other residents.',
+      fr:'De 22h00 à 07h00 ainsi que toute la journée du dimanche. Merci dʼavoir des égards pour les autres habitants.',
+      it:'Dalle 22:00 alle 07:00 e tutta la domenica. Vi preghiamo di avere riguardo per gli altri inquilini.',
+      pt:'Das 22:00 às 07:00 e todo o domingo. Tenha consideração pelos outros moradores.',
+      es:'De 22:00 a 07:00 y todo el domingo. Tenga consideración con los demás residentes.' }
   },
   {
     id:'leise', cat:'hausordnung', ton:'info', icon:'info',
     label:'Bitte leise',
-    title:'Bitte leise',
-    de:'Im Treppenhaus und auf den Gängen bitte leise sprechen. Die Wände sind dünner, als sie aussehen.',
-    en:'Please keep it quiet in the stairwell and hallways.', fr:'', it:'', pt:''
+    titel:{
+      de:'Bitte leise', en:'Please keep it quiet', fr:'Merci de rester discret',
+      it:'Si prega di fare silenzio', pt:'Por favor, silêncio', es:'Por favor, silencio' },
+    text:{
+      de:'Im Treppenhaus und auf den Gängen bitte leise sprechen. Die Wände sind dünner, als sie aussehen.',
+      en:'Please speak quietly in the stairwell and the hallways. The walls are thinner than they look.',
+      fr:'Merci de parler à voix basse dans la cage dʼescalier et les couloirs. Les murs sont plus fins quʼils nʼen ont lʼair.',
+      it:'Nel vano scale e nei corridoi parlate a bassa voce. Le pareti sono più sottili di quanto sembri.',
+      pt:'Fale baixo na escadaria e nos corredores. As paredes são mais finas do que parecem.',
+      es:'Hable en voz baja en la escalera y los pasillos. Las paredes son más finas de lo que parecen.' }
   },
   {
     id:'fenster', cat:'hausordnung', ton:'info', icon:'info',
     label:'Fenster geschlossen halten',
-    title:'Bitte Fenster geschlossen halten',
-    de:'Sämtliche Zimmer verfügen über eine mechanische Belüftung, welche das gesamte Raumvolumen pro Tag rund 15 Mal wechselt. Aus diesem Grund sollten die Fenster geschlossen bleiben. Die dreifach verglasten Scheiben halten zudem den Aussenlärm ab, damit Sie ruhig schlafen können.',
-    en:'All rooms have mechanical ventilation that exchanges the entire room volume about 15 times a day, so the windows should stay closed. The triple glazing also keeps out street noise so you can sleep peacefully.',
-    fr:'', it:'', pt:''
+    titel:{
+      de:'Bitte Fenster geschlossen halten', en:'Please keep the windows closed',
+      fr:'Merci de garder les fenêtres fermées', it:'Tenere le finestre chiuse',
+      pt:'Mantenha as janelas fechadas', es:'Mantenga las ventanas cerradas' },
+    text:{
+      de:'Sämtliche Zimmer verfügen über eine mechanische Belüftung, welche das gesamte Raumvolumen pro Tag rund 15 Mal wechselt. Aus diesem Grund sollten die Fenster geschlossen bleiben. Die dreifach verglasten Scheiben halten zudem den Aussenlärm ab, damit Sie ruhig schlafen können.',
+      en:'All rooms have mechanical ventilation that exchanges the entire room volume about 15 times a day, so the windows should stay closed. The triple glazing also keeps out street noise so you can sleep peacefully.',
+      fr:'Toutes les chambres disposent dʼune ventilation mécanique qui renouvelle environ 15 fois par jour tout le volume dʼair. Les fenêtres devraient donc rester fermées. Le triple vitrage retient en outre le bruit de la rue, pour que vous dormiez tranquillement.',
+      it:'Tutte le camere dispongono di una ventilazione meccanica che ricambia lʼintero volume dʼaria circa 15 volte al giorno. Per questo le finestre dovrebbero restare chiuse. I vetri tripli tengono inoltre lontano il rumore esterno, così potete dormire tranquilli.',
+      pt:'Todos os quartos têm ventilação mecânica que renova cerca de 15 vezes por dia todo o volume de ar. Por isso, as janelas devem permanecer fechadas. Os vidros triplos travam ainda o ruído da rua, para que possa dormir descansado.',
+      es:'Todas las habitaciones cuentan con ventilación mecánica que renueva unas 15 veces al día todo el volumen de aire. Por eso las ventanas deben permanecer cerradas. El triple acristalamiento además aísla del ruido de la calle para que pueda dormir tranquilo.' }
   },
   {
     id:'besucher', cat:'hausordnung', ton:'info', icon:'door',
     label:'Besucher anmelden',
-    title:'Besuch',
-    de:'Besucherinnen und Besucher sind willkommen. Bitte begleiten Sie Ihren Besuch beim Betreten und Verlassen des Hauses und melden Sie Übernachtungen vorher an.',
-    en:'', fr:'', it:'', pt:''
+    titel:{
+      de:'Besuch', en:'Visitors', fr:'Visites', it:'Visite', pt:'Visitas', es:'Visitas' },
+    text:{
+      de:'Besucherinnen und Besucher sind willkommen. Bitte begleiten Sie Ihren Besuch beim Betreten und Verlassen des Hauses und melden Sie Übernachtungen vorher an.',
+      en:'Visitors are welcome. Please accompany your guests when they enter and leave the building, and register overnight stays in advance.',
+      fr:'Les visiteurs sont les bienvenus. Merci dʼaccompagner vos invités à lʼentrée et à la sortie de lʼimmeuble et dʼannoncer les nuitées à lʼavance.',
+      it:'Le visite sono benvenute. Vi preghiamo di accompagnare i vostri ospiti allʼingresso e allʼuscita dallo stabile e di annunciare in anticipo i pernottamenti.',
+      pt:'As visitas são bem-vindas. Acompanhe os seus convidados à entrada e à saída do edifício e comunique antecipadamente as dormidas.',
+      es:'Las visitas son bienvenidas. Acompañe a sus invitados al entrar y salir del edificio y comunique con antelación las pernoctaciones.' }
   },
 
   /* ── Abfall und Recycling ────────────────────────────────────────────── */
   {
     id:'saecke', cat:'abfall', ton:'info', icon:'trash',
     label:'Abfall nur in Säcken',
-    title:'Abfall nur in Säcken',
-    de:'', en:'Waste in official bags only', it:''
+    titel:{
+      de:'Abfall nur in Säcken', en:'Waste in official bags only',
+      fr:'Déchets uniquement en sacs officiels', it:'Rifiuti solo nei sacchi ufficiali',
+      pt:'Lixo apenas em sacos oficiais', es:'Basura solo en bolsas oficiales' },
+    text:{ ...LEER }
   },
   {
     id:'nurpet', cat:'abfall', ton:'info', icon:'bottle',
     label:'Nur PET',
-    title:'Nur PET',
-    de:'Bitte hier ausschliesslich PET-Getränkeflaschen einwerfen. Übriger Abfall gehört in den Kehrichtsack.',
-    en:'PET drink bottles only', it:''
+    titel:{ de:'Nur PET', en:'PET only', fr:'PET uniquement',
+            it:'Solo PET', pt:'Apenas PET', es:'Solo PET' },
+    text:{
+      de:'Bitte hier ausschliesslich PET-Getränkeflaschen einwerfen. Übriger Abfall gehört in den Kehrichtsack.',
+      en:'Please put PET drink bottles in here only. All other waste belongs in the rubbish bag.',
+      fr:'Merci de ne déposer ici que des bouteilles à boisson en PET. Les autres déchets vont dans le sac à ordures.',
+      it:'Inserite qui soltanto bottiglie per bevande in PET. Gli altri rifiuti vanno nel sacco della spazzatura.',
+      pt:'Coloque aqui apenas garrafas de bebidas em PET. Os restantes resíduos vão para o saco do lixo.',
+      es:'Deposite aquí únicamente botellas de bebida de PET. El resto de la basura va en la bolsa oficial.' }
   },
   {
     id:'petluft', cat:'abfall', ton:'info', icon:'bottle',
     label:'PET — Luft rauslassen',
-    title:'Bitte die Luft rauslassen',
-    de:'Flasche zusammendrücken, Deckel wieder aufschrauben. So passt dreimal mehr in den Sack.',
-    en:'Please squeeze the bottle and screw the cap back on.', it:''
+    titel:{
+      de:'Bitte die Luft rauslassen', en:'Please squeeze the air out',
+      fr:'Merci de chasser lʼair', it:'Fate uscire lʼaria',
+      pt:'Deixe sair o ar', es:'Saque el aire' },
+    text:{
+      de:'Flasche zusammendrücken, Deckel wieder aufschrauben. So passt dreimal mehr in den Sack.',
+      en:'Squeeze the bottle and screw the cap back on. Three times as much fits in the bag.',
+      fr:'Écrasez la bouteille et revissez le bouchon. Il en tient trois fois plus dans le sac.',
+      it:'Schiacciate la bottiglia e riavvitate il tappo. Nel sacco ci sta tre volte di più.',
+      pt:'Esprema a garrafa e volte a enroscar a tampa. Assim cabe três vezes mais no saco.',
+      es:'Aplaste la botella y vuelva a enroscar el tapón. Así cabe tres veces más en la bolsa.' }
   },
   {
     id:'sammelstelle', cat:'abfall', ton:'info', icon:'trash',
     label:'Sammelstelle — Beschriftung',
-    title:'Sammelstelle',
-    de:'Karton · Altpapier · Altglas · Metall · Nespresso · PET · Kompost · Kehricht',
-    en:'', it:''
+    titel:{
+      de:'Sammelstelle', en:'Recycling point', fr:'Point de collecte',
+      it:'Punto di raccolta', pt:'Ponto de recolha', es:'Punto de recogida' },
+    text:{
+      de:'Karton · Altpapier · Altglas · Metall · Nespresso · PET · Kompost · Kehricht',
+      en:'Cardboard · Paper · Glass · Metal · Nespresso · PET · Compost · General waste',
+      fr:'Carton · Papier · Verre · Métal · Nespresso · PET · Compost · Ordures ménagères',
+      it:'Cartone · Carta · Vetro · Metallo · Nespresso · PET · Compost · Rifiuti',
+      pt:'Cartão · Papel · Vidro · Metal · Nespresso · PET · Compostagem · Lixo comum',
+      es:'Cartón · Papel · Vidrio · Metal · Nespresso · PET · Compost · Basura' }
   },
-
   {
     id:'papierkarton', cat:'abfall', ton:'info', icon:'trash',
     label:'Sauberes Papier und Karton',
-    title:'Sauberes Papier + Karton',
-    de:'Kein beschichtetes Papier, keine Verbundverpackungen.',
-    en:'Clean paper and cardboard only', fr:'', it:'', pt:''
+    titel:{
+      de:'Sauberes Papier + Karton', en:'Clean paper and cardboard',
+      fr:'Papier et carton propres', it:'Carta e cartone puliti',
+      pt:'Papel e cartão limpos', es:'Papel y cartón limpios' },
+    text:{
+      de:'Kein beschichtetes Papier, keine Verbundverpackungen.',
+      en:'No coated paper, no composite packaging.',
+      fr:'Pas de papier couché, pas dʼemballages composites.',
+      it:'Niente carta patinata, niente imballaggi accoppiati.',
+      pt:'Sem papel plastificado nem embalagens compostas.',
+      es:'Sin papel plastificado ni envases compuestos.' }
   },
 
   /* ── Parkieren ───────────────────────────────────────────────────────── */
   {
     id:'privatpp', cat:'parken', ton:'verbot', icon:'car',
     label:'Privater Parkplatz',
-    title:'Privat',
-    de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
-    en:'Private parking — vehicles parked illegally will be towed at the ownerʼs expense.',
-    it:''
+    titel:{ de:'Privat', en:'Private', fr:'Privé', it:'Privato', pt:'Privado', es:'Privado' },
+    text:{
+      de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+      en:'Vehicles parked without authorisation will be towed at the ownerʼs expense.',
+      fr:'Les véhicules parqués sans autorisation seront enlevés aux frais du propriétaire.',
+      it:'I veicoli posteggiati abusivamente verranno rimossi a spese del proprietario.',
+      pt:'Os veículos estacionados indevidamente serão rebocados a expensas do proprietário.',
+      es:'Los vehículos estacionados sin autorización serán retirados a costa del propietario.' }
   },
   {
     id:'besucherpp', cat:'parken', ton:'info', icon:'car',
     label:'Besucherparkplatz',
-    title:'Lieber Parkplatz-Benutzer',
-    de:'Sie parken Ihr Fahrzeug auf einem privaten Parkplatz, der für Besucher reserviert ist. Falls Sie kein Besucher der {{adresse}} sind, bitten wir Sie, Ihr Fahrzeug umgehend umzustellen.\n\nDieser Parkplatz ist ausschliesslich für Besucher vorgesehen.\n\nVielen Dank für Ihr Verständnis.',
-    en:'', it:''
+    titel:{
+      de:'Lieber Parkplatz-Benutzer', en:'Dear parking user',
+      fr:'Cher utilisateur du parking', it:'Gentile utente del posteggio',
+      pt:'Caro utilizador do estacionamento', es:'Estimado usuario del aparcamiento' },
+    text:{
+      de:'Sie parken Ihr Fahrzeug auf einem privaten Parkplatz, der für Besucher reserviert ist. Falls Sie kein Besucher der {{adresse}} sind, bitten wir Sie, Ihr Fahrzeug umgehend umzustellen.\n\nDieser Parkplatz ist ausschliesslich für Besucher vorgesehen.\n\nVielen Dank für Ihr Verständnis.',
+      en:'You have parked your vehicle in a private car park reserved for visitors. If you are not visiting {{adresse}}, we kindly ask you to move your vehicle immediately.\n\nThis car park is intended for visitors only.\n\nThank you for your understanding.',
+      fr:'Vous avez garé votre véhicule sur un parking privé réservé aux visiteurs. Si vous nʼêtes pas un visiteur du {{adresse}}, nous vous prions de déplacer votre véhicule immédiatement.\n\nCe parking est exclusivement réservé aux visiteurs.\n\nMerci de votre compréhension.',
+      it:'Avete posteggiato il vostro veicolo in un posteggio privato riservato ai visitatori. Se non siete visitatori di {{adresse}}, vi preghiamo di spostare subito il veicolo.\n\nQuesto posteggio è riservato esclusivamente ai visitatori.\n\nGrazie per la comprensione.',
+      pt:'Estacionou o seu veículo num parque privado reservado a visitantes. Se não é visitante de {{adresse}}, pedimos que retire o veículo de imediato.\n\nEste parque destina-se exclusivamente a visitantes.\n\nObrigado pela sua compreensão.',
+      es:'Ha estacionado su vehículo en un aparcamiento privado reservado a las visitas. Si no es usted visitante de {{adresse}}, le rogamos que retire el vehículo de inmediato.\n\nEste aparcamiento está reservado exclusivamente a las visitas.\n\nGracias por su comprensión.' }
   },
   {
     id:'parkverbot', cat:'parken', ton:'verbot', icon:'car',
     label:'Parkverbot',
-    title:'Parkverbot',
-    de:'Auf dem gesamten Areal gilt Parkverbot. Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
-    en:'No parking. Vehicles parked illegally will be towed at the ownerʼs expense.',
-    it:''
+    titel:{
+      de:'Parkverbot', en:'No parking', fr:'Interdiction de parquer',
+      it:'Divieto di posteggio', pt:'Proibido estacionar', es:'Prohibido aparcar' },
+    text:{
+      de:'Auf dem gesamten Areal gilt Parkverbot. Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+      en:'Parking is prohibited on the entire site. Vehicles parked without authorisation will be towed at the ownerʼs expense.',
+      fr:'Le parcage est interdit sur lʼensemble du site. Les véhicules parqués sans autorisation seront enlevés aux frais du propriétaire.',
+      it:'Su tutta lʼarea vige il divieto di posteggio. I veicoli posteggiati abusivamente verranno rimossi a spese del proprietario.',
+      pt:'É proibido estacionar em toda a área. Os veículos estacionados indevidamente serão rebocados a expensas do proprietário.',
+      es:'Está prohibido aparcar en todo el recinto. Los vehículos estacionados sin autorización serán retirados a costa del propietario.' }
   },
-
   {
     id:'fahrzeug', cat:'parken', ton:'warnung', icon:'car',
-    label:'Fahrzeug unberechtigt abgestellt (DE/FR/PT)',
-    title:'Unberechtigt abgestelltes Fahrzeug',
-    de:'Dieses Fahrzeug steht in der Zufahrt zu bzw. auf einem unberechtigten Platz unserer Liegenschaft {{adresse}}!\n\nFalls Sie Besucher eines Bewohners dieser Liegenschaft sind, erkundigen Sie sich bei dem betreffenden Bewohner, wo das Fahrzeug berechtigterweise abgestellt werden kann.\n\nWird das Fahrzeug erneut unberechtigt abgestellt, werden wir Anzeige bei der Polizei erstatten!',
-    en:'',
-    fr:'Ce véhicule est parqué dans une zone interdite de notre bien foncier {{adresse}}! Si vous êtes visiteur de ce bien foncier, nous vous prions de vous renseigner sur un lieu autorisé pour parquer votre véhicule. Si le véhicule est à nouveau garé sans autorisation, nous le signalons à la police!',
-    it:'',
-    pt:'Este veículo está estacionado em uma área proibida, qual pertence à propriedade {{adresse}}! Se você for um visitante desse endereço, solicitamos que informe-se sobre um local autorizado para estacionar seu veículo. Se o veículo for estacionado novamente sem autorização, será denunciado à polícia!'
+    label:'Fahrzeug unberechtigt abgestellt',
+    titel:{
+      de:'Unberechtigt abgestelltes Fahrzeug', en:'Vehicle parked without authorisation',
+      fr:'Véhicule parqué sans autorisation', it:'Veicolo posteggiato abusivamente',
+      pt:'Veículo estacionado sem autorização', es:'Vehículo estacionado sin autorización' },
+    text:{
+      de:'Dieses Fahrzeug steht in der Zufahrt zu bzw. auf einem unberechtigten Platz unserer Liegenschaft {{adresse}}!\n\nFalls Sie Besucher eines Bewohners dieser Liegenschaft sind, erkundigen Sie sich bei dem betreffenden Bewohner, wo das Fahrzeug berechtigterweise abgestellt werden kann.\n\nWird das Fahrzeug erneut unberechtigt abgestellt, werden wir Anzeige bei der Polizei erstatten!',
+      en:'This vehicle is parked in the access lane or in an unauthorised space on our property {{adresse}}.\n\nIf you are visiting a resident of this property, please ask them where the vehicle may legitimately be parked.\n\nIf the vehicle is parked here again without authorisation, we will report it to the police.',
+      /* Wortlaut aus dem Laufwerk, unverändert übernommen. */
+      fr:'Ce véhicule est parqué dans une zone interdite de notre bien foncier {{adresse}}! Si vous êtes visiteur de ce bien foncier, nous vous prions de vous renseigner sur un lieu autorisé pour parquer votre véhicule. Si le véhicule est à nouveau garé sans autorisation, nous le signalons à la police!',
+      it:'Questo veicolo è posteggiato nellʼaccesso o su un posto non autorizzato del nostro stabile {{adresse}}!\n\nSe siete ospiti di un inquilino di questo stabile, chiedetegli dove il veicolo può essere posteggiato legittimamente.\n\nSe il veicolo verrà nuovamente posteggiato senza autorizzazione, sporgeremo denuncia alla polizia!',
+      /* Wortlaut aus dem Laufwerk, unverändert übernommen. */
+      pt:'Este veículo está estacionado em uma área proibida, qual pertence à propriedade {{adresse}}! Se você for um visitante desse endereço, solicitamos que informe-se sobre um local autorizado para estacionar seu veículo. Se o veículo for estacionado novamente sem autorização, será denunciado à polícia!',
+      es:'Este vehículo está estacionado en el acceso o en una plaza no autorizada de nuestra propiedad {{adresse}}.\n\nSi es usted visitante de un residente de este inmueble, pregúntele dónde puede estacionar legítimamente.\n\nSi el vehículo vuelve a estacionarse sin autorización, lo denunciaremos a la policía.' }
   },
 
   /* ── Küche und Bad ───────────────────────────────────────────────────── */
   {
     id:'kuechesauber', cat:'kueche', ton:'info', icon:'cup',
     label:'Küche sauber hinterlassen',
-    title:'Bitte Küche sauber hinterlassen!',
-    de:'Bitte Küche, Geräte, Küchenutensilien und Geschirr nach Gebrauch reinigen.',
-    en:'Please keep the kitchen clean!', it:''
+    titel:{
+      de:'Bitte Küche sauber hinterlassen!', en:'Please leave the kitchen clean!',
+      fr:'Merci de laisser la cuisine propre !', it:'Lasciate la cucina pulita!',
+      pt:'Deixe a cozinha limpa!', es:'¡Deje la cocina limpia!' },
+    text:{
+      de:'Bitte Küche, Geräte, Küchenutensilien und Geschirr nach Gebrauch reinigen.',
+      en:'Please clean the kitchen, appliances, utensils and dishes after use.',
+      fr:'Merci de nettoyer la cuisine, les appareils, les ustensiles et la vaisselle après usage.',
+      it:'Pulite cucina, apparecchi, utensili e stoviglie dopo lʼuso.',
+      pt:'Limpe a cozinha, os aparelhos, os utensílios e a loiça depois de usar.',
+      es:'Limpie la cocina, los aparatos, los utensilios y la vajilla después de usarlos.' }
   },
   {
     id:'kuehlschrank', cat:'kueche', ton:'info', icon:'info',
     label:'Kühlschrank in Ordnung halten',
-    title:'Kühlschrank',
-    de:'Abgelaufene Lebensmittel im Kühlschrank sind zu entsorgen. Der Kühlschrank ist sauber zu halten. Danke.',
-    en:'Expired food in the fridge must be disposed of. The fridge must be kept clean. Thank you.',
-    it:'Gli alimenti scaduti nel frigorifero devono essere smaltiti. Il frigorifero deve essere mantenuto pulito. Grazie.'
+    titel:{
+      de:'Kühlschrank', en:'Fridge', fr:'Réfrigérateur',
+      it:'Frigorifero', pt:'Frigorífico', es:'Nevera' },
+    text:{
+      de:'Abgelaufene Lebensmittel im Kühlschrank sind zu entsorgen. Der Kühlschrank ist sauber zu halten. Danke.',
+      en:'Expired food in the fridge must be disposed of. The fridge must be kept clean. Thank you.',
+      fr:'Les aliments périmés doivent être jetés. Le réfrigérateur doit rester propre. Merci.',
+      it:'Gli alimenti scaduti nel frigorifero devono essere smaltiti. Il frigorifero deve essere mantenuto pulito. Grazie.',
+      pt:'Os alimentos fora do prazo devem ser deitados fora. O frigorífico deve manter-se limpo. Obrigado.',
+      es:'Los alimentos caducados deben tirarse. La nevera debe mantenerse limpia. Gracias.' }
   },
   {
     id:'haendewaschen', cat:'kueche', ton:'info', icon:'info',
     label:'Bitte Hände waschen',
-    title:'Bitte Hände waschen',
-    de:'', en:'Please wash your hands', it:''
+    titel:{
+      de:'Bitte Hände waschen', en:'Please wash your hands',
+      fr:'Merci de vous laver les mains', it:'Lavatevi le mani',
+      pt:'Lave as mãos', es:'Lávese las manos' },
+    text:{ ...LEER }
   },
   {
     id:'duschen', cat:'kueche', ton:'info', icon:'info',
     label:'Duschen statt baden',
-    title:'Bitte kurz duschen',
-    de:'Diese Dusche steht nur den Bewohnern des EGʼs zur Verfügung.\nEs darf nur kurz geduscht werden, damit genügend Warmwasser für alle Bewohner zur Verfügung steht.',
-    en:'', it:''
+    titel:{
+      de:'Bitte kurz duschen', en:'Please shower briefly',
+      fr:'Merci de prendre une douche courte', it:'Fate una doccia breve',
+      pt:'Tome um duche curto', es:'Dúchese brevemente' },
+    text:{
+      de:'Diese Dusche steht nur den Bewohnern des EGʼs zur Verfügung.\nEs darf nur kurz geduscht werden, damit genügend Warmwasser für alle Bewohner zur Verfügung steht.',
+      en:'This shower is available only to residents of the ground floor.\nPlease shower briefly so that there is enough hot water for everyone.',
+      fr:'Cette douche est réservée aux habitants du rez-de-chaussée.\nMerci de ne prendre que de courtes douches afin quʼil reste assez dʼeau chaude pour tous.',
+      it:'Questa doccia è riservata agli inquilini del pianterreno.\nFate docce brevi, affinché ci sia acqua calda a sufficienza per tutti.',
+      pt:'Este duche destina-se apenas aos moradores do rés do chão.\nTome duches curtos para que haja água quente suficiente para todos.',
+      es:'Esta ducha está reservada a los residentes de la planta baja.\nDúchese brevemente para que haya agua caliente suficiente para todos.' }
   },
-
   {
     id:'backofen', cat:'kueche', ton:'info', icon:'cup',
     label:'Backofen nur mit Backpapier',
-    title:'Bitte Backofen nur mit Backtrennpapier benützen',
-    de:'Das Papier ist mehrmals benutzbar.',
-    en:'Please use the oven only with baking paper.', fr:'', it:'', pt:''
+    titel:{
+      de:'Bitte Backofen nur mit Backtrennpapier benützen',
+      en:'Please use the oven only with baking paper',
+      fr:'Merci dʼutiliser le four uniquement avec du papier cuisson',
+      it:'Usate il forno solo con la carta da forno',
+      pt:'Use o forno apenas com papel vegetal',
+      es:'Use el horno solo con papel de hornear' },
+    text:{
+      de:'Das Papier ist mehrmals benutzbar.',
+      en:'The paper can be used several times.',
+      fr:'Le papier peut servir plusieurs fois.',
+      it:'La carta si può riutilizzare più volte.',
+      pt:'O papel pode ser reutilizado várias vezes.',
+      es:'El papel se puede reutilizar varias veces.' }
   },
   {
     id:'geschirr', cat:'kueche', ton:'verbot', icon:'cup',
     label:'Kein Geschirr entfernen',
-    title:'Kein Geschirr, Gläser, Pfannen und Küchengeräte aus diesem Raum entfernen',
-    de:'', en:'', fr:'', it:'', pt:''
+    titel:{
+      de:'Kein Geschirr, Gläser, Pfannen und Küchengeräte aus diesem Raum entfernen',
+      en:'Do not remove dishes, glasses, pans or kitchen appliances from this room',
+      fr:'Ne pas sortir de cette pièce la vaisselle, les verres, les casseroles ni les appareils de cuisine',
+      it:'Non portare fuori da questo locale stoviglie, bicchieri, pentole e apparecchi da cucina',
+      pt:'Não retire desta sala loiça, copos, panelas nem aparelhos de cozinha',
+      es:'No saque de esta sala vajilla, vasos, sartenes ni aparatos de cocina' },
+    text:{ ...LEER }
   },
 
   /* ── Waschen und Trocknen ────────────────────────────────────────────── */
   {
     id:'waschmaschine', cat:'waesche', ton:'info', icon:'info',
     label:'Gebrauch der Waschmaschine',
-    title:'Waschmaschine',
-    de:'Bitte nach jedem Waschgang das Flusensieb reinigen und die Trommel offen stehen lassen. Waschmittel sparsam dosieren.',
-    en:'', it:''
+    titel:{
+      de:'Waschmaschine', en:'Washing machine', fr:'Machine à laver',
+      it:'Lavatrice', pt:'Máquina de lavar', es:'Lavadora' },
+    text:{
+      de:'Bitte nach jedem Waschgang das Flusensieb reinigen und die Trommel offen stehen lassen. Waschmittel sparsam dosieren.',
+      en:'Please clean the lint filter after every wash and leave the drum open. Use detergent sparingly.',
+      fr:'Merci de nettoyer le filtre à peluches après chaque lavage et de laisser le tambour ouvert. Dosez la lessive avec parcimonie.',
+      it:'Dopo ogni lavaggio pulite il filtro e lasciate il cestello aperto. Dosate il detersivo con parsimonia.',
+      pt:'Limpe o filtro de cotão depois de cada lavagem e deixe o tambor aberto. Doseie o detergente com moderação.',
+      es:'Limpie el filtro de pelusa después de cada lavado y deje el tambor abierto. Dosifique el detergente con moderación.' }
   },
   {
     id:'waeschehaengen', cat:'waesche', ton:'info', icon:'info',
     label:'Wäsche aufhängen',
-    title:'Wäsche bitte im Trocknungsraum aufhängen',
-    de:'Im Zimmer aufgehängte Wäsche führt zu Feuchtigkeit und Schimmel. Bitte den Trocknungsraum benutzen.',
-    en:'Please hang your laundry in the drying room, not in your room.', fr:'', it:'', pt:''
+    titel:{
+      de:'Wäsche bitte im Trocknungsraum aufhängen',
+      en:'Please hang laundry in the drying room',
+      fr:'Merci dʼétendre le linge dans le local de séchage',
+      it:'Stendete il bucato nel locale asciugatura',
+      pt:'Estenda a roupa na sala de secagem',
+      es:'Tienda la ropa en el cuarto de secado' },
+    text:{
+      de:'Im Zimmer aufgehängte Wäsche führt zu Feuchtigkeit und Schimmel. Bitte den Trocknungsraum benutzen.',
+      en:'Laundry hung up in the room causes damp and mould. Please use the drying room.',
+      fr:'Le linge étendu dans la chambre provoque humidité et moisissures. Merci dʼutiliser le local de séchage.',
+      it:'Il bucato steso in camera provoca umidità e muffa. Utilizzate il locale asciugatura.',
+      pt:'A roupa estendida no quarto provoca humidade e bolor. Utilize a sala de secagem.',
+      es:'La ropa tendida en la habitación provoca humedad y moho. Utilice el cuarto de secado.' }
   },
   {
     id:'waeschehaenge', cat:'waesche', ton:'info', icon:'info',
-    label:'Trockene Wäsche abnehmen (DE/EN/FR)',
-    title:'Wäschehänge',
-    de:'Bitte nimm deine trockene Kleidung sofort von der Wäschehänge. Wenn du Kleidung aufhängen möchtest und keinen freien Platz findest, darfst du trockene Kleidung anderer Gäste vorsichtig von der Wäschehänge nehmen, ordentlich in den Korb legen und die Wäschehänge benutzen.',
-    en:'Please remove your dried clothes from the drying rack as soon as they are dry. If you would like to hang up clothes and there is no free space available, you may carefully remove dry clothes belonging to other guests from the drying rack, place them neatly in the basket, and use the rack.',
-    fr:'Merci de retirer tes vêtements de lʼétendoir dès quʼils sont secs. Si tu souhaites étendre des vêtements et quʼil nʼy a plus de place disponible, tu peux retirer soigneusement les vêtements secs des autres invités de lʼétendoir, les placer correctement dans le panier et utiliser lʼétendoir.',
-    it:'', pt:''
+    label:'Trockene Wäsche abnehmen',
+    titel:{
+      de:'Wäschehänge', en:'Drying rack', fr:'Étendoir',
+      it:'Stendibiancheria', pt:'Estendal', es:'Tendedero' },
+    text:{
+      de:'Bitte nimm deine trockene Kleidung sofort von der Wäschehänge. Wenn du Kleidung aufhängen möchtest und keinen freien Platz findest, darfst du trockene Kleidung anderer Gäste vorsichtig von der Wäschehänge nehmen, ordentlich in den Korb legen und die Wäschehänge benutzen.',
+      en:'Please remove your dried clothes from the drying rack as soon as they are dry. If you would like to hang up clothes and there is no free space available, you may carefully remove dry clothes belonging to other guests from the drying rack, place them neatly in the basket, and use the rack.',
+      /* Wortlaut aus dem Laufwerk, unverändert übernommen. */
+      fr:'Merci de retirer tes vêtements de lʼétendoir dès quʼils sont secs. Si tu souhaites étendre des vêtements et quʼil nʼy a plus de place disponible, tu peux retirer soigneusement les vêtements secs des autres invités de lʼétendoir, les placer correctement dans le panier et utiliser lʼétendoir.',
+      it:'Per favore togli i tuoi vestiti dallo stendibiancheria non appena sono asciutti. Se vuoi stendere dei capi e non trovi posto libero, puoi togliere con cura i vestiti asciutti degli altri ospiti, riporli ordinatamente nel cesto e usare lo stendibiancheria.',
+      pt:'Retira a tua roupa do estendal assim que estiver seca. Se quiseres estender roupa e não houver espaço livre, podes retirar com cuidado a roupa seca de outros hóspedes, colocá-la arrumada no cesto e usar o estendal.',
+      es:'Retira tu ropa del tendedero en cuanto esté seca. Si quieres tender ropa y no hay sitio libre, puedes retirar con cuidado la ropa seca de otros huéspedes, dejarla ordenada en el cesto y usar el tendedero.' }
   },
 
   /* ── Vermietung ──────────────────────────────────────────────────────── */
   {
     id:'zuvermieten', cat:'vermietung', ton:'info', icon:'key',
     label:'Zu vermieten',
-    title:'Zu vermieten',
-    de:'Wohnung an ruhiger Lage, bezugsbereit. Anfragen über den QR-Code oder telefonisch.',
-    en:'Apartment for rent — scan the QR code or call us.', it:''
+    titel:{
+      de:'Zu vermieten', en:'For rent', fr:'À louer',
+      it:'Da affittare', pt:'Para arrendar', es:'Se alquila' },
+    text:{
+      de:'Wohnung an ruhiger Lage, bezugsbereit. Anfragen über den QR-Code oder telefonisch.',
+      en:'Apartment in a quiet location, ready to move in. Enquiries via the QR code or by telephone.',
+      fr:'Appartement au calme, libre de suite. Renseignements par le code QR ou par téléphone.',
+      it:'Appartamento in posizione tranquilla, libero subito. Informazioni tramite il codice QR o per telefono.',
+      pt:'Apartamento em zona tranquila, pronto a habitar. Informações através do código QR ou por telefone.',
+      es:'Piso en zona tranquila, listo para entrar a vivir. Información mediante el código QR o por teléfono.' }
   },
   {
     id:'reserviert', cat:'vermietung', ton:'info', icon:'key',
     label:'Reserviert',
-    title:'RESERVIERT',
-    de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
-    en:'', it:''
+    titel:{
+      de:'RESERVIERT', en:'RESERVED', fr:'RÉSERVÉ',
+      it:'RISERVATO', pt:'RESERVADO', es:'RESERVADO' },
+    text:{
+      de:'Widerrechtlich abgestellte Fahrzeuge werden kostenpflichtig abgeschleppt.',
+      en:'Vehicles parked without authorisation will be towed at the ownerʼs expense.',
+      fr:'Les véhicules parqués sans autorisation seront enlevés aux frais du propriétaire.',
+      it:'I veicoli posteggiati abusivamente verranno rimossi a spese del proprietario.',
+      pt:'Os veículos estacionados indevidamente serão rebocados a expensas do proprietário.',
+      es:'Los vehículos estacionados sin autorización serán retirados a costa del propietario.' }
   },
 
   /* ── Hotel und Gäste ─────────────────────────────────────────────────── */
   {
     id:'checkin', cat:'hotel', ton:'info', icon:'key',
     label:'Check-in Anleitung',
-    title:'Check-in',
-    de:'Ihren Zimmercode erhalten Sie per E-Mail und SMS. Am Eingang den Code eingeben und bestätigen.',
-    en:'You receive your room code by e-mail and SMS. Enter the code at the entrance and confirm.', it:''
+    titel:{ de:'Check-in', en:'Check-in', fr:'Check-in · Arrivée',
+            it:'Check-in', pt:'Check-in', es:'Check-in · Entrada' },
+    text:{
+      de:'Ihren Zimmercode erhalten Sie per E-Mail und SMS. Am Eingang den Code eingeben und bestätigen.',
+      en:'You receive your room code by e-mail and SMS. Enter the code at the entrance and confirm.',
+      fr:'Vous recevez le code de votre chambre par e-mail et par SMS. Saisissez le code à lʼentrée et confirmez.',
+      it:'Il codice della camera vi arriva per e-mail e SMS. Digitate il codice allʼingresso e confermate.',
+      pt:'Recebe o código do quarto por e-mail e SMS. Introduza o código à entrada e confirme.',
+      es:'Recibirá el código de su habitación por correo electrónico y SMS. Introdúzcalo en la entrada y confirme.' }
   },
   {
     id:'checkout', cat:'hotel', ton:'info', icon:'clock',
     label:'Express Check-out',
-    title:'Express Check-out',
-    de:'Zimmerschlüssel in die Box legen und abreisen. Die Rechnung kommt per E-Mail.',
-    en:'Drop the key in the box and leave. The invoice follows by e-mail.', it:''
+    titel:{ de:'Express Check-out', en:'Express check-out', fr:'Check-out express',
+            it:'Check-out express', pt:'Check-out expresso', es:'Check-out exprés' },
+    text:{
+      de:'Zimmerschlüssel in die Box legen und abreisen. Die Rechnung kommt per E-Mail.',
+      en:'Drop the key in the box and leave. The invoice follows by e-mail.',
+      fr:'Déposez la clé de la chambre dans la boîte et partez. La facture suit par e-mail.',
+      it:'Lasciate la chiave nella cassetta e partite. La fattura arriva per e-mail.',
+      pt:'Deixe a chave do quarto na caixa e parta. A fatura segue por e-mail.',
+      es:'Deje la llave de la habitación en la caja y márchese. La factura llegará por correo electrónico.' }
   },
   {
     id:'fruehstueck', cat:'hotel', ton:'info', icon:'cup',
     label:'Frühstück',
-    title:'Frühstück',
-    de:'Frühstück 07:30 – 10:00 im Aufenthaltsraum.',
-    en:'Breakfast 07:30 – 10:00 in the lounge.', it:''
+    titel:{ de:'Frühstück', en:'Breakfast', fr:'Petit-déjeuner',
+            it:'Colazione', pt:'Pequeno-almoço', es:'Desayuno' },
+    text:{
+      de:'Frühstück 07:30 – 10:00 im Aufenthaltsraum.',
+      en:'Breakfast 07:30 – 10:00 in the lounge.',
+      fr:'Petit-déjeuner de 07h30 à 10h00 dans lʼespace commun.',
+      it:'Colazione dalle 07:30 alle 10:00 nella sala comune.',
+      pt:'Pequeno-almoço das 07:30 às 10:00 na sala comum.',
+      es:'Desayuno de 07:30 a 10:00 en la sala común.' }
   },
   {
     id:'storage', cat:'hotel', ton:'info', icon:'info',
     label:'Gepäckraum',
-    title:'Gepäckraum · Storage',
-    de:'Gepäck kann vor dem Check-in und nach dem Check-out hier abgestellt werden. Keine Haftung für Wertsachen.',
-    en:'Luggage may be left here before check-in and after check-out. No liability for valuables.', it:''
+    titel:{ de:'Gepäckraum', en:'Luggage room', fr:'Local à bagages',
+            it:'Deposito bagagli', pt:'Sala de bagagens', es:'Consigna de equipaje' },
+    text:{
+      de:'Gepäck kann vor dem Check-in und nach dem Check-out hier abgestellt werden. Keine Haftung für Wertsachen.',
+      en:'Luggage may be left here before check-in and after check-out. No liability for valuables.',
+      fr:'Les bagages peuvent être déposés ici avant lʼarrivée et après le départ. Aucune responsabilité pour les objets de valeur.',
+      it:'I bagagli possono essere depositati qui prima del check-in e dopo il check-out. Nessuna responsabilità per gli oggetti di valore.',
+      pt:'A bagagem pode ficar aqui antes do check-in e depois do check-out. Não nos responsabilizamos por objetos de valor.',
+      es:'El equipaje puede dejarse aquí antes del check-in y después del check-out. No nos hacemos responsables de los objetos de valor.' }
   },
-
   {
     id:'rauchhotel', cat:'hotel', ton:'verbot', icon:'smoke',
     label:'Rauchverbot im Zimmer (mit Kostenfolge)',
-    title:'Rauchverbot',
-    de:'In sämtlichen Räumen ist das Rauchen strengstens untersagt. Das gesamte Gebäude ist zu Ihrer Sicherheit mit Rauchmeldern ausgestattet, welche bei der geringsten Rauchentwicklung Alarm auslösen. Der Alarm geht direkt zur örtlichen Feuerwehr. Ein Fehlalarm zieht automatisch hohe Kosten (über CHF 1ʼ800.–) nach sich, welche dem fehlbaren Gast weiterverrechnet werden.\n\nGästen, welche sich nicht an diese Weisung halten, wird eine Reinigungspauschale von CHF 300.– in Rechnung gestellt.',
-    en:'Smoking is strictly prohibited in all rooms. The entire building is equipped with smoke detectors that trigger an alarm at the slightest smoke. The alarm goes directly to the local fire department. A false alarm automatically incurs high costs (over CHF 1ʼ800), which will be charged to the responsible guest. Guests who do not comply will be charged a cleaning fee of CHF 300.–',
-    fr:'', it:'', pt:''
+    titel:{
+      de:'Rauchverbot', en:'No smoking', fr:'Interdiction de fumer',
+      it:'Divieto di fumare', pt:'Proibido fumar', es:'Prohibido fumar' },
+    text:{
+      de:'In sämtlichen Räumen ist das Rauchen strengstens untersagt. Das gesamte Gebäude ist zu Ihrer Sicherheit mit Rauchmeldern ausgestattet, welche bei der geringsten Rauchentwicklung Alarm auslösen. Der Alarm geht direkt zur örtlichen Feuerwehr. Ein Fehlalarm zieht automatisch hohe Kosten (über CHF 1ʼ800.–) nach sich, welche dem fehlbaren Gast weiterverrechnet werden.\n\nGästen, welche sich nicht an diese Weisung halten, wird eine Reinigungspauschale von CHF 300.– in Rechnung gestellt.',
+      en:'Smoking is strictly prohibited in all rooms. For your safety the entire building is equipped with smoke detectors that trigger an alarm at the slightest smoke. The alarm goes directly to the local fire brigade. A false alarm automatically incurs high costs (over CHF 1ʼ800.–), which are charged to the guest responsible.\n\nGuests who do not comply are charged a cleaning fee of CHF 300.–.',
+      fr:'Il est strictement interdit de fumer dans tous les locaux. Pour votre sécurité, tout le bâtiment est équipé de détecteurs de fumée qui déclenchent lʼalarme à la moindre fumée. Lʼalarme est transmise directement aux pompiers. Une fausse alarme entraîne automatiquement des frais élevés (plus de CHF 1ʼ800.–) qui sont facturés à lʼhôte responsable.\n\nLes hôtes qui ne respectent pas cette consigne se voient facturer un forfait de nettoyage de CHF 300.–.',
+      it:'In tutti i locali è severamente vietato fumare. Per la vostra sicurezza lʼintero edificio è dotato di rilevatori di fumo che fanno scattare lʼallarme al minimo fumo. Lʼallarme viene trasmesso direttamente ai pompieri. Un falso allarme comporta automaticamente costi elevati (oltre CHF 1ʼ800.–) che vengono addebitati allʼospite responsabile.\n\nAgli ospiti che non rispettano questa disposizione viene fatturato un forfait di pulizia di CHF 300.–.',
+      pt:'É estritamente proibido fumar em todos os espaços. Para sua segurança, todo o edifício está equipado com detetores de fumo que disparam o alarme ao menor sinal de fumo. O alarme vai diretamente para os bombeiros locais. Um alarme falso implica automaticamente custos elevados (mais de CHF 1ʼ800.–), que são faturados ao hóspede responsável.\n\nAos hóspedes que não cumpram esta indicação é cobrada uma taxa de limpeza de CHF 300.–.',
+      es:'Está terminantemente prohibido fumar en todas las estancias. Por su seguridad, todo el edificio cuenta con detectores de humo que activan la alarma ante el menor humo. La alarma se transmite directamente a los bomberos locales. Una falsa alarma conlleva automáticamente costes elevados (más de CHF 1ʼ800.–) que se facturan al huésped responsable.\n\nA los huéspedes que no respeten esta indicación se les facturará una tarifa de limpieza de CHF 300.–.' }
   },
   {
     id:'checkoutkarte', cat:'hotel', ton:'info', icon:'key',
     label:'Check-out mit Zimmerkarte',
-    title:'Check-out',
-    de:'Beim Verlassen des Zimmers lassen Sie bitte die physische Zimmerkarte auf dem Schreibtisch und senden uns eine Kurzmitteilung «check-out erfolgt». Besten Dank und einen angenehmen Aufenthalt.',
-    en:'When leaving the room, please leave the physical room card on the desk and send us a short message saying “check-out completed”. Thank you and have a pleasant stay.',
-    fr:'', it:'', pt:''
+    titel:{ de:'Check-out', en:'Check-out', fr:'Check-out · Départ',
+            it:'Check-out', pt:'Check-out', es:'Check-out · Salida' },
+    text:{
+      de:'Beim Verlassen des Zimmers lassen Sie bitte die physische Zimmerkarte auf dem Schreibtisch und senden uns eine Kurzmitteilung «check-out erfolgt». Besten Dank und einen angenehmen Aufenthalt.',
+      en:'When leaving the room, please leave the physical room card on the desk and send us a short message saying “check-out completed”. Thank you and have a pleasant stay.',
+      fr:'En quittant la chambre, merci de laisser la carte de chambre physique sur le bureau et de nous envoyer un court message « check-out effectué ». Merci beaucoup et bon séjour.',
+      it:'Lasciando la camera, vi preghiamo di posare la tessera fisica sulla scrivania e di inviarci un breve messaggio «check-out effettuato». Grazie mille e buon soggiorno.',
+      pt:'Ao sair do quarto, deixe o cartão físico na secretária e envie-nos uma mensagem curta «check-out efetuado». Muito obrigado e boa estadia.',
+      es:'Al salir de la habitación, deje la tarjeta física sobre el escritorio y envíenos un mensaje breve «check-out realizado». Muchas gracias y feliz estancia.' }
   },
   {
     id:'wlan', cat:'hotel', ton:'info', icon:'wifi',
     label:'WLAN',
-    title:'welcome to Nʼs HOTEL',
-    de:'WLAN: Gast\nPasswort: · · · · · · · ·\n\nDas Passwort im Editor eintragen — es bleibt in diesem Browser und wird nie mitveröffentlicht.',
-    en:'', fr:'', it:'', pt:''
+    titel:{
+      de:'welcome to Nʼs HOTEL', en:'welcome to Nʼs HOTEL', fr:'welcome to Nʼs HOTEL',
+      it:'welcome to Nʼs HOTEL', pt:'welcome to Nʼs HOTEL', es:'welcome to Nʼs HOTEL' },
+    text:{
+      de:'WLAN: Gast\nPasswort: · · · · · · · ·',
+      en:'Wi-Fi: Gast\nPassword: · · · · · · · ·',
+      fr:'Wi-Fi : Gast\nMot de passe : · · · · · · · ·',
+      it:'Wi-Fi: Gast\nPassword: · · · · · · · ·',
+      pt:'Wi-Fi: Gast\nPalavra-passe: · · · · · · · ·',
+      es:'Wi-Fi: Gast\nContraseña: · · · · · · · ·' }
   },
 
   /* ── Technik und Unterhalt ───────────────────────────────────────────── */
   {
     id:'brandmelder', cat:'technik', ton:'warnung', icon:'warn',
     label:'Brand- und Rauchmelder',
-    title:'Manipulation an Brand- und Rauchmeldern',
-    de:'Jede Manipulation an der Brandmeldeanlage hat zur Folge, dass im Brandfall die Alarmierung der Feuerwehr nicht funktioniert und dass Ihr und das Leben Ihrer Mitbewohner auf dem Spiel steht.\n\nDer Einsatz der Feuerwehr bei einem Fehlalarm wird mit CHF 1ʼ500.– geahndet und wird dem Verursacher in Rechnung gestellt.',
-    en:'', it:''
+    titel:{
+      de:'Manipulation an Brand- und Rauchmeldern',
+      en:'Tampering with fire and smoke detectors',
+      fr:'Manipulation des détecteurs dʼincendie et de fumée',
+      it:'Manomissione dei rilevatori dʼincendio e di fumo',
+      pt:'Manipulação dos detetores de incêndio e de fumo',
+      es:'Manipulación de los detectores de incendios y humo' },
+    text:{
+      de:'Jede Manipulation an der Brandmeldeanlage hat zur Folge, dass im Brandfall die Alarmierung der Feuerwehr nicht funktioniert und dass Ihr und das Leben Ihrer Mitbewohner auf dem Spiel steht.\n\nDer Einsatz der Feuerwehr bei einem Fehlalarm wird mit CHF 1ʼ500.– geahndet und wird dem Verursacher in Rechnung gestellt.',
+      en:'Any tampering with the fire alarm system means that in the event of a fire the fire brigade will not be alerted — putting your life and the lives of the other residents at risk.\n\nA fire brigade call-out for a false alarm is penalised with CHF 1ʼ500.– and billed to whoever caused it.',
+      fr:'Toute manipulation du système de détection dʼincendie a pour conséquence quʼen cas dʼincendie les pompiers ne seront pas alertés — votre vie et celle des autres habitants sont en jeu.\n\nUne intervention des pompiers pour une fausse alarme est sanctionnée par CHF 1ʼ500.– facturés à son auteur.',
+      it:'Ogni manomissione dellʼimpianto di rilevazione incendi comporta che in caso dʼincendio i pompieri non vengano allertati — la vostra vita e quella degli altri inquilini sono in gioco.\n\nUn intervento dei pompieri per falso allarme viene sanzionato con CHF 1ʼ500.– e addebitato a chi lo ha causato.',
+      pt:'Qualquer manipulação do sistema de deteção de incêndio faz com que, em caso de incêndio, os bombeiros não sejam alertados — a sua vida e a dos outros moradores ficam em risco.\n\nUma saída dos bombeiros por alarme falso é sancionada com CHF 1ʼ500.–, faturados a quem lhe deu causa.',
+      es:'Cualquier manipulación del sistema de detección de incendios provoca que, en caso de incendio, no se avise a los bomberos: su vida y la de los demás residentes están en juego.\n\nUna salida de bomberos por falsa alarma se sanciona con CHF 1ʼ500.–, que se facturan a quien la causó.' }
   },
   {
     id:'kontrolle', cat:'technik', ton:'warnung', icon:'warn',
     label:'Kontrolle angekündigt',
-    title:'ACHTUNG',
-    de:'Am {{datum}} findet eine Kontrolle in allen Zimmern statt.\nBitte alle Steckdosen freihalten!',
-    en:'On {{datum}} all rooms will be checked.\nPlease keep all plug sockets free!', it:''
+    titel:{
+      de:'ACHTUNG', en:'ATTENTION', fr:'ATTENTION',
+      it:'ATTENZIONE', pt:'ATENÇÃO', es:'ATENCIÓN' },
+    text:{
+      de:'Am {{datum}} findet eine Kontrolle in allen Zimmern statt.\nBitte alle Steckdosen freihalten!',
+      en:'On {{datum}} all rooms will be inspected.\nPlease keep all sockets clear!',
+      fr:'Le {{datum}}, un contrôle aura lieu dans toutes les chambres.\nMerci de dégager toutes les prises !',
+      it:'Il {{datum}} avrà luogo un controllo in tutte le camere.\nTenete libere tutte le prese!',
+      pt:'No dia {{datum}} haverá uma inspeção em todos os quartos.\nMantenha todas as tomadas desimpedidas!',
+      es:'El {{datum}} se realizará una inspección en todas las habitaciones.\n¡Mantenga libres todos los enchufes!' }
   },
   {
     id:'hauseingang', cat:'technik', ton:'info', icon:'door',
     label:'Hauseingangstüre schliessen',
-    title:'Wichtiger Hinweis zur Hauseingangstür',
-    de:'Bitte achten Sie beim Betreten und Verlassen des Gebäudes darauf, dass die Tür richtig ins Schloss fällt und nicht offensteht.\n\nNur berechtigte Personen — also ausschliesslich Mieterinnen und Mieter sowie deren Gäste — sollen Zugang zum Haus haben.',
-    en:'', it:''
+    titel:{
+      de:'Wichtiger Hinweis zur Hauseingangstür',
+      en:'Important notice about the front door',
+      fr:'Information importante concernant la porte dʼentrée',
+      it:'Avviso importante sulla porta dʼentrata',
+      pt:'Aviso importante sobre a porta de entrada',
+      es:'Aviso importante sobre la puerta de entrada' },
+    text:{
+      de:'Bitte achten Sie beim Betreten und Verlassen des Gebäudes darauf, dass die Tür richtig ins Schloss fällt und nicht offensteht.\n\nNur berechtigte Personen — also ausschliesslich Mieterinnen und Mieter sowie deren Gäste — sollen Zugang zum Haus haben.',
+      en:'When entering and leaving the building, please make sure the door closes properly and is not left ajar.\n\nOnly authorised people — tenants and their guests — should have access to the building.',
+      fr:'En entrant et en sortant de lʼimmeuble, veillez à ce que la porte se referme correctement et ne reste pas ouverte.\n\nSeules les personnes autorisées — les locataires et leurs invités — doivent avoir accès à lʼimmeuble.',
+      it:'Entrando e uscendo dallo stabile, assicuratevi che la porta si chiuda correttamente e non resti aperta.\n\nSolo le persone autorizzate — inquilini e loro ospiti — devono avere accesso allo stabile.',
+      pt:'Ao entrar e sair do edifício, certifique-se de que a porta fecha bem e não fica encostada.\n\nApenas as pessoas autorizadas — inquilinos e os seus convidados — devem ter acesso ao edifício.',
+      es:'Al entrar y salir del edificio, asegúrese de que la puerta cierre bien y no quede entornada.\n\nSolo las personas autorizadas —inquilinos y sus invitados— deben tener acceso al edificio.' }
   }
 ];
 
@@ -1961,6 +2393,10 @@ const QR_VORLAGEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33"
    — Rauchverbot im Treppenhaus, Hinweis an der Waschküchentür — ist ein
    selbst gedrucktes Schild in der gewohnten Formensprache richtig.
 
+   Jedes Zeichen trägt seinen Text in sechs Sprachen (DE EN FR IT PT ES).
+   Ein Sicherheitszeichen wirkt zwar auch ohne Wort — das ist der Sinn der
+   Norm —, aber "Fluchtweg freihalten" versteht sich nicht von selbst.
+
    Farben: Annäherung der Sicherheitsfarben für den Bürodrucker.
    ========================================================================== */
 
@@ -2080,42 +2516,75 @@ const SZ_PIKTO_KEYS = Object.keys(SZ_PIKTO);
    Fertige Zeichen — was im Haus wirklich gebraucht wird.
    -------------------------------------------------------------------------- */
 const SZ_ZEICHEN = [
-  { id:'rauchen-verboten', art:'verbot',  pikto:'rauchen',
-    de:'Rauchen verboten', en:'No smoking' },
-  { id:'feuer-verboten', art:'verbot', pikto:'feuer',
-    de:'Feuer, offenes Licht und Rauchen verboten', en:'No open flame' },
-  { id:'zutritt-verboten', art:'verbot', pikto:'person',
-    de:'Zutritt für Unbefugte verboten', en:'No access for unauthorised persons' },
-  { id:'handy-verboten', art:'verbot', pikto:'handy',
-    de:'Mobiltelefone verboten', en:'No mobile phones' },
-  { id:'hunde-verboten', art:'verbot', pikto:'pfote',
-    de:'Hunde verboten', en:'No dogs' },
-  { id:'kein-trinkwasser', art:'verbot', pikto:'trinkwasser',
-    de:'Kein Trinkwasser', en:'Not drinking water' },
-  { id:'abstellen-verboten', art:'verbot', pikto:'kiste',
-    de:'Abstellen verboten — Fluchtweg freihalten', en:'Do not obstruct — keep escape route clear' },
+  { id:'rauchen-verboten', art:'verbot', pikto:'rauchen', text:{
+    de:'Rauchen verboten', en:'No smoking', fr:'Interdiction de fumer',
+    it:'Vietato fumare', pt:'Proibido fumar', es:'Prohibido fumar' } },
 
-  { id:'warnung-allgemein', art:'warnung', pikto:'ausruf',
-    de:'Achtung', en:'Warning' },
-  { id:'warnung-strom', art:'warnung', pikto:'blitz',
-    de:'Warnung vor elektrischer Spannung', en:'Electricity hazard' },
-  { id:'warnung-rutsch', art:'warnung', pikto:'rutsch',
-    de:'Rutschgefahr', en:'Slippery surface' },
+  { id:'feuer-verboten', art:'verbot', pikto:'feuer', text:{
+    de:'Feuer, offenes Licht und Rauchen verboten', en:'No open flame, fire or smoking',
+    fr:'Feu, flamme nue et cigarette interdits', it:'Vietati fuoco, fiamme libere e sigarette',
+    pt:'Proibido fogo, chama aberta e fumar', es:'Prohibido fuego, llama abierta y fumar' } },
 
-  { id:'gebot-haende', art:'gebot', pikto:'haende',
-    de:'Hände waschen', en:'Wash your hands' },
-  { id:'gebot-tuer', art:'gebot', pikto:'tuer',
-    de:'Tür geschlossen halten', en:'Keep door closed' },
+  { id:'zutritt-verboten', art:'verbot', pikto:'person', text:{
+    de:'Zutritt für Unbefugte verboten', en:'No access for unauthorised persons',
+    fr:'Accès interdit aux personnes non autorisées', it:'Vietato lʼaccesso ai non autorizzati',
+    pt:'Proibida a entrada a pessoas não autorizadas', es:'Prohibida la entrada a personas no autorizadas' } },
 
-  { id:'fluchtweg', art:'rettung', pikto:'fluchtweg',
-    de:'Notausgang', en:'Emergency exit' },
-  { id:'erste-hilfe', art:'rettung', pikto:'kreuz',
-    de:'Erste Hilfe', en:'First aid' },
-  { id:'sammelplatz', art:'rettung', pikto:'sammelplatz',
-    de:'Sammelplatz', en:'Assembly point' },
+  { id:'handy-verboten', art:'verbot', pikto:'handy', text:{
+    de:'Mobiltelefone verboten', en:'No mobile phones', fr:'Téléphones portables interdits',
+    it:'Vietato lʼuso di telefoni cellulari', pt:'Proibido o uso de telemóveis',
+    es:'Prohibido el uso de móviles' } },
 
-  { id:'feuerloescher', art:'brand', pikto:'loescher',
-    de:'Feuerlöscher', en:'Fire extinguisher' }
+  { id:'hunde-verboten', art:'verbot', pikto:'pfote', text:{
+    de:'Hunde verboten', en:'No dogs', fr:'Chiens interdits',
+    it:'Vietato lʼingresso ai cani', pt:'Proibida a entrada de cães',
+    es:'Prohibida la entrada de perros' } },
+
+  { id:'kein-trinkwasser', art:'verbot', pikto:'trinkwasser', text:{
+    de:'Kein Trinkwasser', en:'Not drinking water', fr:'Eau non potable',
+    it:'Acqua non potabile', pt:'Água não potável', es:'Agua no potable' } },
+
+  { id:'abstellen-verboten', art:'verbot', pikto:'kiste', text:{
+    de:'Abstellen verboten — Fluchtweg freihalten', en:'Do not obstruct — keep escape route clear',
+    fr:'Ne rien déposer — dégager la voie de fuite', it:'Non depositare — tenere libera la via di fuga',
+    pt:'Não obstruir — mantenha livre a via de evacuação',
+    es:'No obstruir — mantenga libre la vía de evacuación' } },
+
+  { id:'warnung-allgemein', art:'warnung', pikto:'ausruf', text:{
+    de:'Achtung', en:'Warning', fr:'Attention',
+    it:'Attenzione', pt:'Atenção', es:'Atención' } },
+
+  { id:'warnung-strom', art:'warnung', pikto:'blitz', text:{
+    de:'Warnung vor elektrischer Spannung', en:'Electricity hazard', fr:'Danger électrique',
+    it:'Pericolo di tensione elettrica', pt:'Perigo elétrico', es:'Peligro eléctrico' } },
+
+  { id:'warnung-rutsch', art:'warnung', pikto:'rutsch', text:{
+    de:'Rutschgefahr', en:'Slippery surface', fr:'Sol glissant',
+    it:'Pericolo di scivolamento', pt:'Piso escorregadio', es:'Suelo resbaladizo' } },
+
+  { id:'gebot-haende', art:'gebot', pikto:'haende', text:{
+    de:'Hände waschen', en:'Wash your hands', fr:'Se laver les mains',
+    it:'Lavarsi le mani', pt:'Lave as mãos', es:'Lávese las manos' } },
+
+  { id:'gebot-tuer', art:'gebot', pikto:'tuer', text:{
+    de:'Tür geschlossen halten', en:'Keep door closed', fr:'Garder la porte fermée',
+    it:'Tenere la porta chiusa', pt:'Manter a porta fechada', es:'Mantener la puerta cerrada' } },
+
+  { id:'fluchtweg', art:'rettung', pikto:'fluchtweg', text:{
+    de:'Notausgang', en:'Emergency exit', fr:'Sortie de secours',
+    it:'Uscita di emergenza', pt:'Saída de emergência', es:'Salida de emergencia' } },
+
+  { id:'erste-hilfe', art:'rettung', pikto:'kreuz', text:{
+    de:'Erste Hilfe', en:'First aid', fr:'Premiers secours',
+    it:'Pronto soccorso', pt:'Primeiros socorros', es:'Primeros auxilios' } },
+
+  { id:'sammelplatz', art:'rettung', pikto:'sammelplatz', text:{
+    de:'Sammelplatz', en:'Assembly point', fr:'Point de rassemblement',
+    it:'Punto di raccolta', pt:'Ponto de encontro', es:'Punto de reunión' } },
+
+  { id:'feuerloescher', art:'brand', pikto:'loescher', text:{
+    de:'Feuerlöscher', en:'Fire extinguisher', fr:'Extincteur',
+    it:'Estintore', pt:'Extintor', es:'Extintor' } }
 ];
 
 function szZeichen(id){
@@ -2124,7 +2593,7 @@ function szZeichen(id){
 function szOptions(){
   const gruppe = { verbot:'Verbot', warnung:'Warnung', gebot:'Gebot',
                    rettung:'Rettung', brand:'Brandschutz' };
-  return SZ_ZEICHEN.map(z => ({ v:z.id, t:`${gruppe[z.art]} · ${z.de}` }));
+  return SZ_ZEICHEN.map(z => ({ v:z.id, t:`${gruppe[z.art]} · ${z.text.de}` }));
 }
 
 /* --------------------------------------------------------------------------
@@ -2413,6 +2882,163 @@ function lesbarkeit(root){
     text: `Grösste Schrift aus ca. ${zahl} m lesbar`,
     /* Unter zwei Metern ist es kein Schild mehr, sondern ein Merkblatt. */
     stufe: m >= 2 ? 'ok' : 'nah'
+  };
+}
+
+/* ===== js/lib/kontrast.js ===== */
+/* ==========================================================================
+   Kontrastprüfung
+   --------------------------------------------------------------------------
+   Ein Schild kann gross genug sein und trotzdem unlesbar, wenn Schrift und
+   Grund zu nahe beieinander liegen — cyan auf weiss ist das klassische
+   Beispiel. Geprüft wird nach der Kontrastformel der WCAG: das Verhältnis
+   der relativen Helligkeiten, von 1:1 (gleich) bis 21:1 (schwarz auf weiss).
+
+   Die Schwellen sind die der WCAG in Stufe AA:
+
+     grosse Schrift (ab 18 pt bzw. 14 pt fett)   3.0 : 1
+     alles andere                                4.5 : 1
+
+   Für gedruckte Aushänge sind sie eher grosszügig als streng — Papier hat
+   weniger Kontrast als ein Bildschirm, und im Treppenhaus ist es dunkler
+   als im Büro. Wer knapp über der Schwelle liegt, sollte trotzdem dunkler
+   setzen.
+
+   Der Grund wird nach oben gesucht: das nächste Element, das nicht
+   durchsichtig ist. Verläufe und Bilder kann die Prüfung nicht beurteilen —
+   dort wird nichts gemeldet, statt etwas Falsches zu melden.
+
+   Geprüft wird nur die Schrift, die das Blatt trägt — ab 14 pt. Das
+   Kleingedruckte in Grau (Fusszeile, Sprachkürzel, Massangaben) ist als
+   Nebeninformation gesetzt und liesse sich im Editor ohnehin nicht ändern;
+   eine Warnung darüber wäre Rauschen und keine Hilfe.
+
+   Ebenfalls aussen vor bleibt die Handschrift-Zeile (.eyebrow). Sie ist ein
+   Zierelement der Marke in Cyan auf Weiss — rund 2,5:1, also unter der
+   Schwelle. Das ist bekannt und beabsichtigt: die Zeile wiederholt, was
+   direkt darunter gross und dunkel noch einmal steht. Wer sie ändern
+   wollte, müsste die Markenfarbe ändern, und die steht nicht zur Debatte.
+   Eine Dauerwarnung, die niemand abstellen kann, macht die Anzeige wertlos.
+   ========================================================================== */
+
+const K_MIN_GROSS = 3.0;
+const K_AB_PT     = 14;   // kleinere Schrift wird nicht gemeldet
+const K_MIN_NORM  = 4.5;
+
+/** "rgb(42, 51, 80)" → [42,51,80]. Alles andere: null. */
+function kFarbe(wert){
+  const m = /^rgba?\(([^)]+)\)/.exec(String(wert || ''));
+  if (!m) return null;
+  const teile = m[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+  if (teile.length < 3 || teile.some(isNaN)) return null;
+  const alpha = teile.length > 3 ? teile[3] : 1;
+  return { r:teile[0], g:teile[1], b:teile[2], a:alpha };
+}
+
+/** Relative Helligkeit nach WCAG. */
+function helligkeit(c){
+  const f = v => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
+}
+
+/** Kontrastverhältnis zweier Farben, 1 … 21. */
+function verhaeltnis(a, b){
+  const l1 = helligkeit(a), l2 = helligkeit(b);
+  const hell = Math.max(l1, l2), dunkel = Math.min(l1, l2);
+  return (hell + 0.05) / (dunkel + 0.05);
+}
+
+/** Zwei Farben übereinanderlegen (Vordergrund mit Alpha auf Grund). */
+function mischen(vorn, hinten){
+  const a = vorn.a;
+  return { r: vorn.r * a + hinten.r * (1 - a),
+           g: vorn.g * a + hinten.g * (1 - a),
+           b: vorn.b * a + hinten.b * (1 - a), a:1 };
+}
+
+/**
+ * Den tatsächlichen Grund eines Elements suchen: nach oben, bis etwas
+ * nicht mehr durchsichtig ist. Gibt null zurück, wenn unterwegs ein Bild
+ * oder ein Verlauf liegt — dann lässt sich nichts Verlässliches sagen.
+ */
+function grundFarbe(el){
+  let n = el, gestapelt = [];
+  while (n && n.nodeType === 1){
+    const cs = getComputedStyle(n);
+    if (cs.backgroundImage && cs.backgroundImage !== 'none') return null;
+    const c = kFarbe(cs.backgroundColor);
+    if (c && c.a > 0){
+      if (c.a >= 1){
+        return gestapelt.reduce((unten, oben) => mischen(oben, unten), c);
+      }
+      gestapelt.push(c);
+    }
+    n = n.parentElement;
+  }
+  return gestapelt.length
+    ? gestapelt.reduce((unten, oben) => mischen(oben, unten), { r:255, g:255, b:255, a:1 })
+    : { r:255, g:255, b:255, a:1 };
+}
+
+/** Schwelle für eine Schriftgrösse (px) und ein Gewicht. */
+function schwelle(px, gewicht){
+  const pt = px * 72 / 96;
+  const fett = Number(gewicht) >= 700;
+  return (pt >= 18 || (fett && pt >= 14)) ? K_MIN_GROSS : K_MIN_NORM;
+}
+
+/**
+ * Das Blatt durchgehen und den schlechtesten Textkontrast melden.
+ * @returns {{wert:number, noetig:number, ok:boolean, text:string, wo:string}|null}
+ */
+function kontrastBefund(root, abPt = K_AB_PT){
+  if (!root) return null;
+  let schlimmster = null;
+
+  const lauf = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      return n.nodeValue && n.nodeValue.trim()
+        ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  for (let n = lauf.nextNode(); n; n = lauf.nextNode()){
+    const el = n.parentElement;
+    if (!el) continue;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+    const deck = Number(cs.opacity);
+    if (deck === 0) continue;
+
+    const px = parseFloat(cs.fontSize);
+    if (!(px * 72 / 96 >= abPt)) continue;
+    if (el.closest('.eyebrow')) continue;
+
+    const vorn = kFarbe(cs.color);
+    if (!vorn) continue;
+    const hinten = grundFarbe(el);
+    if (!hinten) continue;
+
+    /* Deckkraft des Elements wirkt wie ein Alpha auf die Schriftfarbe. */
+    const wirklich = mischen({ ...vorn, a:Math.min(1, vorn.a * (isNaN(deck) ? 1 : deck)) }, hinten);
+    const wert = verhaeltnis(wirklich, hinten);
+    const noetig = schwelle(px, cs.fontWeight);
+    const abstand = wert - noetig;
+
+    if (!schlimmster || abstand < schlimmster.abstand){
+      schlimmster = { wert, noetig, abstand, text:n.nodeValue.trim().slice(0, 40) };
+    }
+  }
+
+  if (!schlimmster) return null;
+  return {
+    wert: Math.round(schlimmster.wert * 10) / 10,
+    noetig: schlimmster.noetig,
+    ok: schlimmster.abstand >= 0,
+    text: schlimmster.text
   };
 }
 
@@ -3924,7 +4550,9 @@ const aushang = {
 
 /* ===== js/templates/parkplatz.js ===== */
 /* Parkplatz-Info · mehrsprachig mit Lageplan, A4 hoch.
-   Portiert aus "Parkplatz-Info - Mehrsprachig.html". */
+   Portiert aus "Parkplatz-Info - Mehrsprachig.html", inzwischen auf sechs
+   Sprachen erweitert. Leere Sprachfelder fallen weg — wer nur DE/EN will,
+   löscht die übrigen Texte. */
 
 
 
@@ -3934,7 +4562,7 @@ const aushang = {
 const parkplatz = {
   id:'parkplatz',
   title:'Parkplatz-Info',
-  sub:'Lageplan und Text in vier Sprachen · A4 hoch',
+  sub:'Lageplan und Text in bis zu sechs Sprachen · A4 hoch',
   badge:'Anfahrt',
   badgeCyan:true,
   page:'a4',
@@ -3980,11 +4608,14 @@ const parkplatz = {
     { k:'walkMin', label:'Fussweg Parkplatz — Eingang', type:'text' },
     { k:'adresse', label:'Adresse für das Navi', type:'text' },
 
-    { t:'group', label:'Texte in vier Sprachen' },
+    { t:'group', label:'Texte in bis zu sechs Sprachen' },
+    { t:'note', label:'Was leer bleibt, erscheint nicht auf dem Blatt.' },
     { k:'textDe', label:'Deutsch', type:'textarea', rows:3 },
     { k:'textEn', label:'English', type:'textarea', rows:3 },
     { k:'textFr', label:'Français', type:'textarea', rows:3 },
     { k:'textIt', label:'Italiano', type:'textarea', rows:3 },
+    { k:'textPt', label:'Português', type:'textarea', rows:3 },
+    { k:'textEs', label:'Español', type:'textarea', rows:3 },
 
     { t:'group', label:'Fusszeile' },
     { k:'footer', label:'Adresszeile', type:'text' }
@@ -4005,6 +4636,8 @@ const parkplatz = {
     textEn:'Our guest parking spaces are marked in pink and are free of charge throughout your stay. Please place the parking card from reception clearly visible behind your windscreen.',
     textFr:'Nos places pour les hôtes sont marquées en rose et sont gratuites pendant tout votre séjour. Merci de placer la carte de parking de la réception derrière le pare-brise.',
     textIt:'I nostri posteggi per gli ospiti sono segnati in rosa e sono gratuiti per tutto il soggiorno. Vi preghiamo di esporre la carta di parcheggio della reception dietro il parabrezza.',
+    textPt:'Os nossos lugares para hóspedes estão marcados a cor-de-rosa e são gratuitos durante toda a estadia. Coloque o cartão de estacionamento da receção bem visível atrás do para-brisas.',
+    textEs:'Nuestras plazas para huéspedes están marcadas en rosa y son gratuitas durante toda la estancia. Coloque la tarjeta de aparcamiento de recepción bien visible tras el parabrisas.',
     footer: contactLine()
   },
 
@@ -4023,7 +4656,9 @@ const parkplatz = {
       { code:'DE', name:'Deutsch',   text:d.textDe },
       { code:'EN', name:'English',   text:d.textEn },
       { code:'FR', name:'Français',  text:d.textFr },
-      { code:'IT', name:'Italiano',  text:d.textIt }
+      { code:'IT', name:'Italiano',  text:d.textIt },
+      { code:'PT', name:'Português', text:d.textPt },
+      { code:'ES', name:'Español',   text:d.textEs }
     ].filter(l => has(l.text));
 
     return `
@@ -4052,7 +4687,7 @@ const parkplatz = {
       ${has(d.adresse) ? `<span class="t-park-chip t-park-chip--navy">${icon('flag', 18)}${esc(d.adresse)}</span>` : ''}
     </div>
 
-    <div class="t-park-langs">
+    <div class="t-park-langs${langs.length > 4 ? ' is-eng' : ''}">
       ${langs.map(l => `<div class="t-park-lang">
         <span class="t-park-code">${esc(l.code)}<em>${esc(l.name)}</em></span>
         <p>${fmt(l.text)}</p>
@@ -4992,7 +5627,14 @@ const gaestemappe = {
    eigene Vorlage zu bauen, gibt es eine Vorlage und eine Liste fertiger
    Textbausteine. Baustein wählen, Objekt wählen, drucken.
 
-   Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot. */
+   Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot.
+
+   Sprachen: jeder Baustein liegt in sechs Sprachen vor (DE EN FR IT PT ES).
+   Im Formular wird angehakt, welche davon aufs Blatt sollen — die Reihenfolge
+   ist fest, damit zwei Aushänge nebeneinander gleich aussehen. Die erste
+   gewählte Sprache ist die Hauptsprache: ihre Überschrift steht gross im
+   Kopfbalken, die übrigen erscheinen klein über ihrem Absatz. */
+
 
 
 
@@ -5051,15 +5693,37 @@ const hinweis = {
     { k:'ton',   label:'Ton', type:'select',
       options:[{v:'info',t:'Info (navy)'},{v:'warnung',t:'Warnung (cyan)'},{v:'verbot',t:'Verbot (rot)'}] },
     { k:'icon',  label:'Symbol', type:'select', options:iconOptions() },
-    { k:'title', label:'Titel', type:'text' },
+    { k:'title', label:'Titel im Kopfbalken', type:'text',
+      hint:'Setzt sich beim Übernehmen aus der Hauptsprache. Frei überschreibbar.' },
     { k:'datum', label:'Datum (für {{datum}})', type:'text' },
 
-    { t:'group', label:'Text' },
-    { k:'de', label:'Deutsch',   type:'textarea', hint:'**fett** möglich' },
-    { k:'en', label:'English',   type:'textarea' },
-    { k:'fr', label:'Français',  type:'textarea' },
-    { k:'it', label:'Italiano',  type:'textarea' },
-    { k:'pt', label:'Português', type:'textarea' },
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Was hier angehakt ist, steht auf dem Blatt — in dieser Reihenfolge. Die erste Sprache ist die Hauptsprache und steht gross im Kopf.' },
+    { k:'sprachen', label:'Sprachen auf dem Aushang', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
+    { k:'sprachTags', label:'Sprachkürzel zeigen', type:'select',
+      options:[{v:'ja',t:'ja — DE, FR, PT …'},{v:'nein',t:'nein'}],
+      hint:'Hilft Lesenden, ihren Absatz sofort zu finden.' },
+
+    { t:'group', label:'Deutsch' },
+    { k:'titelDe', label:'Überschrift Deutsch', type:'text' },
+    { k:'de', label:'Text Deutsch', type:'textarea', hint:'**fett** möglich' },
+    { t:'group', label:'English' },
+    { k:'titelEn', label:'Überschrift English', type:'text' },
+    { k:'en', label:'Text English', type:'textarea' },
+    { t:'group', label:'Français' },
+    { k:'titelFr', label:'Überschrift Français', type:'text' },
+    { k:'fr', label:'Text Français', type:'textarea' },
+    { t:'group', label:'Italiano' },
+    { k:'titelIt', label:'Überschrift Italiano', type:'text' },
+    { k:'it', label:'Text Italiano', type:'textarea' },
+    { t:'group', label:'Português' },
+    { k:'titelPt', label:'Überschrift Português', type:'text' },
+    { k:'pt', label:'Text Português', type:'textarea' },
+    { t:'group', label:'Español' },
+    { k:'titelEs', label:'Überschrift Español', type:'text' },
+    { k:'es', label:'Text Español', type:'textarea' },
 
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
@@ -5076,20 +5740,52 @@ const hinweis = {
     icon:'smoke',
     title:'Rauchverbot im gesamten Gebäude',
     datum:'',
+    sprachen:['de','en'],
+    sprachSet:'',
+    sprachTags:'ja',
+    titelDe:'Rauchverbot im gesamten Gebäude',
+    titelEn:'No smoking anywhere in the building',
+    titelFr:'Interdiction de fumer dans tout le bâtiment',
+    titelIt:'Divieto di fumare in tutto lʼedificio',
+    titelPt:'Proibido fumar em todo o edifício',
+    titelEs:'Prohibido fumar en todo el edificio',
     de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
-    en:'No smoking anywhere in the building.',
-    fr:'', it:'', pt:'',
+    en:'If we find that the fire alarm system has been tampered with, the tenancy will be terminated with immediate effect for endangering life and limb.',
+    fr:'Si nous constatons que le système de détection dʼincendie a été manipulé, le bail sera résilié avec effet immédiat pour mise en danger de la vie dʼautrui.',
+    it:'Se accertiamo che lʼimpianto di rilevazione incendi è stato manomesso, il contratto di locazione verrà risolto con effetto immediato per messa in pericolo dellʼincolumità delle persone.',
+    pt:'Se constatarmos que o sistema de deteção de incêndio foi manipulado, o contrato de arrendamento será rescindido de imediato por colocar vidas em perigo.',
+    es:'Si comprobamos que se ha manipulado el sistema de detección de incendios, el contrato de arrendamiento se rescindirá de inmediato por poner en peligro la vida de las personas.',
     gruss:'Die Verwaltung',
     footer:''
   },
 
-  /* Der Knopf "Baustein übernehmen" im Formular. */
+  /* Die beiden Knöpfe im Formular. */
   actions:{
+    /* "Baustein übernehmen" — holt alle sechs Sprachen auf einmal.
+       Der Kopftitel folgt der ersten gewählten Sprache; ist keine gewählt,
+       ist es Deutsch. */
     apply(d){
       const p = preset(d.presetId);
-      return { ...d, ton:p.ton, icon:p.icon, title:p.title,
-               de:p.de || '', en:p.en || '', fr:p.fr || '',
-               it:p.it || '', pt:p.pt || '' };
+      const erste = sprachListe(d.sprachen)[0];
+      const next = { ...d, ton:p.ton, icon:p.icon, title:p.titel[erste] || p.titel.de };
+      for (const sp of SPRACHEN){
+        next['titel' + sp.id[0].toUpperCase() + sp.id[1]] = p.titel[sp.id] || '';
+        next[sp.id] = p.text[sp.id] || '';
+      }
+      return next;
+    },
+
+    /* "Zusammenstellung übernehmen" — DE/FR/IT, DE/PT/ES und so weiter. */
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      if (!ids) return d;
+      const p = preset(d.presetId);
+      /* Kopftitel auf die neue Hauptsprache umstellen, sofern er noch der
+         alten entspricht — von Hand Geschriebenes bleibt stehen. */
+      const alt = sprachListe(d.sprachen)[0];
+      const titelWarAuto = d.title === (p.titel[alt] || '');
+      return { ...d, sprachen:ids,
+               title: titelWarAuto ? (p.titel[ids[0]] || d.title) : d.title };
     }
   },
 
@@ -5106,8 +5802,26 @@ const hinweis = {
       ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
          in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
 
-    const block = (lang, text) => has(text)
-      ? `<p class="t-hinweis-p" lang="${lang}">${fmt(fill(text, d))}</p>` : '';
+    const tags = d.sprachTags !== 'nein';
+    const gewaehlt = sprachObjekte(d.sprachen);
+
+    const bloecke = gewaehlt.map(sp => {
+      const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+      const text = fill(d[sp.id], d);
+      const kopf = fill(d[K] || '', d);
+      /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
+         nicht noch einmal. */
+      const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
+      if (!has(text) && !zeigeKopf) return '';
+      return `
+      <article class="t-hinweis-block" lang="${sp.id}">
+        ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
+        <div class="t-hinweis-blocktxt">
+          ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
+          ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
+        </div>
+      </article>`;
+    }).join('');
 
     return `
     ${warnung}
@@ -5120,12 +5834,8 @@ const hinweis = {
       <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
     </header>
 
-    <section class="t-hinweis-body">
-      ${block('de', d.de)}
-      ${block('en', d.en)}
-      ${block('fr', d.fr)}
-      ${block('it', d.it)}
-      ${block('pt', d.pt)}
+    <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
+      ${bloecke}
     </section>
 
     <footer class="t-hinweis-foot">
@@ -5525,32 +6235,128 @@ const mieterbrief = {
 
 
 
+
 const SAMMEL_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
 
-/* Die Fraktionen, wie sie im Haus wirklich beschriftet sind. */
+/* Die Fraktionen, wie sie im Haus wirklich beschriftet sind — je in sechs
+   Sprachen. Beim Abfall lohnt sich das besonders: wer die Fraktion nicht
+   versteht, wirft im Zweifel alles in den Kehricht. */
 const FRAKTIONEN = [
-  { id:'papier',   wort:'Papier',        en:'Paper',        icon:'trash',  farbe:'#2A3350',
-    ja:'Sauberes Papier und Karton', nein:'Kein beschichtetes Papier, keine Verbundverpackungen' },
-  { id:'karton',   wort:'Karton',        en:'Cardboard',    icon:'trash',  farbe:'#2A3350',
-    ja:'Flach gefaltet', nein:'Kein verschmutzter Karton' },
-  { id:'pet',      wort:'PET',           en:'PET bottles',  icon:'bottle', farbe:'#0B7A3B',
-    ja:'Nur PET-Getränkeflaschen — Luft rauslassen, Deckel wieder aufschrauben', nein:'Keine Milchflaschen, keine Shampooflaschen' },
-  { id:'plastik',  wort:'Clean Plastik', en:'Clean plastic',icon:'bottle', farbe:'#0B7A3B',
-    ja:'Saubere Kunststoffverpackungen', nein:'Keine verschmutzten Verpackungen' },
-  { id:'gebinde',  wort:'Plastik-Gebinde', en:'Plastic bottles', icon:'bottle', farbe:'#0B7A3B',
-    ja:'Shampoo-, Wasch- und Putzmittelflaschen', nein:'Kein PET' },
-  { id:'glas',     wort:'Glas',          en:'Glass',        icon:'bottle', farbe:'#0E6E5E',
-    ja:'Flaschen und Gläser, ohne Deckel', nein:'Kein Fensterglas, keine Keramik' },
-  { id:'metall',   wort:'Alumetall',     en:'Metal',        icon:'trash',  farbe:'#5A6474',
-    ja:'Dosen, Alu, Tuben', nein:'Keine Spraydosen mit Restinhalt' },
-  { id:'nespresso',wort:'Nespresso',     en:'Coffee capsules', icon:'cup', farbe:'#8A5A2B',
-    ja:'Nur Aluminium-Kapseln', nein:'Keine Kunststoff-Kapseln' },
-  { id:'kompost',  wort:'Kompost',       en:'Organic waste',icon:'trash',  farbe:'#6B7A2B',
-    ja:'Rüstabfälle, Kaffeesatz, Eierschalen', nein:'Keine Knochen, keine Plastiksäcke' },
-  { id:'kehricht', wort:'Kehricht',      en:'General waste',icon:'trash',  farbe:'#C0271F',
-    ja:'Nur im offiziellen Gebührensack', nein:'Nichts Recycelbares' },
-  { id:'sperrmuell',wort:'Sperrmüll',    en:'Bulky waste',  icon:'trash',  farbe:'#C0271F',
-    ja:'Nach Absprache mit der Verwaltung', nein:'Nicht einfach abstellen' }
+  { id:'papier', icon:'trash', farbe:'#2A3350',
+    wort:{ de:'Papier', en:'Paper', fr:'Papier', it:'Carta', pt:'Papel', es:'Papel' },
+    ja:{ de:'Sauberes Papier und Karton', en:'Clean paper and cardboard',
+         fr:'Papier et carton propres', it:'Carta e cartone puliti',
+         pt:'Papel e cartão limpos', es:'Papel y cartón limpios' },
+    nein:{ de:'Kein beschichtetes Papier, keine Verbundverpackungen',
+           en:'No coated paper, no composite packaging',
+           fr:'Pas de papier couché ni dʼemballages composites',
+           it:'Niente carta patinata né imballaggi accoppiati',
+           pt:'Sem papel plastificado nem embalagens compostas',
+           es:'Sin papel plastificado ni envases compuestos' } },
+
+  { id:'karton', icon:'trash', farbe:'#2A3350',
+    wort:{ de:'Karton', en:'Cardboard', fr:'Carton', it:'Cartone', pt:'Cartão', es:'Cartón' },
+    ja:{ de:'Flach gefaltet', en:'Folded flat', fr:'Plié à plat',
+         it:'Piegato piatto', pt:'Dobrado ao meio', es:'Plegado en plano' },
+    nein:{ de:'Kein verschmutzter Karton', en:'No soiled cardboard',
+           fr:'Pas de carton souillé', it:'Niente cartone sporco',
+           pt:'Sem cartão sujo', es:'Sin cartón sucio' } },
+
+  { id:'pet', icon:'bottle', farbe:'#0B7A3B',
+    wort:{ de:'PET', en:'PET bottles', fr:'PET', it:'PET', pt:'PET', es:'PET' },
+    ja:{ de:'Nur PET-Getränkeflaschen — Luft rauslassen, Deckel wieder aufschrauben',
+         en:'PET drink bottles only — squeeze out the air, screw the cap back on',
+         fr:'Uniquement bouteilles à boisson en PET — chasser lʼair, revisser le bouchon',
+         it:'Solo bottiglie per bevande in PET — far uscire lʼaria, riavvitare il tappo',
+         pt:'Apenas garrafas de bebidas em PET — esprema o ar, volte a enroscar a tampa',
+         es:'Solo botellas de bebida de PET — saque el aire y enrosque el tapón' },
+    nein:{ de:'Keine Milchflaschen, keine Shampooflaschen',
+           en:'No milk or shampoo bottles', fr:'Ni bouteilles de lait ni flacons de shampooing',
+           it:'Né bottiglie del latte né flaconi di shampoo',
+           pt:'Sem garrafas de leite nem frascos de champô',
+           es:'Ni botellas de leche ni frascos de champú' } },
+
+  { id:'plastik', icon:'bottle', farbe:'#0B7A3B',
+    wort:{ de:'Clean Plastik', en:'Clean plastic', fr:'Plastique propre',
+           it:'Plastica pulita', pt:'Plástico limpo', es:'Plástico limpio' },
+    ja:{ de:'Saubere Kunststoffverpackungen', en:'Clean plastic packaging',
+         fr:'Emballages plastiques propres', it:'Imballaggi in plastica puliti',
+         pt:'Embalagens de plástico limpas', es:'Envases de plástico limpios' },
+    nein:{ de:'Keine verschmutzten Verpackungen', en:'No soiled packaging',
+           fr:'Pas dʼemballages souillés', it:'Niente imballaggi sporchi',
+           pt:'Sem embalagens sujas', es:'Sin envases sucios' } },
+
+  { id:'gebinde', icon:'bottle', farbe:'#0B7A3B',
+    wort:{ de:'Plastik-Gebinde', en:'Plastic bottles', fr:'Flacons en plastique',
+           it:'Flaconi in plastica', pt:'Frascos de plástico', es:'Envases de plástico' },
+    ja:{ de:'Shampoo-, Wasch- und Putzmittelflaschen',
+         en:'Shampoo, detergent and cleaning-product bottles',
+         fr:'Flacons de shampooing, de lessive et de produits de nettoyage',
+         it:'Flaconi di shampoo, detersivo e detergenti',
+         pt:'Frascos de champô, detergente e produtos de limpeza',
+         es:'Frascos de champú, detergente y productos de limpieza' },
+    nein:{ de:'Kein PET', en:'No PET', fr:'Pas de PET',
+           it:'Niente PET', pt:'Sem PET', es:'Sin PET' } },
+
+  { id:'glas', icon:'bottle', farbe:'#0E6E5E',
+    wort:{ de:'Glas', en:'Glass', fr:'Verre', it:'Vetro', pt:'Vidro', es:'Vidrio' },
+    ja:{ de:'Flaschen und Gläser, ohne Deckel', en:'Bottles and jars, without lids',
+         fr:'Bouteilles et bocaux, sans couvercle', it:'Bottiglie e vasetti, senza coperchio',
+         pt:'Garrafas e frascos, sem tampa', es:'Botellas y tarros, sin tapa' },
+    nein:{ de:'Kein Fensterglas, keine Keramik', en:'No window glass, no ceramics',
+           fr:'Ni vitrage ni céramique', it:'Niente vetro da finestra né ceramica',
+           pt:'Sem vidro de janela nem cerâmica', es:'Ni vidrio de ventana ni cerámica' } },
+
+  { id:'metall', icon:'trash', farbe:'#5A6474',
+    wort:{ de:'Alumetall', en:'Metal', fr:'Métal', it:'Metallo', pt:'Metal', es:'Metal' },
+    ja:{ de:'Dosen, Alu, Tuben', en:'Cans, aluminium, tubes', fr:'Boîtes, alu, tubes',
+         it:'Lattine, alluminio, tubetti', pt:'Latas, alumínio, bisnagas',
+         es:'Latas, aluminio, tubos' },
+    nein:{ de:'Keine Spraydosen mit Restinhalt', en:'No aerosol cans with contents left',
+           fr:'Pas dʼaérosols encore pleins', it:'Niente bombolette ancora piene',
+           pt:'Sem latas de spray com resto', es:'Sin aerosoles con contenido' } },
+
+  { id:'nespresso', icon:'cup', farbe:'#8A5A2B',
+    wort:{ de:'Nespresso', en:'Coffee capsules', fr:'Capsules à café',
+           it:'Capsule da caffè', pt:'Cápsulas de café', es:'Cápsulas de café' },
+    ja:{ de:'Nur Aluminium-Kapseln', en:'Aluminium capsules only',
+         fr:'Capsules en aluminium uniquement', it:'Solo capsule in alluminio',
+         pt:'Apenas cápsulas de alumínio', es:'Solo cápsulas de aluminio' },
+    nein:{ de:'Keine Kunststoff-Kapseln', en:'No plastic capsules',
+           fr:'Pas de capsules en plastique', it:'Niente capsule in plastica',
+           pt:'Sem cápsulas de plástico', es:'Sin cápsulas de plástico' } },
+
+  { id:'kompost', icon:'trash', farbe:'#6B7A2B',
+    wort:{ de:'Kompost', en:'Organic waste', fr:'Compost',
+           it:'Compost', pt:'Compostagem', es:'Compost' },
+    ja:{ de:'Rüstabfälle, Kaffeesatz, Eierschalen',
+         en:'Vegetable peelings, coffee grounds, eggshells',
+         fr:'Épluchures, marc de café, coquilles dʼœufs',
+         it:'Scarti di verdura, fondi di caffè, gusci dʼuovo',
+         pt:'Cascas de legumes, borras de café, cascas de ovo',
+         es:'Restos de verdura, posos de café, cáscaras de huevo' },
+    nein:{ de:'Keine Knochen, keine Plastiksäcke', en:'No bones, no plastic bags',
+           fr:'Ni os ni sacs plastique', it:'Niente ossa né sacchetti di plastica',
+           pt:'Sem ossos nem sacos de plástico', es:'Ni huesos ni bolsas de plástico' } },
+
+  { id:'kehricht', icon:'trash', farbe:'#C0271F',
+    wort:{ de:'Kehricht', en:'General waste', fr:'Ordures ménagères',
+           it:'Rifiuti', pt:'Lixo comum', es:'Basura' },
+    ja:{ de:'Nur im offiziellen Gebührensack', en:'Only in the official charged bag',
+         fr:'Uniquement dans le sac taxé officiel', it:'Solo nel sacco ufficiale a pagamento',
+         pt:'Apenas no saco oficial taxado', es:'Solo en la bolsa oficial de pago' },
+    nein:{ de:'Nichts Recycelbares', en:'Nothing recyclable', fr:'Rien de recyclable',
+           it:'Niente di riciclabile', pt:'Nada reciclável', es:'Nada reciclable' } },
+
+  { id:'sperrmuell', icon:'trash', farbe:'#C0271F',
+    wort:{ de:'Sperrmüll', en:'Bulky waste', fr:'Encombrants',
+           it:'Rifiuti ingombranti', pt:'Volumosos', es:'Voluminosos' },
+    ja:{ de:'Nach Absprache mit der Verwaltung', en:'By arrangement with the management',
+         fr:'Sur entente avec la gérance', it:'Previo accordo con lʼamministrazione',
+         pt:'Mediante acordo com a administração', es:'Previo acuerdo con la administración' },
+    nein:{ de:'Nicht einfach abstellen', en:'Do not simply leave it here',
+           fr:'Ne pas déposer sans autorisation', it:'Non depositare senza accordo',
+           pt:'Não deixe aqui sem aviso', es:'No lo deje aquí sin avisar' } }
 ];
 
 const sammelstelle = {
@@ -5584,8 +6390,11 @@ const sammelstelle = {
       { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
       { v:'a4-land', t:'A4 quer' }, { v:'a4', t:'A4 hoch' }
     ] },
-    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
-      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen auf dem Schild', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
 
     { t:'group', label:'Objekt' },
     { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
@@ -5597,7 +6406,7 @@ const sammelstelle = {
       defaultItem:{ art:'papier', wort:'', ja:'', nein:'' },
       item:[
         { k:'art',  label:'Fraktion', type:'select',
-          options:FRAKTIONEN.map(f => ({ v:f.id, t:f.wort })) },
+          options:FRAKTIONEN.map(f => ({ v:f.id, t:f.wort.de })) },
         { k:'wort', label:'Wort (überschreibt)', type:'text' },
         { k:'ja',   label:'Das gehört hinein', type:'text' },
         { k:'nein', label:'Das gehört nicht hinein', type:'text' }
@@ -5606,7 +6415,8 @@ const sammelstelle = {
 
   defaults:{
     format:'a5-land',
-    zweisprachig:'ja',
+    sprachen:['de','en'],
+    sprachSet:'',
     objekt:'-',
     absender:'immobilien',
     /* Die sechs Fraktionen aus "A14 Recycling.docx". */
@@ -5620,27 +6430,41 @@ const sammelstelle = {
     ]
   },
 
+  actions:{
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
   render(d){
     const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
-    const en  = d.zweisprachig !== 'nein';
+    const sprachen = sprachObjekte(d.sprachen);
 
     return (d.rows || []).map(r => {
       const f = FRAKTIONEN.find(x => x.id === r.art) || FRAKTIONEN[0];
-      const wort = has(r.wort) ? r.wort : f.wort;
-      const ja   = has(r.ja)   ? r.ja   : f.ja;
-      const nein = has(r.nein) ? r.nein : f.nein;
+      const haupt = sprachen[0].id;
+      /* Eigene Eingaben überschreiben die Hauptsprache; die weiteren
+         Sprachen bleiben beim hinterlegten Wortlaut. */
+      const wort = has(r.wort) ? r.wort : (f.wort[haupt] || f.wort.de);
+      const ja   = has(r.ja)   ? r.ja   : (f.ja[haupt]   || f.ja.de);
+      const nein = has(r.nein) ? r.nein : (f.nein[haupt] || f.nein.de);
+      const weitere = sprachen.slice(1);
 
       return `
       <article data-page class="t-sammel-page" style="--ton:${f.farbe}">
         <div class="t-sammel-band"></div>
         <div class="t-sammel-body">
           <div class="t-sammel-txt">
-            <h1>${esc(wort)}</h1>
-            ${en && f.en ? `<p class="t-sammel-en">${esc(f.en)}</p>` : ''}
+            <h1 lang="${haupt}">${esc(wort)}</h1>
+            ${weitere.length ? `<p class="t-sammel-en">${
+              weitere.map(sp => esc(f.wort[sp.id] || '')).filter(Boolean).join(' · ')}</p>` : ''}
             ${has(ja)   ? `<p class="t-sammel-ja"><span>✓</span>${esc(ja)}</p>` : ''}
             ${has(nein) ? `<p class="t-sammel-nein"><span>×</span>${esc(nein)}</p>` : ''}
+            ${weitere.map(sp => `<p class="t-sammel-mehr" lang="${sp.id}">
+              <b>${esc(sp.kurz)}</b> ${esc(f.ja[sp.id] || '')}</p>`).join('')}
           </div>
           <div class="t-sammel-ico">${icon(f.icon, 120, 1.6)}</div>
         </div>
@@ -5663,6 +6487,7 @@ const sammelstelle = {
    Treppenhaus, "Tür geschlossen halten" an der Waschküche, Rutschgefahr nach
    dem Putzen. Das Zeichen ist bewusst gross — es soll aus dem Gang wirken,
    nicht erst aus zwei Schritten Abstand. */
+
 
 
 
@@ -5704,8 +6529,12 @@ const sicherheit = {
       { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
     ] },
-    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
-      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen auf dem Schild', type:'checks', options:sprachOptions(),
+      hint:'Die erste Sprache steht gross, die weiteren kleiner darunter.' },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
 
     { t:'group', label:'Objekt' },
     { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
@@ -5714,11 +6543,11 @@ const sicherheit = {
     { t:'group', label:'Schilder' },
     { t:'note', label:'Jede Zeile ergibt eine Druckseite. Der Text darf überschrieben werden — das Zeichen bleibt.' },
     { k:'rows', label:'Schilder', type:'list', itemLabel:'Schild', max:16,
-      defaultItem:{ zeichen:'rauchen-verboten', de:'', en:'', zusatz:'' },
+      defaultItem:{ zeichen:'rauchen-verboten', de:'', zusatz:'' },
       item:[
         { k:'zeichen', label:'Zeichen', type:'select', options:szOptions() },
-        { k:'de',      label:'Text (überschreibt)', type:'text' },
-        { k:'en',      label:'Englisch (überschreibt)', type:'text' },
+        { k:'de',      label:'Text überschreiben (Hauptsprache)', type:'text',
+          hint:'Leer lassen: der Normtext in allen gewählten Sprachen.' },
         { k:'zusatz',  label:'Zusatzzeile', type:'text',
           hint:'z. B. «gilt im ganzen Treppenhaus» oder eine Bussenhöhe' }
       ] },
@@ -5729,30 +6558,39 @@ const sicherheit = {
 
   defaults:{
     format:'a5-land',
-    zweisprachig:'ja',
+    sprachen:['de','en'],
+    sprachSet:'',
     objekt:'-',
     absender:'immobilien',
     rows:[
-      { zeichen:'rauchen-verboten', de:'', en:'', zusatz:'Gilt im ganzen Treppenhaus' },
-      { zeichen:'abstellen-verboten', de:'', en:'', zusatz:'' }
+      { zeichen:'rauchen-verboten', de:'', zusatz:'Gilt im ganzen Treppenhaus' },
+      { zeichen:'abstellen-verboten', de:'', zusatz:'' }
     ],
     fussnote:'Danke für Ihr Verständnis.'
+  },
+
+  actions:{
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
   },
 
   render(d){
     const abs  = ABSENDER[d.absender] || ABSENDER.immobilien;
     const obj  = objekt(d.objekt);
     const adr  = objektAdresse(d.objekt);
-    const en   = d.zweisprachig !== 'nein';
+    const sprachen = sprachObjekte(d.sprachen);
     const page = SICHER_PAGES[d.format] || 'a5-land';
     const mass = SICHER_MASS[page] || 62;
     /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
     const quer = page.endsWith('-land');
 
     return (d.rows || []).map(r => {
-      const z    = szZeichen(r.zeichen);
-      const txt  = has(r.de) ? r.de : z.de;
-      const txtE = has(r.en) ? r.en : z.en;
+      const z = szZeichen(r.zeichen);
+      /* Ist ein eigener Text gesetzt, ersetzt er die Hauptsprache; die
+         übrigen Sprachen bleiben beim Normtext. */
+      const zeile = (sp, i) => (i === 0 && has(r.de)) ? r.de : (z.text[sp.id] || '');
 
       return `
       <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
@@ -5762,8 +6600,9 @@ const sicherheit = {
         <div class="t-sicher-body">
           <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
           <div class="t-sicher-txt">
-            <h1>${esc(txt)}</h1>
-            ${en && has(txtE) ? `<p class="t-sicher-en" lang="en">${esc(txtE)}</p>` : ''}
+            <h1 lang="${sprachen[0].id}">${esc(zeile(sprachen[0], 0))}</h1>
+            ${sprachen.slice(1).map((sp, i) => has(zeile(sp, i + 1))
+              ? `<p class="t-sicher-mehr" lang="${sp.id}">${esc(zeile(sp, i + 1))}</p>` : '').join('')}
             ${has(r.zusatz) ? `<p class="t-sicher-zusatz">${esc(r.zusatz)}</p>` : ''}
           </div>
         </div>
@@ -6194,6 +7033,7 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 
 
+
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
 
@@ -6327,6 +7167,18 @@ function fieldHtml(f, value, path){
         <input id="${id}" type="color" data-path="${esc(path)}" value="${esc(v || '#2A3350')}">${lbl}</div>`;
     case 'image':
       return imageFieldHtml(f, v, path, id);
+    case 'checks':
+      /* Mehrfachauswahl als Kästchen — der Zustand ist ein Array von Werten.
+         Gebraucht für die Sprachen eines Aushangs. */
+      return `<div class="vz-field"><label>${esc(f.label || f.k)}</label>
+        <div class="vz-checks" data-checks="${esc(path)}">${
+          (f.options || []).map(o => {
+            const an = Array.isArray(v) ? v.includes(o.v) : String(v) === String(o.v);
+            return `<label class="vz-check${an ? ' is-on' : ''}">
+              <input type="checkbox" value="${esc(o.v)}"${an ? ' checked' : ''}>
+              <span>${esc(o.t)}</span></label>`;
+          }).join('')
+        }</div>${hint}</div>`;
     case 'action':
       /* Knopf, der eine in der Vorlage hinterlegte Funktion auf den Zustand
          anwendet — z. B. einen fertigen Textbaustein übernehmen. */
@@ -6376,9 +7228,14 @@ function buildForm(tpl, state){
   return tpl.fields.map(f => {
     if (f.t === 'group') return `<div class="vz-fgroup">${esc(f.label)}</div>`;
     if (f.t === 'note')  return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
-    if (f.type === 'list') return listHtml(f, state[f.k], f.k);
-    return fieldHtml(f, state[f.k], f.k);
+    if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
+    return fieldHtml(f, getPath(state, f.k), f.k);
   }).join('');
+}
+
+/* Pfad "rows.2.de" im Zustand lesen. */
+function getPath(state, path){
+  return String(path).split('.').reduce((n, k) => (n == null ? n : n[k]), state);
 }
 
 /* Pfad "rows.2.de" im Zustand setzen. */
@@ -6422,6 +7279,7 @@ function renderEditor(id, geteilt){
         </div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
         ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
+        ${tpl.fern ? '<div class="vz-kontrast" id="vz-kontrast"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
@@ -6457,6 +7315,7 @@ function renderEditor(id, geteilt){
     fitScaler();
     checkFit();
     checkFern();
+    checkKontrast();
   }
   function fitScaler(){
     const stage = document.getElementById('vz-stage');
@@ -6488,6 +7347,19 @@ function renderEditor(id, geteilt){
     box.textContent = '\u2194 ' + b.text;
     box.title = 'Faustregel der Beschilderung: n\u00f6tige x-H\u00f6he in mm = Leseabstand in m \u00d7 2,5. '
               + 'Gilt f\u00fcr gutes Licht und geraden Blick.';
+  }
+
+  /* Schwächster Schrift-Grund-Kontrast auf dem Blatt. Nur melden, wenn er
+     unter der Schwelle liegt — sonst wäre die Leiste nur Rauschen. */
+  function checkKontrast(){
+    const box = document.getElementById('vz-kontrast');
+    if (!box) return;
+    const b = kontrastBefund(sheetPages(sheet)[0]);
+    if (!b || b.ok){ box.className = 'vz-kontrast'; box.textContent = ''; return; }
+    box.className = 'vz-kontrast is-warn';
+    box.textContent = `\u25D1 Schwacher Kontrast ${b.wert}:1 (n\u00f6tig ${b.noetig}:1) — \u00ab${b.text}\u00bb`;
+    box.title = 'Gepr\u00fcft nach der Kontrastformel der WCAG, Stufe AA. '
+              + 'Auf Papier und bei schwachem Licht wirkt es noch flauer als am Bildschirm.';
   }
 
   function commit(){ saveState(tpl, state); paint(); }
@@ -6533,6 +7405,19 @@ function renderEditor(id, geteilt){
           commit(); rebuild();
         }
       }
+      return;
+    }
+
+    /* Kästchen einer Mehrfachauswahl. Der Zustand wird komplett aus den
+       angehakten Kästchen neu gebildet — so bleibt die Reihenfolge die des
+       Formulars und nicht die des Anklickens. */
+    const box = ev.target.closest('[data-checks]');
+    if (box && ev.target.tagName === 'INPUT'){
+      const werte = Array.from(box.querySelectorAll('input:checked')).map(i => i.value);
+      setPath(state, box.dataset.checks, werte);
+      box.querySelectorAll('.vz-check').forEach(l =>
+        l.classList.toggle('is-on', l.querySelector('input').checked));
+      commit();
       return;
     }
 

@@ -3,12 +3,20 @@
    eigene Vorlage zu bauen, gibt es eine Vorlage und eine Liste fertiger
    Textbausteine. Baustein wählen, Objekt wählen, drucken.
 
-   Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot. */
+   Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot.
+
+   Sprachen: jeder Baustein liegt in sechs Sprachen vor (DE EN FR IT PT ES).
+   Im Formular wird angehakt, welche davon aufs Blatt sollen — die Reihenfolge
+   ist fest, damit zwei Aushänge nebeneinander gleich aussehen. Die erste
+   gewählte Sprache ist die Hauptsprache: ihre Überschrift steht gross im
+   Kopfbalken, die übrigen erscheinen klein über ihrem Absatz. */
 import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon, iconOptions } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
 import { PRESETS, preset, presetOptions } from '../presets.js';
+import { SPRACHEN, sprachOptions, sprachSetOptions, sprachSet,
+         sprachObjekte, sprachListe } from '../lib/sprachen.js';
 import { ABSENDER, objekt, objektAdresse, adresseFehlt, istHotel,
          objektOptions, absenderOptions } from '../objekte.js';
 
@@ -64,15 +72,37 @@ export default {
     { k:'ton',   label:'Ton', type:'select',
       options:[{v:'info',t:'Info (navy)'},{v:'warnung',t:'Warnung (cyan)'},{v:'verbot',t:'Verbot (rot)'}] },
     { k:'icon',  label:'Symbol', type:'select', options:iconOptions() },
-    { k:'title', label:'Titel', type:'text' },
+    { k:'title', label:'Titel im Kopfbalken', type:'text',
+      hint:'Setzt sich beim Übernehmen aus der Hauptsprache. Frei überschreibbar.' },
     { k:'datum', label:'Datum (für {{datum}})', type:'text' },
 
-    { t:'group', label:'Text' },
-    { k:'de', label:'Deutsch',   type:'textarea', hint:'**fett** möglich' },
-    { k:'en', label:'English',   type:'textarea' },
-    { k:'fr', label:'Français',  type:'textarea' },
-    { k:'it', label:'Italiano',  type:'textarea' },
-    { k:'pt', label:'Português', type:'textarea' },
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Was hier angehakt ist, steht auf dem Blatt — in dieser Reihenfolge. Die erste Sprache ist die Hauptsprache und steht gross im Kopf.' },
+    { k:'sprachen', label:'Sprachen auf dem Aushang', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
+    { k:'sprachTags', label:'Sprachkürzel zeigen', type:'select',
+      options:[{v:'ja',t:'ja — DE, FR, PT …'},{v:'nein',t:'nein'}],
+      hint:'Hilft Lesenden, ihren Absatz sofort zu finden.' },
+
+    { t:'group', label:'Deutsch' },
+    { k:'titelDe', label:'Überschrift Deutsch', type:'text' },
+    { k:'de', label:'Text Deutsch', type:'textarea', hint:'**fett** möglich' },
+    { t:'group', label:'English' },
+    { k:'titelEn', label:'Überschrift English', type:'text' },
+    { k:'en', label:'Text English', type:'textarea' },
+    { t:'group', label:'Français' },
+    { k:'titelFr', label:'Überschrift Français', type:'text' },
+    { k:'fr', label:'Text Français', type:'textarea' },
+    { t:'group', label:'Italiano' },
+    { k:'titelIt', label:'Überschrift Italiano', type:'text' },
+    { k:'it', label:'Text Italiano', type:'textarea' },
+    { t:'group', label:'Português' },
+    { k:'titelPt', label:'Überschrift Português', type:'text' },
+    { k:'pt', label:'Text Português', type:'textarea' },
+    { t:'group', label:'Español' },
+    { k:'titelEs', label:'Überschrift Español', type:'text' },
+    { k:'es', label:'Text Español', type:'textarea' },
 
     { t:'group', label:'Fusszeile' },
     { k:'gruss',  label:'Grussformel', type:'text' },
@@ -89,20 +119,52 @@ export default {
     icon:'smoke',
     title:'Rauchverbot im gesamten Gebäude',
     datum:'',
+    sprachen:['de','en'],
+    sprachSet:'',
+    sprachTags:'ja',
+    titelDe:'Rauchverbot im gesamten Gebäude',
+    titelEn:'No smoking anywhere in the building',
+    titelFr:'Interdiction de fumer dans tout le bâtiment',
+    titelIt:'Divieto di fumare in tutto lʼedificio',
+    titelPt:'Proibido fumar em todo o edifício',
+    titelEs:'Prohibido fumar en todo el edificio',
     de:'Stellen wir fest, dass an der Brandmeldeanlage manipuliert worden ist, wird das Mietverhältnis per sofort wegen Gefährdung von Leib und Leben aufgelöst.',
-    en:'No smoking anywhere in the building.',
-    fr:'', it:'', pt:'',
+    en:'If we find that the fire alarm system has been tampered with, the tenancy will be terminated with immediate effect for endangering life and limb.',
+    fr:'Si nous constatons que le système de détection dʼincendie a été manipulé, le bail sera résilié avec effet immédiat pour mise en danger de la vie dʼautrui.',
+    it:'Se accertiamo che lʼimpianto di rilevazione incendi è stato manomesso, il contratto di locazione verrà risolto con effetto immediato per messa in pericolo dellʼincolumità delle persone.',
+    pt:'Se constatarmos que o sistema de deteção de incêndio foi manipulado, o contrato de arrendamento será rescindido de imediato por colocar vidas em perigo.',
+    es:'Si comprobamos que se ha manipulado el sistema de detección de incendios, el contrato de arrendamiento se rescindirá de inmediato por poner en peligro la vida de las personas.',
     gruss:'Die Verwaltung',
     footer:''
   },
 
-  /* Der Knopf "Baustein übernehmen" im Formular. */
+  /* Die beiden Knöpfe im Formular. */
   actions:{
+    /* "Baustein übernehmen" — holt alle sechs Sprachen auf einmal.
+       Der Kopftitel folgt der ersten gewählten Sprache; ist keine gewählt,
+       ist es Deutsch. */
     apply(d){
       const p = preset(d.presetId);
-      return { ...d, ton:p.ton, icon:p.icon, title:p.title,
-               de:p.de || '', en:p.en || '', fr:p.fr || '',
-               it:p.it || '', pt:p.pt || '' };
+      const erste = sprachListe(d.sprachen)[0];
+      const next = { ...d, ton:p.ton, icon:p.icon, title:p.titel[erste] || p.titel.de };
+      for (const sp of SPRACHEN){
+        next['titel' + sp.id[0].toUpperCase() + sp.id[1]] = p.titel[sp.id] || '';
+        next[sp.id] = p.text[sp.id] || '';
+      }
+      return next;
+    },
+
+    /* "Zusammenstellung übernehmen" — DE/FR/IT, DE/PT/ES und so weiter. */
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      if (!ids) return d;
+      const p = preset(d.presetId);
+      /* Kopftitel auf die neue Hauptsprache umstellen, sofern er noch der
+         alten entspricht — von Hand Geschriebenes bleibt stehen. */
+      const alt = sprachListe(d.sprachen)[0];
+      const titelWarAuto = d.title === (p.titel[alt] || '');
+      return { ...d, sprachen:ids,
+               title: titelWarAuto ? (p.titel[ids[0]] || d.title) : d.title };
     }
   },
 
@@ -119,8 +181,26 @@ export default {
       ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
          in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
 
-    const block = (lang, text) => has(text)
-      ? `<p class="t-hinweis-p" lang="${lang}">${fmt(fill(text, d))}</p>` : '';
+    const tags = d.sprachTags !== 'nein';
+    const gewaehlt = sprachObjekte(d.sprachen);
+
+    const bloecke = gewaehlt.map(sp => {
+      const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+      const text = fill(d[sp.id], d);
+      const kopf = fill(d[K] || '', d);
+      /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
+         nicht noch einmal. */
+      const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
+      if (!has(text) && !zeigeKopf) return '';
+      return `
+      <article class="t-hinweis-block" lang="${sp.id}">
+        ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
+        <div class="t-hinweis-blocktxt">
+          ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
+          ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
+        </div>
+      </article>`;
+    }).join('');
 
     return `
     ${warnung}
@@ -133,12 +213,8 @@ export default {
       <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
     </header>
 
-    <section class="t-hinweis-body">
-      ${block('de', d.de)}
-      ${block('en', d.en)}
-      ${block('fr', d.fr)}
-      ${block('it', d.it)}
-      ${block('pt', d.pt)}
+    <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
+      ${bloecke}
     </section>
 
     <footer class="t-hinweis-foot">
