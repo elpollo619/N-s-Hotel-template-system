@@ -1404,6 +1404,36 @@ a{color:var(--cyan)}
   max-width:34mm;line-height:1.3;
 }
 
+/* Serie: eine Seite je Liegenschaft. Das Blatt selbst ist dann nur noch ein
+   Stapel — Papier und Rand tragen die einzelnen Seiten. */
+.t-hinweis-page{display:flex;flex-direction:column;background:#fff;overflow:hidden}
+
+/* --------------------------------------------------------------------------
+   Schneidebogen: mehrere Schilder auf einem A4, mit Schnittkanten.
+   Die gestrichelten Linien werden mitgedruckt — sie sind die Schere.
+   -------------------------------------------------------------------------- */
+.t-sicher-bogen{display:grid;background:#fff}
+.t-sicher-bogen.is-2{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+.t-sicher-bogen.is-4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.t-sicher-zelle{
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:8mm 8mm 6mm;min-width:0;overflow:hidden;
+  border-top:3mm solid var(--sz-akzent);
+  outline:.4pt dashed #B9C0CC;outline-offset:-.2pt;
+}
+.t-sicher-zelle.is-leer{border-top:0}
+.t-sicher-bogen.is-2 .t-sicher-zelle .t-sicher-body{flex-direction:row;text-align:left;gap:9mm;justify-content:flex-start}
+.t-sicher-bogen .t-sicher-txt h1{font-size:19pt}
+.t-sicher-bogen .t-sicher-mehr{font-size:10pt}
+.t-sicher-bogen .t-sicher-zusatz{font-size:9.5pt;margin-top:2.5mm}
+.t-sicher-bogen .t-sicher-foot{font-size:6.5pt;padding-top:2mm;gap:3mm}
+.t-sicher-bogen.is-4 .t-sicher-zelle{padding:6mm 6mm 4mm}
+.t-sicher-bogen.is-4 .t-sicher-txt h1{font-size:13pt}
+.t-sicher-bogen.is-4 .t-sicher-mehr{font-size:8pt;margin-top:1.2mm}
+.t-sicher-bogen.is-4 .t-sicher-zusatz{font-size:7.5pt;border-left-width:.9mm;padding-left:2.5mm}
+.t-sicher-bogen.is-4 .t-sicher-body{gap:4mm}
+.t-sicher-bogen.is-4 .t-sicher-foot{font-size:5.5pt}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -1636,6 +1666,20 @@ function objektAdresse(id){
 function adresseFehlt(id){
   const o = objekt(id);
   return Boolean(o.code) && !o.street;
+}
+
+/** Auswahlkästchen für eine Serie — ohne den Eintrag "Ohne Objekt". */
+function objektCheckOptions(){
+  return OBJEKTE.filter(o => o.code).map(o => ({ v:o.id, t:`${o.code} — ${o.name}` }));
+}
+
+/**
+ * Die Objekte einer Serie, in der Reihenfolge dieser Datei.
+ * Unbekannte Kürzel fallen weg; "Ohne Objekt" gehört nie in eine Serie.
+ */
+function objektListe(ids){
+  const gewaehlt = Array.isArray(ids) ? ids : [];
+  return OBJEKTE.filter(o => o.code && gewaehlt.includes(o.id));
 }
 
 /* Bildmarke des Absenders.
@@ -6157,6 +6201,11 @@ const gaestemappe = {
 
    Der Kopfbalken färbt sich nach Ton: Info navy, Warnung cyan, Verbot rot.
 
+   Serie: derselbe Aushang für mehrere Liegenschaften auf einmal. Jede
+   bekommt eine eigene Seite mit ihrem Kürzel, ihrer Adresse und — wenn
+   gewünscht — ihrem eigenen Absender. Aus einem Blatt werden elf, ohne
+   elfmal dasselbe zu tippen.
+
    Sprachen: jeder Baustein liegt in sechs Sprachen vor (DE EN FR IT PT ES).
    Im Formular wird angehakt, welche davon aufs Blatt sollen — die Reihenfolge
    ist fest, damit zwei Aushänge nebeneinander gleich aussehen. Die erste
@@ -6176,6 +6225,11 @@ const TONE = {
   verbot:  { bg:'#C0271F',      fg:'#fff' }
 };
 
+/** Die Liegenschaften der Serie — leer, wenn keine Serie gewählt ist. */
+function serieObjekte(d){
+  return (d && d.serie === 'auswahl') ? objektListe(d.serieObjekte) : [];
+}
+
 /* Platzhalter, die der Baustein mitbringt: {{adresse}}, {{objekt}}, {{datum}} */
 function fill(text, d){
   return String(text || '')
@@ -6193,6 +6247,8 @@ const hinweis = {
   root:'t-hinweis',
   fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'hausordnung',
+  /* Erst mehrseitig, wenn wirklich mehr als eine Liegenschaft gewählt ist. */
+  multipage(d){ return serieObjekte(d).length > 1; },
   thumb: thumb(`
     <rect x="0" y="0" width="210" height="60" fill="#2A3350"/>
     <rect x="18" y="20" width="120" height="12" rx="4" fill="#fff" opacity=".92"/>
@@ -6217,6 +6273,19 @@ const hinweis = {
     { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
     { k:'zeigeAdresse', label:'Adresse im Kopf zeigen', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Serie über mehrere Liegenschaften' },
+    { t:'note', label:'Aus einem Blatt werden mehrere — je Liegenschaft eine Seite mit ihrem Kürzel und ihrer Adresse.' },
+    { k:'serie', label:'Serie drucken', type:'select', options:[
+      { v:'nein', t:'nein — nur die Liegenschaft oben' },
+      { v:'auswahl', t:'ja — die angehakten Liegenschaften' }
+    ] },
+    { k:'serieObjekte', label:'Liegenschaften', type:'checks', options:objektCheckOptions() },
+    { k:'serieAlle', label:'Alle anhaken', type:'action' },
+    { k:'serieAbsender', label:'Absender je Seite', type:'select', options:[
+      { v:'objekt', t:'der zur Liegenschaft gehörende' },
+      { v:'fest',   t:'für alle derselbe (oben gewählt)' }
+    ] },
 
     { t:'group', label:'Kopf' },
     { k:'ton',   label:'Ton', type:'select',
@@ -6271,6 +6340,9 @@ const hinweis = {
     objekt:'-',
     absender:'immobilien',
     zeigeAdresse:'ja',
+    serie:'nein',
+    serieObjekte:[],
+    serieAbsender:'objekt',
     ton:'verbot',
     icon:'smoke',
     title:'Rauchverbot im gesamten Gebäude',
@@ -6313,6 +6385,12 @@ const hinweis = {
       return next;
     },
 
+    /* "Alle anhaken" — spart elf Klicks. */
+    serieAlle(d){
+      return { ...d, serie:'auswahl',
+               serieObjekte:objektCheckOptions().map(o => o.v) };
+    },
+
     /* "Zusammenstellung übernehmen" — DE/FR/IT, DE/PT/ES und so weiter. */
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);
@@ -6328,78 +6406,95 @@ const hinweis = {
   },
 
   render(d){
-    const t = TONE[d.ton] || TONE.info;
-    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
-    const obj = objekt(d.objekt);
-    const adr = objektAdresse(d.objekt);
+    const serie = serieObjekte(d);
+    if (serie.length < 2) return blatt(d);
 
-    const kopfAdresse = (d.zeigeAdresse !== 'nein' && obj.code)
-      ? `<p class="t-hinweis-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : '';
-
-    const warnung = adresseFehlt(d.objekt)
-      ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
-         in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
-
-    const tags = d.sprachTags !== 'nein';
-    const gewaehlt = sprachObjekte(d.sprachen);
-
-    const bloecke = gewaehlt.map(sp => {
-      const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
-      const text = fill(d[sp.id], d);
-      const kopf = fill(d[K] || '', d);
-      /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
-         nicht noch einmal. */
-      const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
-      if (!has(text) && !zeigeKopf) return '';
-      return `
-      <article class="t-hinweis-block" lang="${sp.id}">
-        ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
-        <div class="t-hinweis-blocktxt">
-          ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
-          ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
-        </div>
-      </article>`;
-    }).join('');
-
-    /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
-       Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
-       bleibt die Stelle leer statt das Blatt zu zerschiessen. */
-    let qrBlock = '';
-    if (has(d.qrZiel)){
-      const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
-        ? d.qrZiel : 'https://' + d.qrZiel;
-      const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
-      try {
-        qrBlock = `<div class="t-hinweis-qr">
-          ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
-          ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
-        </div>`;
-      } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
-    }
-
-    return `
-    ${warnung}
-    <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
-      <div class="t-hinweis-headtxt">
-        <p class="t-hinweis-abs">${esc(abs.name)}</p>
-        <h1>${esc(fill(d.title, d))}</h1>
-        ${kopfAdresse}
-      </div>
-      <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
-    </header>
-
-    <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
-      ${bloecke}
-    </section>
-
-    <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
-      ${qrBlock}
-      ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
-      ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
-      <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
-    </footer>`;
+    /* Eine Seite je Liegenschaft. Kürzel, Adresse und — sofern gewünscht —
+       der Absender werden je Seite gesetzt; alles andere bleibt gleich. */
+    return serie.map(o => `<article data-page class="t-hinweis-page">${
+      blatt({ ...d,
+              objekt:o.id,
+              absender:d.serieAbsender === 'fest' ? d.absender : o.absender })
+    }</article>`).join('');
   }
 };
+
+/* --------------------------------------------------------------------------
+   Ein einzelnes Blatt. Einseitig ist das der ganze Aushang; in der Serie
+   wird es je Liegenschaft einmal erzeugt.
+   -------------------------------------------------------------------------- */
+function blatt(d){
+  const t = TONE[d.ton] || TONE.info;
+  const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+  const obj = objekt(d.objekt);
+  const adr = objektAdresse(d.objekt);
+
+  const kopfAdresse = (d.zeigeAdresse !== 'nein' && obj.code)
+    ? `<p class="t-hinweis-obj">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</p>` : '';
+
+  const warnung = adresseFehlt(d.objekt)
+    ? `<p class="t-hinweis-todo no-print">Für ${esc(obj.code)} ist noch keine Adresse hinterlegt —
+       in <code>js/objekte.js</code> ergänzen. Auf dem Druck erscheint sie nicht.</p>` : '';
+
+  const tags = d.sprachTags !== 'nein';
+  const gewaehlt = sprachObjekte(d.sprachen);
+
+  const bloecke = gewaehlt.map(sp => {
+    const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+    const text = fill(d[sp.id], d);
+    const kopf = fill(d[K] || '', d);
+    /* Die Überschrift der Hauptsprache steht schon im Kopfbalken — hier
+       nicht noch einmal. */
+    const zeigeKopf = has(kopf) && kopf.trim() !== String(d.title || '').trim();
+    if (!has(text) && !zeigeKopf) return '';
+    return `
+    <article class="t-hinweis-block" lang="${sp.id}">
+      ${tags ? `<span class="t-hinweis-tag" title="${esc(sp.eigen)}">${esc(sp.kurz)}</span>` : ''}
+      <div class="t-hinweis-blocktxt">
+        ${zeigeKopf ? `<h2>${esc(kopf)}</h2>` : ''}
+        ${has(text) ? `<p class="t-hinweis-p">${fmt(text)}</p>` : ''}
+      </div>
+    </article>`;
+  }).join('');
+
+  /* Freiwilliger QR-Code in der Fusszeile. Stufe Q, weil ein Aushang
+     Fingerabdrücke und Knicke abbekommt. Schlägt die Erzeugung fehl,
+     bleibt die Stelle leer statt das Blatt zu zerschiessen. */
+  let qrBlock = '';
+  if (has(d.qrZiel)){
+    const ziel = /^[a-z]+:/i.test(d.qrZiel) || !/\./.test(d.qrZiel)
+      ? d.qrZiel : 'https://' + d.qrZiel;
+    const mass = Math.max(15, Math.min(60, Number(d.qrMass) || 26));
+    try {
+      qrBlock = `<div class="t-hinweis-qr">
+        ${qrSvg(ziel, { stufe:'Q', groesse:mass + 'mm', farbe:'#2A3350' })}
+        ${has(d.qrLegende) ? `<span>${esc(d.qrLegende)}</span>` : ''}
+      </div>`;
+    } catch (err){ console.warn('[Hinweis] QR-Code:', err.message); }
+  }
+
+  return `
+  ${warnung}
+  <header class="t-hinweis-head" style="background:${t.bg};color:${t.fg}">
+    <div class="t-hinweis-headtxt">
+      <p class="t-hinweis-abs">${esc(abs.name)}</p>
+      <h1>${esc(fill(d.title, d))}</h1>
+      ${kopfAdresse}
+    </div>
+    <div class="t-hinweis-ico">${icon(d.icon || 'info', 64, 2.2)}</div>
+  </header>
+
+  <section class="t-hinweis-body${gewaehlt.length > 3 ? ' is-eng' : ''}">
+    ${bloecke}
+  </section>
+
+  <footer class="t-hinweis-foot${qrBlock ? ' has-qr' : ''}">
+    ${qrBlock}
+    ${has(d.gruss) ? `<p class="t-hinweis-gruss">${esc(d.gruss)}</p>` : ''}
+    ${istHotel(d.absender) ? `<div class="t-hinweis-mark">${logo('color', 30)}</div>` : ''}
+    <p class="t-hinweis-addr">${esc(has(d.footer) ? d.footer : abs.foot)}</p>
+  </footer>`;
+}
 
 /* Damit der Hub weiss, wie viele Bausteine dahinterstehen. */
 const PRESET_COUNT = PRESETS.length - 1;
@@ -7051,6 +7146,8 @@ const sammelstelle = {
 const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
 /* Zeichengrösse je Papier — so gross wie möglich, ohne den Text zu verdrängen. */
 const SICHER_MASS = { 'a5-land':62, a5:78, a4:118, 'a4-land':92 };
+/* Schneidebogen: mehrere kleine Schilder auf ein A4, zum Ausschneiden. */
+const SICHER_BOGEN = { '2':{ proSeite:2, mass:52 }, '4':{ proSeite:4, mass:34 } };
 
 const sicherheit = {
   id:'sicherheit',
@@ -7061,7 +7158,11 @@ const sicherheit = {
   fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'sicherheit',
   multipage:true,
-  pageOf(d){ return SICHER_PAGES[d && d.format] || 'a5-land'; },
+  pageOf(d){
+    /* Der Schneidebogen ist immer A4 hoch — darauf sitzen die Schilder. */
+    if (d && SICHER_BOGEN[d.bogen]) return 'a4';
+    return SICHER_PAGES[d && d.format] || 'a5-land';
+  },
 
   thumb: thumb(`
     <rect x="12" y="22" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
@@ -7080,7 +7181,12 @@ const sicherheit = {
 
   fields:[
     { t:'group', label:'Format' },
-    { k:'format', label:'Papier', type:'select', options:[
+    { k:'bogen', label:'Anordnung', type:'select', options:[
+      { v:'einzeln', t:'ein Schild je Blatt' },
+      { v:'2', t:'Schneidebogen — 2 Schilder auf A4' },
+      { v:'4', t:'Schneidebogen — 4 Schilder auf A4' }
+    ], hint:'Der Schneidebogen spart Papier. Die gestrichelten Linien sind die Schnittkanten und werden mitgedruckt.' },
+    { k:'format', label:'Papier (nur bei «ein Schild je Blatt»)', type:'select', options:[
       { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
     ] },
@@ -7113,6 +7219,7 @@ const sicherheit = {
 
   defaults:{
     format:'a5-land',
+    bogen:'einzeln',
     sprachen:['de','en'],
     sprachSet:'',
     objekt:'-',
@@ -7136,22 +7243,20 @@ const sicherheit = {
     const obj  = objekt(d.objekt);
     const adr  = objektAdresse(d.objekt);
     const sprachen = sprachObjekte(d.sprachen);
-    const page = SICHER_PAGES[d.format] || 'a5-land';
-    const mass = SICHER_MASS[page] || 62;
-    /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
-    const quer = page.endsWith('-land');
+    const bogen = SICHER_BOGEN[d.bogen] || null;
+    const page = bogen ? 'a4' : (SICHER_PAGES[d.format] || 'a5-land');
+    const mass = bogen ? bogen.mass : (SICHER_MASS[page] || 62);
+    const quer = !bogen && page.endsWith('-land');
 
-    return (d.rows || []).map(r => {
+    const zelle = r => {
       const z = szZeichen(r.zeichen);
       /* Ist ein eigener Text gesetzt, ersetzt er die Hauptsprache; die
          übrigen Sprachen bleiben beim Normtext. */
       const zeile = (sp, i) => (i === 0 && has(r.de)) ? r.de : (z.text[sp.id] || '');
-
+      const akzent = z.art === 'rettung' ? SZ_FARBEN.gruen
+                   : z.art === 'gebot'   ? SZ_FARBEN.blau
+                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot;
       return `
-      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
-               style="--sz-akzent:${z.art === 'rettung' ? SZ_FARBEN.gruen
-                                   : z.art === 'gebot' ? SZ_FARBEN.blau
-                                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
         <div class="t-sicher-body">
           <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
           <div class="t-sicher-txt">
@@ -7162,12 +7267,41 @@ const sicherheit = {
           </div>
         </div>
         <footer class="t-sicher-foot">
-          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', 22) : esc(abs.legal)}</span>
+          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', bogen ? 16 : 22) : esc(abs.legal)}</span>
           <span class="t-sicher-ort">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
           ${has(d.fussnote) ? `<span class="t-sicher-note">${esc(d.fussnote)}</span>` : ''}
-        </footer>
-      </article>`;
-    }).join('');
+        </footer>`;
+      };
+
+    const zeilen = (d.rows || []).map(r => ({ r, akzentZ:szZeichen(r.zeichen) }));
+
+    if (!bogen){
+      return zeilen.map(({ r, akzentZ }) => `
+      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
+               style="--sz-akzent:${akzentZ.art === 'rettung' ? SZ_FARBEN.gruen
+                                   : akzentZ.art === 'gebot' ? SZ_FARBEN.blau
+                                   : akzentZ.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+        ${zelle(r)}
+      </article>`).join('');
+    }
+
+    /* Schneidebogen: je Seite so viele Schilder wie eingestellt. Leere
+       Plätze bleiben leer — geschnitten wird trotzdem an der Linie. */
+    const seiten = [];
+    for (let i = 0; i < zeilen.length; i += bogen.proSeite){
+      const teil = zeilen.slice(i, i + bogen.proSeite);
+      const felder = teil.map(({ r, akzentZ }) => `
+        <div class="t-sicher-zelle"
+             style="--sz-akzent:${akzentZ.art === 'rettung' ? SZ_FARBEN.gruen
+                                 : akzentZ.art === 'gebot' ? SZ_FARBEN.blau
+                                 : akzentZ.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+          ${zelle(r)}
+        </div>`).join('');
+      const leer = Array.from({ length:bogen.proSeite - teil.length },
+        () => '<div class="t-sicher-zelle is-leer"></div>').join('');
+      seiten.push(`<article data-page class="t-sicher-bogen is-${bogen.proSeite}">${felder}${leer}</article>`);
+    }
+    return seiten.join('');
   }
 };
 
@@ -7842,6 +7976,13 @@ function unmountActive(){
 function pageOf(tpl, state){
   return (typeof tpl.pageOf === 'function' ? tpl.pageOf(state) : tpl.page) || 'a4';
 }
+/** Ist die Vorlage gerade mehrseitig? Darf vom Zustand abhaengen — der
+    Hinweis-Aushang wird es erst, wenn eine Serie ueber mehrere Objekte
+    gewaehlt ist. */
+function istMehrseitig(tpl, state){
+  return Boolean(typeof tpl.multipage === 'function' ? tpl.multipage(state) : tpl.multipage);
+}
+
 /** Die druckbaren Seiten eines Blattes — einseitig ist das Blatt selbst. */
 function sheetPages(sheet){
   const pages = Array.from(sheet.querySelectorAll('[data-page]'));
@@ -8079,7 +8220,7 @@ function renderEditor(id, geteilt){
       </aside>
       <div class="vz-stage" id="vz-stage">
         <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(pageOf(tpl, state))}${tpl.multipage ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+          <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
         </div>
       </div>
     </div>`;
@@ -8092,7 +8233,7 @@ function renderEditor(id, geteilt){
   function paint(){
     unmountActive();
     const page = pageOf(tpl, state);
-    sheet.className = `sheet sheet--${page} ${tpl.multipage ? 'sheet--multi ' : ''}${tpl.root}`;
+    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}`;
     setPageSize(page);
     sheet.innerHTML = tpl.render(state);
     if (typeof tpl.mount === 'function'){

@@ -27,6 +27,13 @@ function unmountActive(){
 function pageOf(tpl, state){
   return (typeof tpl.pageOf === 'function' ? tpl.pageOf(state) : tpl.page) || 'a4';
 }
+/** Ist die Vorlage gerade mehrseitig? Darf vom Zustand abhaengen — der
+    Hinweis-Aushang wird es erst, wenn eine Serie ueber mehrere Objekte
+    gewaehlt ist. */
+function istMehrseitig(tpl, state){
+  return Boolean(typeof tpl.multipage === 'function' ? tpl.multipage(state) : tpl.multipage);
+}
+
 /** Die druckbaren Seiten eines Blattes — einseitig ist das Blatt selbst. */
 function sheetPages(sheet){
   const pages = Array.from(sheet.querySelectorAll('[data-page]'));
@@ -264,7 +271,7 @@ function renderEditor(id, geteilt){
       </aside>
       <div class="vz-stage" id="vz-stage">
         <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(pageOf(tpl, state))}${tpl.multipage ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+          <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
         </div>
       </div>
     </div>`;
@@ -277,7 +284,7 @@ function renderEditor(id, geteilt){
   function paint(){
     unmountActive();
     const page = pageOf(tpl, state);
-    sheet.className = `sheet sheet--${page} ${tpl.multipage ? 'sheet--multi ' : ''}${tpl.root}`;
+    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}`;
     setPageSize(page);
     sheet.innerHTML = tpl.render(state);
     if (typeof tpl.mount === 'function'){

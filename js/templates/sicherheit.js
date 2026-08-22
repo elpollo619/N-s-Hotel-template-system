@@ -17,6 +17,8 @@ import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptio
 const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
 /* Zeichengrösse je Papier — so gross wie möglich, ohne den Text zu verdrängen. */
 const SICHER_MASS = { 'a5-land':62, a5:78, a4:118, 'a4-land':92 };
+/* Schneidebogen: mehrere kleine Schilder auf ein A4, zum Ausschneiden. */
+const SICHER_BOGEN = { '2':{ proSeite:2, mass:52 }, '4':{ proSeite:4, mass:34 } };
 
 export default {
   id:'sicherheit',
@@ -27,7 +29,11 @@ export default {
   fern:true,   /* Schild — Leseabstand anzeigen */
   cat:'sicherheit',
   multipage:true,
-  pageOf(d){ return SICHER_PAGES[d && d.format] || 'a5-land'; },
+  pageOf(d){
+    /* Der Schneidebogen ist immer A4 hoch — darauf sitzen die Schilder. */
+    if (d && SICHER_BOGEN[d.bogen]) return 'a4';
+    return SICHER_PAGES[d && d.format] || 'a5-land';
+  },
 
   thumb: thumb(`
     <rect x="12" y="22" width="186" height="112" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
@@ -46,7 +52,12 @@ export default {
 
   fields:[
     { t:'group', label:'Format' },
-    { k:'format', label:'Papier', type:'select', options:[
+    { k:'bogen', label:'Anordnung', type:'select', options:[
+      { v:'einzeln', t:'ein Schild je Blatt' },
+      { v:'2', t:'Schneidebogen — 2 Schilder auf A4' },
+      { v:'4', t:'Schneidebogen — 4 Schilder auf A4' }
+    ], hint:'Der Schneidebogen spart Papier. Die gestrichelten Linien sind die Schnittkanten und werden mitgedruckt.' },
+    { k:'format', label:'Papier (nur bei «ein Schild je Blatt»)', type:'select', options:[
       { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
     ] },
@@ -79,6 +90,7 @@ export default {
 
   defaults:{
     format:'a5-land',
+    bogen:'einzeln',
     sprachen:['de','en'],
     sprachSet:'',
     objekt:'-',
@@ -102,22 +114,20 @@ export default {
     const obj  = objekt(d.objekt);
     const adr  = objektAdresse(d.objekt);
     const sprachen = sprachObjekte(d.sprachen);
-    const page = SICHER_PAGES[d.format] || 'a5-land';
-    const mass = SICHER_MASS[page] || 62;
-    /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
-    const quer = page.endsWith('-land');
+    const bogen = SICHER_BOGEN[d.bogen] || null;
+    const page = bogen ? 'a4' : (SICHER_PAGES[d.format] || 'a5-land');
+    const mass = bogen ? bogen.mass : (SICHER_MASS[page] || 62);
+    const quer = !bogen && page.endsWith('-land');
 
-    return (d.rows || []).map(r => {
+    const zelle = r => {
       const z = szZeichen(r.zeichen);
       /* Ist ein eigener Text gesetzt, ersetzt er die Hauptsprache; die
          übrigen Sprachen bleiben beim Normtext. */
       const zeile = (sp, i) => (i === 0 && has(r.de)) ? r.de : (z.text[sp.id] || '');
-
+      const akzent = z.art === 'rettung' ? SZ_FARBEN.gruen
+                   : z.art === 'gebot'   ? SZ_FARBEN.blau
+                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot;
       return `
-      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
-               style="--sz-akzent:${z.art === 'rettung' ? SZ_FARBEN.gruen
-                                   : z.art === 'gebot' ? SZ_FARBEN.blau
-                                   : z.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
         <div class="t-sicher-body">
           <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
           <div class="t-sicher-txt">
@@ -128,11 +138,40 @@ export default {
           </div>
         </div>
         <footer class="t-sicher-foot">
-          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', 22) : esc(abs.legal)}</span>
+          <span class="t-sicher-abs">${istHotel(d.absender) ? logo('color', bogen ? 16 : 22) : esc(abs.legal)}</span>
           <span class="t-sicher-ort">${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
           ${has(d.fussnote) ? `<span class="t-sicher-note">${esc(d.fussnote)}</span>` : ''}
-        </footer>
-      </article>`;
-    }).join('');
+        </footer>`;
+      };
+
+    const zeilen = (d.rows || []).map(r => ({ r, akzentZ:szZeichen(r.zeichen) }));
+
+    if (!bogen){
+      return zeilen.map(({ r, akzentZ }) => `
+      <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
+               style="--sz-akzent:${akzentZ.art === 'rettung' ? SZ_FARBEN.gruen
+                                   : akzentZ.art === 'gebot' ? SZ_FARBEN.blau
+                                   : akzentZ.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+        ${zelle(r)}
+      </article>`).join('');
+    }
+
+    /* Schneidebogen: je Seite so viele Schilder wie eingestellt. Leere
+       Plätze bleiben leer — geschnitten wird trotzdem an der Linie. */
+    const seiten = [];
+    for (let i = 0; i < zeilen.length; i += bogen.proSeite){
+      const teil = zeilen.slice(i, i + bogen.proSeite);
+      const felder = teil.map(({ r, akzentZ }) => `
+        <div class="t-sicher-zelle"
+             style="--sz-akzent:${akzentZ.art === 'rettung' ? SZ_FARBEN.gruen
+                                 : akzentZ.art === 'gebot' ? SZ_FARBEN.blau
+                                 : akzentZ.art === 'warnung' ? SZ_FARBEN.gelb : SZ_FARBEN.rot}">
+          ${zelle(r)}
+        </div>`).join('');
+      const leer = Array.from({ length:bogen.proSeite - teil.length },
+        () => '<div class="t-sicher-zelle is-leer"></div>').join('');
+      seiten.push(`<article data-page class="t-sicher-bogen is-${bogen.proSeite}">${felder}${leer}</article>`);
+    }
+    return seiten.join('');
   }
 };
