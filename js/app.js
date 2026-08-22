@@ -24,6 +24,7 @@ import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
 import { suche, trefferZiel, gruppeVon, ART_LABEL } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
+import { schriftHinweis } from './lib/schrift.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
@@ -237,6 +238,8 @@ function renderHub(){
       <div class="vz-kacheln">${kacheln}</div>
     </section>
 
+    <div class="vz-schriftwarnung" id="vz-schrift" hidden></div>
+
     <section class="vz-block">
       <h2>${esc(t('help'))}</h2>
       <ol class="vz-schritte">
@@ -246,6 +249,24 @@ function renderHub(){
       </ol>
       <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
     </section>`);
+
+  zeigeSchrift();
+}
+
+/* Der Schrifthinweis kann erst beurteilt werden, wenn der Browser mit dem
+   Laden fertig ist — vorher meldet fonts.check() immer false. */
+function zeigeSchrift(){
+  const kasten = document.getElementById('vz-schrift');
+  if (!kasten) return;
+  const sage = () => {
+    const text = schriftHinweis();
+    if (!text) return;
+    kasten.hidden = false;
+    kasten.innerHTML = `<b>${esc(t('fontSub'))}</b> ${esc(text)} `
+      + `<span>${t('fontHow')}</span>`;
+  };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sage);
+  else sage();
 }
 
 function renderKategorie(katId){
@@ -281,9 +302,12 @@ function fieldHtml(f, value, path){
           ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''}
           ${f.step != null ? `step="${f.step}"` : ''}>${hint}</div>`;
     case 'select':
+      /* `options` darf eine Funktion sein — dann wird die Liste bei jedem
+         Zeichnen neu geholt. Gebraucht fuer die eigenen Textbausteine, die
+         waehrend der Arbeit dazukommen koennen. */
       return `<div class="vz-field">${lbl}
         <select id="${id}" data-path="${esc(path)}">${
-          (f.options || []).map(o => `<option value="${esc(o.v)}"${String(o.v) === String(v) ? ' selected' : ''}>${esc(o.t)}</option>`).join('')
+          optionen(f).map(o => `<option value="${esc(o.v)}"${String(o.v) === String(v) ? ' selected' : ''}>${esc(o.t)}</option>`).join('')
         }</select>${hint}</div>`;
     case 'color':
       return `<div class="vz-field vz-field--color">
@@ -295,7 +319,7 @@ function fieldHtml(f, value, path){
          Gebraucht für die Sprachen eines Aushangs. */
       return `<div class="vz-field"><label>${esc(f.label || f.k)}</label>
         <div class="vz-checks" data-checks="${esc(path)}">${
-          (f.options || []).map(o => {
+          optionen(f).map(o => {
             const an = Array.isArray(v) ? v.includes(o.v) : String(v) === String(o.v);
             return `<label class="vz-check${an ? ' is-on' : ''}">
               <input type="checkbox" value="${esc(o.v)}"${an ? ' checked' : ''}>
@@ -395,6 +419,12 @@ function buildForm(tpl, state){
         <div class="vz-kap-inhalt">${inhalt}</div>
       </section>`;
   }).join('');
+}
+
+/** Auswahlliste eines Feldes — fest hinterlegt oder bei Bedarf berechnet. */
+function optionen(f){
+  const o = typeof f.options === 'function' ? f.options() : f.options;
+  return Array.isArray(o) ? o : [];
 }
 
 /* Pfad "rows.2.de" im Zustand lesen. */

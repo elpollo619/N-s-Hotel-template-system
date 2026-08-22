@@ -20,6 +20,8 @@ import kurzanleitung from './kurzanleitung.js';
 import sicherheit from './sicherheit.js';
 import etiketten from './etiketten.js';
 import qrplakat from './qrplakat.js';
+import foto from './foto.js';
+import grossplakat from './grossplakat.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -30,6 +32,8 @@ export const TEMPLATES = {
   sicherheit,
   etiketten,
   qrplakat,
+  foto,
+  grossplakat,
   kurzanleitung,
   notruf,
   rezeption,
@@ -46,6 +50,7 @@ export const TEMPLATES = {
 export const ORDER = [
   'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
   'etiketten', 'qrplakat', 'kurzanleitung',
+  'foto', 'grossplakat',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -56,8 +61,8 @@ export const GROUPS = [
     ids:['hinweis', 'mieterbrief'] },
 
   { id:'sicherheit', title:'Sicherheitszeichen',
-    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt.',
-    ids:['sicherheit'] },
+    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt. Dazu das Grossflächenplakat aus mehreren A4-Blättern.',
+    ids:['sicherheit', 'grossplakat'] },
 
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
@@ -73,7 +78,7 @@ export const GROUPS = [
 
   { id:'hotel', title:'Hotel und Gäste',
     note:'Alles rund um Check-in, Zimmer und Aufenthalt.',
-    ids:['notruf', 'aushang', 'gaestemappe', 'zattoo'] },
+    ids:['notruf', 'aushang', 'foto', 'gaestemappe', 'zattoo'] },
 
   { id:'wegweiser', title:'Wegweiser und Aufkleber',
     note:'Pfeile und runde Aufkleber in Originalgrösse.',

@@ -21,6 +21,9 @@ import { icon, iconOptions } from '../lib/icons.js';
 import { thumb, lines } from '../lib/thumbs.js';
 import { PRESETS, preset, presetOptions } from '../presets.js';
 import { qrSvg } from '../lib/qr.js';
+import { eigeneBausteine, bausteinSichern, bausteinLoeschen, istEigener,
+         sammlungAlsDatei, sammlungLaden } from '../lib/eigene.js';
+import { downloadBlob } from '../lib/export.js';
 import { SPRACHEN, sprachOptions, sprachSetOptions, sprachSet,
          sprachObjekte, sprachListe } from '../lib/sprachen.js';
 import { ABSENDER, objekt, objektAdresse, adresseFehlt, istHotel,
@@ -31,6 +34,32 @@ const TONE = {
   warnung: { bg:'var(--cyan)',  fg:'#fff' },
   verbot:  { bg:'#C0271F',      fg:'#fff' }
 };
+
+/** Ein Baustein — mitgeliefert oder selbst angelegt. */
+function baustein(id){
+  if (istEigener(id)){
+    const eigen = eigeneBausteine().find(p => p.id === id);
+    if (eigen) return eigen;
+  }
+  return preset(id);
+}
+
+/** Auswahlliste: die mitgelieferten Bausteine, danach die eigenen. */
+function bausteinOptions(){
+  const eigen = eigeneBausteine();
+  return presetOptions().concat(
+    eigen.map(p => ({ v:p.id, t:`Eigene Bausteine · ${p.label}` })));
+}
+
+/** Die sechs Sprachfelder als Objekt einsammeln bzw. verteilen. */
+function sprachFelder(d, feld){
+  const o = {};
+  for (const sp of SPRACHEN){
+    const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+    o[sp.id] = feld === 'titel' ? (d[K] || '') : (d[sp.id] || '');
+  }
+  return o;
+}
 
 /** Die Liegenschaften der Serie — leer, wenn keine Serie gewählt ist. */
 function serieObjekte(d){
@@ -70,10 +99,19 @@ export default {
 
   fields:[
     { t:'group', label:'Baustein' },
-    { k:'presetId', label:'Fertiger Text', type:'select', options:presetOptions(),
-      hint:'Wählt Titel und Text. Danach beliebig überschreibbar.' },
+    { k:'presetId', label:'Fertiger Text', type:'select', options:bausteinOptions,
+      hint:'Wählt Titel und Text. Danach beliebig überschreibbar. Ganz unten stehen die selbst angelegten.' },
     { k:'apply', label:'Baustein übernehmen', type:'action',
       hint:'Überschreibt Titel und Texte mit dem gewählten Baustein.' },
+
+    { t:'group', label:'Eigene Bausteine' },
+    { t:'note', label:'Was hier steht, liegt im eigenen Browser. Mit «Sammlung sichern» wird daraus eine Datei, die die anderen mit «Sammlung laden» übernehmen können.' },
+    { k:'eigenName', label:'Name des Bausteins', type:'text',
+      hint:'Nur für die Auswahlliste — auf dem Aushang erscheint er nicht.' },
+    { k:'eigenSichern', label:'Aktuellen Text als eigenen Baustein sichern', type:'action' },
+    { k:'eigenLoeschen', label:'Gewählten eigenen Baustein löschen', type:'action' },
+    { k:'eigenExport', label:'Sammlung sichern (Datei)', type:'action' },
+    { k:'eigenImport', label:'Sammlung laden (Datei)', type:'action' },
 
     { t:'group', label:'Objekt und Absender' },
     { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
@@ -144,6 +182,7 @@ export default {
 
   defaults:{
     presetId:'rauchverbot',
+    eigenName:'',
     objekt:'-',
     absender:'immobilien',
     zeigeAdresse:'ja',
@@ -178,7 +217,7 @@ export default {
 
   /* Aus der Suche: den gefundenen Baustein gleich übernehmen. */
   ausSuche(d, wert){
-    const p = preset(wert);
+    const p = baustein(wert);
     return p.id === wert ? this.actions.apply({ ...d, presetId:wert }) : d;
   },
 
@@ -188,7 +227,7 @@ export default {
        Der Kopftitel folgt der ersten gewählten Sprache; ist keine gewählt,
        ist es Deutsch. */
     apply(d){
-      const p = preset(d.presetId);
+      const p = baustein(d.presetId);
       const erste = sprachListe(d.sprachen)[0];
       const next = { ...d, ton:p.ton, icon:p.icon, title:p.titel[erste] || p.titel.de };
       for (const sp of SPRACHEN){
@@ -196,6 +235,57 @@ export default {
         next[sp.id] = p.text[sp.id] || '';
       }
       return next;
+    },
+
+    /* Den aktuellen Stand als eigenen Baustein ablegen. Ist bereits ein
+       eigener gewählt, wird er überschrieben — sonst entsteht ein neuer. */
+    eigenSichern(d){
+      const name = String(d.eigenName || '').trim() || d.title || 'Eigener Baustein';
+      const id = bausteinSichern({
+        name, ton:d.ton, icon:d.icon,
+        /* Der Kopfbalken traegt die deutsche Ueberschrift — das Feld
+           «Ueberschrift Deutsch» bleibt im Normalfall leer, weil es sie
+           sonst doppelt gaebe. Also gilt der Kopftitel. */
+        titel:{ ...sprachFelder(d, 'titel'), de:d.title || d.titelDe || '' },
+        text:sprachFelder(d, 'text'),
+        id:istEigener(d.presetId) ? d.presetId : null
+      });
+      return { ...d, presetId:id, eigenName:name };
+    },
+
+    eigenLoeschen(d){
+      if (!istEigener(d.presetId)) return d;
+      bausteinLoeschen(d.presetId);
+      return { ...d, presetId:'frei', eigenName:'' };
+    },
+
+    eigenExport(d){
+      const blob = new Blob([sammlungAlsDatei()], { type:'application/json' });
+      downloadBlob(blob, 'ns-hotel-eigene-bausteine.json');
+      return d;
+    },
+
+    eigenImport(d){
+      const feld = document.createElement('input');
+      feld.type = 'file';
+      feld.accept = 'application/json';
+      feld.onchange = () => {
+        const datei = feld.files && feld.files[0];
+        if (!datei) return;
+        const leser = new FileReader();
+        leser.onload = () => {
+          try {
+            const { dazu, ersetzt } = sammlungLaden(leser.result);
+            alert(`${dazu} Baustein(e) dazugekommen, ${ersetzt} ersetzt.`);
+            location.reload();
+          } catch (err){
+            alert('Diese Datei enthält keine Bausteine: ' + err.message);
+          }
+        };
+        leser.readAsText(datei);
+      };
+      feld.click();
+      return d;
     },
 
     /* "Alle anhaken" — spart elf Klicks. */
@@ -208,7 +298,7 @@ export default {
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);
       if (!ids) return d;
-      const p = preset(d.presetId);
+      const p = baustein(d.presetId);
       /* Kopftitel auf die neue Hauptsprache umstellen, sofern er noch der
          alten entspricht — von Hand Geschriebenes bleibt stehen. */
       const alt = sprachListe(d.sprachen)[0];

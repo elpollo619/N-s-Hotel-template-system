@@ -601,6 +601,15 @@ a{color:var(--cyan)}
   .vz-inhalt{padding:22px 18px 60px}
 }
 
+/* Hinweis, wenn die Ersatzschrift läuft — leise, aber sichtbar. */
+.vz-schriftwarnung{
+  margin-top:26px;padding:13px 16px;border-radius:12px;
+  background:#FFF9E8;border:1px solid #F0E2B5;
+  font-size:12.5px;line-height:1.65;color:#7a5c12;max-width:86ch;
+}
+.vz-schriftwarnung b{color:#5d4409}
+.vz-schriftwarnung span{display:block;margin-top:4px;color:#8a6b1c}
+
 /* ===== assets/templates.css ===== */
 /* ==========================================================================
    N's Hotel · Vorlagen-Styles
@@ -1623,6 +1632,156 @@ a{color:var(--cyan)}
 .t-sicher-bogen.is-4 .t-sicher-zusatz{font-size:7.5pt;border-left-width:.9mm;padding-left:2.5mm}
 .t-sicher-bogen.is-4 .t-sicher-body{gap:4mm}
 .t-sicher-bogen.is-4 .t-sicher-foot{font-size:5.5pt}
+
+/* ==========================================================================
+   Foto-Aushang — js/templates/foto.js
+   Das Bild sitzt oben und randabfallend; der Text steht darunter oder,
+   bei «ganzes Blatt», darüber.
+   ========================================================================== */
+.t-foto{padding:0;background:#fff}
+.t-foto-blatt{
+  position:absolute;inset:calc(-1 * var(--bs, 0mm));
+  display:flex;flex-direction:column;background:#fff;
+}
+.t-foto-rahmen{
+  position:relative;flex:0 0 var(--anteil,55%);overflow:hidden;background:var(--bg-2);
+}
+.t-foto-blatt.is-voll .t-foto-rahmen{position:absolute;inset:0;flex:none}
+.t-foto-bild{width:100%;height:100%;object-fit:cover;display:block}
+.t-foto-leer{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--muted);font-size:11pt;letter-spacing:.06em;
+}
+.t-foto-blatt.is-dunkel-wenig .t-foto-rahmen::after,
+.t-foto-blatt.is-dunkel-viel .t-foto-rahmen::after{
+  content:"";position:absolute;inset:0;
+}
+.t-foto-blatt.is-dunkel-wenig .t-foto-rahmen::after{background:rgba(42,51,80,.28)}
+.t-foto-blatt.is-dunkel-viel  .t-foto-rahmen::after{background:rgba(42,51,80,.55)}
+
+.t-foto-txt{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:11mm calc(14mm + var(--bs,0mm)) 4mm;
+}
+.t-foto-eyebrow{margin:0 0 3mm;font-size:19pt;color:var(--cyan)}
+.t-foto-txt h1{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  font-size:30pt;line-height:1.06;letter-spacing:-.015em;color:var(--navy);
+}
+.t-foto-unter{margin:5mm 0 0;font-size:13pt;line-height:1.5;color:var(--ink);max-width:56ch}
+.t-foto-unter b{color:var(--navy)}
+.t-foto-sprachen{list-style:none;margin:7mm 0 0;padding:0;display:flex;flex-direction:column;gap:2mm}
+.t-foto-sprachen li{
+  display:flex;gap:4mm;align-items:baseline;font-size:10pt;line-height:1.4;color:var(--ink-soft);
+}
+.t-foto-sprachen span{
+  flex:0 0 8mm;font-family:var(--font-display);font-weight:700;font-size:8pt;
+  letter-spacing:.08em;color:var(--muted);
+}
+
+/* Ganzes Blatt: Text liegt über dem Bild. */
+.t-foto-ueber{
+  position:relative;z-index:2;margin-top:auto;
+  padding:14mm calc(14mm + var(--bs,0mm)) 4mm;
+  background:linear-gradient(to bottom,rgba(42,51,80,0),rgba(42,51,80,.86) 38%);
+  color:#fff;
+}
+.t-foto-ueber .t-foto-txt{padding:0}
+.t-foto-ueber h1{color:#fff}
+.t-foto-ueber .t-foto-unter{color:rgba(255,255,255,.92)}
+.t-foto-ueber .t-foto-unter b{color:#fff}
+.t-foto-ueber .t-foto-sprachen li{color:rgba(255,255,255,.8)}
+.t-foto-ueber .t-foto-sprachen span{color:rgba(255,255,255,.6)}
+
+.t-foto-foot{
+  position:relative;z-index:2;display:flex;justify-content:space-between;gap:6mm;
+  align-items:center;flex-wrap:wrap;
+  padding:0 calc(14mm + var(--bs,0mm)) calc(11mm + var(--bs,0mm));
+  font-size:8pt;letter-spacing:.04em;color:var(--muted);
+}
+.t-foto-blatt.is-voll .t-foto-foot{color:rgba(255,255,255,.72)}
+
+/* Schnittmarken für die Druckerei — Ecken, ausserhalb des Beschnitts. */
+.t-foto-marken i{
+  position:absolute;width:8mm;height:8mm;pointer-events:none;
+}
+.t-foto-marken i::before,.t-foto-marken i::after{
+  content:"";position:absolute;background:#1A1A1A;
+}
+.t-foto-marken i::before{width:.25pt;height:5mm}
+.t-foto-marken i::after{height:.25pt;width:5mm}
+.t-foto-marken .m-lo{top:0;left:0}
+.t-foto-marken .m-lo::before{left:0;bottom:0}
+.t-foto-marken .m-lo::after{top:0;left:0}
+.t-foto-marken .m-ro{top:0;right:0}
+.t-foto-marken .m-ro::before{right:0;bottom:0}
+.t-foto-marken .m-ro::after{top:0;right:0}
+.t-foto-marken .m-lu{bottom:0;left:0}
+.t-foto-marken .m-lu::before{left:0;top:0}
+.t-foto-marken .m-lu::after{bottom:0;left:0}
+.t-foto-marken .m-ru{bottom:0;right:0}
+.t-foto-marken .m-ru::before{right:0;top:0}
+.t-foto-marken .m-ru::after{bottom:0;right:0}
+
+/* ==========================================================================
+   Grossflächenplakat — js/templates/grossplakat.js
+   Jedes Blatt ist ein Fenster auf ein grosses Plakat. Das Plakat selbst
+   wird einmal gebaut und je Blatt verschoben.
+   ========================================================================== */
+.t-gross-blatt{position:relative;overflow:hidden;background:#fff}
+.t-gross-fenster{position:absolute}
+.t-gross-welt{
+  position:relative;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3%;
+  padding:5% 6%;text-align:center;overflow:hidden;
+}
+.t-gross-welt h1{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  line-height:.98;letter-spacing:-.02em;white-space:nowrap;
+}
+.t-gross-unter{margin:0;font-weight:600;line-height:1.15;opacity:.92}
+.t-gross-sprachen{
+  list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6em;
+  opacity:.82;line-height:1.25;
+}
+.t-gross-zeichen{display:grid;place-items:center}
+.t-gross-zeichen .sz{display:block}
+.t-gross-foot{
+  position:absolute;left:6%;right:6%;bottom:3%;
+  display:flex;justify-content:space-between;gap:4%;
+  opacity:.72;letter-spacing:.04em;
+}
+
+/* Klebekante: dort beginnt das nächste Blatt. */
+.t-gross-kante{position:absolute;pointer-events:none}
+.t-gross-kante.is-rechts{top:0;bottom:0;width:0;border-left:.4pt dashed rgba(0,0,0,.45)}
+.t-gross-kante.is-unten{left:0;right:0;height:0;border-top:.4pt dashed rgba(0,0,0,.45)}
+.t-gross-nr{
+  position:absolute;right:2mm;bottom:2mm;z-index:3;
+  background:#fff;border:.4pt solid #C9CFDA;border-radius:2mm;
+  padding:1.4mm 2.4mm;font:700 8pt/1.2 var(--font-display);color:var(--navy);
+  display:flex;flex-direction:column;gap:.6mm;text-align:right;
+}
+.t-gross-nr em{font:500 6pt/1.2 var(--font-body);font-style:normal;color:var(--muted)}
+
+/* Bauanleitung */
+.t-gross-plan{background:#fff;padding:16mm 16mm 12mm;display:flex;flex-direction:column;gap:6mm}
+.t-gross-plan h2{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:24pt;color:var(--navy);
+}
+.t-gross-mass{margin:0;font-size:11pt;color:var(--ink-soft)}
+.t-gross-mass b{color:var(--navy)}
+.t-gross-vorschau{position:relative;align-self:center;border:.5pt solid var(--line)}
+.t-gross-mini{position:absolute;top:0;left:0;transform-origin:top left}
+.t-gross-feld{
+  position:absolute;display:grid;place-items:center;
+  border:.5pt dashed rgba(255,255,255,.85);
+  font:700 16pt/1 var(--font-display);color:rgba(255,255,255,.9);
+  text-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.t-gross-schritte{margin:0;padding-left:5mm;display:flex;flex-direction:column;gap:2.5mm}
+.t-gross-schritte li{font-size:10.5pt;line-height:1.5;color:var(--ink)}
+.t-gross-schritte b{color:var(--navy)}
 
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
@@ -3829,6 +3988,198 @@ function merken(id){
 
 function verlaufLeeren(){ save(SCHLUESSEL, []); }
 
+/* ===== js/lib/schrift.js ===== */
+/* ==========================================================================
+   Welche Schrift ist gerade aktiv?
+   --------------------------------------------------------------------------
+   Die Marke schreibt Gotham (Titel) und Caflisch Script Pro (Handschrift-
+   Zeile) vor. Beide sind lizenzpflichtig und dürfen nicht im öffentlichen
+   Repository liegen — die App liefert deshalb Montserrat und Parisienne als
+   Ersatz mit.
+
+   Das Problem daran: man sieht es nicht. Ein Aushang in Montserrat sieht
+   ordentlich aus, ist aber nicht die Marke. Wer ihn druckt und aufhängt,
+   merkt es womöglich nie. Darum sagt die Zentrale von sich aus, womit sie
+   gerade setzt.
+
+   Geprüft wird durch Messen, nicht mit document.fonts.check(): das meldet
+   für eine unbekannte Familie in den meisten Browsern `true`, weil ohnehin
+   auf den nächsten Eintrag zurückgefallen wird. Verlässlich ist nur der
+   Vergleich — derselbe Text einmal mit «Gotham, monospace» und einmal mit
+   «monospace» ausmessen. Sind die Breiten gleich, gibt es kein Gotham.
+   ========================================================================== */
+
+const MARKEN_SCHRIFTEN = [
+  { id:'display', familie:'Gotham',
+    ersatz:'Montserrat', wofuer:'Titel und Auszeichnungen' },
+  { id:'script',  familie:'Caflisch Script Pro',
+    ersatz:'Parisienne', wofuer:'die Handschrift-Zeile' }
+];
+
+/* Ein Text mit vielen unterschiedlich breiten Zeichen — je grösser der
+   Unterschied zwischen zwei Schriften, desto sicherer die Messung. */
+const PROBE_TEXT = 'MWmwiIl1080@ÄÖÜ Handschrift';
+
+let messwerkzeug = null;
+function messe(familie){
+  if (!messwerkzeug){
+    const c = document.createElement('canvas');
+    messwerkzeug = c.getContext && c.getContext('2d');
+  }
+  if (!messwerkzeug) return null;
+  messwerkzeug.font = `72px ${familie}`;
+  return messwerkzeug.measureText(PROBE_TEXT).width;
+}
+
+/**
+ * Ist eine Schriftfamilie tatsächlich verfügbar?
+ * Gemessen gegen drei Grundschriften: stimmt die Breite mit allen dreien
+ * überein, wurde zurückgefallen — die Familie gibt es also nicht.
+ */
+function schriftDa(familie){
+  const grund = ['monospace', 'serif', 'sans-serif'];
+  for (const g of grund){
+    const mitFamilie = messe(`"${familie}", ${g}`);
+    const nurGrund   = messe(g);
+    if (mitFamilie == null || nurGrund == null) return false;
+    if (Math.abs(mitFamilie - nurGrund) > 0.5) return true;
+  }
+  return false;
+}
+
+/**
+ * Steht die echte Markenschrift zur Verfügung?
+ * @returns {{alle:boolean, fehlend:Array, vorhanden:Array}}
+ */
+function schriftBefund(){
+  const da = [];
+  const weg = [];
+  for (const s of MARKEN_SCHRIFTEN){
+    (schriftDa(s.familie) ? da : weg).push(s);
+  }
+  return { alle:weg.length === 0, fehlend:weg, vorhanden:da };
+}
+
+/** Ein Satz für die Oberfläche — oder '' wenn alles stimmt. */
+function schriftHinweis(){
+  const b = schriftBefund();
+  if (b.alle) return '';
+  const namen = b.fehlend.map(s => `${s.familie} (${s.wofuer})`).join(' und ');
+  const ersatz = b.fehlend.map(s => s.ersatz).join(' und ');
+  return `Ersatzschrift aktiv: ${ersatz} statt ${namen}. `
+       + `Die Aushänge sind brauchbar, aber nicht in der Hausschrift.`;
+}
+
+/* ===== js/lib/eigene.js ===== */
+/* ==========================================================================
+   Eigene Textbausteine
+   --------------------------------------------------------------------------
+   Die 42 mitgelieferten Bausteine sind die Wortlaute, die im Haus seit
+   Jahren hängen. Was neu dazukommt — ein Aushang zur Baustelle, eine
+   Regelung für den Sommer — soll niemand ins Repository schreiben müssen.
+
+   Eigene Bausteine liegen im Browser der Person, die sie angelegt hat.
+   Damit sie trotzdem herumkommen, lässt sich die ganze Sammlung als Datei
+   sichern und bei den anderen wieder laden. Kein Server, keine Anmeldung —
+   dieselbe Logik wie beim Entwurf.
+
+   Gespeichert wird in derselben Form wie die mitgelieferten Bausteine, damit
+   die Vorlage nicht zwischen zwei Sorten unterscheiden muss.
+   ========================================================================== */
+
+
+const EIGEN_SCHLUESSEL = 'eigene';
+const EIGEN_PRAEFIX = 'eigen-';
+
+function leer(){ const o = {}; for (const s of SPRACH_IDS) o[s] = ''; return o; }
+
+/** Alles, was diese Person selbst angelegt hat. */
+function eigeneBausteine(){
+  const roh = load(EIGEN_SCHLUESSEL, []);
+  if (!Array.isArray(roh)) return [];
+  return roh.filter(p => p && typeof p.id === 'string' && p.titel && p.text)
+            .map(p => ({
+              id:p.id, cat:'eigene', ton:p.ton || 'info', icon:p.icon || 'info',
+              label:p.label || p.titel.de || p.id,
+              titel:{ ...leer(), ...p.titel },
+              text: { ...leer(), ...p.text }
+            }));
+}
+
+function sichere(liste){ save(EIGEN_SCHLUESSEL, liste); }
+
+/** Aus einem Kürzel und einem Namen eine eindeutige id machen. */
+function neueId(name, vorhanden){
+  const stamm = EIGEN_PRAEFIX + (String(name || 'baustein')
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'baustein');
+  let id = stamm, n = 2;
+  while (vorhanden.some(p => p.id === id)) id = `${stamm}-${n++}`;
+  return id;
+}
+
+/**
+ * Einen Baustein anlegen oder überschreiben.
+ * @returns {string} die id des gespeicherten Bausteins
+ */
+function bausteinSichern({ name, ton, icon, titel, text, id }){
+  const liste = eigeneBausteine();
+  const treffer = id ? liste.findIndex(p => p.id === id) : -1;
+  const eintrag = {
+    id: treffer >= 0 ? id : neueId(name, liste),
+    label: String(name || '').trim() || (titel && titel.de) || 'Eigener Baustein',
+    ton: ton || 'info',
+    icon: icon || 'info',
+    titel:{ ...leer(), ...(titel || {}) },
+    text: { ...leer(), ...(text  || {}) }
+  };
+  if (treffer >= 0) liste[treffer] = eintrag; else liste.push(eintrag);
+  sichere(liste);
+  return eintrag.id;
+}
+
+function bausteinLoeschen(id){
+  sichere(eigeneBausteine().filter(p => p.id !== id));
+}
+
+function istEigener(id){ return String(id || '').startsWith(EIGEN_PRAEFIX); }
+
+/** Die Sammlung als Datei-Inhalt. */
+function sammlungAlsDatei(){
+  return JSON.stringify({ art:'nsvz-bausteine', version:1,
+                          bausteine:eigeneBausteine() }, null, 2);
+}
+
+/**
+ * Eine Sammlung einlesen. Vorhandene mit gleicher id werden ersetzt, die
+ * uebrigen kommen dazu — so kann jede Person ihre eigenen behalten.
+ * @returns {{dazu:number, ersetzt:number}}
+ */
+function sammlungLaden(text){
+  const daten = JSON.parse(text);
+  const liste = Array.isArray(daten) ? daten
+              : (daten && Array.isArray(daten.bausteine) ? daten.bausteine : null);
+  if (!liste) throw new Error('Diese Datei enthält keine Bausteine.');
+
+  const meine = eigeneBausteine();
+  let dazu = 0, ersetzt = 0;
+  for (const p of liste){
+    if (!p || !p.id || !p.titel || !p.text) continue;
+    const i = meine.findIndex(x => x.id === p.id);
+    const eintrag = {
+      id:p.id, cat:'eigene', ton:p.ton || 'info', icon:p.icon || 'info',
+      label:p.label || p.titel.de || p.id,
+      titel:{ ...leer(), ...p.titel }, text:{ ...leer(), ...p.text }
+    };
+    if (i >= 0){ meine[i] = eintrag; ersetzt++; } else { meine.push(eintrag); dazu++; }
+  }
+  sichere(meine);
+  return { dazu, ersetzt };
+}
+
 /* ===== js/lib/i18n.js ===== */
 /* Sprache der OBERFLAECHE (nicht des Aushang-Inhalts — der ist immer DE/EN). */
 
@@ -3865,6 +4216,8 @@ const DICT = {
     step3:'Drucken oder teilen',
     step3sub:'«Drucken / PDF», «Als PNG» oder «Link teilen» für die anderen im Haus.',
     helpFoot:'Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen. Änderungen bleiben im eigenen Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt.',
+    fontSub:'Hinweis zur Schrift.',
+    fontHow:'Die echten Markenschriften sind lizenzpflichtig und dürfen nicht öffentlich liegen. Wer sie hat, legt sie lokal ab — die Anleitung steht in der README unter «Echte Schriften und Logos nachrüsten».',
     allOpen:'Alle aufklappen',
     allClosed:'Alle zuklappen',
     preview:'Vorschau',
@@ -3921,6 +4274,8 @@ const DICT = {
     step3:'Print or share',
     step3sub:'“Print / PDF”, “Save PNG” or “Copy share link” for the others in the house.',
     helpFoot:'In the print dialog set <b>margins: none</b> and <b>background graphics: on</b>. Changes stay in your own browser until someone presses <b>Reset</b>.',
+    fontSub:'A note on the typeface.',
+    fontHow:'The real brand fonts are licensed and may not be published. Anyone who owns them installs them locally — see “Echte Schriften und Logos nachrüsten” in the README.',
     allOpen:'Expand all',
     allClosed:'Collapse all',
     preview:'Preview',
@@ -6470,11 +6825,39 @@ const gaestemappe = {
 
 
 
+
+
 const TONE = {
   info:    { bg:'var(--navy)',  fg:'#fff' },
   warnung: { bg:'var(--cyan)',  fg:'#fff' },
   verbot:  { bg:'#C0271F',      fg:'#fff' }
 };
+
+/** Ein Baustein — mitgeliefert oder selbst angelegt. */
+function baustein(id){
+  if (istEigener(id)){
+    const eigen = eigeneBausteine().find(p => p.id === id);
+    if (eigen) return eigen;
+  }
+  return preset(id);
+}
+
+/** Auswahlliste: die mitgelieferten Bausteine, danach die eigenen. */
+function bausteinOptions(){
+  const eigen = eigeneBausteine();
+  return presetOptions().concat(
+    eigen.map(p => ({ v:p.id, t:`Eigene Bausteine · ${p.label}` })));
+}
+
+/** Die sechs Sprachfelder als Objekt einsammeln bzw. verteilen. */
+function sprachFelder(d, feld){
+  const o = {};
+  for (const sp of SPRACHEN){
+    const K = 'titel' + sp.id[0].toUpperCase() + sp.id[1];
+    o[sp.id] = feld === 'titel' ? (d[K] || '') : (d[sp.id] || '');
+  }
+  return o;
+}
 
 /** Die Liegenschaften der Serie — leer, wenn keine Serie gewählt ist. */
 function serieObjekte(d){
@@ -6514,10 +6897,19 @@ const hinweis = {
 
   fields:[
     { t:'group', label:'Baustein' },
-    { k:'presetId', label:'Fertiger Text', type:'select', options:presetOptions(),
-      hint:'Wählt Titel und Text. Danach beliebig überschreibbar.' },
+    { k:'presetId', label:'Fertiger Text', type:'select', options:bausteinOptions,
+      hint:'Wählt Titel und Text. Danach beliebig überschreibbar. Ganz unten stehen die selbst angelegten.' },
     { k:'apply', label:'Baustein übernehmen', type:'action',
       hint:'Überschreibt Titel und Texte mit dem gewählten Baustein.' },
+
+    { t:'group', label:'Eigene Bausteine' },
+    { t:'note', label:'Was hier steht, liegt im eigenen Browser. Mit «Sammlung sichern» wird daraus eine Datei, die die anderen mit «Sammlung laden» übernehmen können.' },
+    { k:'eigenName', label:'Name des Bausteins', type:'text',
+      hint:'Nur für die Auswahlliste — auf dem Aushang erscheint er nicht.' },
+    { k:'eigenSichern', label:'Aktuellen Text als eigenen Baustein sichern', type:'action' },
+    { k:'eigenLoeschen', label:'Gewählten eigenen Baustein löschen', type:'action' },
+    { k:'eigenExport', label:'Sammlung sichern (Datei)', type:'action' },
+    { k:'eigenImport', label:'Sammlung laden (Datei)', type:'action' },
 
     { t:'group', label:'Objekt und Absender' },
     { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
@@ -6588,6 +6980,7 @@ const hinweis = {
 
   defaults:{
     presetId:'rauchverbot',
+    eigenName:'',
     objekt:'-',
     absender:'immobilien',
     zeigeAdresse:'ja',
@@ -6622,7 +7015,7 @@ const hinweis = {
 
   /* Aus der Suche: den gefundenen Baustein gleich übernehmen. */
   ausSuche(d, wert){
-    const p = preset(wert);
+    const p = baustein(wert);
     return p.id === wert ? this.actions.apply({ ...d, presetId:wert }) : d;
   },
 
@@ -6632,7 +7025,7 @@ const hinweis = {
        Der Kopftitel folgt der ersten gewählten Sprache; ist keine gewählt,
        ist es Deutsch. */
     apply(d){
-      const p = preset(d.presetId);
+      const p = baustein(d.presetId);
       const erste = sprachListe(d.sprachen)[0];
       const next = { ...d, ton:p.ton, icon:p.icon, title:p.titel[erste] || p.titel.de };
       for (const sp of SPRACHEN){
@@ -6640,6 +7033,57 @@ const hinweis = {
         next[sp.id] = p.text[sp.id] || '';
       }
       return next;
+    },
+
+    /* Den aktuellen Stand als eigenen Baustein ablegen. Ist bereits ein
+       eigener gewählt, wird er überschrieben — sonst entsteht ein neuer. */
+    eigenSichern(d){
+      const name = String(d.eigenName || '').trim() || d.title || 'Eigener Baustein';
+      const id = bausteinSichern({
+        name, ton:d.ton, icon:d.icon,
+        /* Der Kopfbalken traegt die deutsche Ueberschrift — das Feld
+           «Ueberschrift Deutsch» bleibt im Normalfall leer, weil es sie
+           sonst doppelt gaebe. Also gilt der Kopftitel. */
+        titel:{ ...sprachFelder(d, 'titel'), de:d.title || d.titelDe || '' },
+        text:sprachFelder(d, 'text'),
+        id:istEigener(d.presetId) ? d.presetId : null
+      });
+      return { ...d, presetId:id, eigenName:name };
+    },
+
+    eigenLoeschen(d){
+      if (!istEigener(d.presetId)) return d;
+      bausteinLoeschen(d.presetId);
+      return { ...d, presetId:'frei', eigenName:'' };
+    },
+
+    eigenExport(d){
+      const blob = new Blob([sammlungAlsDatei()], { type:'application/json' });
+      downloadBlob(blob, 'ns-hotel-eigene-bausteine.json');
+      return d;
+    },
+
+    eigenImport(d){
+      const feld = document.createElement('input');
+      feld.type = 'file';
+      feld.accept = 'application/json';
+      feld.onchange = () => {
+        const datei = feld.files && feld.files[0];
+        if (!datei) return;
+        const leser = new FileReader();
+        leser.onload = () => {
+          try {
+            const { dazu, ersetzt } = sammlungLaden(leser.result);
+            alert(`${dazu} Baustein(e) dazugekommen, ${ersetzt} ersetzt.`);
+            location.reload();
+          } catch (err){
+            alert('Diese Datei enthält keine Bausteine: ' + err.message);
+          }
+        };
+        leser.readAsText(datei);
+      };
+      feld.click();
+      return d;
     },
 
     /* "Alle anhaken" — spart elf Klicks. */
@@ -6652,7 +7096,7 @@ const hinweis = {
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);
       if (!ids) return d;
-      const p = preset(d.presetId);
+      const p = baustein(d.presetId);
       /* Kopftitel auf die neue Hauptsprache umstellen, sofern er noch der
          alten entspricht — von Hand Geschriebenes bleibt stehen. */
       const alt = sprachListe(d.sprachen)[0];
@@ -7973,6 +8417,407 @@ const qrplakat = {
   }
 };
 
+/* ===== js/templates/foto.js ===== */
+/* Foto-Aushang · A4 — ein Bild, ein Satz.
+   Ersetzt die Zettel aus dem Laufwerk, die aus einem Foto und einer
+   aufgeklebten Zeile bestehen ("A14 breakfast foto mit info", die
+   Regel-Bilder). Statt Bild in Word ziehen und Textfeld darüberlegen:
+   Bild hochladen, Zeile schreiben, drucken.
+
+   Das Bild bleibt im Browser. Es wird als Data-URI im Entwurf gespeichert
+   und beim Drucken direkt gezeichnet — es geht an keinen Dienst.
+
+   Schnittmarken und Beschnitt: nur für den Fall, dass ein Aushang einmal
+   in eine richtige Druckerei geht. Auf dem Bürodrucker bleibt beides aus. */
+
+
+
+
+
+const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land' };
+
+/* Wie viel Platz das Bild bekommt. */
+const FOTO_ANTEIL = { klein:'42%', halb:'55%', gross:'68%', voll:'100%' };
+
+const foto = {
+  id:'foto',
+  title:'Foto-Aushang',
+  sub:'Ein Bild, ein Satz — Frühstück, Hausregeln, Hinweise · A4',
+  badge:'Foto',
+  badgeCyan:true,
+  root:'t-foto',
+  fern:true,   /* Schild — Leseabstand anzeigen */
+  cat:'hotel',
+  pageOf(d){ return FOTO_PAGES[d && d.format] || 'a4'; },
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="172" fill="#C9CFDA"/>
+    <circle cx="66" cy="52" r="20" fill="#EDF0F4"/>
+    <path d="M0 172 62 104l40 34 34-28 74 62Z" fill="#8B8F99"/>
+    <rect x="0" y="172" width="210" height="125" fill="#fff"/>
+    <rect x="18" y="192" width="80" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="18" y="212" width="150" height="16" rx="5" fill="#2A3350"/>
+    <rect x="18" y="238" width="120" height="16" rx="5" fill="#2A3350"/>
+    <rect x="18" y="266" width="100" height="6" rx="3" fill="#C9CFDA"/>
+    <rect x="18" y="278" width="86" height="6" rx="3" fill="#E5E8ED"/>`),
+
+  fields:[
+    { t:'group', label:'Bild' },
+    { k:'bild', label:'Foto', type:'image',
+      hint:'Bleibt in diesem Browser. Für A4 reicht ein Bild mit rund 1600 Pixel Breite — grössere machen den Entwurf nur schwer.' },
+    { k:'anteil', label:'Bildanteil', type:'select', options:[
+      { v:'klein', t:'klein — viel Platz für Text' },
+      { v:'halb',  t:'gut die Hälfte' },
+      { v:'gross', t:'gross' },
+      { v:'voll',  t:'ganzes Blatt, Text darüber' }
+    ] },
+    { k:'lage', label:'Bildausschnitt', type:'select', options:[
+      { v:'center', t:'Mitte' }, { v:'top', t:'oben' }, { v:'bottom', t:'unten' },
+      { v:'left', t:'links' }, { v:'right', t:'rechts' }
+    ], hint:'Welcher Teil des Bildes sichtbar bleibt, wenn es nicht genau passt.' },
+    { k:'dunkel', label:'Abdunkeln (für Text auf dem Bild)', type:'select', options:[
+      { v:'nein', t:'nicht abdunkeln' }, { v:'wenig', t:'leicht' }, { v:'viel', t:'stark' }
+    ] },
+
+    { t:'group', label:'Format' },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' },
+      { v:'a5', t:'A5 hoch' }, { v:'a5-land', t:'A5 quer' }
+    ] },
+
+    { t:'group', label:'Text' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text' },
+    { k:'unter',   label:'Untertitel', type:'textarea', hint:'**fett** möglich' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen der Zusatzzeile', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
+    { k:'de', label:'Deutsch',   type:'text' },
+    { k:'en', label:'English',   type:'text' },
+    { k:'fr', label:'Français',  type:'text' },
+    { k:'it', label:'Italiano',  type:'text' },
+    { k:'pt', label:'Português', type:'text' },
+    { k:'es', label:'Español',   type:'text' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+
+    { t:'group', label:'Für die Druckerei' },
+    { t:'note', label:'Nur nötig, wenn der Aushang extern gedruckt wird. Auf dem Bürodrucker beides ausgeschaltet lassen — sonst stehen die Marken mit auf dem Blatt.' },
+    { k:'marken', label:'Schnittmarken', type:'select',
+      options:[{v:'nein',t:'aus'},{v:'ja',t:'ein'}] },
+    { k:'beschnitt', label:'Beschnitt in mm', type:'number', min:0, max:10, step:1,
+      hint:'Das Bild läuft um diesen Rand über das Blatt hinaus, damit nach dem Schneiden keine weisse Kante bleibt. Üblich sind 3 mm.' }
+  ],
+
+  defaults:{
+    bild:'',
+    anteil:'halb',
+    lage:'center',
+    dunkel:'nein',
+    format:'a4',
+    eyebrow:'Guten Morgen',
+    titel:'Frühstück 07:30 – 10:00',
+    unter:'Im Aufenthaltsraum im Erdgeschoss. **Bitte das Geschirr zurückbringen.**',
+    sprachen:['de','en','fr'],
+    sprachSet:'',
+    de:'Frühstück von 07:30 bis 10:00 im Aufenthaltsraum.',
+    en:'Breakfast from 07:30 to 10:00 in the lounge.',
+    fr:'Petit-déjeuner de 07h30 à 10h00 dans lʼespace commun.',
+    it:'Colazione dalle 07:30 alle 10:00 nella sala comune.',
+    pt:'Pequeno-almoço das 07:30 às 10:00 na sala comum.',
+    es:'Desayuno de 07:30 a 10:00 en la sala común.',
+    objekt:'A14',
+    absender:'hotel',
+    marken:'nein',
+    beschnitt:0
+  },
+
+  actions:{
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const voll = d.anteil === 'voll';
+    const anteil = FOTO_ANTEIL[d.anteil] || FOTO_ANTEIL.halb;
+    const beschnitt = Math.max(0, Math.min(10, Number(d.beschnitt) || 0));
+    const marken = d.marken === 'ja';
+
+    const bild = has(d.bild)
+      ? `<img class="t-foto-bild" src="${esc(d.bild)}" alt=""
+             style="object-position:${esc(d.lage || 'center')}">`
+      : `<div class="t-foto-leer">Hier ein Foto einsetzen</div>`;
+
+    const schleier = d.dunkel === 'viel' ? ' is-dunkel-viel'
+                   : d.dunkel === 'wenig' ? ' is-dunkel-wenig' : '';
+
+    const zeilen = sprachObjekte(d.sprachen)
+      .map(sp => has(d[sp.id])
+        ? `<li lang="${sp.id}"><span>${esc(sp.kurz)}</span>${esc(d[sp.id])}</li>` : '')
+      .join('');
+
+    const text = `
+      <div class="t-foto-txt">
+        ${has(d.eyebrow) ? `<p class="eyebrow t-foto-eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        ${has(d.titel) ? `<h1>${esc(d.titel)}</h1>` : ''}
+        ${has(d.unter) ? `<p class="t-foto-unter">${fmt(d.unter)}</p>` : ''}
+        ${zeilen ? `<ul class="t-foto-sprachen">${zeilen}</ul>` : ''}
+      </div>`;
+
+    /* Schnittmarken sitzen in den Ecken, ausserhalb des Beschnitts. Sie
+       zeigen der Druckerei, wo das Blatt beschnitten wird. */
+    const schnitt = marken ? `
+      <div class="t-foto-marken" style="--bs:${beschnitt}mm">
+        ${['lo','ro','lu','ru'].map(e => `<i class="m-${e}"></i>`).join('')}
+      </div>` : '';
+
+    return `
+    <div class="t-foto-blatt${voll ? ' is-voll' : ''}${schleier}"
+         style="--anteil:${anteil};--bs:${beschnitt}mm">
+      <div class="t-foto-rahmen">${bild}</div>
+      ${voll ? `<div class="t-foto-ueber">${text}</div>` : text}
+      <footer class="t-foto-foot">
+        <span>${istHotel(d.absender) ? logo(voll ? 'white' : 'color', 24) : esc(abs.legal)}</span>
+        <span>${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+      </footer>
+    </div>
+    ${schnitt}`;
+  }
+};
+
+/* ===== js/templates/grossplakat.js ===== */
+/* Grossflächenplakat · aus mehreren A4-Blättern zusammengesetzt.
+   Für das, was auf ein A4 nicht wirkt: SAMMELPLATZ auf dem Parkplatz,
+   ein Hinweis über einer Baustellenabschrankung, ein Wegweiser im
+   Treppenhaus, der aus zwanzig Metern lesbar sein muss.
+
+   Gedruckt wird auf dem gewöhnlichen Bürodrucker. Jedes Blatt zeigt einen
+   Ausschnitt des grossen Plakats; die Blätter überlappen sich um wenige
+   Millimeter, damit sie sich sauber überkleben lassen. Die gestrichelte
+   Linie markiert, wo das nächste Blatt beginnt.
+
+   Erste Seite ist eine Bauanleitung: das ganze Plakat verkleinert, mit
+   numerierten Feldern. Ohne sie liegen nachher zwölf gleich aussehende
+   Blätter auf dem Tisch. */
+
+
+
+
+
+
+/* A4 hoch in Millimetern — das Papier, auf dem gedruckt wird. */
+const BLATT_B = 210, BLATT_H = 297;
+
+/* Mittlere Zeichenbreite im Verhältnis zur Schrifthöhe, für Grossbuchstaben
+   in einer fetten Geometrischen (Gotham, ersatzweise Montserrat). Gemessen
+   statt geraten: reicht, um ein zu langes Wort auf die Plakatbreite
+   einzupassen, statt es abzuschneiden. */
+const ZEICHEN_BREITE = 0.70;
+
+/** Grösste Schrifthöhe in mm, bei der ein Wort noch auf die Breite passt. */
+function passendeGroesse(wort, breiteMm, gewuenschtMm){
+  const zeichen = String(wort || '').length;
+  if (!zeichen) return gewuenschtMm;
+  /* 12 % Rand links und rechts wie im Layout. */
+  const platz = breiteMm * 0.88;
+  return Math.min(gewuenschtMm, platz / (zeichen * ZEICHEN_BREITE));
+}
+
+/** Die Masse eines Plakats aus n × m Blättern mit Überlappung. */
+function plakatMass(spalten, zeilen, ueberlappung){
+  const s = Math.max(1, Math.min(4, Number(spalten) || 1));
+  const z = Math.max(1, Math.min(4, Number(zeilen) || 1));
+  const ue = Math.max(0, Math.min(20, Number(ueberlappung) || 0));
+  return {
+    spalten:s, zeilen:z, ue,
+    schrittX:BLATT_B - ue, schrittY:BLATT_H - ue,
+    breite:s * (BLATT_B - ue) + ue,
+    hoehe: z * (BLATT_H - ue) + ue
+  };
+}
+
+const grossplakat = {
+  id:'grossplakat',
+  title:'Grossflächenplakat',
+  sub:'Ein grosses Plakat aus mehreren A4-Blättern · zum Zusammenkleben',
+  badge:'Gross',
+  root:'t-gross',
+  fern:true,   /* Schild — Leseabstand anzeigen */
+  cat:'sicherheit',
+  page:'a4',
+  multipage:true,
+
+  thumb: thumb(`
+    <rect x="14" y="16" width="182" height="128" rx="4" fill="#F6F7FA" stroke="#C9CFDA" stroke-width="2"/>
+    <path d="M105 16v128M14 80h182" stroke="#C9CFDA" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <text x="105" y="72" font-family="sans-serif" font-size="30" font-weight="700"
+          text-anchor="middle" fill="#2A3350">A2</text>
+    <rect x="14" y="164" width="86" height="118" rx="4" fill="#2A3350"/>
+    <rect x="110" y="164" width="86" height="118" rx="4" fill="#2A3350" opacity=".35"/>
+    <rect x="26" y="200" width="62" height="20" rx="4" fill="#fff" opacity=".9"/>
+    <rect x="26" y="228" width="40" height="12" rx="4" fill="#01B1E2"/>
+    <text x="153" y="232" font-family="sans-serif" font-size="26" font-weight="700"
+          text-anchor="middle" fill="#fff" opacity=".55">2</text>`),
+
+  fields:[
+    { t:'group', label:'Grösse' },
+    { t:'note', label:'Zwei mal zwei Blätter ergeben rund A2, drei mal drei rund A1. Die genauen Masse stehen über der Vorschau.' },
+    { k:'spalten', label:'Blätter nebeneinander', type:'number', min:1, max:4, step:1 },
+    { k:'zeilen',  label:'Blätter untereinander', type:'number', min:1, max:4, step:1 },
+    { k:'ueberlappung', label:'Überlappung in mm', type:'number', min:0, max:20, step:1,
+      hint:'Damit sich die Blätter überkleben lassen. 10 mm sind bequem; 0 heisst auf Stoss schneiden.' },
+    { k:'plan', label:'Bauanleitung als erste Seite', type:'select',
+      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Inhalt' },
+    { k:'wort',  label:'Grosses Wort', type:'text' },
+    { k:'wortMm',label:'Schrifthöhe in mm', type:'number', min:20, max:400, step:5,
+      hint:'Faustregel: aus 20 m Abstand braucht es rund 50 mm x-Höhe — die Anzeige links rechnet mit. Passt das Wort nicht auf die Breite, wird die Höhe automatisch verkleinert; mehr Blätter nebeneinander schaffen wieder Platz.' },
+    { k:'unter', label:'Zeile darunter', type:'text' },
+    { k:'unterMm', label:'Schrifthöhe darunter in mm', type:'number', min:8, max:120, step:2 },
+
+    { t:'group', label:'Zeichen' },
+    { k:'zeichen', label:'Sicherheitszeichen', type:'select',
+      options:[{v:'',t:'kein Zeichen'}].concat(szOptions()) },
+    { k:'zeichenMm', label:'Zeichengrösse in mm', type:'number', min:30, max:400, step:10 },
+
+    { t:'group', label:'Farben' },
+    { k:'grund', label:'Hintergrund', type:'color' },
+    { k:'schrift', label:'Schrift', type:'color' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Zusatzzeilen', type:'checks', options:sprachOptions() },
+    { k:'de', label:'Deutsch',   type:'text' },
+    { k:'en', label:'English',   type:'text' },
+    { k:'fr', label:'Français',  type:'text' },
+    { k:'it', label:'Italiano',  type:'text' },
+    { k:'pt', label:'Português', type:'text' },
+    { k:'es', label:'Español',   type:'text' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() }
+  ],
+
+  defaults:{
+    spalten:2, zeilen:2, ueberlappung:10, plan:'ja',
+    wort:'SAMMELPLATZ',
+    wortMm:70,
+    unter:'Assembly point · Point de rassemblement',
+    unterMm:20,
+    zeichen:'sammelplatz',
+    zeichenMm:150,
+    grund:'#00843D',
+    schrift:'#FFFFFF',
+    sprachen:['de','en'],
+    de:'Hier sammeln sich alle im Notfall.',
+    en:'In an emergency, everyone gathers here.',
+    fr:'En cas dʼurgence, tout le monde se rassemble ici.',
+    it:'In caso di emergenza ci si raduna qui.',
+    pt:'Em caso de emergência, todos se reúnem aqui.',
+    es:'En caso de emergencia, todos se reúnen aquí.',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  render(d){
+    const m = plakatMass(d.spalten, d.zeilen, d.ueberlappung);
+    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const zahl = (v, min, max, weich) =>
+      Math.max(min, Math.min(max, Number(v) || weich));
+
+    const wortMm    = passendeGroesse(d.wort, m.breite, zahl(d.wortMm, 20, 400, 70));
+    const unterMm   = passendeGroesse(d.unter, m.breite, zahl(d.unterMm, 8, 120, 20));
+    const zeichenMm = zahl(d.zeichenMm, 30, 400, 150);
+    const z = has(d.zeichen) ? szZeichen(d.zeichen) : null;
+
+    const zeilen = sprachObjekte(d.sprachen)
+      .map(sp => has(d[sp.id])
+        ? `<li lang="${sp.id}">${esc(d[sp.id])}</li>` : '').join('');
+
+    /* Das ganze Plakat einmal — jedes Blatt zeigt einen Ausschnitt davon. */
+    const welt = `
+      <div class="t-gross-welt" style="width:${m.breite}mm;height:${m.hoehe}mm;
+           background:${esc(d.grund)};color:${esc(d.schrift)}">
+        ${z ? `<div class="t-gross-zeichen">${szSvg(z.art, z.pikto, zeichenMm)}</div>` : ''}
+        ${has(d.wort) ? `<h1 style="font-size:${wortMm.toFixed(1)}mm">${esc(d.wort)}</h1>` : ''}
+        ${has(d.unter) ? `<p class="t-gross-unter" style="font-size:${unterMm.toFixed(1)}mm">${esc(d.unter)}</p>` : ''}
+        ${zeilen ? `<ul class="t-gross-sprachen" style="font-size:${Math.max(5, unterMm * 0.45)}mm">${zeilen}</ul>` : ''}
+        <footer class="t-gross-foot" style="font-size:${Math.max(3.5, unterMm * 0.3)}mm">
+          <span>${istHotel(d.absender) ? esc(abs.name) : esc(abs.legal)}</span>
+          <span>${esc(obj.code)}${adr ? ' · ' + esc(adr) : ''}</span>
+        </footer>
+      </div>`;
+
+    const seiten = [];
+
+    /* Bauanleitung: das Plakat verkleinert, mit numerierten Feldern. */
+    if (d.plan !== 'nein' && m.spalten * m.zeilen > 1){
+      const passt = Math.min(150 / m.breite, 170 / m.hoehe);
+      const felder = [];
+      for (let r = 0; r < m.zeilen; r++){
+        for (let c = 0; c < m.spalten; c++){
+          felder.push(`<span class="t-gross-feld" style="
+            left:${c * m.schrittX * passt}mm; top:${r * m.schrittY * passt}mm;
+            width:${BLATT_B * passt}mm; height:${BLATT_H * passt}mm">${r * m.spalten + c + 1}</span>`);
+        }
+      }
+      seiten.push(`
+      <article data-page class="t-gross-plan">
+        <h2>Bauanleitung</h2>
+        <p class="t-gross-mass">
+          ${m.spalten} × ${m.zeilen} Blätter A4 · fertiges Plakat
+          <b>${Math.round(m.breite)} × ${Math.round(m.hoehe)} mm</b>
+          ${m.ue ? ` · ${m.ue} mm Überlappung` : ' · auf Stoss'}
+        </p>
+        <div class="t-gross-vorschau" style="width:${m.breite * passt}mm;height:${m.hoehe * passt}mm">
+          <div class="t-gross-mini" style="transform:scale(${passt})">${welt}</div>
+          ${felder.join('')}
+        </div>
+        <ol class="t-gross-schritte">
+          <li>Alle ${m.spalten * m.zeilen} Blätter drucken — <b>Ränder: keine</b>, <b>Skalierung: 100 %</b>.
+              Wird verkleinert, passen die Blätter nicht zusammen.</li>
+          ${m.ue
+            ? `<li>Bei jedem Blatt den Rand <b>rechts und unten</b> an der gestrichelten Linie abschneiden — dort liegt das nächste Blatt darüber.</li>
+               <li>Reihe für Reihe überlappend zusammenkleben, den Nummern nach.</li>`
+            : `<li>Alle Blätter an den gestrichelten Linien beschneiden.</li>
+               <li>Auf Stoss aneinanderlegen und von hinten zusammenkleben, den Nummern nach.</li>`}
+          <li>Von hinten mit Klebeband verstärken; für draussen einlaminieren.</li>
+        </ol>
+      </article>`);
+    }
+
+    for (let r = 0; r < m.zeilen; r++){
+      for (let c = 0; c < m.spalten; c++){
+        const nr = r * m.spalten + c + 1;
+        seiten.push(`
+        <article data-page class="t-gross-blatt">
+          <div class="t-gross-fenster" style="left:${-c * m.schrittX}mm;top:${-r * m.schrittY}mm">
+            ${welt}
+          </div>
+          ${m.ue ? `
+            ${c < m.spalten - 1 ? `<i class="t-gross-kante is-rechts" style="right:${m.ue}mm"></i>` : ''}
+            ${r < m.zeilen - 1 ? `<i class="t-gross-kante is-unten" style="bottom:${m.ue}mm"></i>` : ''}` : ''}
+          <span class="t-gross-nr">${nr} / ${m.spalten * m.zeilen}
+            <em>Reihe ${r + 1}, Spalte ${c + 1}</em></span>
+        </article>`);
+      }
+    }
+    return seiten.join('');
+  }
+};
+
 /* ===== js/templates/kurzanleitung.js ===== */
 /* Kurzanleitung · A4 hoch — der Aushang für die eigene Bürowand.
    Beantwortet die zwei Fragen, die im Haus wirklich gestellt werden:
@@ -8146,6 +8991,8 @@ const kurzanleitung = {
 
 
 
+
+
 const TEMPLATES = {
   hinweis,
   mieterbrief,
@@ -8155,6 +9002,8 @@ const TEMPLATES = {
   sicherheit,
   etiketten,
   qrplakat,
+  foto,
+  grossplakat,
   kurzanleitung,
   notruf,
   rezeption,
@@ -8171,6 +9020,7 @@ const TEMPLATES = {
 const ORDER = [
   'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
   'etiketten', 'qrplakat', 'kurzanleitung',
+  'foto', 'grossplakat',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
 ];
@@ -8181,8 +9031,8 @@ const GROUPS = [
     ids:['hinweis', 'mieterbrief'] },
 
   { id:'sicherheit', title:'Sicherheitszeichen',
-    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt.',
-    ids:['sicherheit'] },
+    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt. Dazu das Grossflächenplakat aus mehreren A4-Blättern.',
+    ids:['sicherheit', 'grossplakat'] },
 
   { id:'parken', title:'Parkieren',
     note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
@@ -8198,7 +9048,7 @@ const GROUPS = [
 
   { id:'hotel', title:'Hotel und Gäste',
     note:'Alles rund um Check-in, Zimmer und Aufenthalt.',
-    ids:['notruf', 'aushang', 'gaestemappe', 'zattoo'] },
+    ids:['notruf', 'aushang', 'foto', 'gaestemappe', 'zattoo'] },
 
   { id:'wegweiser', title:'Wegweiser und Aufkleber',
     note:'Pfeile und runde Aufkleber in Originalgrösse.',
@@ -8236,6 +9086,7 @@ const GROUPS = [
    dieser Menge lohnt der Aufwand nicht, und ein falscher Treffer ist
    ärgerlicher als keiner.
    ========================================================================== */
+
 
 
 
@@ -8299,6 +9150,15 @@ const BESTAND = (() => {
   return aus;
 })();
 
+/* Selbst angelegte Bausteine kommen und gehen waehrend der Arbeit — sie
+   werden deshalb bei jeder Suche frisch dazugenommen, nicht einmal beim
+   Laden eingebacken. Es sind wenige; das faellt nicht ins Gewicht. */
+function eigeneEintraege(){
+  return eigeneBausteine().map(p => eintrag('baustein', p.id, p.titel.de || p.label,
+    'Eigener Baustein', 'hinweis', p.id,
+    `${p.label} ` + SPRACH_IDS.map(s => `${p.titel[s]} ${p.text[s]}`).join(' ')));
+}
+
 /* Vorlagen zuerst, dann Bausteine, dann Zeichen, dann Abfall. */
 const ART_RANG = { vorlage:0, baustein:1, zeichen:2, abfall:3 };
 
@@ -8312,7 +9172,7 @@ function suche(frage, max = 12){
   if (!woerter.length) return [];
 
   const treffer = [];
-  for (const e of BESTAND){
+  for (const e of BESTAND.concat(eigeneEintraege())){
     let punkte = 0;
     let alle = true;
     for (const w of woerter){
@@ -8360,6 +9220,7 @@ const store = { load: load, save: save, remove: remove, keys: keys };
    Formular ist in aufklappbare Kapitel geteilt, statt in einer Kolonne von
    vierzig Feldern zu enden.
    ========================================================================== */
+
 
 
 
@@ -8583,6 +9444,8 @@ function renderHub(){
       <div class="vz-kacheln">${kacheln}</div>
     </section>
 
+    <div class="vz-schriftwarnung" id="vz-schrift" hidden></div>
+
     <section class="vz-block">
       <h2>${esc(t('help'))}</h2>
       <ol class="vz-schritte">
@@ -8592,6 +9455,24 @@ function renderHub(){
       </ol>
       <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
     </section>`);
+
+  zeigeSchrift();
+}
+
+/* Der Schrifthinweis kann erst beurteilt werden, wenn der Browser mit dem
+   Laden fertig ist — vorher meldet fonts.check() immer false. */
+function zeigeSchrift(){
+  const kasten = document.getElementById('vz-schrift');
+  if (!kasten) return;
+  const sage = () => {
+    const text = schriftHinweis();
+    if (!text) return;
+    kasten.hidden = false;
+    kasten.innerHTML = `<b>${esc(t('fontSub'))}</b> ${esc(text)} `
+      + `<span>${t('fontHow')}</span>`;
+  };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sage);
+  else sage();
 }
 
 function renderKategorie(katId){
@@ -8627,9 +9508,12 @@ function fieldHtml(f, value, path){
           ${f.min != null ? `min="${f.min}"` : ''} ${f.max != null ? `max="${f.max}"` : ''}
           ${f.step != null ? `step="${f.step}"` : ''}>${hint}</div>`;
     case 'select':
+      /* `options` darf eine Funktion sein — dann wird die Liste bei jedem
+         Zeichnen neu geholt. Gebraucht fuer die eigenen Textbausteine, die
+         waehrend der Arbeit dazukommen koennen. */
       return `<div class="vz-field">${lbl}
         <select id="${id}" data-path="${esc(path)}">${
-          (f.options || []).map(o => `<option value="${esc(o.v)}"${String(o.v) === String(v) ? ' selected' : ''}>${esc(o.t)}</option>`).join('')
+          optionen(f).map(o => `<option value="${esc(o.v)}"${String(o.v) === String(v) ? ' selected' : ''}>${esc(o.t)}</option>`).join('')
         }</select>${hint}</div>`;
     case 'color':
       return `<div class="vz-field vz-field--color">
@@ -8641,7 +9525,7 @@ function fieldHtml(f, value, path){
          Gebraucht für die Sprachen eines Aushangs. */
       return `<div class="vz-field"><label>${esc(f.label || f.k)}</label>
         <div class="vz-checks" data-checks="${esc(path)}">${
-          (f.options || []).map(o => {
+          optionen(f).map(o => {
             const an = Array.isArray(v) ? v.includes(o.v) : String(v) === String(o.v);
             return `<label class="vz-check${an ? ' is-on' : ''}">
               <input type="checkbox" value="${esc(o.v)}"${an ? ' checked' : ''}>
@@ -8741,6 +9625,12 @@ function buildForm(tpl, state){
         <div class="vz-kap-inhalt">${inhalt}</div>
       </section>`;
   }).join('');
+}
+
+/** Auswahlliste eines Feldes — fest hinterlegt oder bei Bedarf berechnet. */
+function optionen(f){
+  const o = typeof f.options === 'function' ? f.options() : f.options;
+  return Array.isArray(o) ? o : [];
 }
 
 /* Pfad "rows.2.de" im Zustand lesen. */
