@@ -26,6 +26,7 @@ const MODULES = [
   'js/lib/teilen.js',
   'js/lib/lesbarkeit.js',
   'js/lib/kontrast.js',
+  'js/lib/verlauf.js',
   'js/lib/i18n.js',
   'js/lib/brand.js',
   'js/lib/sitemap.js',
@@ -51,6 +52,7 @@ const MODULES = [
   'js/templates/qrplakat.js',
   'js/templates/kurzanleitung.js',
   'js/templates/index.js',
+  'js/lib/suche.js',
   'js/app.js'
 ];
 

@@ -162,23 +162,137 @@ a{color:var(--cyan)}
 .vz-btn--sm{padding:6px 10px;font-size:12px;border-radius:8px}
 .vz-btn--icon{padding:8px 10px}
 
-/* ---------- Hub -------------------------------------------------------- */
+/* ---------- Suche im Kopf ---------------------------------------------- */
+.vz-suche{position:relative;flex:0 1 420px;min-width:180px}
+.vz-suche input{
+  width:100%;height:38px;padding:0 40px 0 14px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);
+  color:#fff;font-size:13.5px;transition:.15s background,.15s border-color;
+}
+.vz-suche input::placeholder{color:rgba(255,255,255,.62)}
+.vz-suche input:focus{outline:0;background:#fff;color:var(--ink);border-color:var(--cyan)}
+.vz-suche input:focus::placeholder{color:var(--muted)}
+.vz-suche kbd{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font:600 11px/1 var(--font-body);color:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.28);border-radius:5px;padding:3px 6px;pointer-events:none;
+}
+.vz-suche input:focus ~ kbd{display:none}
+.vz-treffer{
+  position:absolute;top:46px;left:0;right:0;z-index:60;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 18px 42px rgba(42,51,80,.24);overflow:hidden;
+  max-height:min(60vh,420px);overflow-y:auto;
+}
+.vz-treffer-zeile{
+  display:flex;align-items:center;gap:11px;padding:9px 13px;
+  text-decoration:none;color:var(--ink);border-bottom:1px solid var(--bg-2);
+}
+.vz-treffer-zeile:last-child{border-bottom:0}
+.vz-treffer-zeile.is-aktiv,.vz-treffer-zeile:hover{background:var(--cyan-tint)}
+.vz-treffer-art{
+  flex:0 0 auto;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 7px;border-radius:5px;background:var(--bg-2);color:var(--ink-soft);
+  min-width:92px;text-align:center;
+}
+.vz-treffer-art--vorlage{background:var(--navy);color:#fff}
+.vz-treffer-art--baustein{background:var(--cyan);color:#fff}
+.vz-treffer-txt{min-width:0}
+.vz-treffer-txt b{display:block;font-size:13px;font-weight:600;color:var(--navy)}
+.vz-treffer-txt i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-soft)}
+.vz-treffer-leer{margin:0;padding:16px;font-size:12.5px;color:var(--ink-soft);line-height:1.5}
+
+/* ---------- Übersicht: Kapitelspalte + Inhalt --------------------------- */
+.vz-uebersicht{
+  display:grid;grid-template-columns:236px 1fr;gap:0;
+  min-height:calc(100vh - 62px);
+}
+.vz-nav{
+  background:#fff;border-right:1px solid var(--line);padding:22px 12px 40px;
+  position:sticky;top:62px;max-height:calc(100vh - 62px);overflow-y:auto;
+}
+.vz-nav-titel{
+  margin:22px 10px 8px;font-family:var(--font-display);font-size:10.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+}
+.vz-nav-zeile{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 11px;border-radius:9px;text-decoration:none;
+  color:var(--ink-soft);font-size:13px;font-weight:600;line-height:1.3;
+  transition:.14s background,.14s color;
+}
+.vz-nav-zeile:hover{background:var(--bg-2);color:var(--navy)}
+.vz-nav-zeile.is-aktiv{background:var(--navy);color:#fff}
+.vz-nav-zeile em{
+  flex:0 0 auto;font-style:normal;font-size:11px;font-weight:700;
+  background:var(--bg-2);color:var(--muted);border-radius:999px;padding:2px 7px;
+}
+.vz-nav-zeile.is-aktiv em{background:rgba(255,255,255,.2);color:#fff}
+.vz-inhalt{padding:30px 30px 70px;max-width:1180px}
+
+/* ---------- Startseite -------------------------------------------------- */
 .vz-hub{max-width:1180px;margin:0 auto;padding:38px 22px 70px}
-.vz-hero{margin-bottom:34px}
-.vz-hero .eyebrow{font-size:34px;margin:0 0 2px}
-.vz-hero h1{font-family:var(--font-display);font-weight:700;font-size:40px;line-height:1.06;margin:0 0 10px;color:var(--navy)}
-.vz-hero p{margin:0;max-width:62ch;color:var(--ink-soft);font-size:15px;line-height:1.6}
-.vz-group{margin-top:34px}
-.vz-group h2{
-  font-family:var(--font-display);font-size:13px;font-weight:700;
+.vz-hero{margin-bottom:30px}
+.vz-hero .eyebrow{font-size:32px;margin:0 0 2px}
+.vz-hero h1{font-family:var(--font-display);font-weight:700;font-size:36px;line-height:1.06;margin:0 0 10px;color:var(--navy)}
+.vz-hero p{margin:0;max-width:62ch;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
+.vz-block{margin-top:34px}
+.vz-block h2{
+  font-family:var(--font-display);font-size:12.5px;font-weight:700;
   text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);
   margin:0 0 14px;display:flex;align-items:center;gap:12px;
 }
-.vz-group h2::after{content:"";flex:1;height:1px;background:var(--line)}
-.vz-group-note{margin:-6px 0 14px;font-size:12.5px;line-height:1.6;color:var(--ink-soft);max-width:72ch}
-.vz-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px}
+.vz-block h2::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.vz-kacheln{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px}
+.vz-kachel{
+  display:block;position:relative;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:16px 17px 17px;text-decoration:none;
+  transition:.16s border-color,.16s box-shadow,.16s transform;
+}
+.vz-kachel:hover{border-color:var(--cyan);box-shadow:0 10px 24px rgba(42,51,80,.11);transform:translateY(-2px)}
+.vz-kachel-zahl{
+  position:absolute;top:14px;right:15px;font-family:var(--font-display);
+  font-size:22px;font-weight:700;color:var(--line);line-height:1;
+}
+.vz-kachel b{display:block;font-family:var(--font-display);font-size:15px;color:var(--navy);margin:0 34px 5px 0}
+.vz-kachel i{display:block;font-style:normal;font-size:12px;line-height:1.5;color:var(--ink-soft)}
+
+.vz-schritte{
+  list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;counter-reset:s;
+}
+.vz-schritte li{
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  position:relative;counter-increment:s;
+}
+.vz-schritte li::before{
+  content:counter(s);display:grid;place-items:center;
+  width:26px;height:26px;border-radius:999px;background:var(--cyan);color:#fff;
+  font-family:var(--font-display);font-size:13px;font-weight:700;margin-bottom:10px;
+}
+.vz-schritte b{display:block;font-family:var(--font-display);font-size:14.5px;color:var(--navy);margin-bottom:4px}
+.vz-schritte span{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+.vz-hilfe-fuss{margin:14px 0 0;font-size:12.5px;line-height:1.7;color:var(--ink-soft);max-width:80ch}
+.vz-hilfe-fuss b{color:var(--navy)}
+
+/* ---------- Kapitelseite ------------------------------------------------ */
+.vz-krumen{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  font-size:12px;color:var(--muted);margin-bottom:14px;
+}
+.vz-krumen a{color:var(--ink-soft);text-decoration:none}
+.vz-krumen a:hover{color:var(--cyan);text-decoration:underline}
+.vz-krumen b{color:var(--navy);font-weight:600}
+.vz-kap-kopf{margin-bottom:22px}
+.vz-kap-kopf h1{font-family:var(--font-display);font-weight:700;font-size:28px;margin:0 0 7px;color:var(--navy)}
+.vz-kap-kopf p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-soft);max-width:76ch}
+
+/* ---------- Vorlagenkarten ---------------------------------------------- */
+.vz-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px}
+.vz-cards--klein{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
 .vz-card{
-  display:flex;flex-direction:column;text-align:left;
+  display:flex;flex-direction:column;text-align:left;text-decoration:none;
   background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;
   cursor:pointer;padding:0;transition:.18s box-shadow,.18s border-color,.18s transform;
 }
@@ -200,13 +314,15 @@ a{color:var(--cyan)}
 .vz-card--soon:hover{transform:none;border-color:var(--line);box-shadow:none}
 
 /* ---------- Editor ----------------------------------------------------- */
-.vz-editor{display:grid;grid-template-columns:380px 1fr;min-height:calc(100vh - 62px)}
+.vz-editor{display:grid;grid-template-columns:392px 1fr;min-height:calc(100vh - 62px)}
+.vz-buehne{display:flex;flex-direction:column;min-width:0;height:calc(100vh - 62px)}
 .vz-panel{
   background:#fff;border-right:1px solid var(--line);
   padding:20px 20px 60px;overflow-y:auto;
   max-height:calc(100vh - 62px);position:sticky;top:62px;
 }
 .vz-panel-head{margin-bottom:16px}
+.vz-panel .vz-krumen{margin-bottom:10px}
 .vz-panel-head h2{font-family:var(--font-display);font-size:19px;font-weight:700;margin:12px 0 3px;color:var(--navy);line-height:1.2}
 .vz-panel-head p{margin:0;font-size:12px;color:var(--ink-soft)}
 .vz-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
@@ -272,7 +388,7 @@ a{color:var(--cyan)}
 .vz-item .vz-field+.vz-field{margin-top:8px}
 
 /* ---------- Bühne / Blatt --------------------------------------------- */
-.vz-stage{
+.vz-stage{flex:1;min-height:0;
   padding:28px;overflow:auto;display:flex;justify-content:center;align-items:flex-start;
   background:var(--canvas);
   background-image:radial-gradient(circle at 1px 1px,rgba(42,51,80,.07) 1px,transparent 0);
@@ -409,6 +525,80 @@ a{color:var(--cyan)}
   display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
   padding:8px 11px;border-radius:9px;margin:-10px 0 16px;
   background:#FFF4E0;color:#96591b;cursor:help;
+}
+
+/* ---------- Leiste über der Vorschau ------------------------------------ */
+.vz-leiste{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:8px 16px;background:#fff;border-bottom:1px solid var(--line);
+  min-height:47px;flex:0 0 auto;
+}
+.vz-leiste-links,.vz-leiste-rechts{display:flex;align-items:center;gap:6px}
+.vz-papier{
+  font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.03em;
+  margin-right:6px;
+}
+.vz-seitenwahl,.vz-zoomwahl{
+  border:1px solid var(--line);border-radius:8px;background:#fff;
+  padding:5px 8px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;
+}
+.vz-seitenwahl:focus,.vz-zoomwahl:focus{outline:2px solid var(--cyan);outline-offset:1px}
+
+/* ---------- Kapitel im Formular ----------------------------------------- */
+.vz-formkopf{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 10px;font-family:var(--font-display);font-size:10.5px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+}
+.vz-mini-link{
+  background:none;border:0;padding:0;cursor:pointer;
+  font:600 11px/1 var(--font-body);letter-spacing:.02em;text-transform:none;
+  color:var(--cyan);
+}
+.vz-mini-link:hover{text-decoration:underline}
+
+.vz-form{display:flex;flex-direction:column;gap:8px}
+.vz-kap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+.vz-kap.is-offen{border-color:var(--navy-line,#C9CFDA)}
+.vz-kap-kopfzeile{
+  display:flex;align-items:center;gap:10px;width:100%;
+  background:none;border:0;padding:11px 13px;cursor:pointer;text-align:left;
+  font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--navy);
+}
+.vz-kap-kopfzeile:hover{background:var(--bg-2)}
+.vz-kap-nr{
+  flex:0 0 auto;display:grid;place-items:center;width:21px;height:21px;border-radius:6px;
+  background:var(--bg-2);color:var(--muted);font-size:11px;font-weight:700;
+}
+.vz-kap.is-offen .vz-kap-nr{background:var(--cyan);color:#fff}
+.vz-kap-name{flex:1;min-width:0}
+.vz-kap-pfeil{
+  flex:0 0 auto;width:9px;height:9px;border-right:2px solid var(--muted);
+  border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-right:3px;
+  transition:.18s transform;
+}
+.vz-kap.is-offen .vz-kap-pfeil{transform:rotate(-135deg)}
+.vz-kap-inhalt{display:none;padding:2px 13px 15px;flex-direction:column;gap:13px}
+.vz-kap.is-offen .vz-kap-inhalt{display:flex}
+
+/* Seitenzahl am Rand der Vorschau — nur am Bildschirm. */
+@media screen{
+  .sheet--multi{counter-reset:vzseite}
+  .sheet--multi [data-page]{counter-increment:vzseite}
+  .sheet--multi [data-page]::after{
+    content:counter(vzseite);
+    position:absolute;top:-11px;left:0;
+    font:700 10px/1 var(--font-body);letter-spacing:.1em;color:var(--muted);
+  }
+}
+
+@media (max-width:1080px){
+  .vz-uebersicht{grid-template-columns:1fr}
+  .vz-nav{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+  .vz-nav-titel{display:none}
+  .vz-nav-zeile{padding:7px 11px}
+  .vz-inhalt{padding:22px 18px 60px}
 }
 
 /* ===== assets/templates.css ===== */
@@ -1210,13 +1400,13 @@ a{color:var(--cyan)}
 
 .t-kurz-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10mm;
   padding:12mm 0}
-.t-kurz-steps{list-style:none;margin:0;padding:0 16mm;display:grid;gap:8mm}
-.t-kurz-step{display:flex;align-items:flex-start;gap:6mm}
-.t-kurz-num{flex:0 0 auto;width:10mm;height:10mm;border-radius:50%;background:var(--cyan);
-  color:#fff;font-family:var(--font-display);font-size:14pt;font-weight:700;
+.t-kurz-steps{list-style:none;margin:0;padding:0 16mm;display:grid;gap:6mm}
+.t-kurz-step{display:flex;align-items:flex-start;gap:5mm}
+.t-kurz-num{flex:0 0 auto;width:9mm;height:9mm;border-radius:50%;background:var(--cyan);
+  color:#fff;font-family:var(--font-display);font-size:12.5pt;font-weight:700;
   display:flex;align-items:center;justify-content:center}
-.t-kurz-step h3{margin:0 0 2mm;font-family:var(--font-display);font-size:15pt;color:var(--navy)}
-.t-kurz-step p{margin:0;font-size:11.5pt;line-height:1.55;color:var(--ink-soft)}
+.t-kurz-step h3{margin:0 0 1.4mm;font-family:var(--font-display);font-size:13.5pt;color:var(--navy)}
+.t-kurz-step p{margin:0;font-size:10.5pt;line-height:1.5;color:var(--ink-soft)}
 
 .t-kurz-druck{margin:0 16mm;display:flex;align-items:flex-start;gap:5mm;
   background:#F6F7FA;border:1px solid var(--line);border-radius:4mm;padding:6mm 7mm}
@@ -3614,6 +3804,31 @@ function kontrastBefund(root, abPt = K_AB_PT){
   };
 }
 
+/* ===== js/lib/verlauf.js ===== */
+/* ==========================================================================
+   Zuletzt benutzt
+   --------------------------------------------------------------------------
+   Wer den Waschplan jede Woche druckt, soll ihn nicht jede Woche suchen.
+   Gespeichert wird nur die Reihenfolge der Vorlagen-Kürzel, im Browser der
+   jeweiligen Person — keine Inhalte, keine Namen.
+   ========================================================================== */
+
+const SCHLUESSEL = 'verlauf';
+const MAX = 8;
+
+function verlauf(){
+  const roh = load(SCHLUESSEL, []);
+  return Array.isArray(roh) ? roh.filter(x => typeof x === 'string') : [];
+}
+
+function merken(id){
+  if (!id) return;
+  const ohne = verlauf().filter(x => x !== id);
+  save(SCHLUESSEL, [id, ...ohne].slice(0, MAX));
+}
+
+function verlaufLeeren(){ save(SCHLUESSEL, []); }
+
 /* ===== js/lib/i18n.js ===== */
 /* Sprache der OBERFLAECHE (nicht des Aushang-Inhalts — der ist immer DE/EN). */
 
@@ -3637,6 +3852,24 @@ const DICT = {
     shareGot:'Geteilter Entwurf übernommen',
     shareBad:'Dieser Link ist unvollständig — das Original zeigt weiter',
     shareAsk:'Der geteilte Entwurf ersetzt den eigenen für diese Vorlage. Fortfahren?',
+    search:'Suchen',
+    searchPlaceholder:'Vorlage, Textbaustein oder Zeichen suchen …',
+    searchNone:'Nichts gefunden. Anderes Wort versuchen — es wird in allen sechs Sprachen gesucht.',
+    startPage:'Startseite',
+    chapters:'Kapitel',
+    recent:'Zuletzt benutzt',
+    step1:'Vorlage wählen',
+    step1sub:'Über die Kapitel links oder die Suche oben.',
+    step2:'Texte anpassen',
+    step2sub:'Im Editor links, Kapitel für Kapitel. Die Vorschau zeigt sofort, wie es aussieht.',
+    step3:'Drucken oder teilen',
+    step3sub:'«Drucken / PDF», «Als PNG» oder «Link teilen» für die anderen im Haus.',
+    helpFoot:'Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen. Änderungen bleiben im eigenen Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt.',
+    allOpen:'Alle aufklappen',
+    allClosed:'Alle zuklappen',
+    preview:'Vorschau',
+    zoomFit:'Einpassen',
+    pageOf:'Seite',
     saveJson:'Entwurf sichern',
     loadJson:'Entwurf laden',
     resetAsk:'Alle Aenderungen dieser Vorlage verwerfen und zum Original zurück?',
@@ -3675,6 +3908,24 @@ const DICT = {
     shareGot:'Shared draft loaded',
     shareBad:'This link is incomplete — the original is still shown',
     shareAsk:'The shared draft will replace your own for this template. Continue?',
+    search:'Search',
+    searchPlaceholder:'Search templates, text blocks or signs …',
+    searchNone:'Nothing found. Try another word — all six languages are searched.',
+    startPage:'Start page',
+    chapters:'Chapters',
+    recent:'Recently used',
+    step1:'Pick a template',
+    step1sub:'From the chapters on the left or the search at the top.',
+    step2:'Edit the text',
+    step2sub:'In the editor on the left, chapter by chapter. The preview updates as you type.',
+    step3:'Print or share',
+    step3sub:'“Print / PDF”, “Save PNG” or “Copy share link” for the others in the house.',
+    helpFoot:'In the print dialog set <b>margins: none</b> and <b>background graphics: on</b>. Changes stay in your own browser until someone presses <b>Reset</b>.',
+    allOpen:'Expand all',
+    allClosed:'Collapse all',
+    preview:'Preview',
+    zoomFit:'Fit',
+    pageOf:'Page',
     saveJson:'Save draft',
     loadJson:'Load draft',
     resetAsk:'Discard all changes to this template and restore the original?',
@@ -6241,7 +6492,7 @@ function fill(text, d){
 const hinweis = {
   id:'hinweis',
   title:'Hinweis / Aushang',
-  sub:'Rund 30 fertige Textbausteine aus dem Hausgebrauch · A4',
+  sub:'42 fertige Textbausteine in sechs Sprachen · A4',
   badge:'Hinweis',
   page:'a4',
   root:'t-hinweis',
@@ -6367,6 +6618,12 @@ const hinweis = {
     qrLegende:'',
     gruss:'Die Verwaltung',
     footer:''
+  },
+
+  /* Aus der Suche: den gefundenen Baustein gleich übernehmen. */
+  ausSuche(d, wert){
+    const p = preset(wert);
+    return p.id === wert ? this.actions.apply({ ...d, presetId:wert }) : d;
   },
 
   /* Die beiden Knöpfe im Formular. */
@@ -7080,6 +7337,12 @@ const sammelstelle = {
     ]
   },
 
+  /* Aus der Suche: die gefundene Fraktion als einzige Zeile setzen. */
+  ausSuche(d, wert){
+    return FRAKTIONEN.some(f => f.id === wert)
+      ? { ...d, rows:[{ art:wert, wort:'', ja:'', nein:'' }] } : d;
+  },
+
   actions:{
     setzeSprachen(d){
       const ids = sprachSet(d.sprachSet);
@@ -7229,6 +7492,12 @@ const sicherheit = {
       { zeichen:'abstellen-verboten', de:'', zusatz:'' }
     ],
     fussnote:'Danke für Ihr Verständnis.'
+  },
+
+  /* Aus der Suche: das gefundene Zeichen als erste Zeile setzen. */
+  ausSuche(d, wert){
+    return szZeichen(wert).id === wert
+      ? { ...d, rows:[{ zeichen:wert, de:'', zusatz:'' }] } : d;
   },
 
   actions:{
@@ -7783,13 +8052,15 @@ const kurzanleitung = {
     zeigeQr:'ja',
     steps:[
       { titel:'Öffnen',
-        text:'Den QR-Code scannen oder die Adresse eintippen. Am Handy über «Zum Startbildschirm hinzufügen» — dann liegt sie wie eine App auf dem Display.' },
-      { titel:'Vorlage wählen und Texte anpassen',
-        text:'Beim Hinweis zuerst den fertigen Textbaustein wählen und «Baustein übernehmen» drücken. Danach die Liegenschaft wählen — Kürzel und Adresse setzen sich von selbst.' },
+        text:'QR-Code scannen oder die Adresse eintippen. Am Handy «Zum Startbildschirm hinzufügen» — dann liegt sie wie eine App auf dem Display.' },
+      { titel:'Finden',
+        text:'Oben ins Suchfeld tippen — «Rauchverbot», «PET», «Notausgang» — oder links ein Kapitel anklicken.' },
+      { titel:'Anpassen',
+        text:'Links Kapitel für Kapitel. Die Vorschau ändert sich sofort mit.' },
       { titel:'Drucken',
         text:'«Drucken / PDF» wählen. Wer lieber ein Bild braucht: «Als PNG».' },
       { titel:'Weitergeben',
-        text:'«Link teilen» kopiert den fertigen Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
+        text:'«Link teilen» kopiert den Aushang als Adresse — wer sie anklickt, sieht dasselbe Blatt.' }
     ],
     druckTitel:'Im Druckdialog einstellen',
     druckText:'Ränder: **keine** · Hintergrundgrafiken: **einschalten** · Skalierung: **100 %**',
@@ -7946,13 +8217,151 @@ const GROUPS = [
     ids:['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor'] }
 ];
 
+/* ===== js/lib/suche.js ===== */
+/* ==========================================================================
+   Suche
+   --------------------------------------------------------------------------
+   Achtzehn Vorlagen, 42 Textbausteine, 16 Sicherheitszeichen und elf
+   Abfallfraktionen — das sind zu viele Dinge, um sie durch Scrollen zu
+   finden. Die Suche geht quer durch alles und führt direkt dorthin, wo
+   gearbeitet wird: ein Treffer auf einen Baustein öffnet den Hinweis-Aushang
+   mit genau diesem Baustein, ein Treffer auf ein Zeichen die Sicherheits-
+   vorlage mit genau diesem Zeichen.
+
+   Gesucht wird über alle sechs Aushangsprachen. Wer «no smoking» eintippt,
+   findet das Rauchverbot ebenso wie unter «Rauchen».
+
+   Bewusst schlicht: Wortanfänge zählen mehr als Treffer mitten im Wort, und
+   alle eingegebenen Wörter müssen vorkommen. Keine Fehlertoleranz — bei
+   dieser Menge lohnt der Aufwand nicht, und ein falscher Treffer ist
+   ärgerlicher als keiner.
+   ========================================================================== */
+
+
+
+
+
+/** Klein schreiben und Umlaute/Akzente abstreifen — «Grösse» findet «grosse». */
+function normal(s){
+  return String(s ?? '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/ß/g, 'ss')
+    .replace(/[^\w\s-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** Zu welcher Kategorie gehört eine Vorlage? */
+const KAT_VON = {};
+for (const g of GROUPS) for (const id of g.ids) KAT_VON[id] = g;
+function gruppeVon(id){ return KAT_VON[id] || null; }
+
+function eintrag(art, id, titel, unter, ziel, wert, extra){
+  return { art, id, titel, unter, ziel, wert,
+           schluessel:normal([titel, unter, extra].filter(Boolean).join(' ')) };
+}
+
+/** Der Suchbestand. Einmal gebaut, danach nur noch gefiltert. */
+const BESTAND = (() => {
+  const aus = [];
+
+  for (const id of ORDER){
+    const tpl = TEMPLATES[id];
+    if (!tpl) continue;
+    const g = gruppeVon(id);
+    aus.push(eintrag('vorlage', id, tpl.title, tpl.sub || '', id, null,
+      [tpl.badge, g && g.title, g && g.note].filter(Boolean).join(' ')));
+  }
+
+  const katName = {};
+  for (const k of KATEGORIEN) katName[k.id] = k.label;
+  for (const p of PRESETS){
+    if (p.id === 'frei') continue;
+    const alleSprachen = SPRACH_IDS.map(s => `${p.titel[s]} ${p.text[s]}`).join(' ');
+    aus.push(eintrag('baustein', p.id, p.titel.de, katName[p.cat] || '',
+      'hinweis', p.id, `${p.label} ${alleSprachen}`));
+  }
+
+  for (const z of SZ_ZEICHEN){
+    const art = { verbot:'Verbot', warnung:'Warnung', gebot:'Gebot',
+                  rettung:'Rettung', brand:'Brandschutz' }[z.art];
+    aus.push(eintrag('zeichen', z.id, z.text.de, `Sicherheitszeichen · ${art}`,
+      'sicherheit', z.id, SPRACH_IDS.map(s => z.text[s]).join(' ')));
+  }
+
+  for (const f of FRAKTIONEN){
+    aus.push(eintrag('abfall', f.id, f.wort.de, 'Sammelstelle beschriften',
+      'sammelstelle', f.id,
+      SPRACH_IDS.map(s => `${f.wort[s]} ${f.ja[s]}`).join(' ')));
+  }
+
+  return aus;
+})();
+
+/* Vorlagen zuerst, dann Bausteine, dann Zeichen, dann Abfall. */
+const ART_RANG = { vorlage:0, baustein:1, zeichen:2, abfall:3 };
+
+/**
+ * Suchen. Alle eingegebenen Wörter müssen vorkommen.
+ * @param {string} frage
+ * @param {number} max
+ */
+function suche(frage, max = 12){
+  const woerter = normal(frage).split(' ').filter(Boolean);
+  if (!woerter.length) return [];
+
+  const treffer = [];
+  for (const e of BESTAND){
+    let punkte = 0;
+    let alle = true;
+    for (const w of woerter){
+      const pos = e.schluessel.indexOf(w);
+      if (pos < 0){ alle = false; break; }
+      /* Wortanfang zählt mehr als irgendwo mitten im Wort. */
+      const amAnfang = pos === 0 || e.schluessel[pos - 1] === ' ';
+      punkte += amAnfang ? 10 : 3;
+      if (normal(e.titel).startsWith(w)) punkte += 8;
+    }
+    if (alle) treffer.push({ ...e, punkte });
+  }
+
+  treffer.sort((a, b) =>
+    (b.punkte - a.punkte) ||
+    (ART_RANG[a.art] - ART_RANG[b.art]) ||
+    a.titel.localeCompare(b.titel, 'de'));
+  return treffer.slice(0, max);
+}
+
+/** Die Adresse, die ein Treffer öffnet. */
+function trefferZiel(t){
+  return t.wert ? `#/t/${t.ziel}?w=${encodeURIComponent(t.wert)}` : `#/t/${t.ziel}`;
+}
+
+const ART_LABEL = {
+  vorlage:'Vorlage', baustein:'Textbaustein',
+  zeichen:'Sicherheitszeichen', abfall:'Abfallfraktion'
+};
+
 /* ===== js/app.js ===== */
 const store = { load: load, save: save, remove: remove, keys: keys };
 /* ==========================================================================
    N's Hotel · Vorlagen-Zentrale — App-Kern
-   Router (Hash), Hub, Editor mit automatisch erzeugtem Formular,
-   Live-Vorschau, Speicherung und Export.
+
+   Aufbau der Oberflaeche, drei Ebenen:
+
+     #/            Startseite — Suche, zuletzt benutzt, die Kapitel
+     #/k/<kapitel> ein Kapitel mit seinen Vorlagen
+     #/t/<vorlage> der Editor
+
+   Warum ueberhaupt Kapitel? Achtzehn Vorlagen auf einer Seite sind eine
+   Wand. Wer den Waschplan sucht, will nicht an Sicherheitszeichen und
+   Etikettenbogen vorbeiscrollen. Dieselbe Ueberlegung im Editor: das
+   Formular ist in aufklappbare Kapitel geteilt, statt in einer Kolonne von
+   vierzig Feldern zu enden.
    ========================================================================== */
+
+
 
 
 
@@ -7964,6 +8373,15 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
+
+/* Klartext fuer die Leiste ueber der Vorschau — damit man sieht, auf welchem
+   Papier man gerade arbeitet, ohne im Formular nachzusehen. */
+const PAGE_NAME = {
+  'a4':'A4 hoch · 210 × 297 mm',       'a4-land':'A4 quer · 297 × 210 mm',
+  'a5':'A5 hoch · 148 × 210 mm',       'a5-land':'A5 quer · 210 × 148 mm',
+  'a3':'A3 hoch · 297 × 420 mm',       'a3-land':'A3 quer · 420 × 297 mm',
+  'letter':'Letter hoch',              'letter-land':'Letter quer'
+};
 
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
    Aufraeum-Funktion zurueck. Sie wird vor dem naechsten Zeichnen aufgerufen. */
@@ -8001,6 +8419,8 @@ function loadState(tpl){
 function saveState(tpl, state){ store.save(draftKey(tpl.id), state); }
 
 /* ---------- Topbar ------------------------------------------------------- */
+/* Die Suche steht oben und ist von ueberall erreichbar — auch mitten im
+   Editor. Mit "/" springt der Fokus hinein, ohne die Maus zu bemuehen. */
 function mountTopbar(){
   const bar = qs('.vz-topbar');
   bar.innerHTML = `
@@ -8008,6 +8428,12 @@ function mountTopbar(){
       ${logo('white', 30)}
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
     </button>
+    <div class="vz-suche" role="search">
+      <input id="vz-suchfeld" type="search" autocomplete="off" spellcheck="false"
+             placeholder="${esc(t('searchPlaceholder'))}" aria-label="${esc(t('search'))}">
+      <kbd>/</kbd>
+      <div class="vz-treffer" id="vz-treffer" hidden></div>
+    </div>
     <span class="vz-top-spacer"></span>
     <div class="vz-lang" role="group" aria-label="Sprache">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
@@ -8017,63 +8443,171 @@ function mountTopbar(){
   bar.querySelectorAll('[data-lang]').forEach(b => {
     b.onclick = () => { setLang(b.dataset.lang); mountTopbar(); route(); };
   });
+  mountSuche();
 }
 
-/* ---------- Hub ---------------------------------------------------------- */
+/* ---------- Suche im Kopf ------------------------------------------------ */
+let sucheAktiv = -1;
+
+function mountSuche(){
+  const feld = document.getElementById('vz-suchfeld');
+  const kasten = document.getElementById('vz-treffer');
+  if (!feld || !kasten) return;
+
+  function zeichne(){
+    const treffer = suche(feld.value, 10);
+    sucheAktiv = treffer.length ? 0 : -1;
+    if (!feld.value.trim()){ kasten.hidden = true; kasten.innerHTML = ''; return; }
+    kasten.hidden = false;
+    kasten.innerHTML = treffer.length
+      ? treffer.map((tr, i) => `
+        <a class="vz-treffer-zeile${i === 0 ? ' is-aktiv' : ''}" href="${trefferZiel(tr)}"
+           data-i="${i}">
+          <span class="vz-treffer-art vz-treffer-art--${esc(tr.art)}">${esc(ART_LABEL[tr.art])}</span>
+          <span class="vz-treffer-txt">
+            <b>${esc(tr.titel)}</b>
+            ${tr.unter ? `<i>${esc(tr.unter)}</i>` : ''}
+          </span>
+        </a>`).join('')
+      : `<p class="vz-treffer-leer">${esc(t('searchNone'))}</p>`;
+  }
+
+  function schliessen(){ kasten.hidden = true; sucheAktiv = -1; }
+
+  feld.addEventListener('input', zeichne);
+  feld.addEventListener('focus', () => { if (feld.value.trim()) zeichne(); });
+  feld.addEventListener('keydown', ev => {
+    const zeilen = Array.from(kasten.querySelectorAll('.vz-treffer-zeile'));
+    if (ev.key === 'Escape'){ feld.value = ''; schliessen(); feld.blur(); return; }
+    if (!zeilen.length) return;
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sucheAktiv = (sucheAktiv + (ev.key === 'ArrowDown' ? 1 : -1) + zeilen.length) % zeilen.length;
+      zeilen.forEach((z, i) => z.classList.toggle('is-aktiv', i === sucheAktiv));
+      zeilen[sucheAktiv].scrollIntoView({ block:'nearest' });
+    }
+    if (ev.key === 'Enter'){
+      ev.preventDefault();
+      const ziel = zeilen[Math.max(0, sucheAktiv)];
+      if (ziel){ location.hash = ziel.getAttribute('href'); feld.value = ''; schliessen(); feld.blur(); }
+    }
+  });
+  kasten.addEventListener('mousedown', ev => {
+    const z = ev.target.closest('.vz-treffer-zeile');
+    if (z){ feld.value = ''; setTimeout(schliessen, 0); }
+  });
+  document.addEventListener('click', ev => {
+    if (!ev.target.closest('.vz-suche')) schliessen();
+  });
+}
+
+/* ---------- Startseite und Kapitel --------------------------------------- */
+
+/** Wie viele Vorlagen ein Kapitel wirklich hat (leere Platzhalter zaehlen nicht). */
+function kapitelZahl(g){ return g.ids.filter(id => TEMPLATES[id]).length; }
+
+/** Eine Vorlagenkarte. */
+function karte(id){
+  const tpl = TEMPLATES[id];
+  if (!tpl) return `
+    <div class="vz-card vz-card--soon">
+      <div class="vz-thumb"><span class="vz-badge vz-badge--soon">${esc(t('soon'))}</span></div>
+      <div class="vz-card-body"><h3>${esc(id)}</h3><p>${esc(t('soon'))}</p></div>
+    </div>`;
+  return `
+    <a class="vz-card" href="#/t/${esc(id)}">
+      <div class="vz-thumb">
+        <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
+        ${tpl.thumb || ''}
+      </div>
+      <div class="vz-card-body">
+        <h3>${esc(tpl.title)}</h3>
+        <p>${esc(tpl.sub || '')}</p>
+      </div>
+    </a>`;
+}
+
+/** Die Kapitelspalte links — auf jeder Uebersichtsseite dieselbe. */
+function kapitelSpalte(aktiv){
+  const zeilen = GROUPS.map(g => `
+    <a class="vz-nav-zeile${g.id === aktiv ? ' is-aktiv' : ''}" href="#/k/${esc(g.id)}">
+      <span>${esc(g.title)}</span>
+      <em>${kapitelZahl(g)}</em>
+    </a>`).join('');
+  return `
+    <nav class="vz-nav" aria-label="${esc(t('chapters'))}">
+      <a class="vz-nav-zeile${!aktiv ? ' is-aktiv' : ''}" href="#/">
+        <span>${esc(t('startPage'))}</span>
+        <em>${ORDER.filter(id => TEMPLATES[id]).length}</em>
+      </a>
+      <p class="vz-nav-titel">${esc(t('chapters'))}</p>
+      ${zeilen}
+    </nav>`;
+}
+
+/** Gemeinsamer Rahmen: Kapitelspalte links, Inhalt rechts. */
+function uebersicht(aktiv, inhalt){
+  view().innerHTML = `
+    <div class="vz-uebersicht">
+      ${kapitelSpalte(aktiv)}
+      <div class="vz-inhalt">${inhalt}</div>
+    </div>`;
+}
+
 function renderHub(){
   setPageSize('a4');
-  const groups = GROUPS.map(g => {
-    const cards = g.ids.map(id => {
-      const tpl = TEMPLATES[id];
-      if (!tpl) return `
-        <div class="vz-card vz-card--soon">
-          <div class="vz-thumb"><span class="vz-badge vz-badge--soon">${esc(t('soon'))}</span></div>
-          <div class="vz-card-body"><h3>${esc(id)}</h3><p>${esc(t('soon'))}</p></div>
-        </div>`;
-      return `
-        <button class="vz-card" data-id="${esc(id)}">
-          <div class="vz-thumb">
-            <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
-            ${tpl.thumb || ''}
-          </div>
-          <div class="vz-card-body">
-            <h3>${esc(tpl.title)}</h3>
-            <p>${esc(tpl.sub || '')}</p>
-          </div>
-        </button>`;
-    }).join('');
-    return `<section class="vz-group" id="kat-${esc(g.id || '')}">
-      <h2>${esc(g.title)}</h2>
-      ${g.note ? `<p class="vz-group-note">${esc(g.note)}</p>` : ''}
-      <div class="vz-cards">${cards}</div></section>`;
-  }).join('');
+  const zuletzt = verlauf().filter(id => TEMPLATES[id]).slice(0, 4);
 
-  view().innerHTML = `
-    <div class="vz-hub">
-      <header class="vz-hero">
-        <p class="eyebrow">${esc(t('heroEyebrow'))}</p>
-        <h1>${esc(t('heroTitle'))}</h1>
-        <p>${esc(t('heroLede'))}</p>
-      </header>
-      ${groups}
-      <section class="vz-group">
-        <h2>${esc(t('help'))}</h2>
-        <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;
-             font-size:13px;line-height:1.7;color:var(--ink-soft);max-width:74ch">
-          <b style="color:var(--navy)">1.</b> Vorlage anklicken &nbsp;·&nbsp;
-          <b style="color:var(--navy)">2.</b> links Texte anpassen &nbsp;·&nbsp;
-          <b style="color:var(--navy)">3.</b> <b style="color:var(--navy)">Drucken / PDF</b> wählen.<br>
-          Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen.
-          Aenderungen bleiben im Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt —
-          jede Person am eigenen Gerät. Ein fertiges Blatt geht mit
-          <b>Link teilen</b> an die anderen: die Adresse trägt den ganzen Aushang.
-        </div>
-      </section>
-    </div>`;
+  const kacheln = GROUPS.map(g => `
+    <a class="vz-kachel" href="#/k/${esc(g.id)}">
+      <span class="vz-kachel-zahl">${kapitelZahl(g)}</span>
+      <b>${esc(g.title)}</b>
+      ${g.note ? `<i>${esc(g.note)}</i>` : ''}
+    </a>`).join('');
 
-  view().querySelectorAll('.vz-card[data-id]').forEach(c => {
-    c.onclick = () => { location.hash = '#/t/' + c.dataset.id; };
-  });
+  uebersicht(null, `
+    <header class="vz-hero">
+      <p class="eyebrow">${esc(t('heroEyebrow'))}</p>
+      <h1>${esc(t('heroTitle'))}</h1>
+      <p>${esc(t('heroLede'))}</p>
+    </header>
+
+    ${zuletzt.length ? `
+    <section class="vz-block">
+      <h2>${esc(t('recent'))}</h2>
+      <div class="vz-cards vz-cards--klein">${zuletzt.map(karte).join('')}</div>
+    </section>` : ''}
+
+    <section class="vz-block">
+      <h2>${esc(t('chapters'))}</h2>
+      <div class="vz-kacheln">${kacheln}</div>
+    </section>
+
+    <section class="vz-block">
+      <h2>${esc(t('help'))}</h2>
+      <ol class="vz-schritte">
+        <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
+        <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
+        <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+      </ol>
+      <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
+    </section>`);
+}
+
+function renderKategorie(katId){
+  setPageSize('a4');
+  const g = GROUPS.find(x => x.id === katId);
+  if (!g){ renderHub(); return; }
+
+  uebersicht(g.id, `
+    <nav class="vz-krumen" aria-label="Pfad">
+      <a href="#/">${esc(t('startPage'))}</a><span>›</span><b>${esc(g.title)}</b>
+    </nav>
+    <header class="vz-kap-kopf">
+      <h1>${esc(g.title)}</h1>
+      ${g.note ? `<p>${esc(g.note)}</p>` : ''}
+    </header>
+    <div class="vz-cards">${g.ids.map(karte).join('')}</div>`);
 }
 
 /* ---------- Formular-Erzeugung ------------------------------------------- */
@@ -8159,12 +8693,53 @@ function listHtml(f, arr, base){
     ${f.hint ? `<span class="vz-hint">${f.hint}</span>` : ''}</div>`;
 }
 
+/* Die Felder einer Vorlage in Kapitel schneiden. Jede `{t:'group'}`-Marke
+   beginnt ein neues; was davor steht, kommt in ein erstes Kapitel ohne
+   eigenen Namen. */
+function kapitelVon(tpl){
+  const kap = [];
+  let jetzt = null;
+  for (const f of tpl.fields){
+    if (f.t === 'group'){ jetzt = { label:f.label, felder:[] }; kap.push(jetzt); continue; }
+    if (!jetzt){ jetzt = { label:'', felder:[] }; kap.push(jetzt); }
+    jetzt.felder.push(f);
+  }
+  return kap.filter(k => k.felder.length);
+}
+
+function offenKey(id){ return 'kap:' + id; }
+
+/** Welche Kapitel sind aufgeklappt? Voreinstellung: nur das erste. */
+function offeneKapitel(tpl){
+  const gespeichert = store.load(offenKey(tpl.id), null);
+  if (Array.isArray(gespeichert)) return new Set(gespeichert.map(Number));
+  return new Set([0]);
+}
+function offeneKapitelSichern(tpl, menge){
+  store.save(offenKey(tpl.id), Array.from(menge));
+}
+
 function buildForm(tpl, state){
-  return tpl.fields.map(f => {
-    if (f.t === 'group') return `<div class="vz-fgroup">${esc(f.label)}</div>`;
-    if (f.t === 'note')  return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
-    if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
-    return fieldHtml(f, getPath(state, f.k), f.k);
+  const kapitel = kapitelVon(tpl);
+  const offen = offeneKapitel(tpl);
+
+  return kapitel.map((k, i) => {
+    const inhalt = k.felder.map(f => {
+      if (f.t === 'note') return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
+      if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
+      return fieldHtml(f, getPath(state, f.k), f.k);
+    }).join('');
+    const auf = offen.has(i);
+    return `
+      <section class="vz-kap${auf ? ' is-offen' : ''}" data-kap="${i}">
+        <button type="button" class="vz-kap-kopfzeile" data-kaptoggle="${i}"
+                aria-expanded="${auf}">
+          <span class="vz-kap-nr">${i + 1}</span>
+          <span class="vz-kap-name">${esc(k.label || t('preview'))}</span>
+          <span class="vz-kap-pfeil" aria-hidden="true"></span>
+        </button>
+        <div class="vz-kap-inhalt">${inhalt}</div>
+      </section>`;
   }).join('');
 }
 
@@ -8186,19 +8761,41 @@ function setPath(state, path, value){
 }
 
 /* ---------- Editor -------------------------------------------------------- */
-function renderEditor(id, geteilt){
+function renderEditor(id, geteilt, suchwert){
   const tpl = TEMPLATES[id];
   if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
   if (geteilt){ uebernehmeGeteilt(tpl, geteilt); return; }
 
   const state = loadState(tpl);
+
+  /* Aus der Suche gekommen: die Vorlage gleich auf den gewählten Baustein,
+     das gewählte Zeichen oder die gewählte Fraktion stellen. Die Adresse
+     wird danach aufgeräumt, damit ein Neuladen nichts überschreibt. */
+  if (suchwert && typeof tpl.ausSuche === 'function'){
+    const naechster = tpl.ausSuche({ ...state }, suchwert);
+    if (naechster && typeof naechster === 'object'){
+      Object.keys(state).forEach(x => { delete state[x]; });
+      Object.assign(state, naechster);
+      saveState(tpl, state);
+    }
+  }
+  if (suchwert){
+    history.replaceState(null, '', location.href.split('#')[0] + '#/t/' + tpl.id);
+  }
   unmountActive();
   setPageSize(pageOf(tpl, state));
+
+  const gruppe = gruppeVon(tpl.id);
+  merken(tpl.id);
 
   view().innerHTML = `
     <div class="vz-editor">
       <aside class="vz-panel no-print">
-        <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-back">&#8592; ${esc(t('back'))}</button>
+        <nav class="vz-krumen" aria-label="Pfad">
+          <a href="#/">${esc(t('startPage'))}</a><span>›</span>
+          ${gruppe ? `<a href="#/k/${esc(gruppe.id)}">${esc(gruppe.title)}</a><span>›</span>` : ''}
+          <b>${esc(tpl.title)}</b>
+        </nav>
         <div class="vz-panel-head">
           <h2>${esc(tpl.title)}</h2>
           <p>${esc(tpl.sub || '')}</p>
@@ -8216,11 +8813,18 @@ function renderEditor(id, geteilt){
         ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
         ${tpl.fern ? '<div class="vz-kontrast" id="vz-kontrast"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
+        <div class="vz-formkopf">
+          <span>${esc(t('chapters'))}</span>
+          <button type="button" class="vz-mini-link" id="vz-alle-kap"></button>
+        </div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
-      <div class="vz-stage" id="vz-stage">
-        <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+      <div class="vz-buehne">
+        <div class="vz-leiste no-print" id="vz-leiste"></div>
+        <div class="vz-stage" id="vz-stage">
+          <div class="vz-scaler" id="vz-scaler">
+            <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+          </div>
         </div>
       </div>
     </div>`;
@@ -8229,6 +8833,12 @@ function renderEditor(id, geteilt){
   const sheet  = document.getElementById('vz-sheet');
   const scaler = document.getElementById('vz-scaler');
   const fitBox = document.getElementById('vz-fit');
+  const leiste = document.getElementById('vz-leiste');
+
+  /* 'fit' passt das Blatt in die Buehne; eine Zahl ist ein fester Massstab.
+     Die Wahl bleibt fuer diese Vorlage gespeichert — wer am Plan-Editor
+     zieht, will nicht bei jedem Wechsel neu zoomen. */
+  let zoom = store.load('zoom:' + tpl.id, 'fit');
 
   function paint(){
     unmountActive();
@@ -8251,15 +8861,95 @@ function renderEditor(id, geteilt){
     checkFit();
     checkFern();
     checkKontrast();
+    zeichneLeiste();
   }
-  function fitScaler(){
+
+  /** Der Massstab, mit dem gerade gezeichnet wird. */
+  function massstab(){
     const stage = document.getElementById('vz-stage');
-    if (!stage) return;
-    const avail = stage.clientWidth - 56;
-    const s = Math.min(1, avail / sheet.offsetWidth);
-    scaler.style.transform = `scale(${s})`;
-    scaler.style.height = (sheet.offsetHeight * s) + 'px';
+    if (!stage || !sheet.offsetWidth) return 1;
+    if (zoom === 'fit') return Math.min(1, (stage.clientWidth - 56) / sheet.offsetWidth);
+    return Number(zoom) || 1;
+  }
+
+  function fitScaler(){
+    const m = massstab();
+    scaler.style.transform = `scale(${m})`;
+    scaler.style.height = (sheet.offsetHeight * m) + 'px';
     scaler.style.width  = sheet.offsetWidth + 'px';
+  }
+
+  /* Die Leiste ueber der Vorschau: Seitenzaehler links, Massstab rechts.
+     Der Seitenzaehler erscheint nur, wenn es wirklich mehrere Seiten gibt. */
+  function zeichneLeiste(){
+    if (!leiste) return;
+    const seiten = sheet.querySelectorAll('[data-page]').length;
+    const stufen = [['fit', t('zoomFit')], [0.5, '50 %'], [0.75, '75 %'],
+                    [1, '100 %'], [1.5, '150 %'], [2, '200 %']];
+    leiste.innerHTML = `
+      <div class="vz-leiste-links">
+        <span class="vz-papier">${esc(PAGE_NAME[pageOf(tpl, state)] || '')}</span>
+        ${seiten > 1 ? `
+        <button type="button" class="vz-mini" data-seite="-1" title="${esc(t('pageOf'))} zurück">&#8593;</button>
+        <select class="vz-seitenwahl" id="vz-seitenwahl" aria-label="${esc(t('pageOf'))}">
+          ${Array.from({ length:seiten }, (_, i) =>
+            `<option value="${i}">${esc(t('pageOf'))} ${i + 1} / ${seiten}</option>`).join('')}
+        </select>
+        <button type="button" class="vz-mini" data-seite="1" title="${esc(t('pageOf'))} vor">&#8595;</button>` : ''}
+      </div>
+      <div class="vz-leiste-rechts">
+        <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
+        <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
+          ${stufen.map(([v, l]) =>
+            `<option value="${v}"${String(v) === String(zoom) ? ' selected' : ''}>${esc(l)}</option>`).join('')}
+        </select>
+        <button type="button" class="vz-mini" data-zoom="rein" title="grösser">&#43;</button>
+      </div>`;
+  }
+
+  /** Zum n-ten Blatt scrollen. */
+  function zurSeite(n){
+    const seiten = Array.from(sheet.querySelectorAll('[data-page]'));
+    if (!seiten.length) return;
+    const i = Math.max(0, Math.min(seiten.length - 1, n));
+    const stage = document.getElementById('vz-stage');
+    const m = massstab();
+    stage.scrollTo({ top:Math.max(0, seiten[i].offsetTop * m - 18), behavior:'smooth' });
+    const wahl = document.getElementById('vz-seitenwahl');
+    if (wahl) wahl.value = String(i);
+  }
+
+  function setzeZoom(wert){
+    zoom = wert;
+    store.save('zoom:' + tpl.id, wert);
+    fitScaler();
+    zeichneLeiste();
+  }
+
+  if (leiste){
+    leiste.addEventListener('click', ev => {
+      const s = ev.target.closest('[data-seite]');
+      if (s){
+        const wahl = document.getElementById('vz-seitenwahl');
+        zurSeite(Number(wahl ? wahl.value : 0) + Number(s.dataset.seite));
+        return;
+      }
+      const z = ev.target.closest('[data-zoom]');
+      if (z){
+        const stufen = [0.5, 0.75, 1, 1.5, 2];
+        const jetzt = zoom === 'fit' ? massstab() : Number(zoom);
+        const naechste = z.dataset.zoom === 'rein'
+          ? stufen.find(v => v > jetzt + 0.01)
+          : [...stufen].reverse().find(v => v < jetzt - 0.01);
+        if (naechste) setzeZoom(naechste);
+      }
+    });
+    leiste.addEventListener('change', ev => {
+      if (ev.target.id === 'vz-zoomwahl'){
+        setzeZoom(ev.target.value === 'fit' ? 'fit' : Number(ev.target.value));
+      }
+      if (ev.target.id === 'vz-seitenwahl') zurSeite(Number(ev.target.value));
+    });
   }
   function checkFit(){
     const max = PAGE_MAX_H[pageOf(tpl, state)] || 1123;
@@ -8317,6 +9007,46 @@ function renderEditor(id, geteilt){
     const slot = ev.target.closest('[data-imgslot]');
     if (slot && ev.target.files && ev.target.files[0]) readImage(ev.target.files[0], slot.dataset.imgslot);
   });
+
+  /* Kapitel auf- und zuklappen. Der Zustand haelt sich je Vorlage. */
+  function kapitelZustand(){
+    const menge = new Set();
+    form.querySelectorAll('.vz-kap.is-offen').forEach(k => menge.add(Number(k.dataset.kap)));
+    return menge;
+  }
+  function alleKapitelKnopf(){
+    const knopf = document.getElementById('vz-alle-kap');
+    if (!knopf) return;
+    const zu = form.querySelectorAll('.vz-kap:not(.is-offen)').length;
+    knopf.textContent = zu ? t('allOpen') : t('allClosed');
+    knopf.dataset.auf = zu ? 'ja' : 'nein';
+  }
+
+  form.addEventListener('click', ev => {
+    const kap = ev.target.closest('[data-kaptoggle]');
+    if (kap){
+      const sek = kap.closest('.vz-kap');
+      const offen = sek.classList.toggle('is-offen');
+      kap.setAttribute('aria-expanded', String(offen));
+      offeneKapitelSichern(tpl, kapitelZustand());
+      alleKapitelKnopf();
+      return;
+    }
+  });
+
+  const alleKap = document.getElementById('vz-alle-kap');
+  if (alleKap){
+    alleKap.onclick = () => {
+      const auf = alleKap.dataset.auf === 'ja';
+      form.querySelectorAll('.vz-kap').forEach(k => {
+        k.classList.toggle('is-offen', auf);
+        k.querySelector('[data-kaptoggle]').setAttribute('aria-expanded', String(auf));
+      });
+      offeneKapitelSichern(tpl, kapitelZustand());
+      alleKapitelKnopf();
+    };
+    alleKapitelKnopf();
+  }
 
   /* Bild: Drag & Drop + Klick */
   form.addEventListener('click', ev => {
@@ -8396,10 +9126,11 @@ function renderEditor(id, geteilt){
     const scroll = form.scrollTop;
     form.innerHTML = buildForm(tpl, state);
     form.scrollTop = scroll;
+    alleKapitelKnopf();
   }
 
-  /* Aktionen */
-  document.getElementById('vz-back').onclick  = () => { location.hash = '#/'; };
+  /* Aktionen — zurueck geht ueber die Krumenleiste oben, nicht ueber einen
+     eigenen Knopf. */
   document.getElementById('vz-print').onclick = () => printSheet();
   document.getElementById('vz-png').onclick   = async (ev) => {
     const btn = ev.currentTarget; const old = btn.textContent;
@@ -8514,11 +9245,37 @@ function toast(msg){
 function route(){
   unmountActive();
   const hash = location.hash || '#/';
-  /* #/t/<vorlage> — optional mit geteiltem Zustand: ?d=<Nutzlast> */
-  const m = /^#\/t\/([\w-]+)(?:\?d=([A-Za-z0-9\-_]+))?/.exec(hash);
   window.scrollTo(0, 0);
-  if (m) renderEditor(m[1], m[2] || null); else renderHub();
+
+  /* #/k/<kapitel> — eine Kategorieseite */
+  const k = /^#\/k\/([\w-]+)/.exec(hash);
+  if (k){ renderKategorie(k[1]); return; }
+
+  /* #/t/<vorlage> — der Editor. Optional:
+       ?d=<Nutzlast>  ein geteilter Entwurf
+       ?w=<Wert>      ein Treffer aus der Suche (Baustein, Zeichen, Fraktion) */
+  const m = /^#\/t\/([\w-]+)(?:\?(?:d=([A-Za-z0-9\-_]+)|w=([^&]*)))?/.exec(hash);
+  if (m){
+    renderEditor(m[1], m[2] || null, m[3] ? decodeURIComponent(m[3]) : null);
+    return;
+  }
+  renderHub();
 }
+
+/* ---------- Tastatur ------------------------------------------------------ */
+/* "/" springt in die Suche, Escape kommt zurueck. Zwei Kuerzel reichen —
+   mehr merkt sich im Alltag niemand. */
+document.addEventListener('keydown', ev => {
+  const imFeld = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+  if (ev.key === '/' && !imFeld && !ev.metaKey && !ev.ctrlKey){
+    const feld = document.getElementById('vz-suchfeld');
+    if (feld){ ev.preventDefault(); feld.focus(); feld.select(); }
+    return;
+  }
+  if (ev.key === 'Escape' && !imFeld && /^#\/t\//.test(location.hash)){
+    location.hash = '#/';
+  }
+});
 
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();

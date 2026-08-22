@@ -9,8 +9,23 @@ const problems = [];
 page.on('pageerror', e => problems.push('JS-FEHLER: ' + e.message));
 const check = (ok, was) => { console.log(`${ok ? '✓' : '✗'} ${was}`); if (!ok) problems.push(was); };
 
-await page.goto(BASE + '/index.html#/t/notruf', { waitUntil:'networkidle' });
-await page.waitForSelector('#vz-sheet');
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   fuer Playwright unsichtbar. Vor dem Bedienen also alles aufklappen — genau
+   das tut auch eine Person, die alle Felder sehen will. */
+async function alleKapitelOeffnen(){
+  await page.waitForSelector('#vz-alle-kap');
+  const knopf = page.locator('#vz-alle-kap');
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
+async function zumEditor(id){
+  await page.goto(`${BASE}/index.html#/t/${id}`, { waitUntil:'networkidle' });
+  await page.waitForSelector('#vz-sheet');
+  await alleKapitelOeffnen();
+}
+
+await zumEditor('notruf');
 
 /* 1 · Tippen aktualisiert die Vorschau und der Fokus bleibt im Feld */
 const titel = page.locator('#f-title');
@@ -24,9 +39,10 @@ check(await page.evaluate(() => document.activeElement.id) === 'f-title', 'Fokus
 await page.reload({ waitUntil:'networkidle' });
 await page.waitForSelector('#vz-sheet h1');
 check(await page.locator('#vz-sheet h1').innerText() === 'Notfallnummern', 'Entwurf bleibt gespeichert');
+await alleKapitelOeffnen();
 
 /* 3 · Wiederholbare Zeilen: hinzufügen und löschen (Gäste-Info) */
-await page.goto(BASE + '/index.html#/t/aushang', { waitUntil:'networkidle' });
+await zumEditor('aushang');
 await page.waitForSelector('.t-aushang-row');
 const vorher = await page.locator('.t-aushang-row').count();
 await page.click('[data-add="rows"]');
@@ -38,8 +54,7 @@ check(await page.locator('.t-aushang-row').count() === vorher, 'Zeile gelöscht'
 page.on('dialog', d => d.accept());
 await page.click('#vz-reset');
 await page.waitForTimeout(200);
-await page.goto(BASE + '/index.html#/t/notruf', { waitUntil:'networkidle' });
-await page.waitForSelector('#vz-sheet h1');
+await zumEditor('notruf');
 
 /* 4 · Seitenkontrolle meldet Überlauf */
 await page.locator('#f-ledeDe').fill('Sehr langer Text. '.repeat(120));

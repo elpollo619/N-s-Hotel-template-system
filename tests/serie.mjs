@@ -14,6 +14,15 @@ function pruefe(name, ok, dazu){
   if (!ok) fehler.push(name + (dazu ? ': ' + dazu : ''));
 }
 
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   für Playwright unsichtbar. Vor dem Bedienen also alles aufklappen. */
+async function alleKapitelOeffnen(){
+  const knopf = page.locator('#vz-alle-kap');
+  if (!(await knopf.count())) return;
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
 await page.goto(BASE + '/index.html', { waitUntil:'networkidle' });
 
 async function zeichne(id, teil){
@@ -25,6 +34,7 @@ async function zeichne(id, teil){
   if (page.url().includes('#/t/' + id)) await page.reload({ waitUntil:'networkidle' });
   else await page.goto(`${BASE}/index.html#/t/${id}`, { waitUntil:'networkidle' });
   await page.waitForSelector('#vz-sheet');
+  await alleKapitelOeffnen();
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(200);
   return page.evaluate(() => {

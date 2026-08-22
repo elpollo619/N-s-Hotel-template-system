@@ -1,7 +1,17 @@
 /* ==========================================================================
    N's Hotel · Vorlagen-Zentrale — App-Kern
-   Router (Hash), Hub, Editor mit automatisch erzeugtem Formular,
-   Live-Vorschau, Speicherung und Export.
+
+   Aufbau der Oberflaeche, drei Ebenen:
+
+     #/            Startseite — Suche, zuletzt benutzt, die Kapitel
+     #/k/<kapitel> ein Kapitel mit seinen Vorlagen
+     #/t/<vorlage> der Editor
+
+   Warum ueberhaupt Kapitel? Achtzehn Vorlagen auf einer Seite sind eine
+   Wand. Wer den Waschplan sucht, will nicht an Sicherheitszeichen und
+   Etikettenbogen vorbeiscrollen. Dieselbe Ueberlegung im Editor: das
+   Formular ist in aufklappbare Kapitel geteilt, statt in einer Kolonne von
+   vierzig Feldern zu enden.
    ========================================================================== */
 import { TEMPLATES, ORDER, GROUPS } from './templates/index.js';
 import { esc, e, qs } from './lib/dom.js';
@@ -12,9 +22,20 @@ import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
+import { suche, trefferZiel, gruppeVon, ART_LABEL } from './lib/suche.js';
+import { verlauf, merken } from './lib/verlauf.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
+
+/* Klartext fuer die Leiste ueber der Vorschau — damit man sieht, auf welchem
+   Papier man gerade arbeitet, ohne im Formular nachzusehen. */
+const PAGE_NAME = {
+  'a4':'A4 hoch · 210 × 297 mm',       'a4-land':'A4 quer · 297 × 210 mm',
+  'a5':'A5 hoch · 148 × 210 mm',       'a5-land':'A5 quer · 210 × 148 mm',
+  'a3':'A3 hoch · 297 × 420 mm',       'a3-land':'A3 quer · 420 × 297 mm',
+  'letter':'Letter hoch',              'letter-land':'Letter quer'
+};
 
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
    Aufraeum-Funktion zurueck. Sie wird vor dem naechsten Zeichnen aufgerufen. */
@@ -52,6 +73,8 @@ function loadState(tpl){
 function saveState(tpl, state){ store.save(draftKey(tpl.id), state); }
 
 /* ---------- Topbar ------------------------------------------------------- */
+/* Die Suche steht oben und ist von ueberall erreichbar — auch mitten im
+   Editor. Mit "/" springt der Fokus hinein, ohne die Maus zu bemuehen. */
 function mountTopbar(){
   const bar = qs('.vz-topbar');
   bar.innerHTML = `
@@ -59,6 +82,12 @@ function mountTopbar(){
       ${logo('white', 30)}
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
     </button>
+    <div class="vz-suche" role="search">
+      <input id="vz-suchfeld" type="search" autocomplete="off" spellcheck="false"
+             placeholder="${esc(t('searchPlaceholder'))}" aria-label="${esc(t('search'))}">
+      <kbd>/</kbd>
+      <div class="vz-treffer" id="vz-treffer" hidden></div>
+    </div>
     <span class="vz-top-spacer"></span>
     <div class="vz-lang" role="group" aria-label="Sprache">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
@@ -68,63 +97,171 @@ function mountTopbar(){
   bar.querySelectorAll('[data-lang]').forEach(b => {
     b.onclick = () => { setLang(b.dataset.lang); mountTopbar(); route(); };
   });
+  mountSuche();
 }
 
-/* ---------- Hub ---------------------------------------------------------- */
+/* ---------- Suche im Kopf ------------------------------------------------ */
+let sucheAktiv = -1;
+
+function mountSuche(){
+  const feld = document.getElementById('vz-suchfeld');
+  const kasten = document.getElementById('vz-treffer');
+  if (!feld || !kasten) return;
+
+  function zeichne(){
+    const treffer = suche(feld.value, 10);
+    sucheAktiv = treffer.length ? 0 : -1;
+    if (!feld.value.trim()){ kasten.hidden = true; kasten.innerHTML = ''; return; }
+    kasten.hidden = false;
+    kasten.innerHTML = treffer.length
+      ? treffer.map((tr, i) => `
+        <a class="vz-treffer-zeile${i === 0 ? ' is-aktiv' : ''}" href="${trefferZiel(tr)}"
+           data-i="${i}">
+          <span class="vz-treffer-art vz-treffer-art--${esc(tr.art)}">${esc(ART_LABEL[tr.art])}</span>
+          <span class="vz-treffer-txt">
+            <b>${esc(tr.titel)}</b>
+            ${tr.unter ? `<i>${esc(tr.unter)}</i>` : ''}
+          </span>
+        </a>`).join('')
+      : `<p class="vz-treffer-leer">${esc(t('searchNone'))}</p>`;
+  }
+
+  function schliessen(){ kasten.hidden = true; sucheAktiv = -1; }
+
+  feld.addEventListener('input', zeichne);
+  feld.addEventListener('focus', () => { if (feld.value.trim()) zeichne(); });
+  feld.addEventListener('keydown', ev => {
+    const zeilen = Array.from(kasten.querySelectorAll('.vz-treffer-zeile'));
+    if (ev.key === 'Escape'){ feld.value = ''; schliessen(); feld.blur(); return; }
+    if (!zeilen.length) return;
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      sucheAktiv = (sucheAktiv + (ev.key === 'ArrowDown' ? 1 : -1) + zeilen.length) % zeilen.length;
+      zeilen.forEach((z, i) => z.classList.toggle('is-aktiv', i === sucheAktiv));
+      zeilen[sucheAktiv].scrollIntoView({ block:'nearest' });
+    }
+    if (ev.key === 'Enter'){
+      ev.preventDefault();
+      const ziel = zeilen[Math.max(0, sucheAktiv)];
+      if (ziel){ location.hash = ziel.getAttribute('href'); feld.value = ''; schliessen(); feld.blur(); }
+    }
+  });
+  kasten.addEventListener('mousedown', ev => {
+    const z = ev.target.closest('.vz-treffer-zeile');
+    if (z){ feld.value = ''; setTimeout(schliessen, 0); }
+  });
+  document.addEventListener('click', ev => {
+    if (!ev.target.closest('.vz-suche')) schliessen();
+  });
+}
+
+/* ---------- Startseite und Kapitel --------------------------------------- */
+
+/** Wie viele Vorlagen ein Kapitel wirklich hat (leere Platzhalter zaehlen nicht). */
+function kapitelZahl(g){ return g.ids.filter(id => TEMPLATES[id]).length; }
+
+/** Eine Vorlagenkarte. */
+function karte(id){
+  const tpl = TEMPLATES[id];
+  if (!tpl) return `
+    <div class="vz-card vz-card--soon">
+      <div class="vz-thumb"><span class="vz-badge vz-badge--soon">${esc(t('soon'))}</span></div>
+      <div class="vz-card-body"><h3>${esc(id)}</h3><p>${esc(t('soon'))}</p></div>
+    </div>`;
+  return `
+    <a class="vz-card" href="#/t/${esc(id)}">
+      <div class="vz-thumb">
+        <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
+        ${tpl.thumb || ''}
+      </div>
+      <div class="vz-card-body">
+        <h3>${esc(tpl.title)}</h3>
+        <p>${esc(tpl.sub || '')}</p>
+      </div>
+    </a>`;
+}
+
+/** Die Kapitelspalte links — auf jeder Uebersichtsseite dieselbe. */
+function kapitelSpalte(aktiv){
+  const zeilen = GROUPS.map(g => `
+    <a class="vz-nav-zeile${g.id === aktiv ? ' is-aktiv' : ''}" href="#/k/${esc(g.id)}">
+      <span>${esc(g.title)}</span>
+      <em>${kapitelZahl(g)}</em>
+    </a>`).join('');
+  return `
+    <nav class="vz-nav" aria-label="${esc(t('chapters'))}">
+      <a class="vz-nav-zeile${!aktiv ? ' is-aktiv' : ''}" href="#/">
+        <span>${esc(t('startPage'))}</span>
+        <em>${ORDER.filter(id => TEMPLATES[id]).length}</em>
+      </a>
+      <p class="vz-nav-titel">${esc(t('chapters'))}</p>
+      ${zeilen}
+    </nav>`;
+}
+
+/** Gemeinsamer Rahmen: Kapitelspalte links, Inhalt rechts. */
+function uebersicht(aktiv, inhalt){
+  view().innerHTML = `
+    <div class="vz-uebersicht">
+      ${kapitelSpalte(aktiv)}
+      <div class="vz-inhalt">${inhalt}</div>
+    </div>`;
+}
+
 function renderHub(){
   setPageSize('a4');
-  const groups = GROUPS.map(g => {
-    const cards = g.ids.map(id => {
-      const tpl = TEMPLATES[id];
-      if (!tpl) return `
-        <div class="vz-card vz-card--soon">
-          <div class="vz-thumb"><span class="vz-badge vz-badge--soon">${esc(t('soon'))}</span></div>
-          <div class="vz-card-body"><h3>${esc(id)}</h3><p>${esc(t('soon'))}</p></div>
-        </div>`;
-      return `
-        <button class="vz-card" data-id="${esc(id)}">
-          <div class="vz-thumb">
-            <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
-            ${tpl.thumb || ''}
-          </div>
-          <div class="vz-card-body">
-            <h3>${esc(tpl.title)}</h3>
-            <p>${esc(tpl.sub || '')}</p>
-          </div>
-        </button>`;
-    }).join('');
-    return `<section class="vz-group" id="kat-${esc(g.id || '')}">
-      <h2>${esc(g.title)}</h2>
-      ${g.note ? `<p class="vz-group-note">${esc(g.note)}</p>` : ''}
-      <div class="vz-cards">${cards}</div></section>`;
-  }).join('');
+  const zuletzt = verlauf().filter(id => TEMPLATES[id]).slice(0, 4);
 
-  view().innerHTML = `
-    <div class="vz-hub">
-      <header class="vz-hero">
-        <p class="eyebrow">${esc(t('heroEyebrow'))}</p>
-        <h1>${esc(t('heroTitle'))}</h1>
-        <p>${esc(t('heroLede'))}</p>
-      </header>
-      ${groups}
-      <section class="vz-group">
-        <h2>${esc(t('help'))}</h2>
-        <div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;
-             font-size:13px;line-height:1.7;color:var(--ink-soft);max-width:74ch">
-          <b style="color:var(--navy)">1.</b> Vorlage anklicken &nbsp;·&nbsp;
-          <b style="color:var(--navy)">2.</b> links Texte anpassen &nbsp;·&nbsp;
-          <b style="color:var(--navy)">3.</b> <b style="color:var(--navy)">Drucken / PDF</b> wählen.<br>
-          Im Druckdialog <b>Ränder: keine</b> und <b>Hintergrundgrafiken: ein</b> einstellen.
-          Aenderungen bleiben im Browser gespeichert, bis jemand <b>Zurücksetzen</b> drückt —
-          jede Person am eigenen Gerät. Ein fertiges Blatt geht mit
-          <b>Link teilen</b> an die anderen: die Adresse trägt den ganzen Aushang.
-        </div>
-      </section>
-    </div>`;
+  const kacheln = GROUPS.map(g => `
+    <a class="vz-kachel" href="#/k/${esc(g.id)}">
+      <span class="vz-kachel-zahl">${kapitelZahl(g)}</span>
+      <b>${esc(g.title)}</b>
+      ${g.note ? `<i>${esc(g.note)}</i>` : ''}
+    </a>`).join('');
 
-  view().querySelectorAll('.vz-card[data-id]').forEach(c => {
-    c.onclick = () => { location.hash = '#/t/' + c.dataset.id; };
-  });
+  uebersicht(null, `
+    <header class="vz-hero">
+      <p class="eyebrow">${esc(t('heroEyebrow'))}</p>
+      <h1>${esc(t('heroTitle'))}</h1>
+      <p>${esc(t('heroLede'))}</p>
+    </header>
+
+    ${zuletzt.length ? `
+    <section class="vz-block">
+      <h2>${esc(t('recent'))}</h2>
+      <div class="vz-cards vz-cards--klein">${zuletzt.map(karte).join('')}</div>
+    </section>` : ''}
+
+    <section class="vz-block">
+      <h2>${esc(t('chapters'))}</h2>
+      <div class="vz-kacheln">${kacheln}</div>
+    </section>
+
+    <section class="vz-block">
+      <h2>${esc(t('help'))}</h2>
+      <ol class="vz-schritte">
+        <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
+        <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
+        <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+      </ol>
+      <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
+    </section>`);
+}
+
+function renderKategorie(katId){
+  setPageSize('a4');
+  const g = GROUPS.find(x => x.id === katId);
+  if (!g){ renderHub(); return; }
+
+  uebersicht(g.id, `
+    <nav class="vz-krumen" aria-label="Pfad">
+      <a href="#/">${esc(t('startPage'))}</a><span>›</span><b>${esc(g.title)}</b>
+    </nav>
+    <header class="vz-kap-kopf">
+      <h1>${esc(g.title)}</h1>
+      ${g.note ? `<p>${esc(g.note)}</p>` : ''}
+    </header>
+    <div class="vz-cards">${g.ids.map(karte).join('')}</div>`);
 }
 
 /* ---------- Formular-Erzeugung ------------------------------------------- */
@@ -210,12 +347,53 @@ function listHtml(f, arr, base){
     ${f.hint ? `<span class="vz-hint">${f.hint}</span>` : ''}</div>`;
 }
 
+/* Die Felder einer Vorlage in Kapitel schneiden. Jede `{t:'group'}`-Marke
+   beginnt ein neues; was davor steht, kommt in ein erstes Kapitel ohne
+   eigenen Namen. */
+function kapitelVon(tpl){
+  const kap = [];
+  let jetzt = null;
+  for (const f of tpl.fields){
+    if (f.t === 'group'){ jetzt = { label:f.label, felder:[] }; kap.push(jetzt); continue; }
+    if (!jetzt){ jetzt = { label:'', felder:[] }; kap.push(jetzt); }
+    jetzt.felder.push(f);
+  }
+  return kap.filter(k => k.felder.length);
+}
+
+function offenKey(id){ return 'kap:' + id; }
+
+/** Welche Kapitel sind aufgeklappt? Voreinstellung: nur das erste. */
+function offeneKapitel(tpl){
+  const gespeichert = store.load(offenKey(tpl.id), null);
+  if (Array.isArray(gespeichert)) return new Set(gespeichert.map(Number));
+  return new Set([0]);
+}
+function offeneKapitelSichern(tpl, menge){
+  store.save(offenKey(tpl.id), Array.from(menge));
+}
+
 function buildForm(tpl, state){
-  return tpl.fields.map(f => {
-    if (f.t === 'group') return `<div class="vz-fgroup">${esc(f.label)}</div>`;
-    if (f.t === 'note')  return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
-    if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
-    return fieldHtml(f, getPath(state, f.k), f.k);
+  const kapitel = kapitelVon(tpl);
+  const offen = offeneKapitel(tpl);
+
+  return kapitel.map((k, i) => {
+    const inhalt = k.felder.map(f => {
+      if (f.t === 'note') return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
+      if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
+      return fieldHtml(f, getPath(state, f.k), f.k);
+    }).join('');
+    const auf = offen.has(i);
+    return `
+      <section class="vz-kap${auf ? ' is-offen' : ''}" data-kap="${i}">
+        <button type="button" class="vz-kap-kopfzeile" data-kaptoggle="${i}"
+                aria-expanded="${auf}">
+          <span class="vz-kap-nr">${i + 1}</span>
+          <span class="vz-kap-name">${esc(k.label || t('preview'))}</span>
+          <span class="vz-kap-pfeil" aria-hidden="true"></span>
+        </button>
+        <div class="vz-kap-inhalt">${inhalt}</div>
+      </section>`;
   }).join('');
 }
 
@@ -237,19 +415,41 @@ function setPath(state, path, value){
 }
 
 /* ---------- Editor -------------------------------------------------------- */
-function renderEditor(id, geteilt){
+function renderEditor(id, geteilt, suchwert){
   const tpl = TEMPLATES[id];
   if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
   if (geteilt){ uebernehmeGeteilt(tpl, geteilt); return; }
 
   const state = loadState(tpl);
+
+  /* Aus der Suche gekommen: die Vorlage gleich auf den gewählten Baustein,
+     das gewählte Zeichen oder die gewählte Fraktion stellen. Die Adresse
+     wird danach aufgeräumt, damit ein Neuladen nichts überschreibt. */
+  if (suchwert && typeof tpl.ausSuche === 'function'){
+    const naechster = tpl.ausSuche({ ...state }, suchwert);
+    if (naechster && typeof naechster === 'object'){
+      Object.keys(state).forEach(x => { delete state[x]; });
+      Object.assign(state, naechster);
+      saveState(tpl, state);
+    }
+  }
+  if (suchwert){
+    history.replaceState(null, '', location.href.split('#')[0] + '#/t/' + tpl.id);
+  }
   unmountActive();
   setPageSize(pageOf(tpl, state));
+
+  const gruppe = gruppeVon(tpl.id);
+  merken(tpl.id);
 
   view().innerHTML = `
     <div class="vz-editor">
       <aside class="vz-panel no-print">
-        <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-back">&#8592; ${esc(t('back'))}</button>
+        <nav class="vz-krumen" aria-label="Pfad">
+          <a href="#/">${esc(t('startPage'))}</a><span>›</span>
+          ${gruppe ? `<a href="#/k/${esc(gruppe.id)}">${esc(gruppe.title)}</a><span>›</span>` : ''}
+          <b>${esc(tpl.title)}</b>
+        </nav>
         <div class="vz-panel-head">
           <h2>${esc(tpl.title)}</h2>
           <p>${esc(tpl.sub || '')}</p>
@@ -267,11 +467,18 @@ function renderEditor(id, geteilt){
         ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
         ${tpl.fern ? '<div class="vz-kontrast" id="vz-kontrast"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
+        <div class="vz-formkopf">
+          <span>${esc(t('chapters'))}</span>
+          <button type="button" class="vz-mini-link" id="vz-alle-kap"></button>
+        </div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
-      <div class="vz-stage" id="vz-stage">
-        <div class="vz-scaler" id="vz-scaler">
-          <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+      <div class="vz-buehne">
+        <div class="vz-leiste no-print" id="vz-leiste"></div>
+        <div class="vz-stage" id="vz-stage">
+          <div class="vz-scaler" id="vz-scaler">
+            <div class="sheet sheet--${esc(pageOf(tpl, state))}${istMehrseitig(tpl, state) ? ' sheet--multi' : ''} ${esc(tpl.root)}" id="vz-sheet"></div>
+          </div>
         </div>
       </div>
     </div>`;
@@ -280,6 +487,12 @@ function renderEditor(id, geteilt){
   const sheet  = document.getElementById('vz-sheet');
   const scaler = document.getElementById('vz-scaler');
   const fitBox = document.getElementById('vz-fit');
+  const leiste = document.getElementById('vz-leiste');
+
+  /* 'fit' passt das Blatt in die Buehne; eine Zahl ist ein fester Massstab.
+     Die Wahl bleibt fuer diese Vorlage gespeichert — wer am Plan-Editor
+     zieht, will nicht bei jedem Wechsel neu zoomen. */
+  let zoom = store.load('zoom:' + tpl.id, 'fit');
 
   function paint(){
     unmountActive();
@@ -302,15 +515,95 @@ function renderEditor(id, geteilt){
     checkFit();
     checkFern();
     checkKontrast();
+    zeichneLeiste();
   }
-  function fitScaler(){
+
+  /** Der Massstab, mit dem gerade gezeichnet wird. */
+  function massstab(){
     const stage = document.getElementById('vz-stage');
-    if (!stage) return;
-    const avail = stage.clientWidth - 56;
-    const s = Math.min(1, avail / sheet.offsetWidth);
-    scaler.style.transform = `scale(${s})`;
-    scaler.style.height = (sheet.offsetHeight * s) + 'px';
+    if (!stage || !sheet.offsetWidth) return 1;
+    if (zoom === 'fit') return Math.min(1, (stage.clientWidth - 56) / sheet.offsetWidth);
+    return Number(zoom) || 1;
+  }
+
+  function fitScaler(){
+    const m = massstab();
+    scaler.style.transform = `scale(${m})`;
+    scaler.style.height = (sheet.offsetHeight * m) + 'px';
     scaler.style.width  = sheet.offsetWidth + 'px';
+  }
+
+  /* Die Leiste ueber der Vorschau: Seitenzaehler links, Massstab rechts.
+     Der Seitenzaehler erscheint nur, wenn es wirklich mehrere Seiten gibt. */
+  function zeichneLeiste(){
+    if (!leiste) return;
+    const seiten = sheet.querySelectorAll('[data-page]').length;
+    const stufen = [['fit', t('zoomFit')], [0.5, '50 %'], [0.75, '75 %'],
+                    [1, '100 %'], [1.5, '150 %'], [2, '200 %']];
+    leiste.innerHTML = `
+      <div class="vz-leiste-links">
+        <span class="vz-papier">${esc(PAGE_NAME[pageOf(tpl, state)] || '')}</span>
+        ${seiten > 1 ? `
+        <button type="button" class="vz-mini" data-seite="-1" title="${esc(t('pageOf'))} zurück">&#8593;</button>
+        <select class="vz-seitenwahl" id="vz-seitenwahl" aria-label="${esc(t('pageOf'))}">
+          ${Array.from({ length:seiten }, (_, i) =>
+            `<option value="${i}">${esc(t('pageOf'))} ${i + 1} / ${seiten}</option>`).join('')}
+        </select>
+        <button type="button" class="vz-mini" data-seite="1" title="${esc(t('pageOf'))} vor">&#8595;</button>` : ''}
+      </div>
+      <div class="vz-leiste-rechts">
+        <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
+        <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
+          ${stufen.map(([v, l]) =>
+            `<option value="${v}"${String(v) === String(zoom) ? ' selected' : ''}>${esc(l)}</option>`).join('')}
+        </select>
+        <button type="button" class="vz-mini" data-zoom="rein" title="grösser">&#43;</button>
+      </div>`;
+  }
+
+  /** Zum n-ten Blatt scrollen. */
+  function zurSeite(n){
+    const seiten = Array.from(sheet.querySelectorAll('[data-page]'));
+    if (!seiten.length) return;
+    const i = Math.max(0, Math.min(seiten.length - 1, n));
+    const stage = document.getElementById('vz-stage');
+    const m = massstab();
+    stage.scrollTo({ top:Math.max(0, seiten[i].offsetTop * m - 18), behavior:'smooth' });
+    const wahl = document.getElementById('vz-seitenwahl');
+    if (wahl) wahl.value = String(i);
+  }
+
+  function setzeZoom(wert){
+    zoom = wert;
+    store.save('zoom:' + tpl.id, wert);
+    fitScaler();
+    zeichneLeiste();
+  }
+
+  if (leiste){
+    leiste.addEventListener('click', ev => {
+      const s = ev.target.closest('[data-seite]');
+      if (s){
+        const wahl = document.getElementById('vz-seitenwahl');
+        zurSeite(Number(wahl ? wahl.value : 0) + Number(s.dataset.seite));
+        return;
+      }
+      const z = ev.target.closest('[data-zoom]');
+      if (z){
+        const stufen = [0.5, 0.75, 1, 1.5, 2];
+        const jetzt = zoom === 'fit' ? massstab() : Number(zoom);
+        const naechste = z.dataset.zoom === 'rein'
+          ? stufen.find(v => v > jetzt + 0.01)
+          : [...stufen].reverse().find(v => v < jetzt - 0.01);
+        if (naechste) setzeZoom(naechste);
+      }
+    });
+    leiste.addEventListener('change', ev => {
+      if (ev.target.id === 'vz-zoomwahl'){
+        setzeZoom(ev.target.value === 'fit' ? 'fit' : Number(ev.target.value));
+      }
+      if (ev.target.id === 'vz-seitenwahl') zurSeite(Number(ev.target.value));
+    });
   }
   function checkFit(){
     const max = PAGE_MAX_H[pageOf(tpl, state)] || 1123;
@@ -368,6 +661,46 @@ function renderEditor(id, geteilt){
     const slot = ev.target.closest('[data-imgslot]');
     if (slot && ev.target.files && ev.target.files[0]) readImage(ev.target.files[0], slot.dataset.imgslot);
   });
+
+  /* Kapitel auf- und zuklappen. Der Zustand haelt sich je Vorlage. */
+  function kapitelZustand(){
+    const menge = new Set();
+    form.querySelectorAll('.vz-kap.is-offen').forEach(k => menge.add(Number(k.dataset.kap)));
+    return menge;
+  }
+  function alleKapitelKnopf(){
+    const knopf = document.getElementById('vz-alle-kap');
+    if (!knopf) return;
+    const zu = form.querySelectorAll('.vz-kap:not(.is-offen)').length;
+    knopf.textContent = zu ? t('allOpen') : t('allClosed');
+    knopf.dataset.auf = zu ? 'ja' : 'nein';
+  }
+
+  form.addEventListener('click', ev => {
+    const kap = ev.target.closest('[data-kaptoggle]');
+    if (kap){
+      const sek = kap.closest('.vz-kap');
+      const offen = sek.classList.toggle('is-offen');
+      kap.setAttribute('aria-expanded', String(offen));
+      offeneKapitelSichern(tpl, kapitelZustand());
+      alleKapitelKnopf();
+      return;
+    }
+  });
+
+  const alleKap = document.getElementById('vz-alle-kap');
+  if (alleKap){
+    alleKap.onclick = () => {
+      const auf = alleKap.dataset.auf === 'ja';
+      form.querySelectorAll('.vz-kap').forEach(k => {
+        k.classList.toggle('is-offen', auf);
+        k.querySelector('[data-kaptoggle]').setAttribute('aria-expanded', String(auf));
+      });
+      offeneKapitelSichern(tpl, kapitelZustand());
+      alleKapitelKnopf();
+    };
+    alleKapitelKnopf();
+  }
 
   /* Bild: Drag & Drop + Klick */
   form.addEventListener('click', ev => {
@@ -447,10 +780,11 @@ function renderEditor(id, geteilt){
     const scroll = form.scrollTop;
     form.innerHTML = buildForm(tpl, state);
     form.scrollTop = scroll;
+    alleKapitelKnopf();
   }
 
-  /* Aktionen */
-  document.getElementById('vz-back').onclick  = () => { location.hash = '#/'; };
+  /* Aktionen — zurueck geht ueber die Krumenleiste oben, nicht ueber einen
+     eigenen Knopf. */
   document.getElementById('vz-print').onclick = () => printSheet();
   document.getElementById('vz-png').onclick   = async (ev) => {
     const btn = ev.currentTarget; const old = btn.textContent;
@@ -565,11 +899,37 @@ function toast(msg){
 function route(){
   unmountActive();
   const hash = location.hash || '#/';
-  /* #/t/<vorlage> — optional mit geteiltem Zustand: ?d=<Nutzlast> */
-  const m = /^#\/t\/([\w-]+)(?:\?d=([A-Za-z0-9\-_]+))?/.exec(hash);
   window.scrollTo(0, 0);
-  if (m) renderEditor(m[1], m[2] || null); else renderHub();
+
+  /* #/k/<kapitel> — eine Kategorieseite */
+  const k = /^#\/k\/([\w-]+)/.exec(hash);
+  if (k){ renderKategorie(k[1]); return; }
+
+  /* #/t/<vorlage> — der Editor. Optional:
+       ?d=<Nutzlast>  ein geteilter Entwurf
+       ?w=<Wert>      ein Treffer aus der Suche (Baustein, Zeichen, Fraktion) */
+  const m = /^#\/t\/([\w-]+)(?:\?(?:d=([A-Za-z0-9\-_]+)|w=([^&]*)))?/.exec(hash);
+  if (m){
+    renderEditor(m[1], m[2] || null, m[3] ? decodeURIComponent(m[3]) : null);
+    return;
+  }
+  renderHub();
 }
+
+/* ---------- Tastatur ------------------------------------------------------ */
+/* "/" springt in die Suche, Escape kommt zurueck. Zwei Kuerzel reichen —
+   mehr merkt sich im Alltag niemand. */
+document.addEventListener('keydown', ev => {
+  const imFeld = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+  if (ev.key === '/' && !imFeld && !ev.metaKey && !ev.ctrlKey){
+    const feld = document.getElementById('vz-suchfeld');
+    if (feld){ ev.preventDefault(); feld.focus(); feld.select(); }
+    return;
+  }
+  if (ev.key === 'Escape' && !imFeld && /^#\/t\//.test(location.hash)){
+    location.hash = '#/';
+  }
+});
 
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();

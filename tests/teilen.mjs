@@ -16,9 +16,19 @@ function pruefe(name, ok, dazu){
   if (!ok) fehler.push(name + (dazu ? ': ' + dazu : ''));
 }
 
+/* Das Formular ist in aufklappbare Kapitel geteilt; zugeklappte Felder sind
+   für Playwright unsichtbar. Vor dem Bedienen also alles aufklappen. */
+async function alleKapitelOeffnen(){
+  const knopf = page.locator('#vz-alle-kap');
+  if (!(await knopf.count())) return;
+  if ((await knopf.textContent())?.includes('aufklappen')) await knopf.click();
+  await page.waitForTimeout(120);
+}
+
 /* ---------- 1. Zustand ändern und Link erzeugen ------------------------ */
 await page.goto(`${BASE}/index.html#/t/hinweis`, { waitUntil:'networkidle' });
 await page.waitForSelector('#vz-sheet');
+await alleKapitelOeffnen();
 
 const MARKE = 'Prüftext ÄÖÜ « » 42';
 await page.fill('#f-title', MARKE);
@@ -40,6 +50,8 @@ page2.on('pageerror', err => fehler.push('JS-FEHLER (Empfänger): ' + err.messag
 await page2.goto(link, { waitUntil:'networkidle' });
 await page2.waitForSelector('#vz-sheet');
 await page2.waitForTimeout(300);
+{ const k = page2.locator('#vz-alle-kap');
+  if (await k.count() && (await k.textContent())?.includes('aufklappen')) await k.click(); }
 
 const beim = await page2.evaluate(() => ({
   titel: document.getElementById('f-title')?.value || '',
@@ -53,6 +65,8 @@ pruefe('Adresse ist wieder sauber', beim.hash === '#/t/hinweis', beim.hash);
 /* Neu laden darf den Entwurf nicht wieder überschreiben, sondern behalten. */
 await page2.reload({ waitUntil:'networkidle' });
 await page2.waitForSelector('#f-title');
+{ const k = page2.locator('#vz-alle-kap');
+  if (await k.count() && (await k.textContent())?.includes('aufklappen')) await k.click(); }
 const nachher = await page2.inputValue('#f-title');
 pruefe('Nach dem Neuladen unverändert', nachher === MARKE, nachher);
 
