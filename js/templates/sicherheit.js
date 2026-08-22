@@ -11,6 +11,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { szSvg, szZeichen, szOptions, SZ_FARBEN } from '../lib/sicherheitszeichen.js';
+import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
 import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
@@ -49,8 +50,12 @@ export default {
       { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' }
     ] },
-    { k:'zweisprachig', label:'Englisch mitdrucken', type:'select',
-      options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen auf dem Schild', type:'checks', options:sprachOptions(),
+      hint:'Die erste Sprache steht gross, die weiteren kleiner darunter.' },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+    { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
 
     { t:'group', label:'Objekt' },
     { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
@@ -59,11 +64,11 @@ export default {
     { t:'group', label:'Schilder' },
     { t:'note', label:'Jede Zeile ergibt eine Druckseite. Der Text darf überschrieben werden — das Zeichen bleibt.' },
     { k:'rows', label:'Schilder', type:'list', itemLabel:'Schild', max:16,
-      defaultItem:{ zeichen:'rauchen-verboten', de:'', en:'', zusatz:'' },
+      defaultItem:{ zeichen:'rauchen-verboten', de:'', zusatz:'' },
       item:[
         { k:'zeichen', label:'Zeichen', type:'select', options:szOptions() },
-        { k:'de',      label:'Text (überschreibt)', type:'text' },
-        { k:'en',      label:'Englisch (überschreibt)', type:'text' },
+        { k:'de',      label:'Text überschreiben (Hauptsprache)', type:'text',
+          hint:'Leer lassen: der Normtext in allen gewählten Sprachen.' },
         { k:'zusatz',  label:'Zusatzzeile', type:'text',
           hint:'z. B. «gilt im ganzen Treppenhaus» oder eine Bussenhöhe' }
       ] },
@@ -74,30 +79,39 @@ export default {
 
   defaults:{
     format:'a5-land',
-    zweisprachig:'ja',
+    sprachen:['de','en'],
+    sprachSet:'',
     objekt:'-',
     absender:'immobilien',
     rows:[
-      { zeichen:'rauchen-verboten', de:'', en:'', zusatz:'Gilt im ganzen Treppenhaus' },
-      { zeichen:'abstellen-verboten', de:'', en:'', zusatz:'' }
+      { zeichen:'rauchen-verboten', de:'', zusatz:'Gilt im ganzen Treppenhaus' },
+      { zeichen:'abstellen-verboten', de:'', zusatz:'' }
     ],
     fussnote:'Danke für Ihr Verständnis.'
+  },
+
+  actions:{
+    setzeSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
   },
 
   render(d){
     const abs  = ABSENDER[d.absender] || ABSENDER.immobilien;
     const obj  = objekt(d.objekt);
     const adr  = objektAdresse(d.objekt);
-    const en   = d.zweisprachig !== 'nein';
+    const sprachen = sprachObjekte(d.sprachen);
     const page = SICHER_PAGES[d.format] || 'a5-land';
     const mass = SICHER_MASS[page] || 62;
     /* Bei Warnung sitzt der Text auf hellem Grund — sonst gleich behandelt. */
     const quer = page.endsWith('-land');
 
     return (d.rows || []).map(r => {
-      const z    = szZeichen(r.zeichen);
-      const txt  = has(r.de) ? r.de : z.de;
-      const txtE = has(r.en) ? r.en : z.en;
+      const z = szZeichen(r.zeichen);
+      /* Ist ein eigener Text gesetzt, ersetzt er die Hauptsprache; die
+         übrigen Sprachen bleiben beim Normtext. */
+      const zeile = (sp, i) => (i === 0 && has(r.de)) ? r.de : (z.text[sp.id] || '');
 
       return `
       <article data-page class="t-sicher-page${quer ? ' is-quer' : ''}"
@@ -107,8 +121,9 @@ export default {
         <div class="t-sicher-body">
           <div class="t-sicher-mark">${szSvg(z.art, z.pikto, mass)}</div>
           <div class="t-sicher-txt">
-            <h1>${esc(txt)}</h1>
-            ${en && has(txtE) ? `<p class="t-sicher-en" lang="en">${esc(txtE)}</p>` : ''}
+            <h1 lang="${sprachen[0].id}">${esc(zeile(sprachen[0], 0))}</h1>
+            ${sprachen.slice(1).map((sp, i) => has(zeile(sp, i + 1))
+              ? `<p class="t-sicher-mehr" lang="${sp.id}">${esc(zeile(sp, i + 1))}</p>` : '').join('')}
             ${has(r.zusatz) ? `<p class="t-sicher-zusatz">${esc(r.zusatz)}</p>` : ''}
           </div>
         </div>

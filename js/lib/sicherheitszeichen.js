@@ -20,6 +20,10 @@
    — Rauchverbot im Treppenhaus, Hinweis an der Waschküchentür — ist ein
    selbst gedrucktes Schild in der gewohnten Formensprache richtig.
 
+   Jedes Zeichen trägt seinen Text in sechs Sprachen (DE EN FR IT PT ES).
+   Ein Sicherheitszeichen wirkt zwar auch ohne Wort — das ist der Sinn der
+   Norm —, aber "Fluchtweg freihalten" versteht sich nicht von selbst.
+
    Farben: Annäherung der Sicherheitsfarben für den Bürodrucker.
    ========================================================================== */
 
@@ -139,42 +143,75 @@ export const SZ_PIKTO_KEYS = Object.keys(SZ_PIKTO);
    Fertige Zeichen — was im Haus wirklich gebraucht wird.
    -------------------------------------------------------------------------- */
 export const SZ_ZEICHEN = [
-  { id:'rauchen-verboten', art:'verbot',  pikto:'rauchen',
-    de:'Rauchen verboten', en:'No smoking' },
-  { id:'feuer-verboten', art:'verbot', pikto:'feuer',
-    de:'Feuer, offenes Licht und Rauchen verboten', en:'No open flame' },
-  { id:'zutritt-verboten', art:'verbot', pikto:'person',
-    de:'Zutritt für Unbefugte verboten', en:'No access for unauthorised persons' },
-  { id:'handy-verboten', art:'verbot', pikto:'handy',
-    de:'Mobiltelefone verboten', en:'No mobile phones' },
-  { id:'hunde-verboten', art:'verbot', pikto:'pfote',
-    de:'Hunde verboten', en:'No dogs' },
-  { id:'kein-trinkwasser', art:'verbot', pikto:'trinkwasser',
-    de:'Kein Trinkwasser', en:'Not drinking water' },
-  { id:'abstellen-verboten', art:'verbot', pikto:'kiste',
-    de:'Abstellen verboten — Fluchtweg freihalten', en:'Do not obstruct — keep escape route clear' },
+  { id:'rauchen-verboten', art:'verbot', pikto:'rauchen', text:{
+    de:'Rauchen verboten', en:'No smoking', fr:'Interdiction de fumer',
+    it:'Vietato fumare', pt:'Proibido fumar', es:'Prohibido fumar' } },
 
-  { id:'warnung-allgemein', art:'warnung', pikto:'ausruf',
-    de:'Achtung', en:'Warning' },
-  { id:'warnung-strom', art:'warnung', pikto:'blitz',
-    de:'Warnung vor elektrischer Spannung', en:'Electricity hazard' },
-  { id:'warnung-rutsch', art:'warnung', pikto:'rutsch',
-    de:'Rutschgefahr', en:'Slippery surface' },
+  { id:'feuer-verboten', art:'verbot', pikto:'feuer', text:{
+    de:'Feuer, offenes Licht und Rauchen verboten', en:'No open flame, fire or smoking',
+    fr:'Feu, flamme nue et cigarette interdits', it:'Vietati fuoco, fiamme libere e sigarette',
+    pt:'Proibido fogo, chama aberta e fumar', es:'Prohibido fuego, llama abierta y fumar' } },
 
-  { id:'gebot-haende', art:'gebot', pikto:'haende',
-    de:'Hände waschen', en:'Wash your hands' },
-  { id:'gebot-tuer', art:'gebot', pikto:'tuer',
-    de:'Tür geschlossen halten', en:'Keep door closed' },
+  { id:'zutritt-verboten', art:'verbot', pikto:'person', text:{
+    de:'Zutritt für Unbefugte verboten', en:'No access for unauthorised persons',
+    fr:'Accès interdit aux personnes non autorisées', it:'Vietato lʼaccesso ai non autorizzati',
+    pt:'Proibida a entrada a pessoas não autorizadas', es:'Prohibida la entrada a personas no autorizadas' } },
 
-  { id:'fluchtweg', art:'rettung', pikto:'fluchtweg',
-    de:'Notausgang', en:'Emergency exit' },
-  { id:'erste-hilfe', art:'rettung', pikto:'kreuz',
-    de:'Erste Hilfe', en:'First aid' },
-  { id:'sammelplatz', art:'rettung', pikto:'sammelplatz',
-    de:'Sammelplatz', en:'Assembly point' },
+  { id:'handy-verboten', art:'verbot', pikto:'handy', text:{
+    de:'Mobiltelefone verboten', en:'No mobile phones', fr:'Téléphones portables interdits',
+    it:'Vietato lʼuso di telefoni cellulari', pt:'Proibido o uso de telemóveis',
+    es:'Prohibido el uso de móviles' } },
 
-  { id:'feuerloescher', art:'brand', pikto:'loescher',
-    de:'Feuerlöscher', en:'Fire extinguisher' }
+  { id:'hunde-verboten', art:'verbot', pikto:'pfote', text:{
+    de:'Hunde verboten', en:'No dogs', fr:'Chiens interdits',
+    it:'Vietato lʼingresso ai cani', pt:'Proibida a entrada de cães',
+    es:'Prohibida la entrada de perros' } },
+
+  { id:'kein-trinkwasser', art:'verbot', pikto:'trinkwasser', text:{
+    de:'Kein Trinkwasser', en:'Not drinking water', fr:'Eau non potable',
+    it:'Acqua non potabile', pt:'Água não potável', es:'Agua no potable' } },
+
+  { id:'abstellen-verboten', art:'verbot', pikto:'kiste', text:{
+    de:'Abstellen verboten — Fluchtweg freihalten', en:'Do not obstruct — keep escape route clear',
+    fr:'Ne rien déposer — dégager la voie de fuite', it:'Non depositare — tenere libera la via di fuga',
+    pt:'Não obstruir — mantenha livre a via de evacuação',
+    es:'No obstruir — mantenga libre la vía de evacuación' } },
+
+  { id:'warnung-allgemein', art:'warnung', pikto:'ausruf', text:{
+    de:'Achtung', en:'Warning', fr:'Attention',
+    it:'Attenzione', pt:'Atenção', es:'Atención' } },
+
+  { id:'warnung-strom', art:'warnung', pikto:'blitz', text:{
+    de:'Warnung vor elektrischer Spannung', en:'Electricity hazard', fr:'Danger électrique',
+    it:'Pericolo di tensione elettrica', pt:'Perigo elétrico', es:'Peligro eléctrico' } },
+
+  { id:'warnung-rutsch', art:'warnung', pikto:'rutsch', text:{
+    de:'Rutschgefahr', en:'Slippery surface', fr:'Sol glissant',
+    it:'Pericolo di scivolamento', pt:'Piso escorregadio', es:'Suelo resbaladizo' } },
+
+  { id:'gebot-haende', art:'gebot', pikto:'haende', text:{
+    de:'Hände waschen', en:'Wash your hands', fr:'Se laver les mains',
+    it:'Lavarsi le mani', pt:'Lave as mãos', es:'Lávese las manos' } },
+
+  { id:'gebot-tuer', art:'gebot', pikto:'tuer', text:{
+    de:'Tür geschlossen halten', en:'Keep door closed', fr:'Garder la porte fermée',
+    it:'Tenere la porta chiusa', pt:'Manter a porta fechada', es:'Mantener la puerta cerrada' } },
+
+  { id:'fluchtweg', art:'rettung', pikto:'fluchtweg', text:{
+    de:'Notausgang', en:'Emergency exit', fr:'Sortie de secours',
+    it:'Uscita di emergenza', pt:'Saída de emergência', es:'Salida de emergencia' } },
+
+  { id:'erste-hilfe', art:'rettung', pikto:'kreuz', text:{
+    de:'Erste Hilfe', en:'First aid', fr:'Premiers secours',
+    it:'Pronto soccorso', pt:'Primeiros socorros', es:'Primeros auxilios' } },
+
+  { id:'sammelplatz', art:'rettung', pikto:'sammelplatz', text:{
+    de:'Sammelplatz', en:'Assembly point', fr:'Point de rassemblement',
+    it:'Punto di raccolta', pt:'Ponto de encontro', es:'Punto de reunión' } },
+
+  { id:'feuerloescher', art:'brand', pikto:'loescher', text:{
+    de:'Feuerlöscher', en:'Fire extinguisher', fr:'Extincteur',
+    it:'Estintore', pt:'Extintor', es:'Extintor' } }
 ];
 
 export function szZeichen(id){
@@ -183,7 +220,7 @@ export function szZeichen(id){
 export function szOptions(){
   const gruppe = { verbot:'Verbot', warnung:'Warnung', gebot:'Gebot',
                    rettung:'Rettung', brand:'Brandschutz' };
-  return SZ_ZEICHEN.map(z => ({ v:z.id, t:`${gruppe[z.art]} · ${z.de}` }));
+  return SZ_ZEICHEN.map(z => ({ v:z.id, t:`${gruppe[z.art]} · ${z.text.de}` }));
 }
 
 /* --------------------------------------------------------------------------

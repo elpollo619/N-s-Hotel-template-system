@@ -11,6 +11,7 @@ import * as store from './lib/storage.js';
 import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.js';
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
+import { kontrastBefund } from './lib/kontrast.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
@@ -145,6 +146,18 @@ function fieldHtml(f, value, path){
         <input id="${id}" type="color" data-path="${esc(path)}" value="${esc(v || '#2A3350')}">${lbl}</div>`;
     case 'image':
       return imageFieldHtml(f, v, path, id);
+    case 'checks':
+      /* Mehrfachauswahl als Kästchen — der Zustand ist ein Array von Werten.
+         Gebraucht für die Sprachen eines Aushangs. */
+      return `<div class="vz-field"><label>${esc(f.label || f.k)}</label>
+        <div class="vz-checks" data-checks="${esc(path)}">${
+          (f.options || []).map(o => {
+            const an = Array.isArray(v) ? v.includes(o.v) : String(v) === String(o.v);
+            return `<label class="vz-check${an ? ' is-on' : ''}">
+              <input type="checkbox" value="${esc(o.v)}"${an ? ' checked' : ''}>
+              <span>${esc(o.t)}</span></label>`;
+          }).join('')
+        }</div>${hint}</div>`;
     case 'action':
       /* Knopf, der eine in der Vorlage hinterlegte Funktion auf den Zustand
          anwendet — z. B. einen fertigen Textbaustein übernehmen. */
@@ -194,9 +207,14 @@ function buildForm(tpl, state){
   return tpl.fields.map(f => {
     if (f.t === 'group') return `<div class="vz-fgroup">${esc(f.label)}</div>`;
     if (f.t === 'note')  return `<p class="vz-hint" style="margin:0">${f.label}</p>`;
-    if (f.type === 'list') return listHtml(f, state[f.k], f.k);
-    return fieldHtml(f, state[f.k], f.k);
+    if (f.type === 'list') return listHtml(f, getPath(state, f.k), f.k);
+    return fieldHtml(f, getPath(state, f.k), f.k);
   }).join('');
+}
+
+/* Pfad "rows.2.de" im Zustand lesen. */
+function getPath(state, path){
+  return String(path).split('.').reduce((n, k) => (n == null ? n : n[k]), state);
 }
 
 /* Pfad "rows.2.de" im Zustand setzen. */
@@ -240,6 +258,7 @@ function renderEditor(id, geteilt){
         </div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
         ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
+        ${tpl.fern ? '<div class="vz-kontrast" id="vz-kontrast"></div>' : ''}
         <div class="vz-extra" id="vz-extra"></div>
         <div class="vz-form" id="vz-form">${buildForm(tpl, state)}</div>
       </aside>
@@ -275,6 +294,7 @@ function renderEditor(id, geteilt){
     fitScaler();
     checkFit();
     checkFern();
+    checkKontrast();
   }
   function fitScaler(){
     const stage = document.getElementById('vz-stage');
@@ -306,6 +326,19 @@ function renderEditor(id, geteilt){
     box.textContent = '\u2194 ' + b.text;
     box.title = 'Faustregel der Beschilderung: n\u00f6tige x-H\u00f6he in mm = Leseabstand in m \u00d7 2,5. '
               + 'Gilt f\u00fcr gutes Licht und geraden Blick.';
+  }
+
+  /* Schwächster Schrift-Grund-Kontrast auf dem Blatt. Nur melden, wenn er
+     unter der Schwelle liegt — sonst wäre die Leiste nur Rauschen. */
+  function checkKontrast(){
+    const box = document.getElementById('vz-kontrast');
+    if (!box) return;
+    const b = kontrastBefund(sheetPages(sheet)[0]);
+    if (!b || b.ok){ box.className = 'vz-kontrast'; box.textContent = ''; return; }
+    box.className = 'vz-kontrast is-warn';
+    box.textContent = `\u25D1 Schwacher Kontrast ${b.wert}:1 (n\u00f6tig ${b.noetig}:1) — \u00ab${b.text}\u00bb`;
+    box.title = 'Gepr\u00fcft nach der Kontrastformel der WCAG, Stufe AA. '
+              + 'Auf Papier und bei schwachem Licht wirkt es noch flauer als am Bildschirm.';
   }
 
   function commit(){ saveState(tpl, state); paint(); }
@@ -351,6 +384,19 @@ function renderEditor(id, geteilt){
           commit(); rebuild();
         }
       }
+      return;
+    }
+
+    /* Kästchen einer Mehrfachauswahl. Der Zustand wird komplett aus den
+       angehakten Kästchen neu gebildet — so bleibt die Reihenfolge die des
+       Formulars und nicht die des Anklickens. */
+    const box = ev.target.closest('[data-checks]');
+    if (box && ev.target.tagName === 'INPUT'){
+      const werte = Array.from(box.querySelectorAll('input:checked')).map(i => i.value);
+      setPath(state, box.dataset.checks, werte);
+      box.querySelectorAll('.vz-check').forEach(l =>
+        l.classList.toggle('is-on', l.querySelector('input').checked));
+      commit();
       return;
     }
 
