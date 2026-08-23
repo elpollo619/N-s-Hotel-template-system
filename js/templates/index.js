@@ -41,6 +41,12 @@ import veranstaltung from './veranstaltung.js';
 import ausserbetrieb from './ausserbetrieb.js';
 import fundgegenstaende from './fundgegenstaende.js';
 import paket from './paket.js';
+import uebergabe from './uebergabe.js';
+import schluesselquittung from './schluesselquittung.js';
+import zaehlerstaende from './zaehlerstaende.js';
+import maengelmeldung from './maengelmeldung.js';
+import hausversammlung from './hausversammlung.js';
+import umzug from './umzug.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -81,7 +87,13 @@ export const TEMPLATES = {
   veranstaltung,
   ausserbetrieb,
   fundgegenstaende,
-  paket
+  paket,
+  uebergabe,
+  schluesselquittung,
+  zaehlerstaende,
+  maengelmeldung,
+  hausversammlung,
+  umzug
 };
 
 export const ORDER = [
@@ -92,5 +104,6 @@ export const ORDER = [
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
   'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
-  'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket'
+  'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
+  'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug'
 ];
