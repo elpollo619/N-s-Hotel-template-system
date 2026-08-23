@@ -69,6 +69,12 @@ const MODULES = [
   'js/templates/kontakte.js',
   'js/templates/bauarbeiten.js',
   'js/templates/preisliste.js',
+  'js/templates/gutschein.js',
+  'js/templates/speisekarte.js',
+  'js/templates/veranstaltung.js',
+  'js/templates/ausserbetrieb.js',
+  'js/templates/fundgegenstaende.js',
+  'js/templates/paket.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

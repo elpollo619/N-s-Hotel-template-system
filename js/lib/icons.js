@@ -133,7 +133,10 @@ const ALLGEMEIN = {
   trockner:'<rect x="4.2" y="2.8" width="15.6" height="18.4" rx="2.4"/><circle cx="12" cy="14" r="4.4"/><path d="M9.8 13.2a2.2 2.2 0 0 1 2.2 1.6 2.2 2.2 0 0 0 2.2 1.6"/><path d="M7.4 6.4h.6M10.4 6.4h.6"/><path d="M4.2 9.6h15.6"/>',
   buegeln: '<path d="M3.4 17.4h17.2"/><path d="M4.8 17.4v-2.6a6.4 6.4 0 0 1 6.4-6.4h4.4a5 5 0 0 1 5 5v4"/><path d="M11.2 8.4V6.8a1.8 1.8 0 0 1 1.8-1.8h4"/>',
   foehn:   '<circle cx="8.2" cy="10" r="5.4"/><path d="M13.4 7.4h4.8l1.4 5.2h-6.2"/><path d="m7 15.2-1.2 6.2h3.4l1.2-5.6"/>',
-  putzen:  '<path d="M9 8.2h5.4a2 2 0 0 1 2 2v9.2a1.6 1.6 0 0 1-1.6 1.6H8.6A1.6 1.6 0 0 1 7 19.4v-9.2a2 2 0 0 1 2-2Z"/><path d="M10 8.2V4.8h3.4v3.4"/><path d="M13.4 5.6h3M16.4 3.6l1.8-1M16.4 7.6l1.8 1"/>'
+  putzen:  '<path d="M9 8.2h5.4a2 2 0 0 1 2 2v9.2a1.6 1.6 0 0 1-1.6 1.6H8.6A1.6 1.6 0 0 1 7 19.4v-9.2a2 2 0 0 1 2-2Z"/><path d="M10 8.2V4.8h3.4v3.4"/><path d="M13.4 5.6h3M16.4 3.6l1.8-1M16.4 7.6l1.8 1"/>',
+  geschenk:'<rect x="3.6" y="7.6" width="16.8" height="3.8" rx="1"/><path d="M5 11.4V20h14v-8.6"/><path d="M12 7.6V20"/><path d="M12 7.6C10.4 7.6 8 6.9 8 5.2A1.8 1.8 0 0 1 12 4.9 1.8 1.8 0 0 1 16 5.2c0 1.7-2.4 2.4-4 2.4Z"/>',
+  paket:   '<path d="M12 2.8 3.8 7v10L12 21.2 20.2 17V7Z"/><path d="M3.8 7 12 11.2 20.2 7"/><path d="M12 11.2v10"/><path d="M15.4 13.6v3.2"/>',
+  lupe:    '<circle cx="10.4" cy="10.4" r="6.2"/><path d="m15 15 5 5"/>'
 };
 
 /* ---------- Gruppen zusammenführen ---------------------------------------- */
@@ -190,7 +193,8 @@ export const LABEL = {
   globe:'Sprache · Welt', person:'Person', familie:'Familie', baby:'Baby · Schoppen',
   herz:'Herz', stern:'Stern', stift:'Stift · schreiben', buch:'Mappe · Buch',
   waesche:'Waschmaschine', trockner:'Tumbler · Trockner', buegeln:'Bügeln',
-  foehn:'Föhn', putzen:'Reinigung · Putzen'
+  foehn:'Föhn', putzen:'Reinigung · Putzen',
+  geschenk:'Geschenk · Gutschein', paket:'Paket · Sendung', lupe:'Lupe · Suche · Fund'
 };
 
 /** Icon als SVG-String. size in px, stroke folgt currentColor. */

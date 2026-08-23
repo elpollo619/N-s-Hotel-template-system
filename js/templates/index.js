@@ -35,6 +35,12 @@ import klingelschild from './klingelschild.js';
 import kontakte from './kontakte.js';
 import bauarbeiten from './bauarbeiten.js';
 import preisliste from './preisliste.js';
+import gutschein from './gutschein.js';
+import speisekarte from './speisekarte.js';
+import veranstaltung from './veranstaltung.js';
+import ausserbetrieb from './ausserbetrieb.js';
+import fundgegenstaende from './fundgegenstaende.js';
+import paket from './paket.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -69,7 +75,13 @@ export const TEMPLATES = {
   klingelschild,
   kontakte,
   bauarbeiten,
-  preisliste
+  preisliste,
+  gutschein,
+  speisekarte,
+  veranstaltung,
+  ausserbetrieb,
+  fundgegenstaende,
+  paket
 };
 
 export const ORDER = [
@@ -79,5 +91,6 @@ export const ORDER = [
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
   'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
-  'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste'
+  'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
+  'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket'
 ];

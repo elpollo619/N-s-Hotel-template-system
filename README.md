@@ -136,6 +136,12 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Kontakt-Tafel** | A4 hoch | Wer ist wofür da — Hauswart, Verwaltung, Notfall; die Nummer rechts und gross |
 | **Preisliste** | A4 hoch | Parkplatz, Waschmarken, Extras — nach Abschnitten geordnet, Beträge mit Tabellenziffern |
 | **Klingel- und Briefkastenschilder** | A4 hoch | Namensschilder in vier Handelsgrössen oder freiem Mass, als Bogen zum Ausschneiden |
+| **Gutschein** | A5 quer | Wertgutschein fürs Haus — Betrag im Cyanfeld, Code und Gültigkeit; sechs Sprachen |
+| **Speisekarte** | A4 hoch | Frühstücks- und Getränkekarte nach Abschnitten, Preis rechts |
+| **Veranstaltungsplakat** | A4 hoch | Apéro, Fest, Markt — Datum als farbiger Block, dazu ein Programm |
+| **Ausser Betrieb** | A4 hoch | Lift, Maschine, Anlage steht — «Ausser Betrieb» in vier Sprachen, dazu was stattdessen gilt |
+| **Fundgegenstände** | A4 hoch | Wo Verlorenes abzuholen ist, dazu die Liste der aktuellen Fundstücke |
+| **Paketablage** | A4 hoch | Wo Pakete abgegeben und abgeholt werden — ein Teil für den Boten, einer für die Bewohnerschaft |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -675,7 +681,7 @@ stand, behält seinen Text und fällt auf «Ohne Objekt» zurück. Der Test
 Sie stehen in jedem Auswahlfeld **«Symbol»** — im Hinweis-Aushang, in der
 Gäste-Info, auf den Etiketten, in der Orientierungskarte und in der
 Gästemappe. Das Feld ist nach denselben Gruppen geordnet; eine flache Liste
-mit 86 Einträgen wäre nicht mehr zu überblicken.
+mit 89 Einträgen wäre nicht mehr zu überblicken.
 
 **Nicht zu verwechseln mit den Sicherheitszeichen.** Die nach ISO 7010
 genormten Zeichen stehen getrennt in `js/lib/sicherheitszeichen.js` und
@@ -804,7 +810,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Dreiunddreissig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Neununddreissig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
@@ -828,7 +834,7 @@ Bereiche.
   der mit diesem Aushang nichts zu tun hatte.
 * **Liegenschaften** (`#/s/liegenschaften`) — siehe unten.
 * **Schriften wählen** (`#/s/schrift`) — siehe unten.
-* **Piktogramme** (`#/s/piktogramme`) — alle 86 Zeichen des Hauses, nach Thema
+* **Piktogramme** (`#/s/piktogramme`) — alle 89 Zeichen des Hauses, nach Thema
   geordnet und durchsuchbar. Ein Klick kopiert den Namen.
 * **Marke und Schrift** (`#/s/marke`) — welche Hausschrift wirklich läuft und
   welche gerade durch einen freien Ersatz vertreten wird, dazu die Farben mit
@@ -861,7 +867,7 @@ js/
   app.js                   Router, Rahmen, Seiten, Formular-Erzeugung, Vorschau
   bereiche.js              die sechs Arbeitsbereiche und die Werkzeugseiten
   objekte.js               Liegenschaften und Firmen, fest und selbst angelegt
-  lib/icons.js             86 Piktogramme in acht Gruppen
+  lib/icons.js             89 Piktogramme in acht Gruppen
   lib/schriftwahl.js       die waehlbaren Schriften und die getroffene Wahl
   brand-config.js          Stammdaten und Pfade zu den Marken-Assets
   lib/                     dom · icons · brand · sitemap · export · storage · i18n · thumbs
@@ -1041,7 +1047,7 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   También puedes **subir tu propio archivo** de fuente (.woff2/.ttf/.otf) si
   encuentras algo en Google Fonts que no esté en la lista; se queda en tu
   navegador y no se sube a ninguna parte.
-* **Hay 86 pictogramas** (`#/s/piktogramme`), agrupados por tema y buscables.
+* **Hay 89 pictogramas** (`#/s/piktogramme`), agrupados por tema y buscables.
   Salen en todos los desplegables «Symbol» de las plantillas. Ojo: las señales
   de seguridad ISO 7010 son otra cosa y viven en su propia plantilla.
 * **Las fuentes y los logos siguen pendientes.** Están en tu Drive, pero son

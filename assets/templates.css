@@ -1703,3 +1703,273 @@
   border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
 }
 .t-preis-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-gut · Gutschein, A5 quer
+   Papier, das Geld wert ist: dunkle Karte, der Wert im eigenen Cyanfeld
+   rechts, damit er an der Kasse sofort zu finden ist.
+   ========================================================================== */
+.t-gut{display:flex;flex-direction:column;padding:0}
+.t-gut-karte{flex:1;display:flex;color:#fff;background:var(--navy)}
+.t-gut-links{flex:1;min-width:0;display:flex;flex-direction:column;padding:12mm 12mm 10mm}
+.t-gut-kopf .eyebrow{margin:0 0 2mm;font-size:22pt;color:var(--cyan);line-height:1}
+.t-gut-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.02;letter-spacing:-.02em;
+}
+.t-gut-sprachen{margin:1.5mm 0 0;font-size:10pt;color:rgba(255,255,255,.6)}
+.t-gut-mitte{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4mm}
+.t-gut-namen{margin:0;display:flex;flex-direction:column;gap:2.4mm}
+.t-gut-namen div{display:flex;gap:3mm;align-items:baseline}
+.t-gut-namen dt{
+  flex:0 0 14mm;font-size:8pt;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cyan);
+}
+.t-gut-namen dd{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:13pt;
+  color:#fff;border-bottom:.6pt solid rgba(255,255,255,.3);flex:1;padding-bottom:1mm;
+}
+.t-gut-gruss{margin:0;font-size:10.5pt;line-height:1.5;color:rgba(255,255,255,.85)}
+.t-gut-fuss{
+  display:flex;align-items:center;justify-content:space-between;gap:4mm;
+  margin-top:auto;padding-top:6mm;border-top:.6pt solid rgba(255,255,255,.22);
+}
+.t-gut-mark{display:flex}
+.t-gut-meta{font-size:8pt;color:rgba(255,255,255,.7);text-align:right}
+.t-gut-rechts{
+  flex:0 0 62mm;background:var(--cyan);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2.5mm;padding:10mm 8mm;text-align:center;
+}
+.t-gut-ico{display:flex;opacity:.9}
+.t-gut-ico svg{width:14mm;height:14mm}
+.t-gut-wert{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;
+  line-height:1.02;letter-spacing:-.02em;
+}
+.t-gut-wertzusatz{margin:0;font-size:9.5pt;color:rgba(255,255,255,.85)}
+.t-gut-qr{margin-top:2mm;background:rgba(255,255,255,.14);padding:2mm;border-radius:2mm;display:flex}
+.t-gut-qr svg{width:22mm;height:22mm}
+.t-gut-bed{
+  margin:0;padding:3mm 12mm;font-size:6.6pt;line-height:1.35;color:var(--muted);
+  background:var(--bg);text-align:center;
+}
+
+/* ==========================================================================
+   t-menu · Speisekarte, A4
+   Eine Karte wird gelesen, nicht verglichen: mittiger Kopf, Bezeichnung
+   gross, Preis rechts, ohne Punktlinien.
+   ========================================================================== */
+.t-menu{display:flex;flex-direction:column;padding:18mm 20mm 12mm;text-align:center}
+.t-menu-kopf .eyebrow{margin:0 0 1.5mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-menu-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.01em;
+}
+.t-menu-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-menu-unter{margin:2.5mm 0 0;font-size:10.5pt;line-height:1.4;color:var(--ink-soft)}
+.t-menu-liste{
+  list-style:none;margin:9mm 0 0;padding:0;text-align:left;
+  display:flex;flex-direction:column;gap:3mm;
+}
+.t-menu-abschnitt{
+  display:flex;align-items:center;justify-content:center;gap:2.6mm;margin:5mm 0 1mm;
+}
+.t-menu-abschnitt:first-child{margin-top:0}
+.t-menu-abschnitt b{
+  font-family:var(--font-display);font-weight:700;font-size:12pt;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--navy);
+}
+.t-menu-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-menu-ico svg{width:5mm;height:5mm}
+.t-menu-zeile{display:flex;align-items:baseline;gap:4mm}
+.t-menu-was{flex:1;min-width:0}
+.t-menu-was b{
+  font-family:var(--font-display);font-weight:600;font-size:12pt;line-height:1.2;color:var(--navy);
+}
+.t-menu-was i{display:block;font-style:italic;font-size:9.5pt;line-height:1.3;color:var(--muted)}
+.t-menu-preis{
+  flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:11.5pt;
+  color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.t-menu-fuss{margin-top:auto;padding-top:8mm}
+.t-menu-hinweis{margin:0 0 4mm;font-size:8.6pt;line-height:1.4;color:var(--muted)}
+.t-menu-abs{
+  display:flex;align-items:center;justify-content:center;gap:4mm;
+  padding-top:5mm;border-top:.8pt solid var(--line);
+  font-size:7.6pt;color:var(--muted);line-height:1.4;text-align:left;
+}
+.t-menu-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-event · Veranstaltungsplakat, A4
+   Der Anlass gross, das Datum als farbiger Block — aus fünf Metern lesbar.
+   ========================================================================== */
+.t-event{display:flex;flex-direction:column;padding:18mm 18mm 12mm}
+.t-event-kopf .eyebrow{margin:0 0 2mm;font-size:28pt;color:var(--cyan);line-height:1}
+.t-event-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:38pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-event-unter{margin:3mm 0 0;font-size:12pt;line-height:1.4;color:var(--ink-soft)}
+.t-event-fakten{display:flex;align-items:stretch;gap:6mm;margin:9mm 0 0}
+.t-event-datum{
+  flex:0 0 auto;padding:5mm 7mm;border-radius:4mm;background:var(--cyan);color:#fff;
+  display:flex;flex-direction:column;gap:1mm;justify-content:center;
+}
+.t-event-datum span{font-size:8.6pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.t-event-datum strong{font-family:var(--font-display);font-weight:700;font-size:19pt;line-height:1.05}
+.t-event-datum em{font-style:normal;font-size:12pt;opacity:.9;font-variant-numeric:tabular-nums}
+.t-event-ort{display:flex;align-items:center;gap:3mm;margin:0;font-size:13pt;color:var(--ink)}
+.t-event-ort i{font-style:normal;font-size:8.6pt;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);display:block}
+.t-event-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-event-ico svg{width:7mm;height:7mm}
+.t-event-prog{margin:9mm 0 0}
+.t-event-prog h2{
+  margin:0 0 3.5mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-event-prog ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm}
+.t-event-prog li{display:flex;gap:5mm;align-items:baseline}
+.t-event-pz{
+  flex:0 0 20mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  color:var(--cyan);font-variant-numeric:tabular-nums;
+}
+.t-event-pt{font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-event-text{margin:8mm 0 0;font-size:11.5pt;line-height:1.5;color:var(--ink)}
+.t-event-fuss{margin-top:auto;display:flex;align-items:flex-end;gap:6mm;padding-top:8mm}
+.t-event-qr{flex:0 0 auto;display:flex}
+.t-event-qr svg{width:24mm;height:24mm}
+.t-event-fusstext{flex:1;min-width:0}
+.t-event-anm{margin:0 0 3mm;font-size:10.5pt;line-height:1.4;color:var(--ink-soft)}
+.t-event-abs{
+  display:flex;align-items:center;gap:4mm;margin:0;padding-top:4mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-event-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-oob · Ausser Betrieb, A4
+   Zuerst «Ausser Betrieb» in Rot, dann was stattdessen gilt in Cyan — die
+   Reihenfolge, in der es gebraucht wird.
+   ========================================================================== */
+.t-oob{display:flex;flex-direction:column;padding:16mm 16mm 12mm}
+.t-oob-schild{
+  padding:9mm 8mm;border-radius:5mm;background:var(--red);color:#fff;text-align:center;
+}
+.t-oob-ico{display:flex;justify-content:center;margin-bottom:2mm;opacity:.95}
+.t-oob-titel{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;
+}
+.t-oob-titel2{margin:1.5mm 0 0;font-size:12pt;color:rgba(255,255,255,.85)}
+.t-oob-was{
+  margin:4mm 0 0;font-family:var(--font-display);font-weight:600;font-size:16pt;line-height:1.2;
+}
+.t-oob-was span{display:block;font-family:var(--font-body);font-weight:400;font-size:11pt;opacity:.85;margin-top:1mm}
+.t-oob-zeit{display:flex;gap:4mm;margin:8mm 0 0}
+.t-oob-zeit>div{
+  flex:1;min-width:0;padding:4.5mm 5mm;border-radius:4mm;background:var(--bg-2);
+  display:flex;flex-direction:column;gap:1mm;
+}
+.t-oob-zeit span{font-size:8.4pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.t-oob-zeit strong{font-family:var(--font-display);font-weight:700;font-size:14pt;line-height:1.1;color:var(--navy)}
+.t-oob-statt{
+  display:flex;align-items:center;gap:4mm;margin:8mm 0 0;padding:5.5mm 6mm;
+  border-radius:4mm;background:var(--cyan-tint);border:1.2pt solid var(--cyan);
+}
+.t-oob-ico2{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-oob-ico2 svg{width:8mm;height:8mm}
+.t-oob-statt p{margin:0;font-size:14pt;line-height:1.3;color:var(--navy)}
+.t-oob-statt i{font-style:normal;font-size:9pt;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:.6mm}
+.t-oob-statt b{font-family:var(--font-display);font-weight:700}
+.t-oob-zusatz{margin:6mm 0 0;font-size:11pt;line-height:1.5;color:var(--ink-soft)}
+.t-oob-kontakt{margin:5mm 0 0;font-size:11pt;color:var(--ink)}
+.t-oob-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-oob-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-fund · Fundgegenstände, A4
+   Oben der feste Teil (wo abholen), unten die wechselnde Liste.
+   ========================================================================== */
+.t-fund{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-fund-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-fund-titel{flex:1;min-width:0}
+.t-fund-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-fund-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-fund-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-fund-lupe{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-fund-lupe svg{width:16mm;height:16mm}
+.t-fund-wo{
+  margin:8mm 0 0;padding:5mm 6mm;border-radius:4mm;background:var(--bg-2);
+}
+.t-fund-wo p{margin:0;font-size:12.5pt;line-height:1.4;color:var(--navy);font-weight:600}
+.t-fund-hinweis{margin:2.5mm 0 0!important;font-size:9.5pt!important;
+  color:var(--muted)!important;font-weight:400!important;line-height:1.4!important}
+.t-fund-liste{margin:8mm 0 0}
+.t-fund-liste h2{
+  margin:0 0 3.5mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-fund-liste ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.4mm}
+.t-fund-liste li{
+  display:flex;align-items:center;gap:3.5mm;padding:3.4mm 5mm;
+  border:1pt solid var(--line);border-radius:3mm;background:#fff;
+}
+.t-fund-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-fund-ico svg{width:5mm;height:5mm}
+.t-fund-txt{display:flex;flex-direction:column;gap:.3mm}
+.t-fund-txt b{font-family:var(--font-display);font-weight:600;font-size:11.5pt;color:var(--navy)}
+.t-fund-txt i{font-style:normal;font-size:9pt;color:var(--muted)}
+.t-fund-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-fund-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-paket · Paketablage, A4
+   Zwei Adressaten: der Bote oben (kurz), die Bewohnerschaft unten (Regeln).
+   ========================================================================== */
+.t-paket{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-paket-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-paket-titel{flex:1;min-width:0}
+.t-paket-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-paket-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-paket-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-paket-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-paket-ico svg{width:16mm;height:16mm}
+.t-paket-bote{
+  margin:8mm 0 0;padding:5.5mm 6mm;border-radius:4mm;
+  background:var(--cyan-tint);border:1.2pt solid var(--cyan);
+}
+.t-paket-bote h2,.t-paket-regeln h2{
+  margin:0 0 2.5mm;font-family:var(--font-display);font-weight:700;font-size:10.5pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-paket-bote p{margin:0;font-size:12pt;line-height:1.5;color:var(--navy)}
+.t-paket-regeln{margin:8mm 0 0}
+.t-paket-regeln ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.8mm}
+.t-paket-regeln li{
+  position:relative;padding-left:6mm;font-size:11.5pt;line-height:1.45;color:var(--ink);
+}
+.t-paket-regeln li::before{
+  content:"";position:absolute;left:0;top:1.8mm;width:2.6mm;height:2.6mm;
+  border-radius:50%;background:var(--cyan);
+}
+.t-paket-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-paket-mark{flex:0 0 auto;display:flex}
