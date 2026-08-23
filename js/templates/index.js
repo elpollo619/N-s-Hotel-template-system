@@ -47,6 +47,12 @@ import zaehlerstaende from './zaehlerstaende.js';
 import maengelmeldung from './maengelmeldung.js';
 import hausversammlung from './hausversammlung.js';
 import umzug from './umzug.js';
+import mieten from './mieten.js';
+import turnus from './turnus.js';
+import neuimhaus from './neuimhaus.js';
+import wlankarten from './wlankarten.js';
+import besichtigung from './besichtigung.js';
+import ruhezeiten from './ruhezeiten.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -93,7 +99,13 @@ export const TEMPLATES = {
   zaehlerstaende,
   maengelmeldung,
   hausversammlung,
-  umzug
+  umzug,
+  mieten,
+  turnus,
+  neuimhaus,
+  wlankarten,
+  besichtigung,
+  ruhezeiten
 };
 
 export const ORDER = [
@@ -105,5 +117,6 @@ export const ORDER = [
   'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
   'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
-  'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug'
+  'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
+  'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten'
 ];

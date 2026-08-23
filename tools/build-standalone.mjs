@@ -81,6 +81,12 @@ const MODULES = [
   'js/templates/maengelmeldung.js',
   'js/templates/hausversammlung.js',
   'js/templates/umzug.js',
+  'js/templates/mieten.js',
+  'js/templates/turnus.js',
+  'js/templates/neuimhaus.js',
+  'js/templates/wlankarten.js',
+  'js/templates/besichtigung.js',
+  'js/templates/ruhezeiten.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'
