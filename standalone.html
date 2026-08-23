@@ -3708,6 +3708,72 @@ a{color:var(--cyan)}
   font-size:7.6pt;color:var(--muted);line-height:1.4}
 .t-mit-mark{flex:0 0 auto;display:flex}
 
+/* ==========================================================================
+   t-inv · Inventarliste, A4
+   ========================================================================== */
+.t-inv{display:flex;flex-direction:column;padding:15mm 16mm 12mm}
+.t-inv-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:3mm;border-bottom:1.4pt solid var(--navy)}
+.t-inv-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.01em}
+.t-inv-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-inv-stand{margin:.5mm 0 0;font-size:9pt;color:var(--muted)}
+.t-inv-mark{flex:0 0 auto;display:flex}
+.t-inv-liste{list-style:none;margin:5mm 0 0;padding:0;display:flex;flex-direction:column}
+.t-inv-zeile,.t-inv-titel{display:flex;gap:0;align-items:center}
+.t-inv-zeile{border-bottom:1pt solid var(--line)}
+.t-inv-titel{border-bottom:1.4pt solid var(--navy)}
+.t-inv-titel span{font-size:8.4pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:2mm 3mm}
+.t-inv-abschnitt{margin:3mm 0 0;padding:2mm 3mm 1mm}
+.t-inv-abschnitt span{font-family:var(--font-display);font-weight:700;font-size:10.5pt;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
+.t-inv-was{flex:1;min-width:0;padding:2.8mm 3mm;font-size:10.5pt;color:var(--ink)}
+.t-inv-anz{flex:0 0 22mm;padding:2.8mm 3mm;font-size:10.5pt;color:var(--navy);border-left:1pt solid var(--line);text-align:center}
+.t-inv-zst{flex:0 0 46mm;padding:2.8mm 3mm;border-left:1pt solid var(--line)}
+.t-inv-titel .t-inv-anz,.t-inv-titel .t-inv-zst{border-left:none}
+.t-inv-fuss{margin-top:auto;padding-top:7mm;display:flex;gap:10mm}
+.t-inv-sig{flex:1}
+.t-inv-sig span{display:block;height:9mm;border-bottom:1pt solid var(--navy)}
+.t-inv-sig i{display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted)}
+.t-inv-abs{margin:4mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-tsc · Türschild, A5 quer — ein Symbol, ein Wort
+   ========================================================================== */
+.t-tsc{padding:0;display:flex;flex-direction:column}
+.t-tsc-schild{flex:1;display:flex;align-items:center;gap:10mm;padding:14mm 16mm;
+  background:var(--ton);color:var(--vg)}
+.t-tsc-schild.is-mitte{flex-direction:column;justify-content:center;text-align:center;gap:5mm}
+.t-tsc-schild.is-hell{border:1.4pt solid var(--line)}
+.t-tsc-ico{flex:0 0 auto;color:var(--akz);display:flex}
+.t-tsc-ico svg{width:34mm;height:34mm}
+.t-tsc-text{min-width:0}
+.t-tsc-haupt{margin:0;font-family:var(--font-display);font-weight:700;font-size:44pt;
+  line-height:1.02;letter-spacing:-.02em}
+.t-tsc-unter{margin:2mm 0 0;font-size:15pt;opacity:.8}
+.t-tsc-schild{position:relative}
+.t-tsc-marke{display:flex;opacity:.9}
+.t-tsc-schild.is-links .t-tsc-marke{position:absolute;right:16mm;bottom:12mm;margin:0}
+.t-tsc-schild.is-mitte .t-tsc-marke{position:absolute;left:0;right:0;bottom:12mm;margin:0;justify-content:center}
+
+/* ==========================================================================
+   t-pin · Pinnwand-Karte, A4 — vier Karten mit Abreiss-Fransen
+   ========================================================================== */
+.t-pin{padding:12mm 12mm}
+.t-pin-bogen{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.t-pin-karte{box-sizing:border-box;height:128mm;margin:2mm;padding:8mm 7mm 5mm;
+  display:flex;flex-direction:column;border-top:5mm solid var(--ton)}
+.t-pin-bogen.is-schnitt .t-pin-karte{outline:.6pt dashed var(--line);outline-offset:0}
+.t-pin-titel{margin:0;font-family:var(--font-display);font-weight:700;font-size:20pt;
+  line-height:1.05;color:var(--ton)}
+.t-pin-text{margin:4mm 0 0;font-size:11pt;line-height:1.5;color:var(--ink)}
+.t-pin-fransen{margin-top:auto;display:flex;gap:0;border-top:1pt dashed var(--line);padding-top:2mm}
+.t-pin-fransen span{
+  flex:1;min-width:0;writing-mode:vertical-rl;transform:rotate(180deg);
+  border-left:1pt dashed var(--line);padding:2mm .5mm;font-size:7.5pt;color:var(--ink-soft);
+  text-align:center;white-space:nowrap;overflow:hidden;
+}
+.t-pin-fransen span:first-child{border-left:none}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -4271,7 +4337,7 @@ const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung', 'pinnwand']
   },
   {
     id: 'sicherheit',
@@ -4287,7 +4353,7 @@ const BEREICHE = [
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt']
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt', 'tuerschild']
   },
   {
     id: 'verwaltung',
@@ -4297,7 +4363,7 @@ const BEREICHE = [
     lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
     ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung',
           'mieten', 'besichtigung', 'neuimhaus',
-          'vollmacht', 'protokoll', 'kuendigung']
+          'vollmacht', 'protokoll', 'kuendigung', 'inventar']
   },
   {
     id: 'team',
@@ -17498,11 +17564,295 @@ const mitteilung = {
   }
 };
 
+/* ===== js/templates/inventar.js ===== */
+/* Inventarliste · A4 hoch
+   --------------------------------------------------------------------------
+   Was gehört zur Wohnung? Bei möblierten Wohnungen und beim Hotel-Apartment
+   die Liste dessen, was beim Einzug da war und beim Auszug wieder da sein
+   muss: Möbel, Geräte, Geschirr. Je Zeile ein Gegenstand, Anzahl, Zustand.
+   Gehört zum Übergabeprotokoll wie das Salz zur Suppe.
+*/
+
+
+
+
+const inventar = {
+  id:'inventar',
+  title:'Inventarliste',
+  sub:'Was zur Wohnung gehört — Möbel, Geräte, Geschirr · A4 hoch',
+  badge:'Inventar',
+  root:'t-inv',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="110" height="14" rx="5" fill="#2A3350"/>
+    <rect x="24" y="56" width="162" height="18" rx="4" fill="#01B1E2" opacity=".16"/>
+    ${[0,1,2,3,4,5,6].map(i => `
+      <rect x="24" y="${84 + i*24}" width="162" height="20" rx="3" fill="${i%2?'#F6F7FA':'#fff'}" stroke="#E5E8ED" stroke-width="1"/>
+      <rect x="32" y="${91 + i*24}" width="${70 - (i%3)*10}" height="7" rx="3.5" fill="#2A3350" opacity=".7"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'wohnung', label:'Wohnung / Lage', type:'text' },
+    { k:'stand', label:'Stand / Datum', type:'text' },
+
+    { t:'group', label:'Gegenstände' },
+    { t:'note', label:'Nach Räumen gruppieren mit einer «Abschnitt»-Zeile. Anzahl und Zustand werden bei der Übergabe eingetragen.' },
+    { k:'zeilen', label:'Zeilen', type:'list', itemLabel:'Zeile', max:40,
+      defaultItem:{ art:'posten', text:'', anzahl:'' },
+      item:[
+        { k:'art',    label:'Art', type:'select', options:[
+          { v:'posten', t:'Gegenstand' }, { v:'abschnitt', t:'Raum / Abschnitt' } ] },
+        { k:'text',   label:'Bezeichnung', type:'text' },
+        { k:'anzahl', label:'Anzahl (Vorgabe)', type:'text' }
+      ] },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Inventarliste',
+    objekt:'-',
+    wohnung:'',
+    stand:'',
+    zeilen:[
+      { art:'abschnitt', text:'Küche', anzahl:'' },
+      { art:'posten', text:'Kühlschrank', anzahl:'1' },
+      { art:'posten', text:'Backofen / Herd', anzahl:'1' },
+      { art:'posten', text:'Geschirrspüler', anzahl:'1' },
+      { art:'posten', text:'Geschirr-Set (Teller, Gläser, Besteck)', anzahl:'' },
+      { art:'abschnitt', text:'Wohnen', anzahl:'' },
+      { art:'posten', text:'Sofa', anzahl:'1' },
+      { art:'posten', text:'Esstisch mit Stühlen', anzahl:'1' },
+      { art:'abschnitt', text:'Schlafen', anzahl:'' },
+      { art:'posten', text:'Bett mit Matratze', anzahl:'' },
+      { art:'posten', text:'Schrank', anzahl:'1' }
+    ],
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr, d.wohnung].filter(Boolean).join(' · ');
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.text)).map(z => {
+      if (z.art === 'abschnitt') return `
+        <li class="t-inv-abschnitt"><span>${esc(z.text)}</span></li>`;
+      return `
+        <li class="t-inv-zeile">
+          <span class="t-inv-was">${esc(z.text)}</span>
+          <span class="t-inv-anz">${esc(z.anzahl || '')}</span>
+          <span class="t-inv-zst"></span>
+        </li>`;
+    }).join('');
+
+    return `
+      <header class="t-inv-kopf">
+        <div>
+          <h1>${esc(d.titel || 'Inventarliste')}</h1>
+          ${ort ? `<p class="t-inv-ort">${esc(ort)}</p>` : ''}
+          ${has(d.stand) ? `<p class="t-inv-stand">${esc(d.stand)}</p>` : ''}
+        </div>
+        <span class="t-inv-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      <ul class="t-inv-liste">
+        <li class="t-inv-titel"><span class="t-inv-was">Gegenstand</span>
+          <span class="t-inv-anz">Anzahl</span><span class="t-inv-zst">Zustand</span></li>
+        ${zeilen}
+      </ul>
+
+      <footer class="t-inv-fuss">
+        <div class="t-inv-sig"><span></span><i>Übergeber</i></div>
+        <div class="t-inv-sig"><span></span><i>Übernehmer</i></div>
+      </footer>
+      <p class="t-inv-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/tuerschild.js ===== */
+/* Türschild · A5 quer
+   --------------------------------------------------------------------------
+   Das einzelne Schild an der Zimmertür im Büro oder Betrieb: «Büro»,
+   «Sitzungszimmer», «Lager», «WC», «Privat». Ein Symbol, ein Wort, ruhig und
+   gross. Nicht zu verwechseln mit dem Zimmerschild (Hotelzimmer-Nummern in
+   Serie) oder den Klingelschildern (Namen am Eingang).
+*/
+
+
+
+
+
+const TUERSCHILD_TON = { navy:'#2A3350', cyan:'#01B1E2', weiss:'#FFFFFF' };
+
+const tuerschild = {
+  id:'tuerschild',
+  title:'Türschild',
+  sub:'Einzelnes Raumschild: Büro, Sitzungszimmer, WC · A5 quer',
+  badge:'Beschriften',
+  root:'t-tsc',
+  page:'a5-land',
+  fern:true,
+
+  thumb: thumbLand(`
+    <rect x="0" y="0" width="297" height="210" fill="#2A3350"/>
+    <circle cx="90" cy="105" r="40" fill="none" stroke="#01B1E2" stroke-width="4"/>
+    <rect x="150" y="86" width="110" height="24" rx="6" fill="#fff"/>
+    <rect x="150" y="120" width="70" height="10" rx="5" fill="#01B1E2"/>`),
+
+  fields:[
+    { t:'group', label:'Schild' },
+    { k:'text', label:'Beschriftung', type:'text' },
+    { k:'unter', label:'Untertitel', type:'text' },
+    { k:'icon', label:'Symbol', type:'select', options:iconOptions },
+
+    { t:'group', label:'Aussehen' },
+    { k:'ton', label:'Farbe', type:'select', options:[
+      { v:'navy', t:'Navy — dunkel' }, { v:'cyan', t:'Cyan' }, { v:'weiss', t:'Weiss — dezent' } ] },
+    { k:'ausrichtung', label:'Ausrichtung', type:'select', options:[
+      { v:'mitte', t:'zentriert' }, { v:'links', t:'linksbündig' } ] },
+    { k:'symbolAn', label:'Symbol zeigen', type:'select', options:[
+      { v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen — nur Text' } ] },
+
+    { t:'group', label:'Marke' },
+    { k:'markeAn', label:'Marke unten', type:'select', options:[
+      { v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' } ] },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    text:'Büro',
+    unter:'',
+    icon:'stift',
+    ton:'navy',
+    ausrichtung:'mitte',
+    symbolAn:'ja',
+    markeAn:'ja',
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const ton = TUERSCHILD_TON[d.ton] || TUERSCHILD_TON.navy;
+    const hell = d.ton === 'weiss';
+    const vordergrund = hell ? '#2A3350' : '#fff';
+    const akzent = hell ? '#01B1E2' : '#01B1E2';
+
+    return `
+      <div class="t-tsc-schild is-${esc(d.ausrichtung || 'mitte')}${hell ? ' is-hell' : ''}"
+        style="--ton:${ton};--vg:${vordergrund};--akz:${akzent}">
+        ${d.symbolAn !== 'nein' ? `<span class="t-tsc-ico">${icon(d.icon || 'info', 96, 1.7)}</span>` : ''}
+        <div class="t-tsc-text">
+          <p class="t-tsc-haupt">${esc(d.text || '')}</p>
+          ${has(d.unter) ? `<p class="t-tsc-unter">${esc(d.unter)}</p>` : ''}
+        </div>
+        ${d.markeAn === 'ja' ? `<div class="t-tsc-marke">${
+          istHotel(d.absender) ? logo(hell ? 'color' : 'white', 20) : esc(abs.name)}</div>` : ''}
+      </div>`;
+  }
+};
+
+/* ===== js/templates/pinnwand.js ===== */
+/* Pinnwand-Karte · A4 hoch, vier Karten zum Ausschneiden
+   --------------------------------------------------------------------------
+   Das kleine Kärtchen fürs Schwarze Brett: «Zu verschenken», «Gesucht»,
+   «Biete», «Gefunden». Vier auf ein Blatt, mit Abreiss-Fransen unten für die
+   Telefonnummer. Wer im Haus ein Sofa loswerden oder einen Handwerker
+   empfehlen will, füllt eines aus und hängt es an.
+*/
+
+
+const PIN_ARTEN = {
+  verschenken:{ wort:'Zu verschenken', ton:'#1F9D57' },
+  gesucht:    { wort:'Gesucht',        ton:'#01B1E2' },
+  biete:      { wort:'Biete an',       ton:'#8E44EF' },
+  gefunden:   { wort:'Gefunden',       ton:'#E8A93B' },
+  info:       { wort:'Mitteilung',     ton:'#2A3350' }
+};
+
+const pinnwand = {
+  id:'pinnwand',
+  title:'Pinnwand-Karte',
+  sub:'Zu verschenken, Gesucht, Biete — vier zum Ausschneiden · A4 hoch',
+  badge:'Schwarzes Brett',
+  root:'t-pin',
+  page:'a4',
+
+  thumb: thumb(`
+    ${[0,1].flatMap(r => [0,1].map(c => {
+      const x = 22 + c*88, y = 30 + r*128;
+      return `<rect x="${x}" y="${y}" width="80" height="112" rx="5" fill="#fff" stroke="#C9CFDA" stroke-width="1.4" stroke-dasharray="4 3"/>
+              <rect x="${x+10}" y="${y+12}" width="46" height="10" rx="3" fill="#01B1E2"/>
+              <rect x="${x+10}" y="${y+30}" width="60" height="6" rx="3" fill="#2A3350" opacity=".6"/>
+              <rect x="${x+10}" y="${y+42}" width="52" height="6" rx="3" fill="#2A3350" opacity=".4"/>
+              ${[0,1,2,3,4].map(k => `<rect x="${x+8+k*14}" y="${y+80}" width="10" height="26" rx="2" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="1"/>`).join('')}`;
+    })).join('')}`),
+
+  fields:[
+    { t:'group', label:'Karte' },
+    { k:'art', label:'Art', type:'select',
+      options:Object.entries(PIN_ARTEN).map(([v, a]) => ({ v, t:a.wort })) },
+    { k:'titel', label:'Eigener Titel', type:'text',
+      hint:'Leer lassen: nimmt das Wort der gewählten Art.' },
+    { k:'text', label:'Text', type:'textarea', rows:3 },
+    { k:'kontaktLabel', label:'Abreiss-Text', type:'text',
+      hint:'Steht auf jeder Abreiss-Franse — meist die Telefonnummer.' },
+
+    { t:'group', label:'Bogen' },
+    { k:'anzahl', label:'Anzahl Karten', type:'number', min:1, max:4, step:1 },
+    { k:'fransen', label:'Abreiss-Fransen', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+    { k:'schnitt', label:'Schnittlinien', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] }
+  ],
+
+  defaults:{
+    art:'verschenken',
+    titel:'',
+    text:'Gut erhaltenes Sofa, 3-plätzig, dunkelgrau. Abzuholen im 2. OG.',
+    kontaktLabel:'Tel. …………………',
+    anzahl:4,
+    fransen:'ja',
+    schnitt:'ja'
+  },
+
+  render(d){
+    const a = PIN_ARTEN[d.art] || PIN_ARTEN.info;
+    const titel = has(d.titel) ? d.titel : a.wort;
+    const anzahl = Math.min(4, Math.max(1, Number(d.anzahl) || 4));
+
+    const fransen = d.fransen === 'ja'
+      ? `<div class="t-pin-fransen">${Array.from({ length:7 }, () =>
+          `<span>${esc(d.kontaktLabel || '')}</span>`).join('')}</div>`
+      : '';
+
+    const karte = `
+      <div class="t-pin-karte" style="--ton:${a.ton}">
+        <p class="t-pin-titel">${esc(titel)}</p>
+        ${has(d.text) ? `<p class="t-pin-text">${esc(d.text)}</p>` : ''}
+        ${fransen}
+      </div>`;
+
+    return `
+      <div class="t-pin-bogen${d.schnitt === 'ja' ? ' is-schnitt' : ''}">
+        ${Array.from({ length:anzahl }, () => karte).join('')}
+      </div>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
+
+
+
 
 
 
@@ -17629,7 +17979,10 @@ const TEMPLATES = {
   kuendigung,
   reservationsblatt,
   besucherkarte,
-  mitteilung
+  mitteilung,
+  inventar,
+  tuerschild,
+  pinnwand
 };
 
 const ORDER = [
@@ -17644,7 +17997,8 @@ const ORDER = [
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
   'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
   'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer',
-  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung'
+  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung',
+  'inventar', 'tuerschild', 'pinnwand'
 ];
 
 /* ===== js/lib/suche.js ===== */

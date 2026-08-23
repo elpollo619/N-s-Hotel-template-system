@@ -44,7 +44,7 @@ export const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung', 'pinnwand']
   },
   {
     id: 'sicherheit',
@@ -60,7 +60,7 @@ export const BEREICHE = [
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt']
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt', 'tuerschild']
   },
   {
     id: 'verwaltung',
@@ -70,7 +70,7 @@ export const BEREICHE = [
     lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
     ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung',
           'mieten', 'besichtigung', 'neuimhaus',
-          'vollmacht', 'protokoll', 'kuendigung']
+          'vollmacht', 'protokoll', 'kuendigung', 'inventar']
   },
   {
     id: 'team',

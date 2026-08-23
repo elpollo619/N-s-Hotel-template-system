@@ -166,6 +166,9 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Reservationsblatt** | A4 hoch | Waschküche, Gemeinschaftsraum, Grill — leere Tabelle zum Eintragen |
 | **Besucher-Parkkarte** | A4 hoch | Sechs Karten für die Windschutzscheibe zum Ausschneiden |
 | **Wichtige Mitteilung** | A4 hoch | Die eine Nachricht, gross, mit Datum und Frist — Ton wählbar, mehrsprachig |
+| **Inventarliste** | A4 hoch | Was zur Wohnung gehört — nach Räumen, Anzahl und Zustand, zwei Unterschriften |
+| **Türschild** | A5 quer | Einzelnes Raumschild: Büro, Sitzungszimmer, WC — Symbol und Wort |
+| **Pinnwand-Karte** | A4 hoch | «Zu verschenken», «Gesucht» … vier Karten mit Abreiss-Fransen |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -819,10 +822,10 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 |---|---|
 | **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte |
-| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
 | **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
-| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt |
-| **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung |
+| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt, Türschild |
+| **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung, Inventarliste |
 | **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
 
 Die Einteilung steht in `js/bereiche.js`. **Eine Vorlage gehört in genau einen
@@ -835,7 +838,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Dreiundsechzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Sechsundsechzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist

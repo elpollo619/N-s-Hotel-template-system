@@ -65,6 +65,9 @@ import kuendigung from './kuendigung.js';
 import reservationsblatt from './reservationsblatt.js';
 import besucherkarte from './besucherkarte.js';
 import mitteilung from './mitteilung.js';
+import inventar from './inventar.js';
+import tuerschild from './tuerschild.js';
+import pinnwand from './pinnwand.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -129,7 +132,10 @@ export const TEMPLATES = {
   kuendigung,
   reservationsblatt,
   besucherkarte,
-  mitteilung
+  mitteilung,
+  inventar,
+  tuerschild,
+  pinnwand
 };
 
 export const ORDER = [
@@ -144,5 +150,6 @@ export const ORDER = [
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
   'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
   'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer',
-  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung'
+  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung',
+  'inventar', 'tuerschild', 'pinnwand'
 ];
