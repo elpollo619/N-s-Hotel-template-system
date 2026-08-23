@@ -6780,6 +6780,54 @@ function favoritToggle(id){
   return true;
 }
 
+/* ===== js/lib/sicherung.js ===== */
+/* ==========================================================================
+   Sicherung — die ganze Zentrale von einem Rechner auf den anderen
+   --------------------------------------------------------------------------
+   Die Zentrale speichert alles im Browser: Entwürfe, Favoriten, eigene
+   Textbausteine, Liegenschaften, die Schriftwahl. Das ist gut fürs
+   Datenschützen und schlecht fürs Übertragen — wer am Bürorechner alles
+   eingerichtet hat, steht am Empfangsrechner wieder vor dem leeren Tool.
+
+   Diese Sicherung nimmt jeden `nsvz:`-Schlüssel und legt ihn in eine Datei;
+   das Laden schreibt sie zurück. Eine Datei, ein Doppelklick — und der zweite
+   Rechner kennt dieselben Vorlagen, Bausteine und Häuser.
+   ========================================================================== */
+
+const TYP = 'nsvz-sicherung';
+
+/** Alle gespeicherten Daten als JSON-Text. */
+function sicherungAlsDatei(){
+  const daten = {};
+  for (const k of keys()){
+    const wert = load(k, undefined);
+    if (wert !== undefined) daten[k] = wert;
+  }
+  return JSON.stringify({ typ:TYP, version:1, daten }, null, 2);
+}
+
+/** Zählt, was drin ist — für den Hinweis vor dem Laden. */
+function sicherungZaehlen(){
+  return keys().length;
+}
+
+/**
+ * Schreibt eine Sicherung zurück. Bestehende Schlüssel werden überschrieben,
+ * nicht gelöschte bleiben — so geht beim Zusammenführen nichts verloren.
+ * Gibt die Anzahl übernommener Einträge zurück.
+ */
+function sicherungLaden(text){
+  const obj = JSON.parse(text);
+  if (!obj || obj.typ !== TYP || typeof obj.daten !== 'object' || obj.daten === null){
+    throw new Error('kein gültiges Sicherungsformat');
+  }
+  let n = 0;
+  for (const [k, v] of Object.entries(obj.daten)){
+    if (v !== undefined){ save(k, v); n++; }
+  }
+  return n;
+}
+
 /* ===== js/lib/schrift.js ===== */
 /* ==========================================================================
    Welche Schrift ist gerade aktiv?
@@ -7060,6 +7108,13 @@ const DICT = {
     keySearch:'springt in die Suche, von jeder Seite aus.',
     keyEsc:'schliesst die Suche; im Editor führt es zurück zur Startseite.',
     keyTab:'geht durch alle Felder und Knöpfe — die Zentrale lässt sich ganz ohne Maus bedienen.',
+    backupTitle:'Sichern und übertragen',
+    backupText:'Alles, was in diesem Browser steht — Entwürfe, Favoriten, eigene Textbausteine, Liegenschaften, Schriftwahl — in eine Datei sichern und auf einem anderen Rechner wieder laden. So richtet man die Zentrale einmal ein und hat sie überall gleich.',
+    backupSave:'Alles sichern',
+    backupLoad:'Sicherung laden',
+    backupDone:'Sicherung geladen — die Seite lädt neu.',
+    backupBad:'Das ist keine gültige Sicherungsdatei.',
+    backupAsk:'Die Sicherung überschreibt gleiche Einträge in diesem Browser. Fortfahren?',
     helpOffline:'Ohne Internet',
     helpOfflineText:'Die Datei <b>standalone.html</b> enthält die ganze Zentrale in einer einzigen Datei. Auf den Rechner legen, doppelklicken — fertig. Sie braucht keinen Server und kein Netz.',
     blockYours:'Bausteine des Hauses',
@@ -7235,6 +7290,13 @@ const DICT = {
     keySearch:'jumps into search, from any page.',
     keyEsc:'closes search; in the editor it takes you back to the start page.',
     keyTab:'steps through every field and button — the centre works without a mouse.',
+    backupTitle:'Back up and transfer',
+    backupText:'Save everything stored in this browser — drafts, pinned templates, your own text blocks, properties, font choice — to a file, and load it on another computer. Set the tool up once and have it the same everywhere.',
+    backupSave:'Back up everything',
+    backupLoad:'Load backup',
+    backupDone:'Backup loaded — the page will reload.',
+    backupBad:'That is not a valid backup file.',
+    backupAsk:'Loading a backup overwrites matching entries in this browser. Continue?',
     helpOffline:'Without internet',
     helpOfflineText:'The file <b>standalone.html</b> holds the whole centre in a single file. Put it on the computer, double-click it — done. No server, no network.',
     blockYours:'Blocks of this house',
@@ -18176,6 +18238,7 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 
 
+
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
 
@@ -19390,10 +19453,43 @@ function seiteHilfe(){
       </section>
 
       <section class="vz-block">
+        <h2>${esc(t('backupTitle'))}</h2>
+        <p class="vz-hilfe-fuss">${esc(t('backupText'))}</p>
+        <div class="vz-block-btns" style="margin-top:12px">
+          <button type="button" class="vz-btn vz-btn--sm" id="vz-sig-export">${esc(t('backupSave'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-sig-import">${esc(t('backupLoad'))}</button>
+          <input type="file" id="vz-sig-datei" accept="application/json" hidden>
+        </div>
+      </section>
+
+      <section class="vz-block">
         <h2>${esc(t('helpOffline'))}</h2>
         <p class="vz-hilfe-fuss">${t('helpOfflineText')}</p>
       </section>`
   });
+
+  document.getElementById('vz-sig-export').onclick = () => {
+    downloadBlob(new Blob([sicherungAlsDatei()], { type:'application/json' }),
+                 'ns-hotel-zentrale-sicherung.json');
+  };
+  const sigDatei = document.getElementById('vz-sig-datei');
+  document.getElementById('vz-sig-import').onclick = () => {
+    if (confirm(t('backupAsk'))) sigDatei.click();
+  };
+  sigDatei.onchange = () => {
+    const f = sigDatei.files && sigDatei.files[0];
+    if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try{
+        sicherungLaden(fr.result);
+        toast(t('backupDone'));
+        setTimeout(() => location.reload(), 900);
+      }catch(_){ toast(t('backupBad')); }
+    };
+    fr.readAsText(f);
+    sigDatei.value = '';
+  };
 }
 
 /* --- Eigene Textbausteine -------------------------------------------------- */
@@ -20087,7 +20183,8 @@ route();
 /* Für Tests/Automatisierung erreichbar machen. */
 window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS,
               alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H,
-              favoriten, istFavorit, favoritToggle };
+              favoriten, istFavorit, favoritToggle,
+              sicherungAlsDatei, sicherungLaden };
 
 })();
 </script>

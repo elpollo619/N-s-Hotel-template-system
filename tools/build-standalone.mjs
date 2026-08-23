@@ -30,6 +30,7 @@ const MODULES = [
   'js/lib/kontrast.js',
   'js/lib/verlauf.js',
   'js/lib/favoriten.js',
+  'js/lib/sicherung.js',
   'js/lib/schrift.js',
   'js/lib/eigene.js',
   'js/lib/i18n.js',

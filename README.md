@@ -856,6 +856,11 @@ Wer eine Vorlage oft braucht, heftet sie mit dem **Stern** auf der Karte an;
 angeheftete stehen auf der Startseite zuoberst unter «Angeheftet». Der Stern
 speichert nur das Kürzel, im Browser der jeweiligen Person.
 
+Unter **Anleitung → «Sichern und übertragen»** lässt sich der ganze Stand des
+Browsers — Entwürfe, Favoriten, eigene Textbausteine, Liegenschaften und die
+Schriftwahl — in eine Datei sichern und auf einem anderen Rechner wieder
+laden. So ist die Zentrale einmal eingerichtet und überall gleich.
+
 ### Die sechs Werkzeugseiten
 
 * **Anleitung** (`#/s/hilfe`) — der Ablauf in drei Schritten, die Einstellungen

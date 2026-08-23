@@ -33,6 +33,7 @@ import { kontrastBefund } from './lib/kontrast.js';
 import { suche, trefferZiel, ART_LABEL, normal } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
 import { favoriten, istFavorit, favoritToggle } from './lib/favoriten.js';
+import { sicherungAlsDatei, sicherungLaden } from './lib/sicherung.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
 import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
 import { SPRACH_IDS } from './lib/sprachen.js';
@@ -1256,10 +1257,43 @@ function seiteHilfe(){
       </section>
 
       <section class="vz-block">
+        <h2>${esc(t('backupTitle'))}</h2>
+        <p class="vz-hilfe-fuss">${esc(t('backupText'))}</p>
+        <div class="vz-block-btns" style="margin-top:12px">
+          <button type="button" class="vz-btn vz-btn--sm" id="vz-sig-export">${esc(t('backupSave'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-sig-import">${esc(t('backupLoad'))}</button>
+          <input type="file" id="vz-sig-datei" accept="application/json" hidden>
+        </div>
+      </section>
+
+      <section class="vz-block">
         <h2>${esc(t('helpOffline'))}</h2>
         <p class="vz-hilfe-fuss">${t('helpOfflineText')}</p>
       </section>`
   });
+
+  document.getElementById('vz-sig-export').onclick = () => {
+    downloadBlob(new Blob([sicherungAlsDatei()], { type:'application/json' }),
+                 'ns-hotel-zentrale-sicherung.json');
+  };
+  const sigDatei = document.getElementById('vz-sig-datei');
+  document.getElementById('vz-sig-import').onclick = () => {
+    if (confirm(t('backupAsk'))) sigDatei.click();
+  };
+  sigDatei.onchange = () => {
+    const f = sigDatei.files && sigDatei.files[0];
+    if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try{
+        sicherungLaden(fr.result);
+        toast(t('backupDone'));
+        setTimeout(() => location.reload(), 900);
+      }catch(_){ toast(t('backupBad')); }
+    };
+    fr.readAsText(f);
+    sigDatei.value = '';
+  };
 }
 
 /* --- Eigene Textbausteine -------------------------------------------------- */
@@ -1953,4 +1987,5 @@ route();
 /* Für Tests/Automatisierung erreichbar machen. */
 window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS,
               alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H,
-              favoriten, istFavorit, favoritToggle };
+              favoriten, istFavorit, favoritToggle,
+              sicherungAlsDatei, sicherungLaden };
