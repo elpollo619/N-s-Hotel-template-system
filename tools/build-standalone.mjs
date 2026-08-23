@@ -100,6 +100,9 @@ const MODULES = [
   'js/templates/reservationsblatt.js',
   'js/templates/besucherkarte.js',
   'js/templates/mitteilung.js',
+  'js/templates/inventar.js',
+  'js/templates/tuerschild.js',
+  'js/templates/pinnwand.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'
