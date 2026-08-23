@@ -139,6 +139,12 @@ Drei Regeln, damit er nicht gefaehrlich wird:
 Regel 3 ist die wichtige. Ein Aushang, der beim blossen Oeffnen seine Adresse
 wechselt, ist schlimmer als einer, der die alte behaelt.
 
+**Die Fusszeile** baut `objektFusszeile(objektId, abs.foot)` in `js/objekte.js`:
+Kuerzel, Adresse, Absender. Steht die Strasse der Liegenschaft schon in der
+Fusszeile der Firma — beim Hotel ist das so, es sitzt in seinem eigenen Haus —,
+faellt sie weg. Zweimal dieselbe Adresse untereinander liest sich wie ein
+Fehler, und auf einem Blatt, das jahrelang haengt, faellt so etwas auf.
+
 ## Piktogramme
 
 Sechsundachtzig Strichzeichnungen in `js/lib/icons.js`, acht Gruppen,

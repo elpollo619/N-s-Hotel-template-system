@@ -2262,6 +2262,540 @@ a{color:var(--cyan)}
 .t-gross-schritte li{font-size:10.5pt;line-height:1.5;color:var(--ink)}
 .t-gross-schritte b{color:var(--navy)}
 
+/* ==========================================================================
+   t-checkin · Self-Check-in
+   Der Code ist das Groesste auf dem Blatt. Wer nachts vor der Tuer steht,
+   soll nichts anderes suchen muessen.
+   ========================================================================== */
+.t-checkin{display:flex;flex-direction:column;padding:0}
+.t-checkin-page{display:flex;flex-direction:column;padding:0;box-sizing:border-box}
+
+.t-checkin-kopf{background:var(--navy);color:#fff;padding:13mm 14mm 10mm}
+.t-checkin-kopf .eyebrow{margin:0 0 1mm;font-size:19pt;color:var(--cyan);line-height:1}
+.t-checkin-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;letter-spacing:-.02em;
+}
+.t-checkin-obj{margin:2.5mm 0 0;font-size:9.5pt;color:rgba(255,255,255,.72);letter-spacing:.02em}
+
+.t-checkin-code{
+  margin:8mm 14mm 0;padding:6mm 7mm;border-radius:4mm;
+  background:var(--cyan-tint);border:1.6pt solid var(--cyan);text-align:center;
+}
+.t-checkin-code-label{
+  display:block;font-size:8.5pt;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan-tief,#0182a8);margin-bottom:2mm;
+}
+.t-checkin-code strong{
+  display:block;font-family:var(--font-display);font-weight:700;
+  font-size:46pt;line-height:1;color:var(--navy);letter-spacing:.10em;
+}
+.t-checkin-code-zusatz{
+  display:block;margin-top:2.4mm;font-size:9.5pt;color:var(--ink-soft);
+}
+
+.t-checkin-spalten{flex:1;display:grid;gap:6mm;padding:8mm 14mm 0;align-content:start}
+.t-checkin-spalten[data-spalten="3"],
+.t-checkin-spalten[data-spalten="4"],
+.t-checkin-spalten[data-spalten="5"],
+.t-checkin-spalten[data-spalten="6"]{grid-template-columns:1fr 1fr;gap:5mm 8mm}
+
+.t-checkin-block{min-width:0}
+.t-checkin-block.is-einzeln{flex:1;padding:8mm 14mm 0}
+.t-checkin-sprache{
+  margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:12pt;
+  color:var(--navy);padding-bottom:1.6mm;border-bottom:1pt solid var(--line);
+}
+.t-checkin-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3.4mm}
+.t-checkin-schritt{display:flex;align-items:flex-start;gap:3.2mm}
+.t-checkin-nr{
+  flex:0 0 auto;width:6.6mm;height:6.6mm;border-radius:50%;background:var(--cyan);color:#fff;
+  display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:10pt;
+}
+.t-checkin-ico{flex:0 0 auto;color:var(--navy);display:grid;place-items:center;padding-top:.4mm}
+.t-checkin-ico svg{width:5.4mm;height:5.4mm}
+.t-checkin-txt{display:flex;flex-direction:column;gap:.6mm;min-width:0}
+.t-checkin-txt b{font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy);line-height:1.14}
+.t-checkin-txt i{font-style:normal;font-size:9pt;line-height:1.4;color:var(--ink-soft)}
+.t-checkin-block.is-einzeln .t-checkin-txt b{font-size:14pt}
+.t-checkin-block.is-einzeln .t-checkin-txt i{font-size:11pt}
+.t-checkin-block.is-einzeln .t-checkin-liste{gap:6mm}
+.t-checkin-hilfe{margin:3.4mm 0 0;font-size:9pt;color:var(--ink-soft)}
+.t-checkin-hilfe b{color:var(--navy)}
+
+.t-checkin-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;
+  padding:6mm 14mm 11mm;font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-checkin-fuss > span:nth-child(2){flex:1}
+.t-checkin-mark{flex:0 0 auto;display:flex}
+.t-checkin-qr{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:1.2mm}
+.t-checkin-qr span{font-size:7pt;letter-spacing:.06em;text-transform:uppercase}
+
+/* ==========================================================================
+   t-tuer · Tuerhaenger, zwei Stueck auf A4
+   Echte Masse: 90 x 220 mm, Loch 30 mm.
+   ========================================================================== */
+.t-tuer{display:flex;flex-direction:column;padding:14mm 12mm 8mm}
+.t-tuer-bogen{flex:1;display:flex;justify-content:center;gap:6mm;align-items:flex-start}
+.t-tuer-karte{
+  position:relative;width:90mm;height:220mm;border-radius:6mm;
+  background:var(--ton);color:var(--hell);
+  display:flex;flex-direction:column;align-items:center;
+  padding:34mm 8mm 9mm;box-sizing:border-box;overflow:hidden;
+}
+.t-tuer-bogen.is-schneiden .t-tuer-karte{outline:.6pt dashed rgba(0,0,0,.35);outline-offset:1.6mm}
+.t-tuer-loch{
+  position:absolute;top:12mm;left:50%;transform:translateX(-50%);
+  width:30mm;height:30mm;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 .6pt rgba(0,0,0,.18) inset;
+}
+.t-tuer-inhalt{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6mm;text-align:center}
+.t-tuer-ico{display:flex;opacity:.92}
+.t-tuer-ico svg{width:22mm;height:22mm}
+.t-tuer-haupt{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:20pt;
+  line-height:1.1;letter-spacing:-.01em;
+}
+.t-tuer-weitere{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.8mm;opacity:.82}
+.t-tuer-weitere li{font-size:10.5pt;line-height:1.2}
+.t-tuer-fuss{margin-top:auto;display:flex;justify-content:center;opacity:.8;font-size:8pt;letter-spacing:.1em;text-transform:uppercase}
+.t-tuer-hinweis{
+  margin:5mm 0 0;text-align:center;font-size:8pt;color:var(--muted);letter-spacing:.03em;
+}
+
+/* ==========================================================================
+   t-tisch · Tischaufsteller, A4 quer, in der Mitte gefalzt
+   Die obere Flaeche steht auf dem Kopf — nach dem Falzen zeigt sie nach vorn.
+   ========================================================================== */
+.t-tisch{display:flex;padding:0}
+.t-tisch-bogen{flex:1;display:flex;flex-direction:column}
+.t-tisch-flaeche{
+  flex:1;display:flex;flex-direction:column;padding:11mm 14mm 8mm;box-sizing:border-box;
+  min-height:0;
+}
+.t-tisch-flaeche.is-vorne{transform:rotate(180deg)}
+.t-tisch-inhalt{flex:1;display:flex;align-items:center;gap:10mm;min-height:0}
+.t-tisch-text{flex:1;min-width:0}
+.t-tisch-text .eyebrow{margin:0 0 1mm;font-size:17pt;color:var(--cyan);line-height:1}
+.t-tisch-text h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:29pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-tisch-text h2{
+  margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:19pt;
+  line-height:1.05;color:var(--navy);
+}
+.t-tisch-unter{margin:2.6mm 0 0;font-size:11pt;color:var(--ink-soft);line-height:1.45;max-width:120mm}
+.t-tisch-obj{margin:2mm 0 0;font-size:9pt;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.t-tisch-zeilen{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.4mm}
+.t-tisch-zeilen li{display:flex;align-items:center;gap:3mm;font-size:10.5pt}
+.t-tisch-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-tisch-ico svg{width:4.6mm;height:4.6mm}
+.t-tisch-zeilen b{font-family:var(--font-display);font-weight:700;color:var(--navy);min-width:26mm}
+.t-tisch-zeilen i{font-style:normal;color:var(--ink-soft)}
+.t-tisch-qr{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:1.4mm}
+.t-tisch-qr span{font-size:7.4pt;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.t-tisch-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:4mm;
+  padding-top:3mm;border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);
+}
+.t-tisch-marke{flex:0 0 auto;display:flex;font-weight:700;letter-spacing:.08em}
+.t-tisch-falz{
+  position:relative;height:0;border-top:.8pt dashed var(--cyan);
+}
+.t-tisch-falz span{
+  position:absolute;right:6mm;top:-2.2mm;background:#fff;padding:0 2mm;
+  font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);
+}
+
+/* ==========================================================================
+   t-zimmer · Zimmerschild
+   ========================================================================== */
+.t-zimmer-page{display:flex;padding:8mm;box-sizing:border-box}
+.t-zimmer-rahmen{
+  flex:1;display:flex;flex-direction:column;border-radius:5mm;
+  border:1.4pt solid var(--line);padding:8mm 9mm 6mm;background:#fff;
+}
+.t-zimmer-page.is-cyan .t-zimmer-rahmen{border-color:var(--cyan)}
+.t-zimmer-page.is-voll .t-zimmer-rahmen{background:var(--navy);border-color:var(--navy);color:#fff}
+.t-zimmer-mitte{flex:1;display:flex;align-items:center;gap:9mm;min-height:0}
+.t-zimmer-nr{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:64pt;
+  line-height:.92;color:var(--navy);letter-spacing:-.04em;
+}
+.t-zimmer-page.is-cyan .t-zimmer-nr{color:var(--cyan)}
+.t-zimmer-page.is-voll .t-zimmer-nr{color:#fff}
+.t-zimmer-rechts{flex:1;min-width:0;display:flex;flex-direction:column;gap:2mm}
+.t-zimmer-name{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:17pt;
+  line-height:1.08;color:var(--navy);
+}
+.t-zimmer-page.is-voll .t-zimmer-name{color:#fff}
+.t-zimmer-zusatz{margin:0;font-size:10pt;color:var(--ink-soft)}
+.t-zimmer-page.is-voll .t-zimmer-zusatz{color:rgba(255,255,255,.75)}
+.t-zimmer-ico{margin-top:1mm;color:var(--cyan);display:flex}
+.t-zimmer-ico svg{width:11mm;height:11mm}
+.t-zimmer-page.is-voll .t-zimmer-ico{color:var(--cyan)}
+.t-zimmer-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:4mm;padding-top:3mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);letter-spacing:.04em;
+}
+.t-zimmer-page.is-voll .t-zimmer-fuss{border-top-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)}
+.t-zimmer-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-willk · Willkommenskarte, A5
+   ========================================================================== */
+.t-willk{display:flex;flex-direction:column;padding:0}
+.t-willk-band{height:4mm;background:var(--cyan);flex:0 0 auto}
+.t-willk-kopf{padding:11mm 13mm 0}
+.t-willk-kopf .eyebrow{margin:0;font-size:23pt;color:var(--cyan);line-height:1.05}
+.t-willk-obj{margin:2mm 0 0;font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.t-willk-mitte{flex:1;padding:6mm 13mm 0;display:flex;flex-direction:column;gap:5mm}
+.t-willk-block{min-width:0}
+.t-willk-anrede{
+  margin:0 0 2mm;font-family:var(--font-display);font-weight:700;font-size:15pt;
+  line-height:1.08;color:var(--navy);
+}
+.t-willk-block.is-erste .t-willk-anrede{font-size:20pt}
+.t-willk-text{margin:0;font-size:10pt;line-height:1.5;color:var(--ink-soft)}
+.t-willk-block.is-erste .t-willk-text{font-size:11.5pt;color:var(--ink)}
+.t-willk-sig{
+  margin:5mm 13mm 0;font-family:var(--font-display);font-weight:700;
+  font-size:11pt;color:var(--navy);
+}
+.t-willk-hinweis{
+  display:flex;align-items:center;gap:3mm;margin:5mm 13mm 0;padding:3.4mm 4mm;
+  border-radius:3mm;background:var(--bg-2);font-size:9.5pt;color:var(--ink);
+}
+.t-willk-hinweis span{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-willk-hinweis svg{width:4.6mm;height:4.6mm}
+.t-willk-fuss{
+  display:flex;align-items:center;gap:4mm;margin-top:auto;
+  padding:5mm 13mm 9mm;font-size:7pt;color:var(--muted);line-height:1.4;
+}
+.t-willk-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-fb · Feedback-Aushang
+   ========================================================================== */
+.t-fb{display:flex;flex-direction:column;padding:16mm 16mm 11mm;text-align:center}
+.t-fb-kopf .eyebrow{margin:0 0 1.5mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-fb-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-fb-lede{margin:4mm auto 0;max-width:130mm;font-size:12pt;line-height:1.45;color:var(--ink-soft)}
+.t-fb-sterne{display:flex;justify-content:center;gap:2mm;margin:7mm 0 0;color:var(--cyan)}
+.t-fb-sterne svg{width:11mm;height:11mm}
+.t-fb-code{margin:8mm 0 0;display:flex;flex-direction:column;align-items:center;gap:3mm}
+.t-fb-code p{
+  margin:0;font-size:9.5pt;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--navy);
+}
+.t-fb-weitere{
+  list-style:none;margin:8mm 0 0;padding:5mm 0 0;border-top:1pt solid var(--line);
+  display:flex;flex-direction:column;gap:2.6mm;text-align:left;
+}
+.t-fb-weitere li{font-size:9.5pt;line-height:1.4;color:var(--ink-soft)}
+.t-fb-weitere b{color:var(--navy);font-family:var(--font-display);font-weight:700}
+.t-fb-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:6mm;
+  font-size:7.6pt;color:var(--muted);text-align:left;line-height:1.4;
+}
+.t-fb-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-zeiten · Zeiten-Tafel, A4
+   Eine Kolonne mit Punktlinie: das Auge springt von der Bezeichnung zur
+   Zeit, ohne die Zeile zu verlieren.
+   ========================================================================== */
+.t-zeiten{display:flex;flex-direction:column;padding:18mm 18mm 12mm}
+.t-zeiten-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1}
+.t-zeiten-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-zeiten-sprachen{
+  margin:2mm 0 0;font-size:11pt;color:var(--ink-soft);font-weight:600;letter-spacing:.01em;
+}
+.t-zeiten-unter{margin:3mm 0 0;font-size:11pt;line-height:1.45;color:var(--ink-soft)}
+.t-zeiten-liste{
+  list-style:none;margin:9mm 0 0;padding:0;display:flex;flex-direction:column;gap:3.2mm;
+}
+.t-zeiten-zeile{display:flex;align-items:baseline;gap:3mm;min-width:0}
+.t-zeiten-ico{flex:0 0 auto;color:var(--cyan);display:flex;align-self:center}
+.t-zeiten-ico svg{width:5.4mm;height:5.4mm}
+.t-zeiten-was{display:flex;flex-direction:column;min-width:0}
+.t-zeiten-was b{
+  font-family:var(--font-display);font-weight:700;font-size:13pt;
+  line-height:1.15;color:var(--navy);
+}
+.t-zeiten-was i{font-style:normal;font-size:9pt;line-height:1.3;color:var(--muted)}
+/* Die Punktlinie waechst, die beiden Enden bleiben stehen. */
+.t-zeiten-punkte{
+  flex:1 1 auto;min-width:6mm;height:1px;align-self:center;
+  border-bottom:1.4pt dotted var(--line);
+}
+.t-zeiten-zeit{
+  flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:13pt;
+  color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.t-zeiten-hinweis{
+  margin:8mm 0 0;padding:4mm 5mm;border-radius:3mm;background:var(--bg-2);
+  font-size:10pt;line-height:1.45;color:var(--ink-soft);
+}
+.t-zeiten-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-zeiten-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-termin · Termin-Aushang, A4
+   Das Datum ist das Groesste auf dem Blatt — wer vorbeigeht, muss es aus
+   zwei Metern lesen koennen.
+   ========================================================================== */
+.t-termin{display:flex;flex-direction:column;padding:18mm 18mm 12mm}
+.t-termin-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-termin-kopf>div{flex:1;min-width:0}
+.t-termin-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1}
+.t-termin-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.03;color:var(--navy);letter-spacing:-.02em;
+}
+.t-termin-wer{margin:2.5mm 0 0;font-size:12pt;color:var(--ink-soft)}
+.t-termin-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-termin-ico svg{width:17mm;height:17mm}
+.t-termin-wann{
+  margin:9mm 0 0;padding:6mm 7mm;border-radius:4mm;background:var(--navy);
+  display:flex;flex-direction:column;gap:1.5mm;
+}
+.t-termin-label{
+  font-size:9pt;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
+}
+.t-termin-wann strong{
+  font-family:var(--font-display);font-weight:700;font-size:26pt;line-height:1.05;color:#fff;
+}
+.t-termin-zeit{font-size:14pt;color:rgba(255,255,255,.82);font-variant-numeric:tabular-nums}
+.t-termin-tun{
+  margin:7mm 0 0;padding:6mm 7mm;border-radius:4mm;
+  background:var(--cyan-tint);border:1.2pt solid var(--cyan);
+}
+.t-termin-tun h2{
+  margin:0 0 3.5mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-termin-tun ul{margin:0;padding:0 0 0 5mm;display:flex;flex-direction:column;gap:2.4mm}
+.t-termin-tun li{font-size:11pt;line-height:1.45;color:var(--ink)}
+.t-termin-tun li::marker{color:var(--cyan)}
+.t-termin-frage{margin:7mm 0 0;font-size:11pt;line-height:1.45;color:var(--ink-soft)}
+.t-termin-frage b{
+  display:block;font-family:var(--font-display);font-weight:700;font-size:10pt;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--navy);
+}
+.t-termin-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-termin-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-kling · Klingel- und Briefkastenschilder, A4-Bogen
+   Die Schriftgroesse haengt an der Schildhoehe: ein 12-mm-Schild vertraegt
+   keine 12-pt-Zeile. Darum rechnet sie aus --kling-h.
+   ========================================================================== */
+/* 10 mm Rand und 3 mm Abstand: so stehen drei 60-mm-Schilder nebeneinander
+   statt zwei, und der Bogen ist zu zwei Dritteln statt zur Haelfte genutzt. */
+.t-kling{display:flex;flex-direction:column;padding:12mm 10mm 10mm}
+.t-kling-bogen{display:flex;flex-wrap:wrap;gap:3mm;align-content:flex-start}
+.t-kling-schild{
+  box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;
+  gap:.6mm;padding:1.5mm 3mm;overflow:hidden;background:#fff;
+}
+.t-kling-bogen.is-rahmen-linie .t-kling-schild{border:.6pt dashed var(--line)}
+.t-kling-bogen.is-mitte .t-kling-schild{align-items:center;text-align:center}
+.t-kling-name{
+  font-family:var(--font-display);font-weight:700;color:var(--navy);
+  font-size:calc(var(--kling-h) * .34);line-height:1.05;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+.t-kling-bogen.is-versal .t-kling-name{text-transform:uppercase;letter-spacing:.04em}
+.t-kling-zusatz{
+  font-size:calc(var(--kling-h) * .2);line-height:1.1;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+.t-kling-fuss{
+  margin-top:auto;padding-top:6mm;border-top:.8pt solid var(--line);
+  font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+
+/* ==========================================================================
+   t-kontakt · Kontakt-Tafel, A4
+   Die Nummer rechts und gross: im Treppenhaus wird sie abgetippt, nicht
+   gelesen.
+   ========================================================================== */
+.t-kontakt{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-kontakt-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1}
+.t-kontakt-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-kontakt-unter{margin:3mm 0 0;font-size:11pt;line-height:1.45;color:var(--ink-soft)}
+.t-kontakt-liste{
+  list-style:none;margin:8mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.6mm;
+}
+.t-kontakt-zeile{
+  display:flex;align-items:center;gap:4mm;padding:3.6mm 5mm;
+  border:1pt solid var(--line);border-radius:3mm;background:#fff;
+}
+.t-kontakt-zeile.is-dringend{border-color:var(--red);background:var(--red-tint)}
+.t-kontakt-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-kontakt-ico svg{width:6mm;height:6mm}
+.t-kontakt-zeile.is-dringend .t-kontakt-ico{color:var(--red)}
+.t-kontakt-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:.4mm}
+.t-kontakt-txt b{
+  font-family:var(--font-display);font-weight:700;font-size:12pt;
+  line-height:1.15;color:var(--navy);
+}
+.t-kontakt-txt i{font-style:normal;font-size:10pt;line-height:1.25;color:var(--ink-soft)}
+.t-kontakt-txt em{font-style:normal;font-size:8.6pt;line-height:1.25;color:var(--muted)}
+.t-kontakt-nr{
+  flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:15pt;
+  color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.t-kontakt-zeile.is-dringend .t-kontakt-nr{color:var(--red)}
+.t-kontakt-qr{
+  margin:7mm 0 0;display:flex;align-items:center;gap:4mm;
+}
+.t-kontakt-qr span{font-size:9.5pt;font-weight:700;color:var(--navy)}
+.t-kontakt-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-kontakt-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-bau · Umbau- und Baustellen-Aushang, A4
+   Das Band oben ist die Warnschraffur — in Marineblau und Cyan statt in
+   Gelb-Schwarz, damit der Aushang zum Haus gehoert und nicht zur Baustelle.
+   ========================================================================== */
+.t-bau{display:flex;flex-direction:column;padding:0 17mm 12mm}
+.t-bau-band{
+  height:7mm;margin:0 -17mm 13mm;flex:0 0 auto;
+  background:repeating-linear-gradient(135deg,
+    var(--navy) 0 6mm, var(--cyan) 6mm 12mm);
+}
+.t-bau-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-bau-kopf>div{flex:1;min-width:0}
+.t-bau-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1}
+.t-bau-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.03;color:var(--navy);letter-spacing:-.02em;
+}
+.t-bau-betrifft{margin:3mm 0 0;font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-bau-betrifft span{
+  display:block;font-size:8.6pt;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);
+}
+.t-bau-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-bau-ico svg{width:16mm;height:16mm}
+.t-bau-zeitraum{display:flex;gap:4mm;margin:8mm 0 0}
+.t-bau-datum{
+  flex:1;min-width:0;padding:5mm 5.5mm;border-radius:4mm;
+  background:var(--bg-2);display:flex;flex-direction:column;gap:1.2mm;
+}
+.t-bau-datum span{
+  font-size:8.6pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);
+}
+.t-bau-datum strong{
+  font-family:var(--font-display);font-weight:700;font-size:17pt;
+  line-height:1.06;color:var(--navy);
+}
+.t-bau-zeit{
+  margin:3mm 0 0;font-size:11pt;color:var(--ink-soft);font-variant-numeric:tabular-nums;
+}
+.t-bau-folgen{
+  list-style:none;margin:8mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.4mm;
+}
+.t-bau-folgen li{
+  position:relative;padding-left:6mm;font-size:11pt;line-height:1.45;color:var(--ink);
+}
+.t-bau-folgen li::before{
+  content:"";position:absolute;left:0;top:1.6mm;width:2.6mm;height:2.6mm;
+  border-radius:50%;background:var(--cyan);
+}
+.t-bau-sorry{
+  margin:8mm 0 0;padding:4.5mm 5mm;border-radius:3mm;background:var(--cyan-tint);
+  font-size:11.5pt;line-height:1.45;color:var(--navy);
+}
+.t-bau-weitere{
+  list-style:none;margin:2.5mm 0 0;padding:0 5mm;
+  display:flex;flex-direction:column;gap:1.6mm;
+}
+.t-bau-weitere li{font-size:9.5pt;line-height:1.35;color:var(--ink-soft)}
+.t-bau-wer{margin:7mm 0 0;font-size:10.5pt;line-height:1.4;color:var(--ink-soft)}
+.t-bau-fuss{
+  margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-bau-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-preis · Preisliste, A4
+   Betraege mit Tabellenziffern, sonst tanzen die Rappen und die Spalte
+   laesst sich nicht vergleichen.
+   ========================================================================== */
+.t-preis{display:flex;flex-direction:column;padding:17mm 17mm 11mm}
+.t-preis-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;line-height:1}
+.t-preis-titelzeile{display:flex;align-items:baseline;gap:5mm;flex-wrap:wrap}
+.t-preis-titelzeile h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em;
+}
+.t-preis-stand{font-size:9.5pt;color:var(--muted);white-space:nowrap}
+.t-preis-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-preis-unter{margin:3mm 0 0;font-size:11pt;line-height:1.45;color:var(--ink-soft)}
+.t-preis-liste{list-style:none;margin:8mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.4mm}
+.t-preis-abschnitt{
+  display:flex;align-items:center;gap:2.6mm;margin:4mm 0 1mm;
+  padding-bottom:1.6mm;border-bottom:1.2pt solid var(--cyan);
+}
+.t-preis-abschnitt:first-child{margin-top:0}
+.t-preis-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-preis-ico svg{width:5mm;height:5mm}
+.t-preis-abschnitt b{
+  font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-preis-abschnitt i{font-style:normal;font-size:9pt;color:var(--muted)}
+.t-preis-zeile{display:flex;align-items:baseline;gap:3mm;min-width:0}
+.t-preis-was{display:flex;flex-direction:column;min-width:0}
+.t-preis-was b{font-family:var(--font-display);font-weight:700;font-size:11.5pt;line-height:1.15;color:var(--navy)}
+.t-preis-was i{font-style:normal;font-size:9pt;line-height:1.3;color:var(--muted)}
+.t-preis-punkte{
+  flex:1 1 auto;min-width:6mm;height:1px;align-self:center;
+  border-bottom:1.4pt dotted var(--line);
+}
+.t-preis-betrag{flex:0 0 auto;display:flex;align-items:baseline;gap:2mm;white-space:nowrap}
+.t-preis-betrag b{
+  font-family:var(--font-display);font-weight:700;font-size:12.5pt;color:var(--navy);
+  font-variant-numeric:tabular-nums;
+}
+.t-preis-betrag i{font-style:normal;font-size:8.6pt;color:var(--muted)}
+.t-preis-fuss{margin-top:auto;padding-top:7mm}
+.t-preis-zahlung{margin:0;font-size:10pt;line-height:1.4;color:var(--ink-soft)}
+.t-preis-hinweis{
+  list-style:none;margin:3mm 0 0;padding:0;display:flex;flex-direction:column;gap:1.2mm;
+}
+.t-preis-hinweis li{font-size:8.6pt;line-height:1.35;color:var(--muted)}
+.t-preis-abs{
+  display:flex;align-items:center;gap:5mm;margin:6mm 0 0;padding-top:5mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
+}
+.t-preis-mark{flex:0 0 auto;display:flex}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -2660,6 +3194,20 @@ function objektAdresse(id){
     .filter(x => x && x.trim()).join(', ');
 }
 
+/**
+ * Die Fusszeile eines Blattes: Kürzel, Adresse, Absender.
+ *
+ * Steht die Strasse des Objekts schon in der Fusszeile der Firma — beim
+ * Hotel ist das so, es sitzt in seinem eigenen Haus —, fällt sie hier weg.
+ * Zweimal dieselbe Adresse untereinander liest sich wie ein Fehler.
+ */
+function objektFusszeile(objektId, absenderFuss){
+  const o = objekt(objektId);
+  const fuss = String(absenderFuss || '');
+  const adr = o.street && fuss.includes(o.street) ? '' : objektAdresse(objektId);
+  return [o.code, adr, fuss].filter(x => x && x.trim()).join(' · ');
+}
+
 /** true, wenn zum Objekt noch keine Strasse hinterlegt ist. */
 function adresseFehlt(id){
   const o = objekt(id);
@@ -2799,15 +3347,16 @@ const BEREICHE = [
     title: 'Zimmer und Gäste',
     kurz: 'Zimmer',
     lede: 'Was im Zimmer liegt und an der Wand hängt — von der Mappe auf dem Tisch bis zum WLAN-Code neben dem Bett.',
-    ids: ['gaestemappe', 'foto', 'aushang', 'qrplakat', 'zattoo', 'notruf']
+    ids: ['checkin', 'gaestemappe', 'willkommen', 'zimmerschild', 'tuerhaenger',
+          'tischaufsteller', 'foto', 'aushang', 'qrplakat', 'feedback', 'zattoo', 'notruf']
   },
   {
     id: 'hausordnung',
     icon: 'door',
     title: 'Hausordnung',
     kurz: 'Hausordnung',
-    lede: 'Was im Haus gilt — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
-    ids: ['hinweis', 'mieterbrief']
+    lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
+    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte']
   },
   {
     id: 'sicherheit',
@@ -2822,8 +3371,8 @@ const BEREICHE = [
     icon: 'trash',
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
-    lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten']
+    lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild']
   },
   {
     id: 'team',
@@ -10411,11 +10960,1818 @@ const kurzanleitung = {
   }
 };
 
+/* ===== js/templates/checkin.js ===== */
+/* Self-Check-in · A4 hoch
+   --------------------------------------------------------------------------
+   N's Hotel kommt ohne Rezeption aus. Damit steht und fällt der Aufenthalt
+   mit diesem einen Blatt: Wer nachts um elf vor der Tür steht und den Code
+   nicht findet, kommt nicht ins Zimmer.
+
+   Darum ist der Code das Grösste auf der Seite — grösser als der Titel.
+   Alles andere ist Beiwerk.
+
+   Zwei Verwendungen, darum zwei Anordnungen:
+     zusammen  alle Sprachen auf einem Blatt — zum Aushängen an der Tür
+     einzeln   eine Seite je Sprache — zum Mitgeben oder Mailen
+*/
+
+
+
+
+
+
+
+/* Die vier Schritte in allen sechs Sprachen. Deutsch ist das Original; die
+   übrigen sind Übersetzungen und dürfen überschrieben werden. */
+const CHECKIN_SCHRITTE = [
+  { icon:'door',
+    de:{ t:'Haustür öffnen',       s:'Code auf dem Tastenfeld eingeben, dann die Taste mit dem Schlüssel drücken.' },
+    en:{ t:'Open the front door',  s:'Enter the code on the keypad, then press the key button.' },
+    fr:{ t:'Ouvrir la porte',      s:'Saisissez le code sur le clavier, puis appuyez sur la touche clé.' },
+    it:{ t:'Aprire il portone',    s:'Digitate il codice sulla tastiera, poi premete il tasto con la chiave.' },
+    pt:{ t:'Abrir a porta',        s:'Introduza o código no teclado e prima a tecla com a chave.' },
+    es:{ t:'Abrir la puerta',      s:'Introduzca el código en el teclado y pulse la tecla de la llave.' } },
+
+  { icon:'stairs',
+    de:{ t:'In den ersten Stock',  s:'Treppe hoch. Ihr Zimmer ist angeschrieben.' },
+    en:{ t:'Up to the first floor',s:'Take the stairs. Your room is labelled.' },
+    fr:{ t:'Monter au premier',    s:'Prenez l’escalier. Votre chambre est indiquée.' },
+    it:{ t:'Salire al primo piano',s:'Salite le scale. La vostra camera è segnalata.' },
+    pt:{ t:'Subir ao primeiro andar', s:'Suba as escadas. O seu quarto está identificado.' },
+    es:{ t:'Suba al primer piso',  s:'Suba las escaleras. Su habitación está señalizada.' } },
+
+  { icon:'key',
+    de:{ t:'Zimmer öffnen',        s:'Der Schlüssel steckt im Schlüsselkasten neben der Zimmertür.' },
+    en:{ t:'Open your room',       s:'The key is in the key box next to the room door.' },
+    fr:{ t:'Ouvrir la chambre',    s:'La clé se trouve dans le boîtier à côté de la porte.' },
+    it:{ t:'Aprire la camera',     s:'La chiave è nella cassetta accanto alla porta.' },
+    pt:{ t:'Abrir o quarto',       s:'A chave está na caixa ao lado da porta do quarto.' },
+    es:{ t:'Abrir la habitación',  s:'La llave está en la caja junto a la puerta.' } },
+
+  { icon:'wifi',
+    de:{ t:'Ankommen',             s:'WLAN, Frühstück und alles Weitere stehen in der Mappe im Zimmer.' },
+    en:{ t:'Settle in',            s:'Wi-Fi, breakfast and everything else are in the folder in your room.' },
+    fr:{ t:'Vous installer',       s:'Wi-Fi, petit-déjeuner et le reste: dans le dossier de la chambre.' },
+    it:{ t:'Sistemarsi',           s:'Wi-Fi, colazione e tutto il resto sono nella cartella in camera.' },
+    pt:{ t:'Instalar-se',          s:'Wi-Fi, pequeno-almoço e o resto estão na pasta do quarto.' },
+    es:{ t:'Instalarse',           s:'Wi-Fi, desayuno y lo demás están en la carpeta de la habitación.' } }
+];
+
+const CHECKIN_KOPF = {
+  de:{ eyebrow:'Herzlich willkommen', titel:'So kommen Sie herein',
+       code:'Ihr Zutrittscode', hilfe:'Klappt etwas nicht? Rufen Sie uns an:' },
+  en:{ eyebrow:'Welcome',             titel:'How to get in',
+       code:'Your access code',       hilfe:'Something not working? Give us a call:' },
+  fr:{ eyebrow:'Bienvenue',           titel:'Comment entrer',
+       code:'Votre code d’accès',     hilfe:'Un problème? Appelez-nous:' },
+  it:{ eyebrow:'Benvenuti',           titel:'Come entrare',
+       code:'Il vostro codice',       hilfe:'Qualcosa non funziona? Chiamateci:' },
+  pt:{ eyebrow:'Bem-vindo',           titel:'Como entrar',
+       code:'O seu código de acesso', hilfe:'Algo não funciona? Ligue-nos:' },
+  es:{ eyebrow:'Bienvenido',          titel:'Cómo entrar',
+       code:'Su código de acceso',    hilfe:'¿Algo no funciona? Llámenos:' }
+};
+
+/** Ein überschriebener Schritt-Text, sonst der hinterlegte. */
+function checkinText(d, i, sp, feld){
+  const eigen = d[`s${i + 1}${feld}${sp.toUpperCase()}`];
+  if (has(eigen)) return eigen;
+  const s = CHECKIN_SCHRITTE[i][sp] || CHECKIN_SCHRITTE[i].de;
+  return feld === 'T' ? s.t : s.s;
+}
+
+function checkinBlock(d, sp, einzeln){
+  const k = CHECKIN_KOPF[sp] || CHECKIN_KOPF.de;
+  const schritte = CHECKIN_SCHRITTE.map((s, i) => `
+    <li class="t-checkin-schritt">
+      <span class="t-checkin-nr">${i + 1}</span>
+      <span class="t-checkin-ico">${icon(s.icon, 26, 1.9)}</span>
+      <span class="t-checkin-txt">
+        <b>${esc(checkinText(d, i, sp, 'T'))}</b>
+        <i>${esc(checkinText(d, i, sp, 'S'))}</i>
+      </span>
+    </li>`).join('');
+
+  return `
+    <section class="t-checkin-block${einzeln ? ' is-einzeln' : ''}" lang="${sp}">
+      ${einzeln ? '' : `<h2 class="t-checkin-sprache">${esc(k.titel)}</h2>`}
+      <ol class="t-checkin-liste">${schritte}</ol>
+      ${has(d.telefon) ? `<p class="t-checkin-hilfe">${esc(k.hilfe)} <b>${esc(d.telefon)}</b></p>` : ''}
+    </section>`;
+}
+
+const checkin = {
+  id:'checkin',
+  title:'Self-Check-in',
+  sub:'Zutrittscode und vier Schritte · A4 hoch · sechs Sprachen',
+  badge:'Ankunft',
+  badgeCyan:true,
+  root:'t-checkin',
+  page:'a4',
+  multipage(d){ return d && d.anordnung === 'einzeln' && sprachListe(d.sprachen).length > 1; },
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="64" fill="#2A3350"/>
+    <rect x="18" y="18" width="86" height="9" rx="4" fill="#01B1E2"/>
+    <rect x="18" y="34" width="132" height="14" rx="5" fill="#fff" opacity=".95"/>
+    <rect x="18" y="78" width="174" height="46" rx="8" fill="#E7F7FC" stroke="#01B1E2" stroke-width="2"/>
+    <rect x="40" y="94" width="130" height="16" rx="5" fill="#2A3350"/>
+    ${[0, 1, 2, 3].map(i => `
+      <circle cx="27" cy="${146 + i * 30}" r="8" fill="#01B1E2"/>
+      <rect x="42" y="${141 + i * 30}" width="${96 - i * 8}" height="7" rx="3.5" fill="#2A3350" opacity=".8"/>
+      <rect x="42" y="${152 + i * 30}" width="${140 - i * 12}" height="5" rx="2.5" fill="#C9CFDA"/>`).join('')}
+    ${lines(18, 274, 120, 1)}`),
+
+  fields:[
+    { t:'group', label:'Zutritt' },
+    { k:'code', label:'Zutrittscode', type:'text',
+      hint:'Das Grösste auf dem Blatt. Wer nachts vor der Tür steht, findet sonst nichts anderes.' },
+    { k:'codeHinweis', label:'Zusatz zum Code', type:'text',
+      hint:'Zum Beispiel «gültig ab 15:00» oder «gilt für Haustür und Zimmer».' },
+    { k:'telefon', label:'Telefon für den Notfall', type:'text' },
+
+    { t:'group', label:'Anordnung und Sprachen' },
+    { k:'anordnung', label:'Anordnung', type:'select', options:[
+      { v:'zusammen', t:'alle Sprachen auf einem Blatt — zum Aushängen' },
+      { v:'einzeln',  t:'eine Seite je Sprache — zum Mitgeben' }
+    ] },
+    { k:'sprachen', label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'QR-Code' },
+    { k:'qrText', label:'Adresse für den QR-Code', type:'text',
+      hint:'Leer lassen: kein Code. Sonst z. B. die Anfahrtsseite oder die Gästemappe.' },
+    { k:'qrLabel', label:'Beschriftung am Code', type:'text' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
+
+    { t:'group', label:'Schritte überschreiben' },
+    { t:'note',  label:'Leer lassen heisst: der hinterlegte Text gilt. Überschrieben wird nur, was hier steht — und nur auf Deutsch. Die anderen Sprachen bleiben, wie sie sind.' },
+    ...CHECKIN_SCHRITTE.map((s, i) => ({
+      k:`s${i + 1}TDE`, label:`Schritt ${i + 1} — Titel`, type:'text'
+    })),
+    ...CHECKIN_SCHRITTE.map((s, i) => ({
+      k:`s${i + 1}SDE`, label:`Schritt ${i + 1} — Text`, type:'textarea', rows:2
+    }))
+  ],
+
+  defaults:{
+    code:'1 4 7 2',
+    codeHinweis:'Gilt für die Haustür, rund um die Uhr',
+    telefon:'+41 31 951 85 54',
+    anordnung:'zusammen',
+    sprachen:['de','en'],
+    sprachSet:'',
+    qrText:'',
+    qrLabel:'Gästemappe',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const sprachen = sprachObjekte(d.sprachen);
+    const einzeln = d.anordnung === 'einzeln' && sprachen.length > 1;
+
+    const qr = has(d.qrText)
+      ? `<div class="t-checkin-qr">${qrSvg(d.qrText, { stufe:'M', groesse:'22mm' })}
+           ${has(d.qrLabel) ? `<span>${esc(d.qrLabel)}</span>` : ''}</div>`
+      : '';
+
+    const kopf = (sp) => {
+      const k = CHECKIN_KOPF[sp] || CHECKIN_KOPF.de;
+      return `
+        <header class="t-checkin-kopf">
+          <p class="eyebrow">${esc(k.eyebrow)}</p>
+          <h1>${esc(k.titel)}</h1>
+          ${(obj.code || adr) ? `<p class="t-checkin-obj">${esc([obj.name, adr].filter(Boolean).join(' · '))}</p>` : ''}
+        </header>
+
+        <div class="t-checkin-code">
+          <span class="t-checkin-code-label">${esc(k.code)}</span>
+          <strong>${esc(d.code || '––––')}</strong>
+          ${has(d.codeHinweis) ? `<span class="t-checkin-code-zusatz">${esc(d.codeHinweis)}</span>` : ''}
+        </div>`;
+    };
+
+    const fuss = `
+      <footer class="t-checkin-fuss">
+        <span class="t-checkin-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(abs.foot)}</span>
+        ${qr}
+      </footer>`;
+
+    /* Eine Seite je Sprache — für den Ausdruck, den man dem Gast mitgibt. */
+    if (einzeln){
+      return sprachen.map(sp => `
+        <article data-page class="t-checkin-page">
+          ${kopf(sp.id)}
+          ${checkinBlock(d, sp.id, true)}
+          ${fuss}
+        </article>`).join('');
+    }
+
+    /* Alles auf einem Blatt — für die Tür. Der Kopf steht in der ersten
+       gewählten Sprache, die Schritte stehen darunter in allen. */
+    return `
+      ${kopf(sprachen[0].id)}
+      <div class="t-checkin-spalten" data-spalten="${sprachen.length}">
+        ${sprachen.map(sp => checkinBlock(d, sp.id, false)).join('')}
+      </div>
+      ${fuss}`;
+  }
+};
+
+/* ===== js/templates/tuerhaenger.js ===== */
+/* Türhänger · A4 hoch, zwei Stück nebeneinander
+   --------------------------------------------------------------------------
+   Der Klassiker an der Zimmertür: vorne «Bitte nicht stören», hinten «Zimmer
+   bitte reinigen». Gedruckt wird beides nebeneinander auf ein Blatt — wer
+   doppelseitig drucken kann, nimmt zwei Blätter; wer nicht, schneidet aus,
+   klebt Rücken an Rücken und hat dasselbe.
+
+   Die Masse sind echt: 90 × 220 mm, Loch 30 mm Durchmesser, 22 mm von oben.
+   Damit passt der Hänger über jede gewöhnliche Türklinke.
+*/
+
+
+
+
+
+
+/* Zwei Seiten, jede mit einem eigenen Ton. Die Texte stehen in allen sechs
+   Sprachen; die deutsche Zeile ist die grosse, die übrigen stehen darunter. */
+const HAENGER_SEITEN = {
+  ruhe: {
+    ton:'#2A3350', hell:'#fff', icon:'nodisturb',
+    de:'Bitte nicht stören', en:'Do not disturb', fr:'Ne pas déranger',
+    it:'Non disturbare',     pt:'Não incomodar',  es:'No molestar'
+  },
+  /* Weiss auf Cyan kommt nur auf 2.5:1 — die Kontrastpruefung der Zentrale
+     meldet das zu Recht. Navy auf Cyan sind 5.5:1 und aus fuenf Metern
+     deutlich besser zu lesen. */
+  reinigen: {
+    ton:'#01B1E2', hell:'#2A3350', icon:'putzen',
+    de:'Zimmer bitte reinigen', en:'Please make up the room', fr:'Chambre à faire',
+    it:'Rifare la camera',      pt:'Arrumar o quarto',        es:'Arreglar la habitación'
+  },
+  frei: {
+    ton:'#1F9D57', hell:'#fff', icon:'check',
+    de:'Zimmer ist frei', en:'Room is free', fr:'Chambre libre',
+    it:'Camera libera',   pt:'Quarto livre', es:'Habitación libre'
+  },
+  wecken: {
+    ton:'#E8A93B', hell:'#2A3350', icon:'clock',
+    de:'Bitte nicht wecken', en:'Do not wake', fr:'Ne pas réveiller',
+    it:'Non svegliare',      pt:'Não acordar', es:'No despertar'
+  }
+};
+
+function haengerOptions(){
+  return [
+    { v:'ruhe',     t:'Bitte nicht stören (navy)' },
+    { v:'reinigen', t:'Zimmer bitte reinigen (cyan)' },
+    { v:'frei',     t:'Zimmer ist frei (grün)' },
+    { v:'wecken',   t:'Bitte nicht wecken (gelb)' }
+  ];
+}
+
+function haenger(d, art, eigenerText){
+  const s = HAENGER_SEITEN[art] || HAENGER_SEITEN.ruhe;
+  const sprachen = sprachObjekte(d.sprachen);
+  const haupt = has(eigenerText) ? eigenerText : (s[sprachen[0].id] || s.de);
+  const weitere = sprachen.slice(1).map(sp => s[sp.id]).filter(Boolean);
+
+  return `
+    <div class="t-tuer-karte" style="--ton:${s.ton};--hell:${s.hell}">
+      <div class="t-tuer-loch"></div>
+      <div class="t-tuer-inhalt">
+        <span class="t-tuer-ico">${icon(s.icon, 64, 1.7)}</span>
+        <p class="t-tuer-haupt">${esc(haupt)}</p>
+        ${weitere.length ? `<ul class="t-tuer-weitere">${
+          weitere.map(w => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}
+      </div>
+      ${d.markeAn === 'ja' ? `<div class="t-tuer-fuss">${
+        istHotel(d.absender) ? logo(s.hell === '#fff' ? 'white' : 'color', 20)
+                             : esc(absender(d.absender, 'hotel').name)}</div>` : ''}
+    </div>`;
+}
+
+const tuerhaenger = {
+  id:'tuerhaenger',
+  title:'Türhänger',
+  sub:'Bitte nicht stören · zwei Stück auf A4 zum Ausschneiden',
+  badge:'Zimmer',
+  root:'t-tuer',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="16" y="20" width="82" height="260" rx="8" fill="#2A3350"/>
+    <circle cx="57" cy="52" r="15" fill="#fff"/>
+    <circle cx="57" cy="150" r="22" fill="none" stroke="#fff" stroke-width="3" opacity=".8"/>
+    <rect x="26" y="192" width="62" height="9" rx="4.5" fill="#fff" opacity=".95"/>
+    <rect x="32" y="208" width="50" height="6" rx="3" fill="#fff" opacity=".5"/>
+    <rect x="32" y="220" width="50" height="6" rx="3" fill="#fff" opacity=".5"/>
+    <rect x="112" y="20" width="82" height="260" rx="8" fill="#01B1E2"/>
+    <circle cx="153" cy="52" r="15" fill="#fff"/>
+    <circle cx="153" cy="150" r="22" fill="none" stroke="#fff" stroke-width="3" opacity=".8"/>
+    <rect x="122" y="192" width="62" height="9" rx="4.5" fill="#fff" opacity=".95"/>
+    <rect x="128" y="208" width="50" height="6" rx="3" fill="#fff" opacity=".5"/>`),
+
+  fields:[
+    { t:'group', label:'Die beiden Seiten' },
+    { k:'links',  label:'Linker Hänger',  type:'select', options:haengerOptions() },
+    { k:'rechts', label:'Rechter Hänger', type:'select', options:haengerOptions() },
+    { k:'textLinks',  label:'Linker Text — überschreiben', type:'text',
+      hint:'Leer lassen: der hinterlegte Satz gilt, in der ersten gewählten Sprache.' },
+    { k:'textRechts', label:'Rechter Text — überschreiben', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen', label:'Sprachen', type:'checks', options:sprachOptions(),
+      hint:'Die erste steht gross, die übrigen darunter. Mehr als vier wird auf dem schmalen Hänger eng.' },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Marke' },
+    { k:'markeAn',  label:'Marke unten', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions },
+    { k:'schneiden', label:'Schnittlinien', type:'select',
+      options:[{ v:'ja', t:'zeigen — Hilfslinien zum Ausschneiden' }, { v:'nein', t:'weglassen' }] }
+  ],
+
+  defaults:{
+    links:'ruhe',
+    rechts:'reinigen',
+    textLinks:'',
+    textRechts:'',
+    sprachen:['de','en','fr'],
+    sprachSet:'',
+    markeAn:'ja',
+    absender:'hotel',
+    schneiden:'ja'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    return `
+      <div class="t-tuer-bogen${d.schneiden === 'ja' ? ' is-schneiden' : ''}">
+        ${haenger(d, d.links,  d.textLinks)}
+        ${haenger(d, d.rechts, d.textRechts)}
+      </div>
+      <p class="t-tuer-hinweis">
+        90 × 220 mm · Loch 30 mm — ausschneiden, Rücken an Rücken kleben, über die Klinke hängen.
+      </p>`;
+  }
+};
+
+/* ===== js/templates/tischaufsteller.js ===== */
+/* Tischaufsteller · A4 quer, in der Mitte gefalzt
+   --------------------------------------------------------------------------
+   Das Zelt, das auf dem Tisch im Zimmer oder im Frühstücksraum steht. Ein
+   Blatt A4 quer, quer durch die Mitte gefalzt — zwei Flächen von 297 × 105 mm,
+   die sich gegenüberstehen.
+
+   Die obere Fläche steht auf dem Kopf. Das ist kein Fehler: nach dem Falzen
+   zeigt sie nach vorn, die untere nach hinten. Wer den Bogen umdreht, liest
+   beide Seiten aufrecht.
+*/
+
+
+
+
+
+
+const tischaufsteller = {
+  id:'tischaufsteller',
+  title:'Tischaufsteller',
+  sub:'Zelt für Tisch und Theke · A4 quer, in der Mitte gefalzt',
+  badge:'Zimmer',
+  root:'t-tisch',
+  page:'a4-land',
+
+  thumb: thumbLand(`
+    <rect x="0" y="0" width="297" height="105" fill="#F6F7FA"/>
+    <g transform="rotate(180 148 52)">
+      <rect x="30" y="24" width="70" height="8" rx="4" fill="#01B1E2"/>
+      <rect x="30" y="40" width="150" height="16" rx="5" fill="#2A3350"/>
+      <rect x="30" y="64" width="120" height="6" rx="3" fill="#C9CFDA"/>
+      <rect x="215" y="26" width="46" height="46" rx="4" fill="#2A3350" opacity=".85"/>
+    </g>
+    <path d="M0 105h297" stroke="#01B1E2" stroke-width="2" stroke-dasharray="8 6"/>
+    <rect x="30" y="130" width="70" height="8" rx="4" fill="#01B1E2"/>
+    <rect x="30" y="146" width="150" height="16" rx="5" fill="#2A3350"/>
+    ${[0, 1, 2].map(i => `
+      <circle cx="36" cy="${180 + i * 16}" r="5" fill="#01B1E2"/>
+      <rect x="48" y="${176 + i * 16}" width="${120 - i * 14}" height="6" rx="3" fill="#2A3350" opacity=".7"/>`).join('')}
+    <rect x="215" y="132" width="46" height="46" rx="4" fill="#2A3350" opacity=".85"/>`),
+
+  fields:[
+    { t:'group', label:'Vorderseite' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel',             type:'text' },
+    { k:'unter',   label:'Untertitel',        type:'text' },
+
+    { t:'group', label:'Rückseite' },
+    { k:'eyebrow2', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel2',   label:'Titel',             type:'text' },
+    { k:'zeilen', label:'Zeilen', type:'list', itemLabel:'Zeile', max:6,
+      defaultItem:{ icon:'info', text:'', wert:'' },
+      item:[
+        { k:'icon', label:'Symbol', type:'select', options:iconOptions },
+        { k:'text', label:'Bezeichnung', type:'text' },
+        { k:'wert', label:'Angabe',      type:'text' }
+      ] },
+
+    { t:'group', label:'QR-Code' },
+    { k:'qrText',  label:'Adresse für den QR-Code', type:'text',
+      hint:'Leer lassen: kein Code. Steht auf beiden Seiten.' },
+    { k:'qrLabel', label:'Beschriftung am Code', type:'text' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Schön, dass Sie da sind',
+    titel:'Willkommen',
+    unter:'Alles Wichtige finden Sie auf der Rückseite.',
+    eyebrow2:'Gut zu wissen',
+    titel2:'Auf einen Blick',
+    zeilen:[
+      { icon:'wifi', text:'WLAN',      wert:'Gast · Passwort im Zimmer' },
+      { icon:'cup',  text:'Frühstück', wert:'07:30 – 10:00' },
+      { icon:'clock',text:'Check-out', wert:'bis 11:00' },
+      { icon:'phone',text:'Wir sind da', wert:'+41 31 951 85 54' }
+    ],
+    qrText:'',
+    qrLabel:'Mehr erfahren',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const obj = objekt(d.objekt);
+
+    const qr = has(d.qrText)
+      ? `<div class="t-tisch-qr">${qrSvg(d.qrText, { stufe:'M', groesse:'26mm' })}
+           ${has(d.qrLabel) ? `<span>${esc(d.qrLabel)}</span>` : ''}</div>`
+      : '';
+
+    const marke = `<span class="t-tisch-marke">${
+      istHotel(d.absender) ? logo('color', 22) : esc(abs.name)}</span>`;
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.text) || has(z.wert)).map(z => `
+      <li>
+        <span class="t-tisch-ico">${icon(z.icon || 'info', 20, 1.9)}</span>
+        <b>${esc(z.text)}</b>
+        <i>${esc(z.wert)}</i>
+      </li>`).join('');
+
+    return `
+      <div class="t-tisch-bogen">
+        <section class="t-tisch-flaeche is-vorne">
+          <div class="t-tisch-inhalt">
+            <div class="t-tisch-text">
+              ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+              <h1>${esc(d.titel || '')}</h1>
+              ${has(d.unter) ? `<p class="t-tisch-unter">${esc(d.unter)}</p>` : ''}
+              ${obj.name && obj.code ? `<p class="t-tisch-obj">${esc(obj.name)}</p>` : ''}
+            </div>
+            ${qr}
+          </div>
+          <footer class="t-tisch-fuss">${marke}<span>${esc(abs.foot)}</span></footer>
+        </section>
+
+        <div class="t-tisch-falz"><span>Hier falzen</span></div>
+
+        <section class="t-tisch-flaeche is-hinten">
+          <div class="t-tisch-inhalt">
+            <div class="t-tisch-text">
+              ${has(d.eyebrow2) ? `<p class="eyebrow">${esc(d.eyebrow2)}</p>` : ''}
+              <h2>${esc(d.titel2 || '')}</h2>
+              ${zeilen ? `<ul class="t-tisch-zeilen">${zeilen}</ul>` : ''}
+            </div>
+            ${qr}
+          </div>
+          <footer class="t-tisch-fuss">${marke}<span>${esc(abs.foot)}</span></footer>
+        </section>
+      </div>`;
+  }
+};
+
+/* ===== js/templates/zimmerschild.js ===== */
+/* Zimmerschild · A5 quer, eine Seite je Zimmer
+   --------------------------------------------------------------------------
+   Die Nummer an der Tür. Aus einem Bereich — «1 bis 8» — wird eine Seite je
+   Zimmer, wie beim Parkplatz-Schild. Wer eigene Namen statt Nummern will,
+   schreibt sie in die Liste; dann gilt die Liste und der Bereich wird
+   ignoriert.
+
+   Die Nummer ist gross, weil sie aus dem Gang erkannt werden muss. Der Name
+   darunter ist die Zugabe.
+*/
+
+
+
+
+
+const ZIMMER_PAGES = { 'a5-land':'a5-land', a5:'a5', 'a4-land':'a4-land', a4:'a4' };
+
+const zimmerschild = {
+  id:'zimmerschild',
+  title:'Zimmerschild',
+  sub:'Nummer und Name an der Tür · eine Seite je Zimmer',
+  badge:'Zimmer',
+  root:'t-zimmer',
+  fern:true,
+  multipage:true,
+  pageOf(d){ return ZIMMER_PAGES[d && d.format] || 'a5-land'; },
+
+  thumb: thumbLand(`
+    <rect x="14" y="14" width="269" height="177" rx="10" fill="#fff" stroke="#E5E8ED" stroke-width="2"/>
+    <rect x="14" y="14" width="269" height="14" rx="7" fill="#01B1E2"/>
+    <text x="52" y="130" font-family="sans-serif" font-size="86" font-weight="700" fill="#2A3350">12</text>
+    <rect x="150" y="72" width="96" height="12" rx="6" fill="#2A3350" opacity=".8"/>
+    <rect x="150" y="94" width="72" height="8" rx="4" fill="#C9CFDA"/>
+    <circle cx="198" cy="140" r="22" fill="none" stroke="#01B1E2" stroke-width="3"/>`),
+
+  fields:[
+    { t:'group', label:'Zimmer' },
+    { k:'von', label:'von Nr.', type:'number', min:1, max:199, step:1 },
+    { k:'bis', label:'bis Nr.', type:'number', min:1, max:199, step:1,
+      hint:'Ergibt eine Seite je Zimmer. Gleiche Zahl = ein einzelnes Schild.' },
+    { k:'liste', label:'Statt Nummern: eigene Zimmer', type:'list', itemLabel:'Zimmer', max:24,
+      defaultItem:{ nr:'', name:'' },
+      item:[
+        { k:'nr',   label:'Nummer oder Kürzel', type:'text' },
+        { k:'name', label:'Name',               type:'text' }
+      ],
+      hint:'Sobald hier eine Zeile steht, gilt die Liste — der Bereich oben wird nicht mehr verwendet.' },
+
+    { t:'group', label:'Aussehen' },
+    { k:'format', label:'Papier', type:'select', options:[
+      { v:'a5-land', t:'A5 quer' }, { v:'a5', t:'A5 hoch' },
+      { v:'a4-land', t:'A4 quer' }, { v:'a4', t:'A4 hoch' }
+    ] },
+    { k:'ton', label:'Farbe', type:'select', options:[
+      { v:'navy',  t:'Navy auf Weiss' },
+      { v:'cyan',  t:'Cyan auf Weiss' },
+      { v:'voll',  t:'Weiss auf Navy' }
+    ] },
+    { k:'icon', label:'Symbol', type:'select', options:iconOptions },
+    { k:'zusatz', label:'Zeile unter der Nummer', type:'text',
+      hint:'Gilt für alle Schilder — zum Beispiel «1. Stock» oder «Nichtraucher».' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    von:1, bis:8,
+    liste:[],
+    format:'a5-land',
+    ton:'navy',
+    icon:'bed',
+    zusatz:'',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const obj = objekt(d.objekt);
+
+    const eigene = (d.liste || []).filter(z => has(z.nr) || has(z.name));
+    let zimmer;
+    if (eigene.length){
+      zimmer = eigene.map(z => ({ nr:z.nr, name:z.name }));
+    } else {
+      const von = Math.max(1, Number(d.von) || 1);
+      const bis = Math.max(von, Number(d.bis) || von);
+      zimmer = [];
+      for (let n = von; n <= bis; n++) zimmer.push({ nr:String(n), name:'' });
+    }
+
+    return zimmer.map(z => `
+      <article data-page class="t-zimmer-page is-${esc(d.ton || 'navy')}">
+        <div class="t-zimmer-rahmen">
+          <div class="t-zimmer-mitte">
+            <p class="t-zimmer-nr">${esc(z.nr)}</p>
+            <div class="t-zimmer-rechts">
+              ${has(z.name) ? `<p class="t-zimmer-name">${esc(z.name)}</p>` : ''}
+              ${has(d.zusatz) ? `<p class="t-zimmer-zusatz">${esc(d.zusatz)}</p>` : ''}
+              <span class="t-zimmer-ico">${icon(d.icon || 'bed', 46, 1.7)}</span>
+            </div>
+          </div>
+          <footer class="t-zimmer-fuss">
+            <span class="t-zimmer-mark">${istHotel(d.absender) ? logo(d.ton === 'voll' ? 'white' : 'color', 20) : ''}</span>
+            <span>${esc([obj.code && obj.name, abs.name].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i).join(' · '))}</span>
+          </footer>
+        </div>
+      </article>`).join('');
+  }
+};
+
+/* ===== js/templates/willkommen.js ===== */
+/* Willkommenskarte · A5 hoch
+   --------------------------------------------------------------------------
+   Die Karte, die auf dem Bett oder auf dem Tisch liegt, wenn jemand ankommt.
+   Sie erklärt nichts — dafür gibt es die Mappe. Sie sagt nur: wir haben an
+   Sie gedacht.
+
+   Darum steht der Name des Gastes gross und die Handschrift-Zeile darüber.
+   Alles andere ist klein.
+*/
+
+
+
+
+
+
+/* Symbolliste mit einem leeren Eintrag davor — die Hinweiszeile darf auch
+   ohne Zeichen stehen. */
+function willkIconOptions(){
+  return [{ v:'', t:'kein Symbol' }].concat(iconOptions());
+}
+
+/* Der Grusstext in sechs Sprachen. %s wird durch den Namen ersetzt; steht
+   kein Name da, faellt die Anrede weg. */
+const WILLKOMMEN = {
+  de:{ gruss:'Herzlich willkommen',  anrede:'Liebe Gäste',
+       text:'Schön, dass Sie da sind. Wir wünschen Ihnen einen guten Aufenthalt — und wenn etwas fehlt, sagen Sie es uns einfach.' },
+  en:{ gruss:'A warm welcome',       anrede:'Dear guests',
+       text:'We are glad you are here. Have a good stay — and if anything is missing, just tell us.' },
+  fr:{ gruss:'Bienvenue',            anrede:'Chers hôtes',
+       text:'Nous sommes heureux de vous accueillir. Bon séjour — et s’il vous manque quelque chose, dites-le-nous.' },
+  it:{ gruss:'Benvenuti',            anrede:'Cari ospiti',
+       text:'Siamo lieti di avervi qui. Buon soggiorno — e se manca qualcosa, ditecelo pure.' },
+  pt:{ gruss:'Bem-vindos',           anrede:'Caros hóspedes',
+       text:'Ficamos contentes por vos receber. Boa estadia — e se faltar alguma coisa, é só dizer.' },
+  es:{ gruss:'Bienvenidos',          anrede:'Estimados huéspedes',
+       text:'Nos alegra tenerles aquí. Que disfruten de su estancia — y si falta algo, dígannoslo.' }
+};
+
+const willkommen = {
+  id:'willkommen',
+  title:'Willkommenskarte',
+  sub:'Gruss aufs Zimmer · A5 hoch · sechs Sprachen',
+  badge:'Zimmer',
+  badgeCyan:true,
+  root:'t-willk',
+  page:'a5',
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="297" fill="#fff"/>
+    <rect x="0" y="0" width="210" height="6" fill="#01B1E2"/>
+    <rect x="26" y="46" width="104" height="12" rx="6" fill="#01B1E2" opacity=".85"/>
+    <rect x="26" y="72" width="150" height="20" rx="6" fill="#2A3350"/>
+    ${lines(26, 116, 158, 4, 12)}
+    <rect x="26" y="188" width="90" height="7" rx="3.5" fill="#C9CFDA"/>
+    <circle cx="105" cy="238" r="20" fill="none" stroke="#01B1E2" stroke-width="2.4"/>
+    <path d="M96 238l7 7 14-14" stroke="#01B1E2" stroke-width="2.8" fill="none"/>
+    ${lines(26, 274, 120, 1)}`),
+
+  fields:[
+    { t:'group', label:'Gruss' },
+    { k:'name',   label:'Name der Gäste', type:'text',
+      hint:'Leer lassen: es steht die allgemeine Anrede da («Liebe Gäste»).' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text',
+      hint:'Leer lassen: nimmt den hinterlegten Gruss der ersten Sprache.' },
+    { k:'text',    label:'Text — überschreiben', type:'textarea', rows:4,
+      hint:'Leer lassen: der hinterlegte Text gilt, in jeder gewählten Sprache.' },
+    { k:'unterschrift', label:'Unterschrift', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Hinweiszeile unten' },
+    { k:'hinweisIcon', label:'Symbol', type:'select', options:willkIconOptions },
+    { k:'hinweis',     label:'Zeile',  type:'text',
+      hint:'Zum Beispiel «Frühstück 07:30 – 10:00» oder «WLAN: Gast».' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    name:'',
+    eyebrow:'',
+    text:'',
+    unterschrift:'Ihr Team von N’s Hotel',
+    sprachen:['de','en'],
+    sprachSet:'',
+    hinweisIcon:'cup',
+    hinweis:'Frühstück 07:30 – 10:00 im Aufenthaltsraum',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const obj = objekt(d.objekt);
+    const sprachen = sprachObjekte(d.sprachen);
+    const erste = WILLKOMMEN[sprachen[0].id] || WILLKOMMEN.de;
+
+    const bloecke = sprachen.map((sp, i) => {
+      const w = WILLKOMMEN[sp.id] || WILLKOMMEN.de;
+      const text = has(d.text) ? d.text : w.text;
+      return `
+        <div class="t-willk-block${i === 0 ? ' is-erste' : ''}" lang="${sp.id}">
+          <p class="t-willk-anrede">${esc(has(d.name) ? d.name : w.anrede)}</p>
+          <p class="t-willk-text">${esc(text)}</p>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="t-willk-band"></div>
+      <header class="t-willk-kopf">
+        <p class="eyebrow">${esc(has(d.eyebrow) ? d.eyebrow : erste.gruss)}</p>
+        ${obj.code ? `<p class="t-willk-obj">${esc(obj.name)}</p>` : ''}
+      </header>
+
+      <div class="t-willk-mitte">${bloecke}</div>
+
+      ${has(d.unterschrift) ? `<p class="t-willk-sig">${esc(d.unterschrift)}</p>` : ''}
+
+      ${has(d.hinweis) ? `
+      <p class="t-willk-hinweis">
+        <span>${icon(d.hinweisIcon || 'cup', 20, 1.9)}</span>${esc(d.hinweis)}
+      </p>` : ''}
+
+      <footer class="t-willk-fuss">
+        <span class="t-willk-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc(abs.foot)}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/feedback.js ===== */
+/* Feedback-Aushang · A4 hoch
+   --------------------------------------------------------------------------
+   Ein Haus ohne Rezeption hoert nie, was schiefging — es sei denn, es fragt
+   danach. Dieses Blatt fragt: gross, freundlich, mit einem Code, den man vom
+   Bett aus scannt.
+
+   Der Code ist das Wichtigste. Eine Bitte um Rueckmeldung ohne Weg dorthin
+   ist eine Bitte ins Leere.
+*/
+
+
+
+
+
+
+
+const FEEDBACK_TEXT = {
+  de:{ eyebrow:'Sagen Sie es uns',  titel:'Wie war es bei uns?',
+       text:'Zwei Minuten, die uns weiterhelfen. Was gut war — und was nicht.',
+       scan:'Code scannen' },
+  en:{ eyebrow:'Tell us',           titel:'How was your stay?',
+       text:'Two minutes that help us. What was good — and what was not.',
+       scan:'Scan the code' },
+  fr:{ eyebrow:'Dites-le-nous',     titel:'Comment était votre séjour?',
+       text:'Deux minutes qui nous aident. Ce qui était bien — et ce qui ne l’était pas.',
+       scan:'Scannez le code' },
+  it:{ eyebrow:'Ditecelo',          titel:'Com’è andata da noi?',
+       text:'Due minuti che ci aiutano. Che cosa è andato bene — e che cosa no.',
+       scan:'Scansionate il codice' },
+  pt:{ eyebrow:'Diga-nos',          titel:'Como foi a sua estadia?',
+       text:'Dois minutos que nos ajudam. O que correu bem — e o que não correu.',
+       scan:'Leia o código' },
+  es:{ eyebrow:'Cuéntenos',         titel:'¿Qué tal su estancia?',
+       text:'Dos minutos que nos ayudan. Lo que estuvo bien — y lo que no.',
+       scan:'Escanee el código' }
+};
+
+/* Fuenf Sterne, gezeichnet statt als Zeichen gesetzt: so sehen sie in jeder
+   Schrift gleich aus und ueberstehen den PNG-Export. */
+function feedbackSterne(){
+  return `<span class="t-fb-sterne">${
+    [0,1,2,3,4].map(() => icon('stern', 34, 1.6)).join('')}</span>`;
+}
+
+const feedback = {
+  id:'feedback',
+  title:'Feedback-Aushang',
+  sub:'Rückmeldung erbitten, mit QR-Code · A4 hoch',
+  badge:'Gäste',
+  root:'t-fb',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="297" fill="#fff"/>
+    <rect x="24" y="34" width="96" height="10" rx="5" fill="#01B1E2"/>
+    <rect x="24" y="56" width="162" height="18" rx="6" fill="#2A3350"/>
+    <rect x="24" y="84" width="140" height="7" rx="3.5" fill="#C9CFDA"/>
+    ${[0,1,2,3,4].map(i => `<path d="M${34 + i * 30} 122l5 10 11 1.6-8 7.8 2 11-10-5.2-10 5.2 2-11-8-7.8 11-1.6z" fill="#01B1E2"/>`).join('')}
+    <rect x="52" y="160" width="106" height="106" rx="6" fill="#2A3350"/>
+    <rect x="66" y="174" width="78" height="78" rx="3" fill="#fff"/>`),
+
+  fields:[
+    { t:'group', label:'Wohin' },
+    { k:'qrText', label:'Adresse für den QR-Code', type:'text',
+      hint:'Die Seite, auf der die Rückmeldung landet — Bewertungsportal, Formular oder Mail.' },
+    { k:'qrLabel', label:'Beschriftung am Code', type:'text',
+      hint:'Leer lassen: nimmt «Code scannen» in der ersten Sprache.' },
+    { k:'sterne', label:'Sterne zeigen', type:'select',
+      options:[{ v:'ja', t:'ja' }, { v:'nein', t:'nein' }] },
+
+    { t:'group', label:'Text' },
+    { k:'eyebrow', label:'Handschrift-Zeile — überschreiben', type:'text' },
+    { k:'titel',   label:'Titel — überschreiben',             type:'text' },
+    { k:'text',    label:'Text — überschreiben', type:'textarea', rows:3,
+      hint:'Leer lassen: der hinterlegte Satz gilt, in jeder gewählten Sprache.' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    qrText:'https://www.google.com/search?q=N%27s+Hotel+Kerzers',
+    qrLabel:'',
+    sterne:'ja',
+    eyebrow:'',
+    titel:'',
+    text:'',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const sprachen = sprachObjekte(d.sprachen);
+    const erste = FEEDBACK_TEXT[sprachen[0].id] || FEEDBACK_TEXT.de;
+
+    const weitere = sprachen.slice(1).map(sp => {
+      const f = FEEDBACK_TEXT[sp.id] || FEEDBACK_TEXT.de;
+      return `<li lang="${sp.id}"><b>${esc(f.titel)}</b> ${esc(has(d.text) ? d.text : f.text)}</li>`;
+    }).join('');
+
+    return `
+      <header class="t-fb-kopf">
+        <p class="eyebrow">${esc(has(d.eyebrow) ? d.eyebrow : erste.eyebrow)}</p>
+        <h1>${esc(has(d.titel) ? d.titel : erste.titel)}</h1>
+        <p class="t-fb-lede">${esc(has(d.text) ? d.text : erste.text)}</p>
+      </header>
+
+      ${d.sterne === 'ja' ? feedbackSterne() : ''}
+
+      ${has(d.qrText) ? `
+      <div class="t-fb-code">
+        ${qrSvg(d.qrText, { stufe:'Q', groesse:'62mm' })}
+        <p>${esc(has(d.qrLabel) ? d.qrLabel : erste.scan)}</p>
+      </div>` : ''}
+
+      ${weitere ? `<ul class="t-fb-weitere">${weitere}</ul>` : ''}
+
+      <footer class="t-fb-fuss">
+        <span class="t-fb-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/zeiten.js ===== */
+/* Zeiten-Tafel · A4 hoch
+   --------------------------------------------------------------------------
+   Öffnungszeiten, Frühstückszeiten, Waschküchenzeiten — dieselbe Form für
+   alles, was zu bestimmten Stunden gilt.
+
+   Zwei Spalten wären hübscher, sind aber falsch: eine Zeitentafel wird
+   ueberflogen, nicht gelesen. Eine Kolonne, links die Bezeichnung, rechts
+   die Zeit, dazwischen eine Punktlinie — so findet das Auge die Zeile.
+*/
+
+
+
+
+
+
+const ZEITEN_TITEL = {
+  de:'Öffnungszeiten', en:'Opening hours',  fr:'Heures d’ouverture',
+  it:'Orari d’apertura', pt:'Horário',      es:'Horario'
+};
+
+const zeiten = {
+  id:'zeiten',
+  title:'Zeiten-Tafel',
+  sub:'Öffnungs-, Frühstücks- und Waschzeiten · A4 hoch',
+  badge:'Zeiten',
+  root:'t-zeiten',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="24" y="30" width="98" height="10" rx="5" fill="#01B1E2"/>
+    <rect x="24" y="52" width="152" height="18" rx="6" fill="#2A3350"/>
+    ${[0,1,2,3,4,5].map(i => `
+      <rect x="24" y="${104 + i * 30}" width="${64 - (i % 3) * 8}" height="9" rx="4.5" fill="#2A3350" opacity=".82"/>
+      <rect x="${96 - (i % 3) * 8}" y="${107 + i * 30}" width="${52 + (i % 3) * 8}" height="3" rx="1.5" fill="#E5E8ED"/>
+      <rect x="152" y="${104 + i * 30}" width="34" height="9" rx="4.5" fill="#01B1E2"/>`).join('')}
+    <rect x="24" y="288" width="120" height="6" rx="3" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text',
+      hint:'Leer lassen: nimmt «Öffnungszeiten» in der ersten gewählten Sprache.' },
+    { k:'unter',   label:'Untertitel', type:'text' },
+
+    { t:'group', label:'Zeilen' },
+    { k:'zeilen', label:'Zeiten', type:'list', itemLabel:'Zeile', max:14,
+      defaultItem:{ icon:'clock', was:'', zeit:'', zusatz:'' },
+      item:[
+        { k:'icon',   label:'Symbol',      type:'select', options:iconOptions },
+        { k:'was',    label:'Bezeichnung', type:'text' },
+        { k:'zeit',   label:'Zeit',        type:'text' },
+        { k:'zusatz', label:'Zusatz',      type:'text' }
+      ] },
+
+    { t:'group', label:'Hinweis unten' },
+    { k:'hinweis', label:'Hinweis', type:'textarea', rows:2 },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note',  label:'Die Sprachen betreffen nur den Titel. Die Zeiten selbst sind Zahlen — die versteht jede Sprache.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Wann was offen ist',
+    titel:'',
+    unter:'',
+    zeilen:[
+      { icon:'cup',     was:'Frühstück',    zeit:'07:30 – 10:00', zusatz:'Aufenthaltsraum, Erdgeschoss' },
+      { icon:'key',     was:'Check-in',     zeit:'ab 15:00',      zusatz:'jederzeit mit dem Zutrittscode' },
+      { icon:'clock',   was:'Check-out',    zeit:'bis 11:00',     zusatz:'' },
+      { icon:'waesche', was:'Waschküche',   zeit:'08:00 – 20:00', zusatz:'sonntags geschlossen' },
+      { icon:'trash',   was:'Sammelstelle', zeit:'07:00 – 20:00', zusatz:'' }
+    ],
+    hinweis:'Ausserhalb dieser Zeiten bitten wir um Ruhe im ganzen Haus.',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'A14',
+    absender:'hotel'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const sprachen = sprachObjekte(d.sprachen);
+
+    const titel = has(d.titel) ? d.titel : (ZEITEN_TITEL[sprachen[0].id] || ZEITEN_TITEL.de);
+    const weitere = sprachen.slice(1).map(sp => ZEITEN_TITEL[sp.id]).filter(Boolean);
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.was) || has(z.zeit)).map(z => `
+      <li class="t-zeiten-zeile">
+        <span class="t-zeiten-ico">${icon(z.icon || 'clock', 22, 1.9)}</span>
+        <span class="t-zeiten-was">
+          <b>${esc(z.was)}</b>
+          ${has(z.zusatz) ? `<i>${esc(z.zusatz)}</i>` : ''}
+        </span>
+        <span class="t-zeiten-punkte"></span>
+        <span class="t-zeiten-zeit">${esc(z.zeit)}</span>
+      </li>`).join('');
+
+    return `
+      <header class="t-zeiten-kopf">
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(titel)}</h1>
+        ${weitere.length ? `<p class="t-zeiten-sprachen">${esc(weitere.join(' · '))}</p>` : ''}
+        ${has(d.unter) ? `<p class="t-zeiten-unter">${esc(d.unter)}</p>` : ''}
+      </header>
+
+      <ul class="t-zeiten-liste">${zeilen}</ul>
+
+      ${has(d.hinweis) ? `<p class="t-zeiten-hinweis">${esc(d.hinweis)}</p>` : ''}
+
+      <footer class="t-zeiten-fuss">
+        <span class="t-zeiten-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/termin.js ===== */
+/* Termin-Aushang · A4 hoch
+   --------------------------------------------------------------------------
+   Heizungswartung, Liftkontrolle, Kaminfeger, Ablesung: jemand kommt ins
+   Haus, und alle muessen es wissen. Das Datum ist darum das Groesste auf
+   dem Blatt — wichtiger als der Anlass.
+
+   Der Kasten «Was zu tun ist» ist der eigentliche Zweck. Ein Aushang, der
+   nur einen Termin nennt, laesst die Frage offen, ob man zu Hause sein muss.
+*/
+
+
+
+
+
+
+/* Kopfzeilen in sechs Sprachen. Der Anlass selbst wird eingetippt — die
+   Anlaesse sind zu verschieden, um sie zu hinterlegen. */
+const TERMIN_WORT = {
+  de:{ eyebrow:'Bitte beachten', wann:'Wann',   was:'Was zu tun ist', frage:'Fragen?' },
+  en:{ eyebrow:'Please note',    wann:'When',   was:'What to do',     frage:'Questions?' },
+  fr:{ eyebrow:'À noter',        wann:'Quand',  was:'À faire',        frage:'Questions?' },
+  it:{ eyebrow:'Da notare',      wann:'Quando', was:'Cosa fare',      frage:'Domande?' },
+  pt:{ eyebrow:'Atenção',        wann:'Quando', was:'O que fazer',    frage:'Dúvidas?' },
+  es:{ eyebrow:'Atención',       wann:'Cuándo', was:'Qué hacer',      frage:'¿Preguntas?' }
+};
+
+const termin = {
+  id:'termin',
+  title:'Termin-Aushang',
+  sub:'Wartung, Kontrolle, Ablesung · Datum gross · A4 hoch',
+  badge:'Termin',
+  root:'t-termin',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="24" y="28" width="80" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="24" y="48" width="158" height="17" rx="6" fill="#2A3350"/>
+    <rect x="24" y="86" width="162" height="62" rx="8" fill="#2A3350"/>
+    <rect x="40" y="102" width="46" height="7" rx="3.5" fill="#01B1E2"/>
+    <rect x="40" y="116" width="118" height="18" rx="5" fill="#fff" opacity=".95"/>
+    <rect x="24" y="168" width="162" height="66" rx="8" fill="#E7F7FC" stroke="#01B1E2" stroke-width="2"/>
+    ${lines(38, 186, 130, 3, 14)}
+    ${lines(24, 254, 150, 2, 12)}`),
+
+  fields:[
+    { t:'group', label:'Anlass' },
+    { k:'anlass', label:'Was',   type:'text' },
+    { k:'wer',    label:'Wer kommt', type:'text' },
+    { k:'icon',   label:'Symbol', type:'select', options:iconOptions },
+
+    { t:'group', label:'Datum und Zeit' },
+    { k:'datum',  label:'Datum', type:'text',
+      hint:'Frei geschrieben, damit «Montag, 8. September» genauso geht wie «8.–9. September».' },
+    { k:'zeit',   label:'Zeit',  type:'text' },
+
+    { t:'group', label:'Was zu tun ist' },
+    { k:'punkte', label:'Punkte', type:'list', itemLabel:'Punkt', max:6,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Punkt', type:'textarea', rows:2 }] },
+
+    { t:'group', label:'Rückfragen' },
+    { k:'kontakt', label:'Wer Auskunft gibt', type:'text' },
+    { k:'telefon', label:'Telefon', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note',  label:'Die Sprachen betreffen die Beschriftungen — «Wann», «Was zu tun ist». Anlass und Punkte stehen so da, wie du sie schreibst.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    anlass:'Heizungswartung',
+    wer:'Sanitär Meier AG',
+    icon:'heating',
+    datum:'Dienstag, 8. September',
+    zeit:'08:00 – 12:00',
+    punkte:[
+      { text:'Bitte halten Sie den Zugang zum Heizungsraum frei.' },
+      { text:'Wir betreten die Wohnungen nicht. Sie müssen nicht zu Hause sein.' },
+      { text:'Während der Arbeiten kann das Warmwasser kurz ausfallen.' }
+    ],
+    kontakt:'Hans Amonn Immobilien',
+    telefon:'+41 31 951 85 54',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'-',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = TERMIN_WORT[sprachen[0].id] || TERMIN_WORT.de;
+    const marken = sprachen.slice(1).map(sp => TERMIN_WORT[sp.id] || TERMIN_WORT.de);
+
+    const punkte = (d.punkte || []).filter(p => has(p.text)).map(p => `
+      <li>${esc(p.text)}</li>`).join('');
+
+    return `
+      <header class="t-termin-kopf">
+        <div>
+          <p class="eyebrow">${esc(w.eyebrow)}</p>
+          <h1>${esc(d.anlass || '')}</h1>
+          ${has(d.wer) ? `<p class="t-termin-wer">${esc(d.wer)}</p>` : ''}
+        </div>
+        <span class="t-termin-ico">${icon(d.icon || 'clock', 62, 1.8)}</span>
+      </header>
+
+      <div class="t-termin-wann">
+        <span class="t-termin-label">${esc([w.wann].concat(marken.map(m => m.wann)).join(' · '))}</span>
+        <strong>${esc(d.datum || '')}</strong>
+        ${has(d.zeit) ? `<span class="t-termin-zeit">${esc(d.zeit)}</span>` : ''}
+      </div>
+
+      ${punkte ? `
+      <section class="t-termin-tun">
+        <h2>${esc([w.was].concat(marken.map(m => m.was)).join(' · '))}</h2>
+        <ul>${punkte}</ul>
+      </section>` : ''}
+
+      ${(has(d.kontakt) || has(d.telefon)) ? `
+      <p class="t-termin-frage">
+        <b>${esc(w.frage)}</b>
+        ${esc([d.kontakt, d.telefon].filter(Boolean).join(' · '))}
+      </p>` : ''}
+
+      <footer class="t-termin-fuss">
+        <span class="t-termin-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/klingelschild.js ===== */
+/* Klingel- und Briefkastenschilder · A4 hoch, Bogen zum Ausschneiden
+   --------------------------------------------------------------------------
+   Namensschilder fuer Klingel und Briefkasten. Es gibt keine Norm dafuer —
+   jedes Haus hat andere Rahmen. Darum ist die Groesse frei einstellbar, und
+   die Schilder liegen so eng nebeneinander, wie es die Groesse zulaesst.
+
+   Schnittlinien statt Schnittmarken: bei kleinen Schildern liegen die Marken
+   naeher beieinander als die Schere breit ist.
+*/
+
+
+
+/* Uebliche Groessen aus dem Handel, plus «frei». Die Werte sind Millimeter. */
+const KLINGEL_MASSE = {
+  klein:  { b:50,  h:12, label:'50 × 12 mm — Klingel schmal' },
+  mittel: { b:60,  h:15, label:'60 × 15 mm — Klingel' },
+  gross:  { b:75,  h:20, label:'75 × 20 mm — Klingel breit' },
+  brief:  { b:90,  h:25, label:'90 × 25 mm — Briefkasten' },
+  frei:   { b:0,   h:0,  label:'frei — Masse selbst angeben' }
+};
+
+const klingelschild = {
+  id:'klingelschild',
+  title:'Klingel- und Briefkastenschilder',
+  sub:'Namensschilder auf A4 · Grösse frei · zum Ausschneiden',
+  badge:'Beschriften',
+  root:'t-kling',
+  page:'a4',
+
+  thumb: thumb(`
+    ${[0,1,2,3,4,5,6,7].map(i => {
+      const x = 22 + (i % 2) * 88, y = 34 + Math.floor(i / 2) * 62;
+      return `<rect x="${x}" y="${y}" width="80" height="42" rx="3" fill="#fff" stroke="#C9CFDA" stroke-width="1.6" stroke-dasharray="4 3"/>
+              <rect x="${x + 12}" y="${y + 14}" width="${52 - (i % 3) * 8}" height="9" rx="4.5" fill="#2A3350" opacity=".85"/>
+              <rect x="${x + 12}" y="${y + 27}" width="${34 - (i % 2) * 6}" height="5" rx="2.5" fill="#C9CFDA"/>`;
+    }).join('')}`),
+
+  fields:[
+    { t:'group', label:'Grösse' },
+    { k:'mass', label:'Format', type:'select',
+      options:Object.entries(KLINGEL_MASSE).map(([v, m]) => ({ v, t:m.label })) },
+    { k:'breite', label:'Breite in mm', type:'number', min:20, max:190, step:1,
+      hint:'Gilt nur bei «frei».' },
+    { k:'hoehe',  label:'Höhe in mm',   type:'number', min:8,  max:60,  step:1 },
+
+    { t:'group', label:'Aussehen' },
+    { k:'ausrichtung', label:'Ausrichtung', type:'select',
+      options:[{ v:'links', t:'linksbündig' }, { v:'mitte', t:'zentriert' }] },
+    { k:'rahmen', label:'Rahmen', type:'select',
+      options:[{ v:'linie', t:'dünne Linie — als Schnitthilfe' },
+               { v:'ohne',  t:'ohne — nur Text' }] },
+    { k:'grossbuchstaben', label:'Grossbuchstaben', type:'select',
+      options:[{ v:'nein', t:'nein' }, { v:'ja', t:'ja' }] },
+
+    { t:'group', label:'Namen' },
+    { k:'namen', label:'Schilder', type:'list', itemLabel:'Schild', max:60,
+      defaultItem:{ name:'', zusatz:'' },
+      item:[
+        { k:'name',   label:'Name',   type:'text' },
+        { k:'zusatz', label:'Zusatz', type:'text' }
+      ],
+      hint:'Jede Zeile wird ein Schild. Für mehrere gleiche einfach mehrmals eintragen.' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions }
+  ],
+
+  defaults:{
+    mass:'mittel',
+    breite:60, hoehe:15,
+    ausrichtung:'links',
+    rahmen:'linie',
+    grossbuchstaben:'nein',
+    namen:[
+      { name:'Muster',     zusatz:'EG links' },
+      { name:'Beispiel',   zusatz:'EG rechts' },
+      { name:'Muster',     zusatz:'1. OG links' },
+      { name:'Beispiel',   zusatz:'1. OG rechts' },
+      { name:'Muster',     zusatz:'2. OG links' },
+      { name:'Beispiel',   zusatz:'2. OG rechts' },
+      { name:'Hauswart',   zusatz:'' },
+      { name:'Verwaltung', zusatz:'Hans Amonn Immobilien' }
+    ],
+    objekt:'-'
+  },
+
+  render(d){
+    const m = KLINGEL_MASSE[d.mass] || KLINGEL_MASSE.mittel;
+    const b = m.b || Math.max(20, Number(d.breite) || 60);
+    const h = m.h || Math.max(8,  Number(d.hoehe)  || 15);
+    const obj = objekt(d.objekt);
+
+    const schilder = (d.namen || []).filter(n => has(n.name) || has(n.zusatz)).map(n => `
+      <div class="t-kling-schild" style="width:${b}mm;height:${h}mm">
+        <span class="t-kling-name">${esc(n.name)}</span>
+        ${has(n.zusatz) ? `<span class="t-kling-zusatz">${esc(n.zusatz)}</span>` : ''}
+      </div>`).join('');
+
+    return `
+      <div class="t-kling-bogen is-${esc(d.ausrichtung || 'links')} is-rahmen-${esc(d.rahmen || 'linie')}${
+        d.grossbuchstaben === 'ja' ? ' is-versal' : ''}"
+        style="--kling-h:${h}mm">
+        ${schilder}
+      </div>
+      <p class="t-kling-fuss">
+        ${esc(b)} × ${esc(h)} mm${obj.code ? ' · ' + esc(obj.name) : ''}
+        — auf festes Papier drucken, ausschneiden, einschieben.
+      </p>`;
+  }
+};
+
+/* ===== js/templates/kontakte.js ===== */
+/* Kontakt-Tafel · A4 hoch
+   --------------------------------------------------------------------------
+   «Wer ist wofuer da» — die Tafel im Treppenhaus. Nicht zu verwechseln mit
+   dem Notruf-Aushang: der nennt die drei Notrufnummern am Telefon, diese
+   Tafel nennt die Menschen, die im Alltag zustaendig sind.
+
+   Die Nummer steht rechts und gross. Wer im Treppenhaus steht und den
+   Hauswart sucht, tippt sie ab — er liest nicht.
+*/
+
+
+
+
+
+
+const kontakte = {
+  id:'kontakte',
+  title:'Kontakt-Tafel',
+  sub:'Wer ist wofür da — Hauswart, Verwaltung, Notfall · A4 hoch',
+  badge:'Kontakt',
+  root:'t-kontakt',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="24" y="28" width="86" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="24" y="48" width="150" height="17" rx="6" fill="#2A3350"/>
+    ${[0,1,2,3,4].map(i => `
+      <rect x="24" y="${94 + i * 42}" width="162" height="32" rx="5" fill="#fff" stroke="#E5E8ED" stroke-width="1.6"/>
+      <circle cx="42" cy="${110 + i * 42}" r="8" fill="${i === 0 ? '#E23A2E' : '#01B1E2'}"/>
+      <rect x="58" y="${102 + i * 42}" width="${58 - i * 4}" height="7" rx="3.5" fill="#2A3350" opacity=".85"/>
+      <rect x="58" y="${113 + i * 42}" width="${44 - i * 3}" height="5" rx="2.5" fill="#C9CFDA"/>
+      <rect x="${132}" y="${106 + i * 42}" width="46" height="9" rx="4.5" fill="#2A3350"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text' },
+    { k:'unter',   label:'Untertitel', type:'text' },
+
+    { t:'group', label:'Kontakte' },
+    { k:'zeilen', label:'Zeilen', type:'list', itemLabel:'Kontakt', max:10,
+      defaultItem:{ icon:'phone', rolle:'', name:'', nummer:'', zeiten:'', dringend:'nein' },
+      item:[
+        { k:'icon',     label:'Symbol',  type:'select', options:iconOptions },
+        { k:'rolle',    label:'Wofür',   type:'text' },
+        { k:'name',     label:'Wer',     type:'text' },
+        { k:'nummer',   label:'Nummer',  type:'text' },
+        { k:'zeiten',   label:'Erreichbar', type:'text' },
+        { k:'dringend', label:'Notfall hervorheben', type:'select',
+          options:[{ v:'nein', t:'nein' }, { v:'ja', t:'ja — rot' }] }
+      ] },
+
+    { t:'group', label:'QR-Code' },
+    { k:'qrText',  label:'Adresse für den QR-Code', type:'text',
+      hint:'Leer lassen: kein Code. Sonst z. B. das Störungsformular der Verwaltung.' },
+    { k:'qrLabel', label:'Beschriftung am Code', type:'text' },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Wer ist wofür da',
+    titel:'Kontakte',
+    unter:'Bitte in dieser Reihenfolge anrufen.',
+    zeilen:[
+      { icon:'warn',      rolle:'Notfall — Feuer, Unfall, Wasser', name:'Polizei · Feuerwehr · Sanität',
+        nummer:'112', zeiten:'rund um die Uhr', dringend:'ja' },
+      { icon:'reception', rolle:'Hauswart', name:'', nummer:'', zeiten:'Mo–Fr 08:00–17:00', dringend:'nein' },
+      { icon:'mail',      rolle:'Verwaltung', name:'Hans Amonn Immobilien',
+        nummer:'+41 31 951 85 54', zeiten:'Mo–Fr 09:00–12:00', dringend:'nein' },
+      { icon:'bolt',      rolle:'Strom und Heizung', name:'', nummer:'', zeiten:'', dringend:'nein' },
+      { icon:'lift',      rolle:'Lift steckt', name:'', nummer:'', zeiten:'rund um die Uhr', dringend:'nein' }
+    ],
+    qrText:'',
+    qrLabel:'Störung melden',
+    objekt:'-',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.rolle) || has(z.nummer)).map(z => `
+      <li class="t-kontakt-zeile${z.dringend === 'ja' ? ' is-dringend' : ''}">
+        <span class="t-kontakt-ico">${icon(z.icon || 'phone', 24, 1.9)}</span>
+        <span class="t-kontakt-txt">
+          <b>${esc(z.rolle)}</b>
+          ${has(z.name) ? `<i>${esc(z.name)}</i>` : ''}
+          ${has(z.zeiten) ? `<em>${esc(z.zeiten)}</em>` : ''}
+        </span>
+        <span class="t-kontakt-nr">${esc(z.nummer)}</span>
+      </li>`).join('');
+
+    return `
+      <header class="t-kontakt-kopf">
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(d.titel || '')}</h1>
+        ${has(d.unter) ? `<p class="t-kontakt-unter">${esc(d.unter)}</p>` : ''}
+      </header>
+
+      <ul class="t-kontakt-liste">${zeilen}</ul>
+
+      ${has(d.qrText) ? `
+      <div class="t-kontakt-qr">
+        ${qrSvg(d.qrText, { stufe:'M', groesse:'28mm' })}
+        ${has(d.qrLabel) ? `<span>${esc(d.qrLabel)}</span>` : ''}
+      </div>` : ''}
+
+      <footer class="t-kontakt-fuss">
+        <span class="t-kontakt-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/bauarbeiten.js ===== */
+/* Bauarbeiten-Aushang · A4 hoch
+   --------------------------------------------------------------------------
+   Umbau, Sanierung, Gerüst, Malerarbeiten. Anders als der Termin-Aushang
+   geht es hier nicht um eine Stunde, sondern um einen Zeitraum — und darum,
+   dass es laut wird.
+
+   Drei Dinge muessen drauf, sonst ruft die halbe Liegenschaft an:
+   von wann bis wann, was genau, und wer es zu verantworten hat.
+*/
+
+
+
+
+
+
+const BAU_WORT = {
+  de:{ eyebrow:'Bitte um Verständnis', von:'Von', bis:'Bis', betrifft:'Betroffen ist',
+       sorry:'Wir halten den Lärm so kurz wie möglich und danken für Ihr Verständnis.' },
+  en:{ eyebrow:'Please bear with us',  von:'From', bis:'Until', betrifft:'Affected',
+       sorry:'We keep the noise as short as we can and thank you for your patience.' },
+  fr:{ eyebrow:'Merci de votre compréhension', von:'Du', bis:'Au', betrifft:'Concerne',
+       sorry:'Nous limitons le bruit autant que possible et vous remercions de votre patience.' },
+  it:{ eyebrow:'Grazie per la comprensione', von:'Dal', bis:'Al', betrifft:'Riguarda',
+       sorry:'Cerchiamo di limitare il rumore e vi ringraziamo per la pazienza.' },
+  pt:{ eyebrow:'Agradecemos a compreensão', von:'De', bis:'Até', betrifft:'Afeta',
+       sorry:'Vamos limitar o ruído ao mínimo e agradecemos a sua paciência.' },
+  es:{ eyebrow:'Gracias por su comprensión', von:'Del', bis:'Al', betrifft:'Afecta a',
+       sorry:'Limitaremos el ruido al mínimo y les agradecemos la paciencia.' }
+};
+
+const bauarbeiten = {
+  id:'bauarbeiten',
+  title:'Bauarbeiten-Aushang',
+  sub:'Umbau, Sanierung, Gerüst — von wann bis wann · A4 hoch',
+  badge:'Bau',
+  root:'t-bau',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="10" fill="#E8A93B"/>
+    <rect x="24" y="34" width="94" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="24" y="54" width="156" height="18" rx="6" fill="#2A3350"/>
+    <rect x="24" y="94" width="78" height="54" rx="7" fill="#2A3350"/>
+    <rect x="108" y="94" width="78" height="54" rx="7" fill="#2A3350"/>
+    <rect x="36" y="108" width="26" height="6" rx="3" fill="#01B1E2"/>
+    <rect x="36" y="122" width="54" height="13" rx="4" fill="#fff" opacity=".95"/>
+    <rect x="120" y="108" width="26" height="6" rx="3" fill="#01B1E2"/>
+    <rect x="120" y="122" width="54" height="13" rx="4" fill="#fff" opacity=".95"/>
+    <rect x="24" y="166" width="162" height="48" rx="7" fill="#FFF9E8" stroke="#F0E2B5" stroke-width="2"/>
+    ${lines(38, 182, 128, 2, 14)}
+    ${lines(24, 236, 150, 3, 13)}`),
+
+  fields:[
+    { t:'group', label:'Was und wann' },
+    { k:'titel', label:'Was',  type:'text' },
+    { k:'von',   label:'Von',  type:'text' },
+    { k:'bis',   label:'Bis',  type:'text' },
+    { k:'zeit',  label:'Arbeitszeiten', type:'text',
+      hint:'Zum Beispiel «Mo–Fr 07:30 – 17:00, samstags keine lauten Arbeiten».' },
+
+    { t:'group', label:'Betroffen und Folgen' },
+    { k:'betrifft', label:'Betroffen ist', type:'text' },
+    { k:'folgen', label:'Was das bedeutet', type:'list', itemLabel:'Punkt', max:6,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Punkt', type:'textarea', rows:2 }] },
+
+    { t:'group', label:'Wer' },
+    { k:'firma',   label:'Ausführende Firma', type:'text' },
+    { k:'kontakt', label:'Auskunft bei',      type:'text' },
+    { k:'telefon', label:'Telefon',           type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Sanierung der Fassade',
+    von:'Montag, 15. September',
+    bis:'Freitag, 24. Oktober',
+    zeit:'Mo – Fr 07:30 – 17:00 · samstags keine lauten Arbeiten',
+    betrifft:'Ostfassade und Balkone',
+    folgen:[
+      { text:'Ein Gerüst steht während der ganzen Zeit an der Fassade.' },
+      { text:'Bitte halten Sie die Fenster an Arbeitstagen geschlossen.' },
+      { text:'Die Balkone sind vorübergehend nicht benutzbar.' }
+    ],
+    firma:'',
+    kontakt:'Hans Amonn Immobilien',
+    telefon:'+41 31 951 85 54',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'-',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = BAU_WORT[sprachen[0].id] || BAU_WORT.de;
+    const weitere = sprachen.slice(1).map(sp => BAU_WORT[sp.id] || BAU_WORT.de);
+
+    const folgen = (d.folgen || []).filter(f => has(f.text))
+      .map(f => `<li>${esc(f.text)}</li>`).join('');
+
+    const zweisprachig = (feld) =>
+      esc([w[feld]].concat(weitere.map(m => m[feld])).join(' · '));
+
+    return `
+      <div class="t-bau-band"></div>
+
+      <header class="t-bau-kopf">
+        <div>
+          <p class="eyebrow">${esc(w.eyebrow)}</p>
+          <h1>${esc(d.titel || '')}</h1>
+          ${has(d.betrifft) ? `<p class="t-bau-betrifft">
+            <span>${zweisprachig('betrifft')}</span> ${esc(d.betrifft)}</p>` : ''}
+        </div>
+        <span class="t-bau-ico">${icon('warn', 58, 1.8)}</span>
+      </header>
+
+      <div class="t-bau-zeitraum">
+        <div class="t-bau-datum">
+          <span>${zweisprachig('von')}</span>
+          <strong>${esc(d.von || '')}</strong>
+        </div>
+        <div class="t-bau-datum">
+          <span>${zweisprachig('bis')}</span>
+          <strong>${esc(d.bis || '')}</strong>
+        </div>
+      </div>
+      ${has(d.zeit) ? `<p class="t-bau-zeit">${esc(d.zeit)}</p>` : ''}
+
+      ${folgen ? `<ul class="t-bau-folgen">${folgen}</ul>` : ''}
+
+      <p class="t-bau-sorry">${esc(w.sorry)}</p>
+      ${weitere.length ? `<ul class="t-bau-weitere">${
+        weitere.map((m, i) => `<li lang="${sprachen[i + 1].id}">${esc(m.sorry)}</li>`).join('')}</ul>` : ''}
+
+      ${(has(d.firma) || has(d.kontakt) || has(d.telefon)) ? `
+      <p class="t-bau-wer">${esc([d.firma, d.kontakt, d.telefon].filter(Boolean).join(' · '))}</p>` : ''}
+
+      <footer class="t-bau-fuss">
+        <span class="t-bau-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+        <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/preisliste.js ===== */
+/* Preisliste · A4 hoch
+   --------------------------------------------------------------------------
+   Was etwas kostet: Parkplatz im Monat, ein Waschmarken-Bund, das zweite
+   Frühstück, der verlorene Schlüssel. Bisher stand das in drei verschiedenen
+   Word-Dateien und in keiner gleich.
+
+   Zwei Sorten Zeilen: Abschnitte gliedern (Parkieren, Waschen, Diverses),
+   Posten nennen Preise. Der Preis steht rechts, mit Tabellenziffern
+   untereinander — sonst tanzen die Rappen und man vergleicht schlecht.
+
+   Die Sprachen betreffen Titel und Fusshinweis. Die Posten selbst schreibt,
+   wer die Liste macht — ein «Waschmarken-Bund à 10 Stück» lässt sich nicht
+   sinnvoll automatisch übersetzen.
+*/
+
+
+
+
+
+
+/* Titel und der Satz unten. Der Hinweis ist der, der rechtlich zaehlt:
+   Preise inkl. MwSt., Aenderungen vorbehalten. */
+const PREIS_WORT = {
+  de:{ titel:'Preisliste', hinweis:'Alle Preise in %W%, inklusive MwSt. Änderungen vorbehalten.' },
+  en:{ titel:'Price list', hinweis:'All prices in %W%, VAT included. Subject to change.' },
+  fr:{ titel:'Tarifs',     hinweis:'Tous les prix en %W%, TVA comprise. Sous réserve de modification.' },
+  it:{ titel:'Listino prezzi', hinweis:'Tutti i prezzi in %W%, IVA inclusa. Con riserva di modifiche.' },
+  pt:{ titel:'Tabela de preços', hinweis:'Todos os preços em %W%, IVA incluído. Sujeito a alterações.' },
+  es:{ titel:'Lista de precios', hinweis:'Todos los precios en %W%, IVA incluido. Sujeto a cambios.' }
+};
+
+function preisWort(id){ return PREIS_WORT[id] || PREIS_WORT.de; }
+
+/* Die Zeilenart entscheidet, ob eine Zeile gliedert oder etwas kostet. */
+function preisArtOptions(){
+  return [
+    { v:'posten',    t:'Posten — mit Preis' },
+    { v:'abschnitt', t:'Abschnitt — Zwischentitel' }
+  ];
+}
+
+const preisliste = {
+  id:'preisliste',
+  title:'Preisliste',
+  sub:'Parkplatz, Waschmarken, Extras · A4 hoch',
+  badge:'Preise',
+  root:'t-preis',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="30" width="76" height="10" rx="5" fill="#01B1E2"/>
+    <rect x="24" y="52" width="140" height="18" rx="6" fill="#2A3350"/>
+    <rect x="24" y="98" width="60" height="8" rx="4" fill="#01B1E2"/>
+    ${[0,1,2].map(i => `
+      <rect x="24" y="${118 + i * 24}" width="${86 - i * 10}" height="8" rx="4" fill="#2A3350" opacity=".8"/>
+      <rect x="150" y="${118 + i * 24}" width="36" height="8" rx="4" fill="#2A3350"/>`).join('')}
+    <rect x="24" y="200" width="60" height="8" rx="4" fill="#01B1E2"/>
+    ${[0,1,2].map(i => `
+      <rect x="24" y="${220 + i * 24}" width="${92 - i * 12}" height="8" rx="4" fill="#2A3350" opacity=".8"/>
+      <rect x="150" y="${220 + i * 24}" width="36" height="8" rx="4" fill="#2A3350"/>`).join('')}
+    <rect x="24" y="298" width="150" height="5" rx="2.5" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text',
+      hint:'Leer lassen: nimmt «Preisliste» in der ersten gewählten Sprache.' },
+    { k:'unter',   label:'Untertitel', type:'text' },
+    { k:'stand',   label:'Gültig ab', type:'text',
+      hint:'Steht klein neben dem Titel. Eine Preisliste ohne Datum ist wertlos.' },
+
+    { t:'group', label:'Posten' },
+    { k:'waehrung', label:'Währung', type:'select', options:[
+      { v:'CHF', t:'CHF — Schweizer Franken' },
+      { v:'EUR', t:'EUR — Euro' },
+      { v:'',    t:'ohne — die Währung steht schon beim Preis' }
+    ] },
+    { k:'zeilen', label:'Zeilen', type:'list', itemLabel:'Zeile', max:22,
+      defaultItem:{ art:'posten', icon:'info', was:'', dazu:'', preis:'', einheit:'' },
+      item:[
+        { k:'art',     label:'Art',         type:'select', options:preisArtOptions() },
+        { k:'icon',    label:'Symbol',      type:'select', options:iconOptions },
+        { k:'was',     label:'Bezeichnung', type:'text' },
+        { k:'dazu',    label:'Erläuterung', type:'text' },
+        { k:'preis',   label:'Preis',       type:'text' },
+        { k:'einheit', label:'je',          type:'text' }
+      ] },
+
+    { t:'group', label:'Fuss' },
+    { k:'hinweisAn', label:'Preishinweis', type:'select', options:[
+      { v:'ja',   t:'zeigen — MwSt. und Änderungsvorbehalt' },
+      { v:'nein', t:'weglassen' }
+    ] },
+    { k:'hinweis', label:'Eigener Hinweis', type:'textarea', rows:2,
+      hint:'Leer lassen: der hinterlegte Satz gilt, in allen gewählten Sprachen.' },
+    { k:'zahlung', label:'Zahlung', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note',  label:'Die Sprachen betreffen Titel und Fusshinweis. Die Posten schreiben Sie selbst — die kann niemand automatisch übersetzen.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Was was kostet',
+    titel:'',
+    unter:'',
+    stand:'gültig ab 01.01.2026',
+    waehrung:'CHF',
+    zeilen:[
+      { art:'abschnitt', icon:'car', was:'Parkieren', dazu:'', preis:'', einheit:'' },
+      { art:'posten', icon:'car',  was:'Aussenparkplatz', dazu:'fest zugeteilt', preis:'60.–', einheit:'Monat' },
+      { art:'posten', icon:'car',  was:'Einstellhallenplatz', dazu:'fest zugeteilt', preis:'120.–', einheit:'Monat' },
+      { art:'posten', icon:'car',  was:'Besucherparkplatz', dazu:'mit Parkkarte, max. 24 Std.', preis:'ohne Kosten', einheit:'' },
+
+      { art:'abschnitt', icon:'waesche', was:'Waschen und Trocknen', dazu:'', preis:'', einheit:'' },
+      { art:'posten', icon:'waesche', was:'Waschmarke', dazu:'ein Waschgang', preis:'4.–', einheit:'Stück' },
+      { art:'posten', icon:'waesche', was:'Marken-Bund', dazu:'10 Stück, bei der Verwaltung', preis:'38.–', einheit:'Bund' },
+      { art:'posten', icon:'waesche', was:'Tumbler', dazu:'ein Durchgang', preis:'3.–', einheit:'Stück' },
+
+      { art:'abschnitt', icon:'key', was:'Diverses', dazu:'', preis:'', einheit:'' },
+      { art:'posten', icon:'key',  was:'Ersatzschlüssel', dazu:'Bestellung über die Verwaltung', preis:'45.–', einheit:'Stück' },
+      { art:'posten', icon:'key',  was:'Türöffnung ausserhalb der Bürozeiten', dazu:'', preis:'80.–', einheit:'Einsatz' },
+      { art:'posten', icon:'trash',was:'Entsorgung zurückgelassener Gegenstände', dazu:'nach Aufwand', preis:'ab 120.–', einheit:'Stunde' }
+    ],
+    hinweisAn:'ja',
+    hinweis:'',
+    zahlung:'Zahlbar bei der Verwaltung oder per Rechnung.',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'-',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const sprachen = sprachObjekte(d.sprachen);
+    const waehrung = has(d.waehrung) ? d.waehrung : '';
+
+    const titel = has(d.titel) ? d.titel : preisWort(sprachen[0].id).titel;
+    const weitere = sprachen.slice(1).map(sp => preisWort(sp.id).titel).filter(Boolean);
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.was) || has(z.preis)).map(z => {
+      if (z.art === 'abschnitt') return `
+        <li class="t-preis-abschnitt">
+          <span class="t-preis-ico">${icon(z.icon || 'info', 20, 1.9)}</span>
+          <b>${esc(z.was)}</b>
+          ${has(z.dazu) ? `<i>${esc(z.dazu)}</i>` : ''}
+        </li>`;
+
+      return `
+        <li class="t-preis-zeile">
+          <span class="t-preis-was">
+            <b>${esc(z.was)}</b>
+            ${has(z.dazu) ? `<i>${esc(z.dazu)}</i>` : ''}
+          </span>
+          <span class="t-preis-punkte"></span>
+          <span class="t-preis-betrag">
+            <b>${esc([/\d/.test(z.preis || '') ? waehrung : '', z.preis].filter(has).join(' '))}</b>
+            ${has(z.einheit) ? `<i>je ${esc(z.einheit)}</i>` : ''}
+          </span>
+        </li>`;
+    }).join('');
+
+    /* Der Standardhinweis steht in jeder gewaehlten Sprache — eine Zeile je
+       Sprache, damit auch der portugiesische Mieter den Vorbehalt liest. */
+    const hinweise = has(d.hinweis)
+      ? [d.hinweis]
+      : (d.hinweisAn === 'ja'
+          ? sprachen.map(sp => preisWort(sp.id).hinweis.replace('%W%', waehrung || 'CHF'))
+          : []);
+
+    return `
+      <header class="t-preis-kopf">
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <div class="t-preis-titelzeile">
+          <h1>${esc(titel)}</h1>
+          ${has(d.stand) ? `<span class="t-preis-stand">${esc(d.stand)}</span>` : ''}
+        </div>
+        ${weitere.length ? `<p class="t-preis-sprachen">${esc(weitere.join(' · '))}</p>` : ''}
+        ${has(d.unter) ? `<p class="t-preis-unter">${esc(d.unter)}</p>` : ''}
+      </header>
+
+      <ul class="t-preis-liste">${zeilen}</ul>
+
+      <footer class="t-preis-fuss">
+        ${has(d.zahlung) ? `<p class="t-preis-zahlung">${esc(d.zahlung)}</p>` : ''}
+        ${hinweise.length ? `<ul class="t-preis-hinweis">${
+          hinweise.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
+        <p class="t-preis-abs">
+          <span class="t-preis-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+          <span>${esc(objektFusszeile(d.objekt, abs.foot))}</span>
+        </p>
+      </footer>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10458,7 +12814,19 @@ const TEMPLATES = {
   'anfahrt-luftbild': luftbild,
   zattoo,
   'plan-editor': planeditor,
-  gaestemappe
+  gaestemappe,
+  checkin,
+  tuerhaenger,
+  tischaufsteller,
+  zimmerschild,
+  willkommen,
+  feedback,
+  zeiten,
+  termin,
+  klingelschild,
+  kontakte,
+  bauarbeiten,
+  preisliste
 };
 
 const ORDER = [
@@ -10466,7 +12834,9 @@ const ORDER = [
   'etiketten', 'qrplakat', 'kurzanleitung',
   'foto', 'grossplakat',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
-  'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
+  'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
+  'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
+  'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste'
 ];
 
 /* ===== js/lib/suche.js ===== */

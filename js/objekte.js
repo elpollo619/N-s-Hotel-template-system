@@ -256,6 +256,20 @@ export function objektAdresse(id){
     .filter(x => x && x.trim()).join(', ');
 }
 
+/**
+ * Die Fusszeile eines Blattes: Kürzel, Adresse, Absender.
+ *
+ * Steht die Strasse des Objekts schon in der Fusszeile der Firma — beim
+ * Hotel ist das so, es sitzt in seinem eigenen Haus —, fällt sie hier weg.
+ * Zweimal dieselbe Adresse untereinander liest sich wie ein Fehler.
+ */
+export function objektFusszeile(objektId, absenderFuss){
+  const o = objekt(objektId);
+  const fuss = String(absenderFuss || '');
+  const adr = o.street && fuss.includes(o.street) ? '' : objektAdresse(objektId);
+  return [o.code, adr, fuss].filter(x => x && x.trim()).join(' · ');
+}
+
 /** true, wenn zum Objekt noch keine Strasse hinterlegt ist. */
 export function adresseFehlt(id){
   const o = objekt(id);
