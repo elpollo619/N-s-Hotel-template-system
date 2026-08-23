@@ -1,5 +1,5 @@
-/* Prüft die Gliederung der Oberfläche: Startseite, Kapitelseiten, Suche,
-   Kapitel im Editor, Massstab und Seitenzähler.
+/* Prüft die Gliederung der Oberfläche: Startseite, Arbeitsbereiche,
+   Werkzeugseiten, Suche, Kapitel im Editor, Massstab und Seitenzähler.
    Aufruf:  node tests/navigation.mjs [http://127.0.0.1:8099]  */
 import { chromium } from 'playwright';
 
@@ -14,52 +14,97 @@ function pruefe(name, ok, dazu){
   console.log(`${ok ? '✓' : '✗'} ${name}${dazu ? '  — ' + dazu : ''}`);
   if (!ok) fehler.push(name + (dazu ? ': ' + dazu : ''));
 }
+/* page.goto auf eine Adresse, die schon offen ist, laedt nicht neu: der
+   Zustand der vorigen Pruefung — Fokus, aufgeklappte Kapitel — stuende noch
+   da. Darum in dem Fall ausdruecklich neu laden. */
 const hin = async (hash) => {
-  await page.goto(`${BASE}/index.html${hash}`, { waitUntil:'networkidle' });
+  const ziel = `${BASE}/index.html${hash}`;
+  if (page.url() === ziel) await page.reload({ waitUntil:'networkidle' });
+  else await page.goto(ziel, { waitUntil:'networkidle' });
   await page.waitForTimeout(220);
 };
 
 /* ---------- 1. Startseite ------------------------------------------------ */
 await hin('#/');
 const start = await page.evaluate(() => ({
-  kapitelSpalte: document.querySelectorAll('.vz-nav .vz-nav-zeile').length,
+  navZeilen: document.querySelectorAll('#vz-seitenleiste .vz-nav-zeile').length,
   kacheln: document.querySelectorAll('.vz-kachel').length,
-  karten: document.querySelectorAll('.vz-inhalt .vz-card').length,
+  karten: document.querySelectorAll('.vz-seite .vz-card').length,
+  zahlen: Array.from(document.querySelectorAll('.vz-zahl b')).map(b => Number(b.textContent)),
   schritte: document.querySelectorAll('.vz-schritte li').length,
-  suchfeld: Boolean(document.getElementById('vz-suchfeld'))
+  suchfeld: Boolean(document.getElementById('vz-suchfeld')),
+  datum: document.querySelector('.vz-heute')?.textContent || ''
 }));
-const kapZahl = await page.evaluate(() => window.VZ.GROUPS.length);
-pruefe('Die Startseite zeigt jedes Kapitel als Kachel',
-  start.kacheln === kapZahl, `${start.kacheln} von ${kapZahl}`);
-pruefe('Die Kapitelspalte führt Startseite plus alle Kapitel',
-  start.kapitelSpalte === kapZahl + 1, String(start.kapitelSpalte));
-pruefe('Die Startseite ist keine Wand aus Vorlagen mehr',
+const [bZahl, sZahl, vZahl] = await page.evaluate(() =>
+  [window.VZ.BEREICHE.length, Object.keys(window.VZ.SEITEN).length,
+   window.VZ.BEREICHE.flatMap(b => b.ids).filter(i => window.VZ.TEMPLATES[i]).length]);
+
+pruefe('Die Startseite zeigt jeden Arbeitsbereich als Kachel',
+  start.kacheln === bZahl, `${start.kacheln} von ${bZahl}`);
+pruefe('Die Seitenleiste führt Startseite, alle Bereiche und alle Werkzeuge',
+  start.navZeilen === 1 + bZahl + sZahl, String(start.navZeilen));
+pruefe('Die Startseite ist keine Wand aus Vorlagen',
   start.karten === 0, `${start.karten} Karten`);
+pruefe('Die Zahlenreihe nennt alle Vorlagen',
+  start.zahlen[0] === vZahl, `${start.zahlen[0]} von ${vZahl}`);
+pruefe('Jede Vorlage steht in genau einem Bereich',
+  vZahl === await page.evaluate(() => Object.keys(window.VZ.TEMPLATES).length),
+  `${vZahl} zugeteilt`);
 pruefe('Drei Schritte als Einstieg', start.schritte === 3);
 pruefe('Das Suchfeld steht im Kopf', start.suchfeld);
+pruefe('Das heutige Datum steht im Kopf',
+  /\d{4}/.test(start.datum), start.datum);
 
-/* ---------- 2. Kapitelseite ---------------------------------------------- */
-const gruppen = await page.evaluate(() =>
-  window.VZ.GROUPS.map(g => ({ id:g.id, titel:g.title,
-    n:g.ids.filter(i => window.VZ.TEMPLATES[i]).length })));
+/* ---------- 2. Arbeitsbereiche ------------------------------------------- */
+const bereiche = await page.evaluate(() =>
+  window.VZ.BEREICHE.map(b => ({ id:b.id, titel:b.title, kurz:b.kurz,
+    n:b.ids.filter(i => window.VZ.TEMPLATES[i]).length })));
 
-for (const g of gruppen){
-  await hin('#/k/' + g.id);
+for (const b of bereiche){
+  await hin('#/b/' + b.id);
   const k = await page.evaluate(() => ({
-    karten: document.querySelectorAll('.vz-inhalt .vz-card').length,
-    titel: document.querySelector('.vz-kap-kopf h1')?.textContent || '',
-    aktiv: document.querySelector('.vz-nav-zeile.is-aktiv span')?.textContent || '',
+    karten: document.querySelectorAll('.vz-seite .vz-card').length,
+    titel: document.querySelector('.vz-seitenkopf h1')?.textContent || '',
+    aktiv: document.querySelector('.vz-nav-zeile.is-aktiv .vz-nav-txt')?.textContent || '',
     krumen: Array.from(document.querySelectorAll('.vz-krumen a, .vz-krumen b'))
       .map(e => e.textContent)
   }));
-  const ok = k.karten === g.n && k.titel === g.titel &&
-             k.aktiv === g.titel && k.krumen[0] === 'Startseite';
-  pruefe(`Kapitel «${g.titel}»`, ok, `${k.karten} Vorlagen, Pfad ${k.krumen.join(' › ')}`);
+  const ok = k.karten === b.n && k.titel === b.titel &&
+             k.aktiv === b.kurz && k.krumen[0] === 'Startseite';
+  pruefe(`Bereich «${b.titel}»`, ok, `${k.karten} Vorlagen, Pfad ${k.krumen.join(' › ')}`);
 }
 
-await hin('#/k/gibtsnicht');
-pruefe('Ein unbekanntes Kapitel führt zurück auf die Startseite',
+await hin('#/b/gibtsnicht');
+pruefe('Ein unbekannter Bereich führt zurück auf die Startseite',
   await page.evaluate(() => document.querySelectorAll('.vz-kachel').length > 0));
+
+/* Alte Kapitel-Adressen stecken in verschickten Links — sie müssen weiter
+   irgendwo landen, statt ins Leere zu laufen. */
+await hin('#/k/parken');
+pruefe('Eine alte Kapitel-Adresse leitet auf den passenden Bereich um',
+  await page.evaluate(() => location.hash === '#/b/ankommen'),
+  await page.evaluate(() => location.hash));
+
+/* ---------- 2b. Werkzeugseiten ------------------------------------------- */
+for (const [id, titel] of [['hilfe','Anleitung'], ['eigene','Eigene Textbausteine'],
+                           ['marke','Marke und Schrift']]){
+  await hin('#/s/' + id);
+  const w = await page.evaluate(() => ({
+    titel: document.querySelector('.vz-seitenkopf h1')?.textContent || '',
+    aktiv: document.querySelector('.vz-nav-zeile.is-aktiv')?.dataset.nav || ''
+  }));
+  pruefe(`Werkzeugseite «${titel}»`,
+    w.titel === titel && w.aktiv === 's:' + id, `${w.titel} / ${w.aktiv}`);
+}
+pruefe('Die Marke-Seite nennt beide Hausschriften',
+  await page.evaluate(() => document.querySelectorAll('.vz-schriftzeile').length === 2));
+pruefe('Die Marke-Seite zeigt die echten Token-Werte',
+  await page.evaluate(() =>
+    document.querySelector('[data-token="--navy"]')?.textContent.trim() === '#2A3350'),
+  await page.evaluate(() => document.querySelector('[data-token="--navy"]')?.textContent));
+await hin('#/s/eigene');
+pruefe('Ohne eigene Bausteine steht ein Hinweis statt einer leeren Liste',
+  await page.evaluate(() => Boolean(document.querySelector('.vz-leer'))));
 
 /* ---------- 3. Suche ------------------------------------------------------ */
 await hin('#/');
@@ -201,11 +246,87 @@ pruefe('Escape führt aus dem Editor zurück',
 
 const zuletzt = await page.evaluate(() => ({
   gespeichert: JSON.parse(localStorage.getItem('nsvz:verlauf') || '[]'),
-  gezeigt: Array.from(document.querySelectorAll('.vz-inhalt .vz-card h3')).map(h => h.textContent)
+  gezeigt: Array.from(document.querySelectorAll('.vz-seite .vz-card h3')).map(h => h.textContent)
 }));
 pruefe('Zuletzt benutzte Vorlagen stehen auf der Startseite',
   zuletzt.gespeichert[0] === 'waschplan' && zuletzt.gezeigt.includes('Waschplan'),
   zuletzt.gespeichert.slice(0, 3).join(', '));
+
+/* ---------- 7. Weiterarbeiten -------------------------------------------- */
+/* Wer einen Entwurf offen hat, soll ihn auf der Startseite wiederfinden,
+   ohne den Bereich zu kennen, in dem die Vorlage steht. */
+await hin('#/');
+const weiter = await page.evaluate(() => Array.from(
+  document.querySelectorAll('.vz-weiter-zeile')).map(z => ({
+    titel: z.querySelector('b').textContent,
+    bereich: z.querySelector('i').textContent,
+    ziel: z.getAttribute('href')
+  })));
+pruefe('Offene Entwürfe stehen auf der Startseite',
+  weiter.some(w => w.ziel === '#/t/hinweis'),
+  weiter.map(w => w.titel).join(', ') || '—');
+pruefe('Jeder offene Entwurf nennt seinen Arbeitsbereich',
+  weiter.length > 0 && weiter.every(w => w.bereich.length > 0),
+  weiter[0] ? weiter[0].bereich : '—');
+
+/* ---------- 8. Bedienbarkeit --------------------------------------------- */
+/* Nach den Web Interface Guidelines. Nicht erschoepfend, aber die vier
+   Regeln, die beim Umbauen am ehesten verloren gehen. */
+await hin('#/');
+pruefe('Ein Sprunglink führt an den Inhalt',
+  await page.evaluate(() => document.querySelector('.vz-skip')?.getAttribute('href') === '#vz-view'));
+
+await page.keyboard.press('Tab');
+const ersterFokus = await page.evaluate(() => {
+  const el = document.activeElement;
+  const s = getComputedStyle(el);
+  return { was: `${el.tagName}.${el.className || '-'}#${el.id || '-'}`,
+           skip: el.matches?.('.vz-skip') || false,
+           umriss: s.outlineStyle, breite: s.outlineWidth };
+});
+pruefe('Der erste Tabstopp ist der Sprunglink und zeigt einen Fokusring',
+  ersterFokus.skip && ersterFokus.umriss !== 'none',
+  `${ersterFokus.was} · ${ersterFokus.umriss} ${ersterFokus.breite}`);
+
+const klein = await page.evaluate(() => {
+  const zuKlein = [];
+  for (const el of document.querySelectorAll('a[href], button, select, input')){
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) continue;              // versteckt
+    /* Links mitten im Fliesstext sind keine Bedienelemente: sie erben die
+       Zeilenhoehe des Satzes. Sie 24 px hoch zu machen hiesse, den Absatz
+       auseinanderzureissen. Die Regel gilt fuer Knoepfe und fuer Ziele, die
+       man als solche ansteuert. */
+    if (el.tagName === 'A' && getComputedStyle(el).display === 'inline') continue;
+    if (r.height < 24) zuKlein.push(`${el.className || el.tagName} ${Math.round(r.height)}px`);
+  }
+  return zuKlein;
+});
+pruefe('Keine Trefferfläche unter 24 px hoch', klein.length === 0, klein.slice(0, 3).join(' · '));
+
+pruefe('Der Browser-Zoom ist nicht gesperrt',
+  await page.evaluate(() =>
+    !/user-scalable\s*=\s*no|maximum-scale/.test(
+      document.querySelector('meta[name=viewport]')?.content || '')));
+
+/* Die Schublade auf schmalen Geräten. */
+const handy = await browser.newPage({ viewport:{ width:420, height:820 } });
+await handy.goto(`${BASE}/index.html#/`, { waitUntil:'networkidle' });
+await handy.waitForTimeout(260);
+const zu = await handy.evaluate(() =>
+  Math.round(document.getElementById('vz-seitenleiste').getBoundingClientRect().right));
+await handy.click('#vz-burger');
+await handy.waitForTimeout(340);
+const auf = await handy.evaluate(() => ({
+  links: Math.round(document.getElementById('vz-seitenleiste').getBoundingClientRect().x),
+  schleier: !document.getElementById('vz-schleier').hidden,
+  gross: getComputedStyle(document.querySelector('#vz-suchfeld')).fontSize
+}));
+pruefe('Schmal ist die Seitenleiste eine Schublade', zu <= 0, `rechter Rand ${zu}px`);
+pruefe('Der Griff zieht sie auf', auf.links === 0 && auf.schleier, JSON.stringify(auf));
+pruefe('Eingabefelder sind auf dem Telefon mindestens 16 px',
+  parseFloat(auf.gross) >= 16, auf.gross);
+await handy.close();
 
 await browser.close();
 if (fehler.length){ console.error('\nFehler:\n · ' + fehler.join('\n · ')); process.exit(1); }

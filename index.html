@@ -16,8 +16,13 @@
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
 <body>
-  <header class="vz-topbar no-print"></header>
-  <main id="vz-view"></main>
+  <a class="vz-skip" href="#vz-view">Zum Inhalt springen</a>
+  <div class="vz-app">
+    <header class="vz-topbar no-print"></header>
+    <aside class="vz-seitenleiste no-print" id="vz-seitenleiste"></aside>
+    <div class="vz-schleier no-print" id="vz-schleier" hidden></div>
+    <main id="vz-view" tabindex="-1"></main>
+  </div>
   <noscript>
     <p style="padding:24px;font-family:sans-serif">
       Diese Seite braucht JavaScript. Bitte im Browser aktivieren.

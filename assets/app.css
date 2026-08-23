@@ -22,12 +22,11 @@ a{color:var(--cyan)}
   background:var(--navy);color:#fff;
   box-shadow:0 2px 12px rgba(42,51,80,.18);
 }
-.vz-brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit}
+.vz-brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-decoration:none}
 .vz-brand img{height:30px;width:auto;display:block}
 .vz-brand svg{height:30px;width:auto;display:block}
-.vz-brand-txt{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.02em}
+.vz-brand-txt{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.02em;white-space:nowrap}
 .vz-brand-txt small{display:block;font-family:var(--font-body);font-weight:500;font-size:11px;opacity:.7;letter-spacing:.06em;text-transform:uppercase}
-.vz-top-spacer{flex:1}
 .vz-lang{display:flex;border:1px solid rgba(255,255,255,.28);border-radius:999px;overflow:hidden}
 .vz-lang button{background:none;border:0;color:#fff;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;opacity:.65}
 .vz-lang button[aria-pressed="true"]{background:var(--cyan);opacity:1}
@@ -42,6 +41,8 @@ a{color:var(--cyan)}
 }
 .vz-btn:hover{border-color:var(--cyan);background:var(--cyan-tint)}
 .vz-btn:active{transform:translateY(1px)}
+.vz-btn:disabled{opacity:.45;cursor:not-allowed}
+.vz-btn:disabled:hover{border-color:var(--line);background:#fff}
 .vz-btn--primary{background:var(--cyan);border-color:var(--cyan);color:#fff}
 .vz-btn--primary:hover{background:#00a0cc;border-color:#00a0cc}
 .vz-btn--navy{background:var(--navy);border-color:var(--navy);color:#fff}
@@ -91,39 +92,80 @@ a{color:var(--cyan)}
 .vz-treffer-leer{margin:0;padding:16px;font-size:12.5px;color:var(--ink-soft);line-height:1.5}
 
 /* ---------- Übersicht: Kapitelspalte + Inhalt --------------------------- */
-.vz-uebersicht{
-  display:grid;grid-template-columns:236px 1fr;gap:0;
-  min-height:calc(100vh - 62px);
+/* ---------- Rahmen: Kopf, Seitenleiste, Inhalt --------------------------- */
+/* Ein Raster fuer die ganze Anwendung. Die Seitenleiste steht auf jeder
+   Seite — auch im Editor — damit «wo bin ich» nie eine Frage ist. */
+.vz-app{
+  display:grid;
+  grid-template-columns:232px minmax(0,1fr);
+  grid-template-rows:62px minmax(0,1fr);
+  grid-template-areas:"kopf kopf" "leiste inhalt";
+  min-height:100vh;
 }
-.vz-nav{
-  background:#fff;border-right:1px solid var(--line);padding:22px 12px 40px;
-  position:sticky;top:62px;max-height:calc(100vh - 62px);overflow-y:auto;
+.vz-topbar{grid-area:kopf}
+.vz-seitenleiste{grid-area:leiste}
+#vz-view{grid-area:inhalt;min-width:0}
+
+.vz-seitenleiste{
+  background:#fff;border-right:1px solid var(--line);padding:18px 10px 40px;
+  position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;
+  z-index:40;
 }
 .vz-nav-titel{
-  margin:22px 10px 8px;font-family:var(--font-display);font-size:10.5px;font-weight:700;
+  margin:20px 12px 7px;font-family:var(--font-display);font-size:10px;font-weight:700;
   letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
 }
 .vz-nav-zeile{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:9px 11px;border-radius:9px;text-decoration:none;
+  display:flex;align-items:center;gap:10px;
+  min-height:38px;padding:8px 11px;border-radius:9px;text-decoration:none;
   color:var(--ink-soft);font-size:13px;font-weight:600;line-height:1.3;
   transition:.14s background,.14s color;
 }
+.vz-nav-ico{flex:0 0 auto;display:flex;opacity:.8}
+.vz-nav-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vz-nav-zeile:hover{background:var(--bg-2);color:var(--navy)}
 .vz-nav-zeile.is-aktiv{background:var(--navy);color:#fff}
+.vz-nav-zeile.is-aktiv .vz-nav-ico{opacity:1}
+.vz-nav-zeile--start{margin-bottom:2px}
 .vz-nav-zeile em{
   flex:0 0 auto;font-style:normal;font-size:11px;font-weight:700;
   background:var(--bg-2);color:var(--muted);border-radius:999px;padding:2px 7px;
+  font-variant-numeric:tabular-nums;
 }
 .vz-nav-zeile.is-aktiv em{background:rgba(255,255,255,.2);color:#fff}
-.vz-inhalt{padding:30px 30px 70px;max-width:1180px}
+
+/* Der Schleier hinter der Schublade — nur auf schmalen Geraeten sichtbar. */
+.vz-schleier{
+  position:fixed;inset:62px 0 0;background:rgba(42,51,80,.42);
+  z-index:39;border:0;
+}
+
+/* Der Griff, der die Schublade oeffnet. Steht nur schmal im Weg. */
+.vz-burger{
+  display:none;flex-direction:column;justify-content:center;gap:4px;
+  width:40px;height:40px;padding:0 9px;margin-left:-6px;
+  background:none;border:0;cursor:pointer;border-radius:9px;
+}
+.vz-burger span{display:block;height:2px;background:#fff;border-radius:2px}
+.vz-burger:hover{background:rgba(255,255,255,.12)}
+
+/* Heutiges Datum im Kopf — schiebt zugleich die Sprachwahl nach rechts. */
+.vz-heute{
+  flex:1;text-align:right;font-size:12px;color:rgba(255,255,255,.72);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ---------- Seitengeruest ----------------------------------------------- */
+.vz-seite{padding:28px 30px 72px;max-width:1180px}
+.vz-seitenkopf{margin-bottom:26px}
+.vz-seitenkopf .eyebrow{font-size:26px;margin:0 0 2px;line-height:1.1}
+.vz-seitenkopf h1{
+  font-family:var(--font-display);font-weight:700;font-size:33px;line-height:1.07;
+  margin:0 0 9px;color:var(--navy);text-wrap:balance;
+}
+.vz-lede{margin:0;max-width:64ch;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
 
 /* ---------- Startseite -------------------------------------------------- */
-.vz-hub{max-width:1180px;margin:0 auto;padding:38px 22px 70px}
-.vz-hero{margin-bottom:30px}
-.vz-hero .eyebrow{font-size:32px;margin:0 0 2px}
-.vz-hero h1{font-family:var(--font-display);font-weight:700;font-size:36px;line-height:1.06;margin:0 0 10px;color:var(--navy)}
-.vz-hero p{margin:0;max-width:62ch;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
 .vz-block{margin-top:34px}
 .vz-block h2{
   font-family:var(--font-display);font-size:12.5px;font-weight:700;
@@ -139,9 +181,13 @@ a{color:var(--cyan)}
   transition:.16s border-color,.16s box-shadow,.16s transform;
 }
 .vz-kachel:hover{border-color:var(--cyan);box-shadow:0 10px 24px rgba(42,51,80,.11);transform:translateY(-2px)}
-.vz-kachel-zahl{
-  position:absolute;top:14px;right:15px;font-family:var(--font-display);
-  font-size:22px;font-weight:700;color:var(--line);line-height:1;
+.vz-kachel-ico{
+  position:absolute;top:15px;right:15px;display:flex;
+  color:var(--cyan);opacity:.9;
+}
+.vz-kachel em{
+  display:block;margin-top:9px;font-style:normal;font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
 }
 .vz-kachel b{display:block;font-family:var(--font-display);font-size:15px;color:var(--navy);margin:0 34px 5px 0}
 .vz-kachel i{display:block;font-style:normal;font-size:12px;line-height:1.5;color:var(--ink-soft)}
@@ -172,9 +218,6 @@ a{color:var(--cyan)}
 .vz-krumen a{color:var(--ink-soft);text-decoration:none}
 .vz-krumen a:hover{color:var(--cyan);text-decoration:underline}
 .vz-krumen b{color:var(--navy);font-weight:600}
-.vz-kap-kopf{margin-bottom:22px}
-.vz-kap-kopf h1{font-family:var(--font-display);font-weight:700;font-size:28px;margin:0 0 7px;color:var(--navy)}
-.vz-kap-kopf p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-soft);max-width:76ch}
 
 /* ---------- Vorlagenkarten ---------------------------------------------- */
 .vz-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px}
@@ -197,9 +240,6 @@ a{color:var(--cyan)}
   padding:4px 9px;
 }
 .vz-badge--cyan{background:var(--cyan)}
-.vz-badge--soon{background:var(--muted)}
-.vz-card--soon{opacity:.62;cursor:default}
-.vz-card--soon:hover{transform:none;border-color:var(--line);box-shadow:none}
 
 /* ---------- Editor ----------------------------------------------------- */
 .vz-editor{display:grid;grid-template-columns:392px 1fr;min-height:calc(100vh - 62px)}
@@ -317,6 +357,11 @@ a{color:var(--cyan)}
 @media print{
   .no-print{display:none!important}
   html,body{background:#fff!important}
+  /* Das Raster der Oberflaeche darf im Druck nicht mitzaehlen: eine Zeile
+     von 100vh Hoehe wuerde jedem Auftrag eine leere Seite anhaengen. */
+  .vz-app{display:block!important;min-height:0!important}
+  .vz-skip{display:none!important}
+  #vz-view{display:block}
   .vz-editor{display:block}
   .vz-stage{padding:0!important;background:#fff!important;background-image:none!important;display:block;overflow:visible}
   .vz-scaler{transform:none!important;height:auto!important;width:auto!important}
@@ -480,13 +525,39 @@ a{color:var(--cyan)}
   }
 }
 
-@media (max-width:1080px){
-  .vz-uebersicht{grid-template-columns:1fr}
-  .vz-nav{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);
-    display:flex;flex-wrap:wrap;gap:6px;padding:12px}
-  .vz-nav-titel{display:none}
-  .vz-nav-zeile{padding:7px 11px}
-  .vz-inhalt{padding:22px 18px 60px}
+/* Mittelbreit: die Seitenleiste wird zur Schiene aus Icons. Der Titel jeder
+   Zeile steht weiter im title-Attribut und wird vorgelesen. */
+@media (max-width:1180px){
+  .vz-app{grid-template-columns:64px minmax(0,1fr)}
+  .vz-seitenleiste{padding:14px 8px 32px}
+  .vz-nav-txt,.vz-nav-zeile em{display:none}
+  .vz-nav-zeile{justify-content:center;padding:10px 0}
+  .vz-nav-titel{margin:16px 0 6px;text-align:center;font-size:9px;letter-spacing:.08em}
+  .vz-seite{padding:24px 22px 64px}
+  .vz-heute{display:none}
+}
+
+/* Schmal: die Seitenleiste wird zur Schublade, die von links kommt. */
+@media (max-width:900px){
+  .vz-app{grid-template-columns:minmax(0,1fr);grid-template-areas:"kopf" "inhalt"}
+  .vz-burger{display:flex}
+  .vz-seitenleiste{
+    position:fixed;left:0;top:62px;width:250px;padding:16px 12px 40px;
+    transform:translateX(-100%);transition:transform .22s ease;
+    box-shadow:6px 0 22px rgba(42,51,80,.15);
+  }
+  .vz-nav-txt,.vz-nav-zeile em{display:flex}
+  .vz-nav-zeile{justify-content:space-between;padding:9px 11px}
+  .vz-nav-titel{margin:20px 12px 7px;text-align:left;font-size:10px;letter-spacing:.13em}
+  .vz-nav-em{display:block}
+  body.vz-nav-offen .vz-seitenleiste{transform:none}
+  .vz-brand-txt small{display:none}
+  .vz-seite{padding:20px 16px 60px}
+  .vz-seitenkopf h1{font-size:26px}
+}
+@media (min-width:901px){ .vz-schleier{display:none} }
+@media (prefers-reduced-motion:reduce){
+  .vz-seitenleiste{transition:none}
 }
 
 /* Hinweis, wenn die Ersatzschrift läuft — leise, aber sichtbar. */
@@ -497,3 +568,177 @@ a{color:var(--cyan)}
 }
 .vz-schriftwarnung b{color:#5d4409}
 .vz-schriftwarnung span{display:block;margin-top:4px;color:#8a6b1c}
+
+/* ==========================================================================
+   Startseite: Stand und offene Arbeit
+   Die Zahlenreihe sagt in einem Blick, wie gross die Zentrale ist. Darunter
+   steht, woran zuletzt gearbeitet wurde — das ist fast immer der Grund,
+   warum jemand die Seite ueberhaupt oeffnet.
+   ========================================================================== */
+.vz-zahlen{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;
+  margin-bottom:6px;
+}
+.vz-zahl{
+  background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 16px;
+}
+.vz-zahl b{
+  display:block;font-family:var(--font-display);font-size:29px;line-height:1;
+  color:var(--navy);font-variant-numeric:tabular-nums;
+}
+.vz-zahl span{
+  display:block;margin-top:5px;font-size:11px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);
+}
+
+.vz-block-note{margin:-4px 0 14px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);max-width:80ch}
+.vz-block-kopf{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}
+.vz-block-kopf h2{flex:1 1 auto}
+.vz-block-kopf h2 em{
+  font-style:normal;font-size:11px;font-weight:700;background:var(--bg-2);
+  color:var(--muted);border-radius:999px;padding:2px 8px;margin-left:2px;
+}
+.vz-block-btns{display:flex;flex-wrap:wrap;gap:8px}
+
+.vz-weiter{display:flex;flex-direction:column;gap:8px}
+.vz-weiter-zeile{
+  display:flex;align-items:center;gap:12px;min-height:48px;
+  background:#fff;border:1px solid var(--line);border-radius:11px;
+  padding:11px 15px;text-decoration:none;
+  transition:.14s border-color,.14s background;
+}
+.vz-weiter-zeile:hover{border-color:var(--cyan);background:var(--cyan-tint)}
+.vz-weiter-punkt{
+  flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--cyan);
+}
+.vz-weiter-zeile b{flex:0 1 auto;font-family:var(--font-display);font-size:14px;color:var(--navy)}
+.vz-weiter-zeile i{
+  flex:1;font-style:normal;font-size:12px;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.vz-weiter-zeile em{flex:0 0 auto;font-style:normal;color:var(--cyan);font-size:15px}
+
+/* ---------- Werkzeugkarten ------------------------------------------------ */
+.vz-werkzeuge{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.vz-werkzeug{
+  display:block;background:#fff;border:1px solid var(--line);border-radius:13px;
+  padding:14px 16px;text-decoration:none;transition:.14s border-color,.14s box-shadow;
+}
+.vz-werkzeug:hover{border-color:var(--cyan);box-shadow:0 8px 20px rgba(42,51,80,.1)}
+.vz-werkzeug-ico{display:flex;color:var(--cyan);margin-bottom:8px}
+.vz-werkzeug b{display:block;font-family:var(--font-display);font-size:14.5px;color:var(--navy);margin-bottom:3px}
+.vz-werkzeug i{display:block;font-style:normal;font-size:12px;line-height:1.5;color:var(--ink-soft)}
+
+/* ---------- Anleitung: Tastatur ------------------------------------------ */
+.vz-tasten{display:grid;grid-template-columns:auto 1fr;gap:9px 16px;margin:0;align-items:baseline}
+.vz-tasten dt{margin:0}
+.vz-tasten dd{margin:0;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+.vz-tasten kbd{
+  display:inline-block;min-width:26px;text-align:center;
+  border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;
+  background:#fff;padding:3px 7px;font-family:inherit;font-size:11.5px;
+  font-weight:700;color:var(--navy);
+}
+
+/* ---------- Eigene Textbausteine ------------------------------------------ */
+.vz-bausteine{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.vz-baustein{
+  background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 16px 13px;
+}
+.vz-baustein-kopf{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.vz-baustein-ico{display:flex;color:var(--cyan)}
+.vz-baustein-kopf b{flex:1;font-family:var(--font-display);font-size:14px;color:var(--navy);min-width:0}
+.vz-baustein-ton{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:999px;padding:2px 8px;background:var(--bg-2);color:var(--muted);
+}
+.vz-baustein-ton--warn{background:#FDECEA;color:#a3271d}
+.vz-baustein-ton--ok{background:var(--green-tint);color:#17683c}
+.vz-baustein-text{
+  margin:0 0 11px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.vz-baustein-btns{display:flex;gap:8px;flex-wrap:wrap}
+.vz-leer{
+  grid-column:1/-1;
+  margin:0;padding:20px;border:1px dashed var(--line);border-radius:13px;
+  font-size:13px;line-height:1.6;color:var(--ink-soft);background:#fff;max-width:80ch;
+}
+
+/* ---------- Marke: Schriftstand und Farben -------------------------------- */
+.vz-schriftstand{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.vz-schriftzeile{
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 15px;
+}
+.vz-schriftzeile-punkt{flex:0 0 auto;width:9px;height:9px;border-radius:50%}
+.vz-schriftzeile--ok .vz-schriftzeile-punkt{background:var(--green)}
+.vz-schriftzeile--ersatz .vz-schriftzeile-punkt{background:#E8A93B}
+.vz-schriftzeile b{font-family:var(--font-display);font-size:14px;color:var(--navy)}
+.vz-schriftzeile i{flex:1;font-style:normal;font-size:12px;color:var(--ink-soft);min-width:120px}
+.vz-schriftzeile em{
+  font-style:normal;font-size:11px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--muted);
+}
+.vz-schriftzeile--ok em{color:#17683c}
+
+.vz-farben{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.vz-farbe{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px 14px 13px}
+.vz-farbe-feld{display:block;height:42px;border-radius:9px;border:1px solid rgba(42,51,80,.08);margin-bottom:9px}
+.vz-farbe b{display:block;font-family:var(--font-display);font-size:13.5px;color:var(--navy)}
+.vz-farbe code{
+  display:block;margin:2px 0 5px;font-size:11.5px;color:var(--cyan);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.vz-farbe i{display:block;font-style:normal;font-size:11.5px;line-height:1.45;color:var(--ink-soft)}
+
+.vz-textlink{color:var(--cyan);font-weight:600;text-decoration:none;border-bottom:1px solid transparent}
+.vz-textlink:hover{border-bottom-color:currentColor}
+
+/* ==========================================================================
+   Bedienbarkeit
+   Nach den Web Interface Guidelines: alles per Tastatur erreichbar, jeder
+   Fokus sichtbar, keine Trefferflaeche unter 24 px — auf dem Telefon 44 px.
+   Eingabefelder dort mindestens 16 px, sonst zoomt iOS Safari beim Antippen
+   von allein hinein und verschiebt die halbe Seite.
+   ========================================================================== */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:4px}
+.vz-topbar :focus-visible{outline-color:#fff}
+.vz-topbar .vz-suche input:focus-visible{outline-color:var(--cyan)}
+
+/* Der Sprung an den Inhalt — fuer alle, die mit der Tastatur navigieren. */
+.vz-skip{
+  position:fixed;left:12px;top:-64px;z-index:80;
+  background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 10px 10px;
+  font-size:13px;font-weight:600;text-decoration:none;transition:top .16s;
+}
+.vz-skip:focus{top:0}
+#vz-view:focus{outline:none}
+
+.vz-mini,.vz-lang button,.vz-btn{min-height:24px}
+
+@media (pointer:coarse){
+  .vz-mini,.vz-lang button,.vz-btn,.vz-nav-zeile,.vz-burger{min-height:44px}
+  .vz-mini{min-width:44px}
+}
+@media (max-width:640px){
+  /* Auf dem Telefon zaehlt jeder Millimeter im Kopf: das Logo bleibt, der
+     Schriftzug weicht dem Suchfeld. */
+  .vz-brand-txt{display:none}
+  .vz-topbar{gap:10px;padding:0 14px}
+  input,select,textarea,
+  .vz-field input[type=text],.vz-field input[type=number],
+  .vz-field select,.vz-field textarea,
+  .vz-suche input,.vz-seitenwahl,.vz-zoomwahl{font-size:16px}
+}
+
+/* Im Editor wird die Seitenleiste zur Schiene — die Vorschau bekommt den
+   Platz. Nur ab Tablet-Breite; darunter ist sie ohnehin eine Schublade. */
+@media (min-width:901px){
+  body.vz-im-editor .vz-app{grid-template-columns:64px minmax(0,1fr)}
+  body.vz-im-editor .vz-seitenleiste{padding:14px 8px 32px}
+  body.vz-im-editor .vz-nav-txt,
+  body.vz-im-editor .vz-nav-zeile em{display:none}
+  body.vz-im-editor .vz-nav-zeile{justify-content:center;padding:10px 0}
+  body.vz-im-editor .vz-nav-titel{margin:16px 0 6px;text-align:center;font-size:9px;letter-spacing:.08em}
+}

@@ -16,6 +16,7 @@ const MODULES = [
   'js/brand-config.js',
   'js/lib/sprachen.js',
   'js/objekte.js',
+  'js/bereiche.js',
   'js/presets.js',
   'js/lib/dom.js',
   'js/lib/icons.js',
@@ -132,6 +133,24 @@ async function bundle(){
     }
 
     parts.push(`/* ===== ${rel} ===== */\n${ns}${src.trim()}\n`);
+  }
+
+  /* Jede lokal importierte Datei muss auch in MODULES stehen — sonst fehlt
+     sie im Buendel und die Einzeldatei bricht erst im Browser, mit einem
+     nackten «x is not defined». Lieber hier abbrechen. */
+  const fehlend = [];
+  for (const rel of MODULES){
+    const src = await fs.readFile(p(rel), 'utf8');
+    for (const m of src.matchAll(/^import[\s\S]*?from\s+['"](\.[^'"]+)['"];?\s*$/gm)){
+      const ziel = path.join(path.dirname(rel), m[1]).replace(/\\/g, '/');
+      if (!MODULES.includes(ziel)) fehlend.push(`${ziel}  (gebraucht von ${rel})`);
+    }
+  }
+  if (fehlend.length){
+    console.error('\nAbbruch: diese Module fehlen in der Liste MODULES:');
+    [...new Set(fehlend)].forEach(f => console.error('  · ' + f));
+    console.error('Bitte in tools/build-standalone.mjs eintragen — Abhaengigkeiten zuerst.\n');
+    process.exit(1);
   }
 
   if (clashes.length){
