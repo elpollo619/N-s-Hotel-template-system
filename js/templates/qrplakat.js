@@ -16,7 +16,7 @@ import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { qrSvg, qrWlan, qrTelefon, qrMail, qrOrt } from '../lib/qr.js';
 import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 /** Aus dem Formular die Zeile bauen, die im Code steckt. */
 export function qrInhalt(d){
@@ -134,8 +134,8 @@ export default {
     { k:'es', label:'Anleitung Español',   type:'text' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() }
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
   ],
 
   defaults:{
@@ -175,7 +175,7 @@ export default {
   },
 
   render(d){
-    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const abs = absender(d.absender, 'hotel');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const inhalt = qrInhalt(d);

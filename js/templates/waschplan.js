@@ -5,7 +5,7 @@
 import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumb, lines } from '../lib/thumbs.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const TAGE = ['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
 
@@ -40,8 +40,8 @@ export default {
     { k:'woche', label:'Woche / Monat', type:'text' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
 
     { t:'group', label:'Raster' },
     { k:'tage', label:'Tage', type:'number', min:1, max:7, step:1,
@@ -68,7 +68,7 @@ export default {
   },
 
   render(d){
-    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const abs = absender(d.absender, 'immobilien');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const tage = TAGE.slice(0, Math.min(7, Math.max(1, Number(d.tage) || 6)));

@@ -5,6 +5,9 @@
    ========================================================================== */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
+/* Eigene display-Regeln schlagen sonst das hidden-Attribut aus dem Browser —
+   ein leerer Kasten bleibt dann sichtbar stehen. */
+[hidden]{display:none!important}
 body{
   font-family:var(--font-body);
   color:var(--ink);
@@ -840,4 +843,104 @@ a{color:var(--cyan)}
 .vz-block h2 em{
   font-style:normal;font-size:11px;font-weight:700;background:var(--bg-2);
   color:var(--muted);border-radius:999px;padding:2px 8px;
+}
+
+/* ==========================================================================
+   Aktive Liegenschaft im Kopf
+   Das Haus, an dem gerade gearbeitet wird. Es steht oben, weil es fuer jede
+   Vorlage gilt — versteckt in einer einzelnen waere es nutzlos.
+   ========================================================================== */
+.vz-objekt{
+  display:flex;align-items:center;gap:8px;flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:3px 5px 3px 12px;
+}
+.vz-objekt label{
+  font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);white-space:nowrap;
+}
+.vz-objekt select{
+  border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:999px;
+  padding:5px 10px;font:inherit;font-size:12.5px;font-weight:600;
+  max-width:210px;cursor:pointer;
+}
+.vz-objekt select option{background:var(--navy);color:#fff}
+.vz-objekt select:hover{background:rgba(255,255,255,.2)}
+
+/* Der Hinweis im Editor, wenn Vorlage und aktive Liegenschaft auseinanderlaufen. */
+.vz-objekthinweis{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:10px;padding:10px 13px;border-radius:11px;
+  background:#FFF9E8;border:1px solid #F0E2B5;
+  font-size:12px;line-height:1.5;color:#7a5c12;
+}
+.vz-objekthinweis span{flex:1;min-width:150px}
+
+/* ---------- Liste der Liegenschaften -------------------------------------- */
+.vz-objektliste{display:flex;flex-direction:column;gap:8px}
+.vz-objektzeile{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:11px 15px;
+}
+.vz-objektzeile.is-aktiv{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
+.vz-objektzeile-code{
+  flex:0 0 auto;min-width:44px;text-align:center;
+  font-family:var(--font-display);font-size:12px;font-weight:700;color:#fff;
+  background:var(--navy);border-radius:7px;padding:4px 8px;
+}
+.vz-objektzeile.is-aktiv .vz-objektzeile-code{background:var(--cyan)}
+.vz-objektzeile-txt{flex:1 1 220px;min-width:0}
+.vz-objektzeile-txt b{display:block;font-family:var(--font-display);font-size:14px;color:var(--navy)}
+.vz-objektzeile-txt i{display:block;font-style:normal;font-size:12px;color:var(--ink-soft)}
+.vz-objektzeile-firma{
+  flex:0 1 auto;font-size:11px;font-weight:600;letter-spacing:.04em;
+  color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;
+}
+.vz-objektzeile-btns{flex:0 0 auto;display:flex;gap:7px;flex-wrap:wrap}
+.vz-marke-aktiv{
+  font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:#fff;background:var(--cyan);border-radius:999px;padding:4px 11px;
+}
+
+/* ---------- Das Formular --------------------------------------------------- */
+.vz-objektform{
+  background:#fff;border:1px solid var(--cyan);border-radius:14px;
+  padding:16px 18px 18px;box-shadow:0 10px 26px rgba(42,51,80,.1);
+}
+.vz-objektform .vz-block-kopf{margin-bottom:12px}
+.vz-objektfelder{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 18px;
+}
+
+@media (max-width:900px){
+  .vz-objekt label{display:none}
+  .vz-objekt{padding:3px 4px}
+  .vz-objekt select{max-width:130px}
+}
+/* Der Umschalter in der Seitenleiste. Auf breiten Schirmen steht er im Kopf
+   und ist hier ueberfluessig; auf dem Telefon ist der Kopf voll, und die
+   Schublade ist der Ort, an dem man ohnehin nachsieht. */
+.vz-objekt-nav{display:none}
+.vz-objekt-nav label{
+  display:block;margin:0 12px 6px;
+  font-family:var(--font-display);font-size:10px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+}
+.vz-objekt-nav select{
+  width:calc(100% - 24px);margin:0 12px 6px;
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:9px;padding:9px 11px;font:inherit;font-size:16px;font-weight:600;
+}
+.vz-objekt-nav select:focus{outline:0;border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-tint)}
+
+@media (max-width:900px){
+  .vz-objekt label{display:none}
+  .vz-objekt{padding:3px 4px}
+  .vz-objekt select{max-width:130px}
+}
+@media (max-width:640px){
+  /* Im Kopf ist auf dem Telefon kein Platz mehr — der Umschalter zieht in
+     die Schublade um, wo er ganz oben und in voller Breite steht. */
+  .vz-objekt{display:none}
+  .vz-objekt-nav{display:block;padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:10px}
 }

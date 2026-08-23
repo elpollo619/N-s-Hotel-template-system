@@ -88,7 +88,7 @@ export default {
     { k:'lueckeY', label:'Lücke senkrecht (mm)', type:'number', step:0.1 },
 
     { t:'group', label:'Aussehen' },
-    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions(),
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions,
       hint:'Setzt das Kürzel als kleine Zeile auf jedes Etikett.' },
     { k:'kuerzel', label:'Kürzel mitdrucken', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },

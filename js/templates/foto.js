@@ -13,7 +13,7 @@ import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land' };
 
@@ -83,8 +83,8 @@ export default {
     { k:'es', label:'Español',   type:'text' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
 
     { t:'group', label:'Für die Druckerei' },
     { t:'note', label:'Nur nötig, wenn der Aushang extern gedruckt wird. Auf dem Bürodrucker beides ausgeschaltet lassen — sonst stehen die Marken mit auf dem Blatt.' },
@@ -125,7 +125,7 @@ export default {
   },
 
   render(d){
-    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const abs = absender(d.absender, 'hotel');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const voll = d.anteil === 'voll';

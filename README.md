@@ -596,6 +596,54 @@ Person. Für alle im Haus ist der Weg unten der richtige.
 
 ---
 
+## Liegenschaften
+
+Die feste Liste in `js/objekte.js` bildet die Ordnerstruktur aus
+`J:\Immobilien` ab — A4, A12, A14, B4, B7, B22, H8, I16, S17, Casa Reto.
+Sie reicht nicht: es kommen Häuser dazu, und wer eines neu verwaltet, kann
+nicht warten, bis jemand eine Datei ändert.
+
+### Die aktive Liegenschaft
+
+Im Kopf der Zentrale steht ein Umschalter — auf schmalen Geräten oben in der
+Schublade. Er hält fest, an **welchem Haus gerade gearbeitet wird**, und das
+gilt für alles:
+
+* Eine Vorlage, die noch keinen Entwurf hat, **startet bei der aktiven
+  Liegenschaft** — Adresse und Firma sind gesetzt, bevor man das erste Wort
+  tippt.
+* Wird der Umschalter betätigt, **während ein Editor offen ist**, stellt sich
+  die offene Vorlage gleich mit um. Wer oben umschaltet, während ein Aushang
+  vor ihm liegt, will genau das sehen.
+* Eine Vorlage, an der schon gearbeitet wurde, wird **nicht** überfahren.
+  Stattdessen sagt der Editor: «Diese Vorlage steht auf A14, aktiv ist B22» —
+  mit einem Knopf daneben. Stillschweigend umstellen wäre schlimmer: dann
+  änderte sich ein fertiger Aushang beim blossen Öffnen.
+
+Die Firma kommt beim Wechseln mit, weil jede Liegenschaft weiss, unter
+welcher sie läuft.
+
+### Eigene anlegen
+
+Auf der Seite `#/s/liegenschaften`. Kürzel, Name, Adresse, Firma — mehr
+braucht es nicht. Das Kürzel ist Pflicht: daran wird die Liegenschaft im
+Umschalter, auf dem Aushang und in einer Serie erkannt.
+
+Ebenso lassen sich **eigene Firmen** anlegen, für den Fall, dass ein Haus
+unter einer anderen Verwaltung läuft. Bleibt die Fusszeile leer, wird sie
+aus Name, Adresse und Kontakt gebaut — lieber knapp als leer.
+
+Eigene Einträge liegen im **Browser** (`nsvz:objekte`, `nsvz:absender`,
+`nsvz:aktives-objekt`), nicht im Repository. Sie überleben das Schliessen,
+aber nur auf diesem Gerät. Zum Weitergeben gibt es «Als Datei sichern» und
+«Datei einlesen» — derselbe Weg wie bei den eigenen Textbausteinen.
+
+Gelöschte Liegenschaften reissen nichts mit: ein Aushang, der noch auf ihr
+stand, behält seinen Text und fällt auf «Ohne Objekt» zurück. Der Test
+`tests/liegenschaften.mjs` prüft genau das.
+
+---
+
 ## Piktogramme
 
 `#/s/piktogramme`. Sechsundachtzig Strichzeichnungen, 24 × 24, immer in
@@ -758,7 +806,7 @@ gespeichertem Entwurf steht unter «Weiterarbeiten». Das ist fast immer der
 Grund, warum jemand die Seite überhaupt öffnet. Erst danach kommen die
 Bereiche.
 
-### Die fünf Werkzeugseiten
+### Die sechs Werkzeugseiten
 
 * **Anleitung** (`#/s/hilfe`) — der Ablauf in drei Schritten, die Einstellungen
   im Druckdialog, die Tastaturkürzel, der Weg ohne Internet.
@@ -766,6 +814,7 @@ Bereiche.
   löschen, als Datei sichern und einlesen. Vorher steckte das im Editor des
   Hinweis-Aushangs: man musste einen Aushang öffnen, um einen Satz zu löschen,
   der mit diesem Aushang nichts zu tun hatte.
+* **Liegenschaften** (`#/s/liegenschaften`) — siehe unten.
 * **Schriften wählen** (`#/s/schrift`) — siehe unten.
 * **Piktogramme** (`#/s/piktogramme`) — alle 86 Zeichen des Hauses, nach Thema
   geordnet und durchsuchbar. Ein Klick kopiert den Namen.
@@ -799,6 +848,7 @@ assets/
 js/
   app.js                   Router, Rahmen, Seiten, Formular-Erzeugung, Vorschau
   bereiche.js              die sechs Arbeitsbereiche und die Werkzeugseiten
+  objekte.js               Liegenschaften und Firmen, fest und selbst angelegt
   lib/icons.js             86 Piktogramme in acht Gruppen
   lib/schriftwahl.js       die waehlbaren Schriften und die getroffene Wahl
   brand-config.js          Stammdaten und Pfade zu den Marken-Assets
@@ -965,6 +1015,13 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   para Allmendstrasse 14 y lleva la atribución «© swisstopo» que exige la
   licencia. Está en `assets/img/aerial-site.jpg`.
 * La **marca de Zattoo** original está incrustada en la plantilla de TV.
+* **Puedes elegir la propiedad arriba en la cabecera** y crear las tuyas en
+  `#/s/liegenschaften`: código, nombre, dirección y empresa. Se guardan en el
+  navegador y aparecen al instante en todas las plantillas. La plantilla que
+  abras sin borrador empieza ya con esa propiedad; si una plantilla vieja está
+  en otra, el editor te avisa y te deja cambiarla con un clic — nunca te la
+  cambia solo. Para pasárselas al resto del equipo: «Als Datei sichern» y
+  mandar el archivo.
 * **Puedes elegir la tipografía dentro de la herramienta** (`#/s/schrift`):
   diecisiete familias libres para los tres papeles — título, texto y la línea
   manuscrita — con vista previa sobre un cartel real. La comprada siempre va

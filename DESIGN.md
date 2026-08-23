@@ -124,6 +124,21 @@ schlägt fehl, wenn eine Vorlage keinem Bereich zugeteilt ist.
 
 ---
 
+## Die aktive Liegenschaft
+
+Der Umschalter im Kopf ist Kontext, keine Einstellung: er sagt, an welchem
+Haus gerade gearbeitet wird, und faerbt jede Vorlage ein, die man oeffnet.
+Drei Regeln, damit er nicht gefaehrlich wird:
+
+1. **Ohne Entwurf** startet eine Vorlage bei der aktiven Liegenschaft.
+2. **Mit offenem Editor** stellt der Umschalter die Vorlage gleich mit um —
+   sichtbar, im selben Moment.
+3. **Ein vorhandener Entwurf** wird nie ueberfahren. Laeuft er auf einer
+   anderen Liegenschaft, sagt der Editor das und bietet einen Knopf an.
+
+Regel 3 ist die wichtige. Ein Aushang, der beim blossen Oeffnen seine Adresse
+wechselt, ist schlimmer als einer, der die alte behaelt.
+
 ## Piktogramme
 
 Sechsundachtzig Strichzeichnungen in `js/lib/icons.js`, acht Gruppen,

@@ -12,7 +12,7 @@ import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { szSvg, szZeichen, szOptions, SZ_FARBEN } from '../lib/sicherheitszeichen.js';
 import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const SICHER_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
 /* Zeichengrösse je Papier — so gross wie möglich, ohne den Text zu verdrängen. */
@@ -69,8 +69,8 @@ export default {
     { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
 
     { t:'group', label:'Schilder' },
     { t:'note', label:'Jede Zeile ergibt eine Druckseite. Der Text darf überschrieben werden — das Zeichen bleibt.' },
@@ -116,7 +116,7 @@ export default {
   },
 
   render(d){
-    const abs  = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const abs  = absender(d.absender, 'immobilien');
     const obj  = objekt(d.objekt);
     const adr  = objektAdresse(d.objekt);
     const sprachen = sprachObjekte(d.sprachen);

@@ -17,6 +17,11 @@
    ========================================================================== */
 import { TEMPLATES, ORDER } from './templates/index.js';
 import { BEREICHE, SEITEN, BEREICH_ORDER, bereich, bereichVon } from './bereiche.js';
+import { alleObjekte, alleAbsender, eigeneObjekte, eigeneAbsender, objekt, objektAdresse,
+         objektSichern, objektLoeschen, istEigenesObjekt,
+         absenderSichern, absenderLoeschen, istEigenerAbsender,
+         aktivesObjektId, aktivesObjekt, setzeAktivesObjekt, objektVorgabe,
+         bestandAlsDatei, bestandLaden } from './objekte.js';
 import { esc, e, qs } from './lib/dom.js';
 import { logo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
@@ -79,7 +84,26 @@ function draftKey(id){ return 'draft:' + id; }
 
 function loadState(tpl){
   const saved = store.load(draftKey(tpl.id), null);
-  return Object.assign({}, structuredClone(tpl.defaults), saved || {});
+  const state = Object.assign({}, structuredClone(tpl.defaults), saved || {});
+  /* Noch kein Entwurf und eine Liegenschaft ist aktiv? Dann startet die
+     Vorlage bei ihr. Ein vorhandener Entwurf wird nicht angetastet — was
+     jemand einmal eingestellt hat, bleibt stehen, bis er es selbst
+     umstellt. Der Editor weist darauf hin, wenn beides auseinanderlaeuft. */
+  if (!saved && Object.hasOwn(state, 'objekt')){
+    setzeObjektImZustand(state, objektVorgabe(state.objekt));
+  }
+  return state;
+}
+
+/** Liegenschaft im Zustand setzen — und den Absender gleich mit, weil jede
+    Liegenschaft weiss, unter welcher Firma sie laeuft. */
+function setzeObjektImZustand(state, id){
+  if (!id || !Object.hasOwn(state, 'objekt')) return false;
+  if (state.objekt === id) return false;
+  state.objekt = id;
+  const o = objekt(id);
+  if (Object.hasOwn(state, 'absender') && o.absender) state.absender = o.absender;
+  return true;
 }
 function saveState(tpl, state){ store.save(draftKey(tpl.id), state); }
 
@@ -131,6 +155,7 @@ function mountTopbar(){
       <kbd>/</kbd>
       <div class="vz-treffer" id="vz-treffer" hidden></div>
     </div>
+    ${objektWaehler('vz-objektwahl', 'vz-objekt')}
     <span class="vz-heute" title="${esc(t('today'))}">${esc(heuteText())}</span>
     <div class="vz-lang" role="group" aria-label="${esc(t('uiLang'))}">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
@@ -142,7 +167,59 @@ function mountTopbar(){
   });
   const burger = document.getElementById('vz-burger');
   burger.onclick = () => schubladeZeigen(!document.body.classList.contains('vz-nav-offen'));
+
+  objektWaehlerBinden(bar);
   mountSuche();
+}
+
+/* ---------- Aktive Liegenschaft ------------------------------------------- */
+/* Das Haus, an dem gerade gearbeitet wird. Steht im Kopf, weil es fuer jede
+   Vorlage gilt und nicht in einer einzelnen versteckt sein darf. */
+function objektWaehler(id, klasse){
+  const jetzt = aktivesObjektId();
+  const zeilen = alleObjekte().filter(o => o.code).map(o =>
+    `<option value="${esc(o.id)}"${o.id === jetzt ? ' selected' : ''}>${
+      esc(`${o.code} — ${o.name}`)}</option>`).join('');
+  return `
+    <div class="${esc(klasse)}" title="${esc(t('propertyActive'))}">
+      <label for="${esc(id)}">${esc(t('property'))}</label>
+      <select id="${esc(id)}" data-objektwahl>
+        <option value="">${esc(t('propertyNone'))}</option>
+        ${zeilen}
+      </select>
+    </div>`;
+}
+
+/* Beide Umschalter — der im Kopf und der in der Schublade — haengen an
+   derselben Wahl. Sichtbar ist je nach Breite genau einer. */
+function objektWaehlerBinden(wurzel){
+  wurzel.querySelectorAll('[data-objektwahl]').forEach(sel => {
+    sel.onchange = () => objektWechseln(sel.value);
+  });
+}
+
+/**
+ * Die aktive Liegenschaft wechseln. Steht gerade ein Editor offen, wird er
+ * gleich mit umgestellt — wer im Kopf umschaltet, waehrend ein Aushang vor
+ * ihm liegt, will genau das sehen.
+ */
+function objektWechseln(id){
+  setzeAktivesObjekt(id);
+  const m = /^#\/t\/([\w-]+)/.exec(location.hash || '');
+  if (m && id){
+    const tpl = TEMPLATES[m[1]];
+    if (tpl){
+      const state = loadState(tpl);
+      if (setzeObjektImZustand(state, id)){
+        saveState(tpl, state);
+        renderEditor(tpl.id);
+        toast(`${t('propertySwitched')}: ${objekt(id).name}`);
+        return;
+      }
+    }
+  }
+  route();
+  if (id) toast(`${t('propertySwitched')}: ${objekt(id).name}`);
 }
 
 /** Die Schublade auf dem Telefon auf- und zuziehen. */
@@ -171,6 +248,7 @@ function mountSeitenleiste(){
     </a>`).join('');
 
   leiste.innerHTML = `
+    ${objektWaehler('vz-objektwahl-nav', 'vz-objekt-nav')}
     <nav aria-label="${esc(t('areas'))}">
       <a class="vz-nav-zeile vz-nav-zeile--start" href="#/" data-nav="start"
          title="${esc(t('startPage'))}">
@@ -197,6 +275,7 @@ function mountSeitenleiste(){
   leiste.addEventListener('click', ev => {
     if (ev.target.closest('.vz-nav-zeile')) schubladeZeigen(false);
   });
+  objektWaehlerBinden(leiste);
 }
 
 /** Kopfzeile und Seitenleiste zusammen aufbauen (nach Sprachwechsel). */
@@ -658,6 +737,7 @@ function renderEditor(id, geteilt, suchwert){
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
+        <div class="vz-objekthinweis" id="vz-objekthinweis" hidden></div>
         <div class="vz-fit vz-fit--ok" id="vz-fit"></div>
         ${tpl.fern ? '<div class="vz-fern" id="vz-fern"></div>' : ''}
         ${tpl.fern ? '<div class="vz-kontrast" id="vz-kontrast"></div>' : ''}
@@ -710,6 +790,7 @@ function renderEditor(id, geteilt, suchwert){
     checkFit();
     checkFern();
     checkKontrast();
+    zeigeObjektHinweis();
     zeichneLeiste();
   }
 
@@ -834,6 +915,27 @@ function renderEditor(id, geteilt, suchwert){
     box.textContent = `\u25D1 Schwacher Kontrast ${b.wert}:1 (n\u00f6tig ${b.noetig}:1) — \u00ab${b.text}\u00bb`;
     box.title = 'Gepr\u00fcft nach der Kontrastformel der WCAG, Stufe AA. '
               + 'Auf Papier und bei schwachem Licht wirkt es noch flauer als am Bildschirm.';
+  }
+
+  /* Laeuft die Vorlage auf einer anderen Liegenschaft als der aktiven, wird
+     das gesagt — mit einem Knopf daneben. Stillschweigend umstellen waere
+     schlimmer: dann aendert sich ein fertiger Aushang beim blossen Oeffnen. */
+  function zeigeObjektHinweis(){
+    const kasten = document.getElementById('vz-objekthinweis');
+    if (!kasten) return;
+    const aktiv = aktivesObjektId();
+    if (!aktiv || !Object.hasOwn(state, 'objekt') || state.objekt === aktiv){
+      kasten.hidden = true; kasten.innerHTML = ''; return;
+    }
+    kasten.hidden = false;
+    kasten.innerHTML = `
+      <span>${esc(t('propertyDiffers')
+        .replace('%1', objekt(state.objekt).name)
+        .replace('%2', objekt(aktiv).name))}</span>
+      <button type="button" class="vz-btn vz-btn--sm" id="vz-objekt-um">${esc(t('propertySwitchTo'))}</button>`;
+    document.getElementById('vz-objekt-um').onclick = () => {
+      if (setzeObjektImZustand(state, aktiv)){ commit(); rebuild(); }
+    };
   }
 
   function commit(){ saveState(tpl, state); paint(); }
@@ -1101,6 +1203,7 @@ function renderSeite(id){
   if (id === 'marke')  return seiteMarke();
   if (id === 'schrift') return seiteSchrift();
   if (id === 'piktogramme') return seitePiktogramme();
+  if (id === 'liegenschaften') return seiteLiegenschaften();
   renderStart();
 }
 
@@ -1489,6 +1592,269 @@ function seitePiktogramme(){
   zeichne();
 }
 
+/* --- Liegenschaften und Firmen --------------------------------------------- */
+/* Die feste Liste ist der Bestand aus dem Laufwerk. Sie reicht nicht: es
+   kommen Häuser dazu, und niemand kann warten, bis jemand eine Datei ändert.
+   Hier legt man eigene an — sie bleiben im Browser und stehen danach in jeder
+   Vorlage zur Wahl. */
+
+/* Welcher Eintrag gerade im Formular liegt. Leer = neu anlegen. */
+let objektFormular = null;      // { art:'objekt'|'absender', daten:{} } | null
+
+function seiteLiegenschaften(){
+  const s = SEITEN.liegenschaften;
+  const aktiv = aktivesObjektId();
+  const eigeneO = eigeneObjekte();
+  const eigeneA = eigeneAbsender();
+
+  const objektZeile = (o) => `
+    <div class="vz-objektzeile${o.id === aktiv ? ' is-aktiv' : ''}">
+      <span class="vz-objektzeile-code">${esc(o.code || '—')}</span>
+      <span class="vz-objektzeile-txt">
+        <b>${esc(o.name)}</b>
+        <i>${esc(objektAdresse(o.id) || t('propertyNoAddress'))}</i>
+      </span>
+      <span class="vz-objektzeile-firma">${esc(firmenName(o.absender))}</span>
+      <span class="vz-objektzeile-btns">
+        ${o.id === aktiv
+          ? `<span class="vz-marke-aktiv">${esc(t('propertyIsActive'))}</span>`
+          : `<button type="button" class="vz-btn vz-btn--sm" data-aktiv="${esc(o.id)}">${esc(t('propertyUse'))}</button>`}
+        ${o.eigen ? `
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-bearbeiten="${esc(o.id)}">${esc(t('edit'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-objweg="${esc(o.id)}">${esc(t('blockDelete'))}</button>` : ''}
+      </span>
+    </div>`;
+
+  const firmaZeile = (a) => `
+    <div class="vz-objektzeile">
+      <span class="vz-objektzeile-code">${esc(a.eigen ? '·' : '★')}</span>
+      <span class="vz-objektzeile-txt">
+        <b>${esc(a.name)}</b>
+        <i>${esc([a.street, [a.zip, a.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')
+                 || t('propertyNoAddress'))}</i>
+      </span>
+      <span class="vz-objektzeile-firma">${esc(a.contact || '')}</span>
+      <span class="vz-objektzeile-btns">
+        ${a.eigen ? `
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-firmabearbeiten="${esc(a.id)}">${esc(t('edit'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-firmaweg="${esc(a.id)}">${esc(t('blockDelete'))}</button>` : ''}
+      </span>
+    </div>`;
+
+  seite({
+    nav: 's:liegenschaften',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <div class="vz-hinweiskasten">
+        <b>${esc(t('propertyScopeTitle'))}</b>
+        <span>${esc(t('propertyScopeText'))}</span>
+      </div>
+
+      ${objektFormular ? objektFormularHtml() : ''}
+
+      <section class="vz-block">
+        <div class="vz-block-kopf">
+          <h2>${esc(t('properties'))} <em>${alleObjekte().filter(o => o.code).length}</em></h2>
+          <div class="vz-block-btns">
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--navy" id="vz-obj-neu">${esc(t('propertyNew'))}</button>
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-obj-export"
+              ${eigeneO.length || eigeneA.length ? '' : 'disabled'}>${esc(t('blockExport'))}</button>
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-obj-import">${esc(t('blockImport'))}</button>
+            <input type="file" id="vz-obj-datei" accept="application/json" hidden>
+          </div>
+        </div>
+        <p class="vz-block-note">${esc(t('propertyFixedNote'))}</p>
+        <div class="vz-objektliste">${alleObjekte().filter(o => o.code).map(objektZeile).join('')}</div>
+      </section>
+
+      <section class="vz-block">
+        <div class="vz-block-kopf">
+          <h2>${esc(t('companies'))} <em>${alleAbsender().length}</em></h2>
+          <div class="vz-block-btns">
+            <button type="button" class="vz-btn vz-btn--sm" id="vz-firma-neu">${esc(t('companyNew'))}</button>
+          </div>
+        </div>
+        <p class="vz-block-note">${esc(t('companyNote'))}</p>
+        <div class="vz-objektliste">${alleAbsender().map(firmaZeile).join('')}</div>
+      </section>`
+  });
+
+  const wurzel = view();
+
+  wurzel.addEventListener('click', ev => {
+    const zu = (knopf, tu) => { const el = ev.target.closest(knopf); if (el) tu(el); return Boolean(el); };
+
+    if (zu('[data-aktiv]', el => {
+      setzeAktivesObjekt(el.dataset.aktiv);
+      mountRahmen();
+      seiteLiegenschaften();
+      toast(`${t('propertySwitched')}: ${objekt(el.dataset.aktiv).name}`);
+    })) return;
+
+    if (zu('[data-bearbeiten]', el => {
+      objektFormular = { art:'objekt', daten:{ ...objekt(el.dataset.bearbeiten) } };
+      seiteLiegenschaften();
+    })) return;
+
+    if (zu('[data-objweg]', el => {
+      if (!confirm(t('propertyDeleteAsk'))) return;
+      objektLoeschen(el.dataset.objweg);
+      objektFormular = null;
+      mountRahmen();
+      seiteLiegenschaften();
+      toast(t('propertyDeleted'));
+    })) return;
+
+    if (zu('[data-firmabearbeiten]', el => {
+      const a = alleAbsender().find(x => x.id === el.dataset.firmabearbeiten);
+      objektFormular = { art:'absender', daten:{ ...a } };
+      seiteLiegenschaften();
+    })) return;
+
+    if (zu('[data-firmaweg]', el => {
+      if (!confirm(t('companyDeleteAsk'))) return;
+      absenderLoeschen(el.dataset.firmaweg);
+      objektFormular = null;
+      seiteLiegenschaften();
+      toast(t('companyDeleted'));
+    })) return;
+  });
+
+  document.getElementById('vz-obj-neu').onclick = () => {
+    objektFormular = { art:'objekt', daten:{ absender:'immobilien' } };
+    seiteLiegenschaften();
+    document.getElementById('vz-of-code')?.focus();
+  };
+  document.getElementById('vz-firma-neu').onclick = () => {
+    objektFormular = { art:'absender', daten:{} };
+    seiteLiegenschaften();
+    document.getElementById('vz-of-name')?.focus();
+  };
+
+  document.getElementById('vz-obj-export').onclick = () => {
+    downloadBlob(new Blob([bestandAlsDatei()], { type:'application/json' }),
+                 'ns-hotel-liegenschaften.json');
+    toast(t('saved'));
+  };
+  const datei = document.getElementById('vz-obj-datei');
+  document.getElementById('vz-obj-import').onclick = () => datei.click();
+  datei.onchange = () => {
+    const f = datei.files[0]; if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try{
+        const { objekte, absender } = bestandLaden(fr.result);
+        mountRahmen();
+        seiteLiegenschaften();
+        toast(`${t('blockLoaded')} · ${objekte} + ${absender}`);
+      }catch(err){ alert(t('propertyBadFile')); }
+    };
+    fr.readAsText(f);
+  };
+
+  if (objektFormular) formularBinden();
+}
+
+/** Name einer Firma zum Anzeigen — auch wenn es sie nicht mehr gibt. */
+function firmenName(id){
+  const a = alleAbsender().find(x => x.id === id);
+  return a ? a.name : '';
+}
+
+/* Das Formular. Bewusst dieselben Feldnamen wie in objekte.js, damit man
+   beim Lesen nicht übersetzen muss. */
+function objektFormularHtml(){
+  const { art, daten } = objektFormular;
+  const feld = (k, label, hinweis) => `
+    <div class="vz-field">
+      <label for="vz-of-${k}">${esc(label)}</label>
+      <input id="vz-of-${k}" type="text" data-of="${k}" value="${esc(daten[k] || '')}">
+      ${hinweis ? `<span class="vz-hint">${esc(hinweis)}</span>` : ''}
+    </div>`;
+
+  const neu = !daten.id;
+  const inhalt = art === 'objekt' ? `
+    ${feld('code', t('propertyCode'), t('propertyCodeHint'))}
+    ${feld('name', t('propertyName'), t('propertyNameHint'))}
+    ${feld('street', t('propertyStreet'))}
+    ${feld('zip', t('propertyZip'))}
+    ${feld('city', t('propertyCity'))}
+    <div class="vz-field">
+      <label for="vz-of-absender">${esc(t('propertyCompany'))}</label>
+      <select id="vz-of-absender" data-of="absender">
+        ${alleAbsender().map(a =>
+          `<option value="${esc(a.id)}"${a.id === daten.absender ? ' selected' : ''}>${esc(a.name)}</option>`).join('')}
+      </select>
+      <span class="vz-hint">${esc(t('propertyCompanyHint'))}</span>
+    </div>` : `
+    ${feld('name', t('companyName'), t('companyNameHint'))}
+    ${feld('legal', t('companyLegal'))}
+    ${feld('street', t('propertyStreet'))}
+    ${feld('zip', t('propertyZip'))}
+    ${feld('city', t('propertyCity'))}
+    ${feld('contact', t('companyContact'), t('companyContactHint'))}
+    ${feld('foot', t('companyFoot'), t('companyFootHint'))}`;
+
+  return `
+    <section class="vz-block vz-objektform" id="vz-objektform">
+      <div class="vz-block-kopf">
+        <h2>${esc(neu
+          ? (art === 'objekt' ? t('propertyNew') : t('companyNew'))
+          : (art === 'objekt' ? t('propertyEdit') : t('companyEdit')))}</h2>
+      </div>
+      <div class="vz-objektfelder">${inhalt}</div>
+      <div class="vz-block-btns" style="margin-top:14px">
+        <button type="button" class="vz-btn vz-btn--navy" id="vz-of-sichern">${esc(t('propertySave'))}</button>
+        <button type="button" class="vz-btn vz-btn--ghost" id="vz-of-abbruch">${esc(t('cancel'))}</button>
+      </div>
+    </section>`;
+}
+
+function formularBinden(){
+  const kasten = document.getElementById('vz-objektform');
+  if (!kasten) return;
+
+  kasten.addEventListener('input', ev => {
+    const el = ev.target.closest('[data-of]');
+    if (el) objektFormular.daten[el.dataset.of] = el.value;
+  });
+  kasten.addEventListener('change', ev => {
+    const el = ev.target.closest('[data-of]');
+    if (el) objektFormular.daten[el.dataset.of] = el.value;
+  });
+
+  document.getElementById('vz-of-abbruch').onclick = () => {
+    objektFormular = null;
+    seiteLiegenschaften();
+  };
+
+  document.getElementById('vz-of-sichern').onclick = () => {
+    const { art, daten } = objektFormular;
+
+    if (art === 'objekt'){
+      /* Ohne Kürzel taucht die Liegenschaft weder im Umschalter noch in einer
+         Serie auf — das Kürzel ist das, woran sie erkannt wird. */
+      if (!String(daten.code || '').trim()){ alert(t('propertyCodeMissing')); return; }
+      const id = objektSichern(daten);
+      if (!id){ alert(t('propertySaveFailed')); return; }
+      objektFormular = null;
+      mountRahmen();
+      seiteLiegenschaften();
+      toast(t('propertySaved'));
+      return;
+    }
+
+    if (!String(daten.name || '').trim()){ alert(t('companyNameMissing')); return; }
+    if (!absenderSichern(daten)){ alert(t('propertySaveFailed')); return; }
+    objektFormular = null;
+    seiteLiegenschaften();
+    toast(t('companySaved'));
+  };
+}
+
 /* ---------- Router -------------------------------------------------------- */
 /* Die alten Kapitel-Adressen (#/k/...) stecken in verschickten Links und in
    ausgedruckten Anleitungen. Sie fuehren weiter — auf den Arbeitsbereich,
@@ -1557,4 +1923,5 @@ mountRahmen();
 route();
 
 /* Für Tests/Automatisierung erreichbar machen. */
-window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS, route, PAGE_MAX_H };
+window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS,
+              alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H };
