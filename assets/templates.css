@@ -2167,3 +2167,159 @@
 .t-umz-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
   border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
 .t-umz-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-miet · Wohnung zu vermieten, A4
+   Foto oben, Eckdaten als Kachelreihe, dann Beschreibung und Kontakt.
+   ========================================================================== */
+.t-miet{display:flex;flex-direction:column;padding:0}
+.t-miet-foto{height:78mm;flex:0 0 auto;overflow:hidden;background:var(--bg-2)}
+.t-miet-foto img,.t-miet-bild{width:100%;height:100%;object-fit:cover;display:block}
+.t-miet-platzhalter{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2mm;color:var(--muted);font-size:10pt;
+}
+.t-miet-platzhalter span{color:var(--line);display:flex}
+.t-miet-kopf{padding:8mm 16mm 0}
+.t-miet-kopf .eyebrow{margin:0 0 1.5mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-miet-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:28pt;
+  line-height:1.03;color:var(--navy);letter-spacing:-.02em}
+.t-miet-ort{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft)}
+.t-miet-eckreihe{display:flex;gap:3mm;padding:6mm 16mm 0}
+.t-miet-eck{flex:1;min-width:0;padding:4mm 3mm;border-radius:3mm;background:var(--cyan-tint);
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:.8mm}
+.t-miet-eico{color:var(--cyan);display:flex}
+.t-miet-eck b{font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy);line-height:1.05}
+.t-miet-eck i{font-style:normal;font-size:8pt;color:var(--muted)}
+.t-miet-body{padding:6mm 16mm 0}
+.t-miet-text{margin:0;font-size:11pt;line-height:1.5;color:var(--ink)}
+.t-miet-punkte{list-style:none;margin:4mm 0 0;padding:0;
+  display:grid;grid-template-columns:1fr 1fr;gap:1.6mm 6mm}
+.t-miet-punkte li{display:flex;align-items:center;gap:2.5mm;font-size:10pt;color:var(--ink)}
+.t-miet-punkte span{color:var(--cyan);display:flex;flex:0 0 auto}
+.t-miet-fuss{margin-top:auto;display:flex;align-items:flex-end;gap:6mm;padding:8mm 16mm 11mm}
+.t-miet-qr{flex:0 0 auto;display:flex}
+.t-miet-qr svg{width:26mm;height:26mm}
+.t-miet-kontakt{flex:1;min-width:0}
+.t-miet-klabel{margin:0;font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-miet-kwer{margin:1mm 0 0;font-size:11pt;color:var(--ink)}
+.t-miet-abs{margin:3mm 0 0;display:flex;align-items:center;gap:3mm;
+  padding-top:3mm;border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);line-height:1.4}
+.t-miet-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-turn · Turnusplan, A4
+   ========================================================================== */
+.t-turn{display:flex;flex-direction:column;padding:16mm 16mm 12mm}
+.t-turn-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-turn-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-turn-ort{margin:2.5mm 0 0;font-size:10.5pt;color:var(--ink-soft)}
+.t-turn-tab{list-style:none;margin:8mm 0 0;padding:0;display:flex;flex-direction:column}
+.t-turn-tab li{display:flex;gap:4mm;padding:2.8mm 4mm}
+.t-turn-tab li:nth-child(even){background:var(--bg-2)}
+.t-turn-titel{border-bottom:1.4pt solid var(--navy)!important;background:none!important}
+.t-turn-titel span{font-size:8.6pt!important;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)!important}
+.t-turn-a{flex:0 0 52mm;font-weight:600;font-size:10.5pt;color:var(--navy)}
+.t-turn-b{flex:1;font-size:10.5pt;color:var(--ink)}
+.t-turn-auf{margin:8mm 0 0}
+.t-turn-auf h2{margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:10.5pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-turn-auf ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.8mm}
+.t-turn-auf li{display:flex;align-items:center;gap:2.5mm;font-size:10.5pt;color:var(--ink)}
+.t-turn-auf span{color:var(--cyan);display:flex;flex:0 0 auto}
+.t-turn-hinweis{margin:7mm 0 0;padding:4mm 5mm;border-radius:3mm;background:var(--cyan-tint);
+  font-size:10pt;line-height:1.45;color:var(--navy)}
+.t-turn-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-turn-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-neu · Neu im Haus, A4 — Themenkacheln
+   ========================================================================== */
+.t-neu{display:flex;flex-direction:column;padding:16mm 16mm 12mm}
+.t-neu-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-neu-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-neu-ort{margin:2mm 0 0;font-size:10pt;color:var(--muted)}
+.t-neu-lede{margin:3mm 0 0;font-size:11pt;line-height:1.5;color:var(--ink-soft);max-width:150mm}
+.t-neu-grid{margin:8mm 0 0;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.t-neu-kachel{padding:4.5mm 5mm;border-radius:4mm;background:var(--bg-2);border:1pt solid var(--line)}
+.t-neu-kh{display:flex;align-items:center;gap:3mm;margin-bottom:2mm}
+.t-neu-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-neu-kh b{font-family:var(--font-display);font-weight:700;font-size:12pt;color:var(--navy)}
+.t-neu-kachel p{margin:0;font-size:9.5pt;line-height:1.4;color:var(--ink)}
+.t-neu-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-neu-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-wlan · WLAN-Kärtchen, A4-Bogen
+   ========================================================================== */
+.t-wlan{padding:12mm 12mm}
+.t-wlan-bogen{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.t-wlan-karte{
+  box-sizing:border-box;height:52mm;display:flex;align-items:center;gap:3mm;
+  padding:5mm 6mm;overflow:hidden;
+}
+.t-wlan-bogen.is-schnitt .t-wlan-karte{border:.5pt dashed var(--line)}
+.t-wlan-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1mm}
+.t-wlan-mark{display:flex;font-family:var(--font-display);font-weight:700;font-size:9pt;color:var(--navy)}
+.t-wlan-titel{font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy);line-height:1}
+.t-wlan-txt dl{margin:1mm 0 0;display:flex;flex-direction:column;gap:.6mm}
+.t-wlan-txt dl div{display:flex;gap:2mm;align-items:baseline}
+.t-wlan-txt dt{flex:0 0 15mm;font-size:7.4pt;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.t-wlan-txt dd{margin:0;font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--cyan)}
+.t-wlan-hint{margin:1.5mm 0 0;font-size:7.4pt;line-height:1.3;color:var(--muted)}
+.t-wlan-qr{flex:0 0 auto;display:flex}
+.t-wlan-qr svg{width:23mm;height:23mm}
+
+/* ==========================================================================
+   t-bes · Besichtigung, A4
+   ========================================================================== */
+.t-bes{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-bes-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-bes-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-bes-was{margin:2.5mm 0 0;font-size:13pt;color:var(--ink)}
+.t-bes-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-bes-termine{list-style:none;margin:8mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.6mm}
+.t-bes-termine li{display:flex;align-items:center;gap:4mm;padding:4mm 5mm;
+  border:1pt solid var(--line);border-radius:3mm;background:#fff}
+.t-bes-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-bes-datum{flex:1;font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy)}
+.t-bes-zeit{flex:0 0 auto;font-size:12pt;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.t-bes-treff{display:flex;align-items:center;gap:3mm;margin:6mm 0 0;font-size:11.5pt;color:var(--ink)}
+.t-bes-fuss{margin-top:auto;display:flex;align-items:flex-end;gap:6mm;padding-top:8mm}
+.t-bes-qr{flex:0 0 auto;display:flex}
+.t-bes-qr svg{width:26mm;height:26mm}
+.t-bes-ftext{flex:1;min-width:0}
+.t-bes-anm{margin:0;font-size:10.5pt;line-height:1.45;color:var(--ink-soft)}
+.t-bes-kontakt{margin:2.5mm 0 0;font-size:11pt;color:var(--ink)}
+.t-bes-abs{margin:3mm 0 0;display:flex;align-items:center;gap:3mm;
+  padding-top:3mm;border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);line-height:1.4}
+.t-bes-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-ruhe · Ruhezeiten, A4 — mittig, ruhig
+   ========================================================================== */
+.t-ruhe{display:flex;flex-direction:column;padding:18mm 18mm 12mm;text-align:center}
+.t-ruhe-symbol{display:flex;justify-content:center;color:var(--cyan);margin-bottom:3mm}
+.t-ruhe-kopf .eyebrow{margin:0 0 1.5mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-ruhe-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:34pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-ruhe-sprachen{margin:2mm 0 0;font-size:11pt;color:var(--ink-soft);font-weight:600}
+.t-ruhe-liste{list-style:none;margin:9mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.6mm;text-align:left}
+.t-ruhe-liste li{display:flex;align-items:center;gap:4mm;padding:4mm 6mm;
+  border-radius:3mm;background:var(--bg-2)}
+.t-ruhe-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-ruhe-was{flex:1;font-family:var(--font-display);font-weight:600;font-size:13pt;color:var(--navy)}
+.t-ruhe-zeit{flex:0 0 auto;font-family:var(--font-display);font-weight:700;font-size:14pt;
+  color:var(--cyan);font-variant-numeric:tabular-nums}
+.t-ruhe-hinweis{margin:7mm auto 0;max-width:150mm;font-size:10.5pt;line-height:1.5;color:var(--ink-soft)}
+.t-ruhe-dank{margin:5mm 0 0;font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-ruhe-fuss{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;text-align:left}
+.t-ruhe-mark{flex:0 0 auto;display:flex}
