@@ -94,6 +94,12 @@ const MODULES = [
   'js/templates/empfangstafel.js',
   'js/templates/hausordnung.js',
   'js/templates/fruehstuecktuer.js',
+  'js/templates/vollmacht.js',
+  'js/templates/protokoll.js',
+  'js/templates/kuendigung.js',
+  'js/templates/reservationsblatt.js',
+  'js/templates/besucherkarte.js',
+  'js/templates/mitteilung.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

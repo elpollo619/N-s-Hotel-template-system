@@ -59,6 +59,12 @@ import wegweiser from './wegweiser.js';
 import empfangstafel from './empfangstafel.js';
 import hausordnung from './hausordnung.js';
 import fruehstuecktuer from './fruehstuecktuer.js';
+import vollmacht from './vollmacht.js';
+import protokoll from './protokoll.js';
+import kuendigung from './kuendigung.js';
+import reservationsblatt from './reservationsblatt.js';
+import besucherkarte from './besucherkarte.js';
+import mitteilung from './mitteilung.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -117,7 +123,13 @@ export const TEMPLATES = {
   wegweiser,
   empfangstafel,
   hausordnung,
-  fruehstuecktuer
+  fruehstuecktuer,
+  vollmacht,
+  protokoll,
+  kuendigung,
+  reservationsblatt,
+  besucherkarte,
+  mitteilung
 };
 
 export const ORDER = [
@@ -131,5 +143,6 @@ export const ORDER = [
   'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
   'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
-  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer'
+  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer',
+  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung'
 ];

@@ -3566,6 +3566,148 @@ a{color:var(--cyan)}
   border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);text-align:left;line-height:1.35}
 .t-frut-mark{flex:0 0 auto;display:flex}
 
+/* ==========================================================================
+   t-vm · Vollmacht, A4 — kurzes Formular
+   ========================================================================== */
+.t-vm{display:flex;flex-direction:column;padding:16mm 17mm 12mm}
+.t-vm-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:4mm;border-bottom:1.4pt solid var(--navy)}
+.t-vm-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.01em}
+.t-vm-anlass{margin:2mm 0 0;font-size:11pt;color:var(--ink)}
+.t-vm-ort{margin:1mm 0 0;font-size:9.5pt;color:var(--muted)}
+.t-vm-mark{flex:0 0 auto;display:flex}
+.t-vm-text{margin:6mm 0 0;font-size:11pt;line-height:1.55;color:var(--ink)}
+.t-vm-block{margin:6mm 0 0;display:flex;flex-direction:column;gap:6mm}
+.t-vm-zeile{display:flex;flex-direction:column;gap:1.5mm}
+.t-vm-zeile span{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-vm-zeile i{border-bottom:1pt solid var(--navy);min-height:8mm}
+.t-vm-mitteilung{flex:1;min-height:10mm}
+.t-vm-fuss{margin-top:auto;padding-top:8mm;display:flex;gap:10mm}
+.t-vm-sig{flex:1}
+.t-vm-sig span{display:block;height:9mm;border-bottom:1pt solid var(--navy)}
+.t-vm-sig i{display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted)}
+.t-vm-abs{margin:5mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-prot · Protokoll, A4
+   ========================================================================== */
+.t-prot{display:flex;flex-direction:column;padding:15mm 17mm 12mm}
+.t-prot-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:3mm;border-bottom:1.4pt solid var(--navy)}
+.t-prot-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.01em}
+.t-prot-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-prot-mark{flex:0 0 auto;display:flex}
+.t-prot-rahmen{margin:5mm 0 0;display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 8mm}
+.t-prot-kz{display:flex;align-items:baseline;gap:3mm}
+.t-prot-kz span{flex:0 0 34mm;font-size:8.4pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-prot-kz i{flex:1;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-prot-trakt{margin:5mm 0 0}
+.t-prot-trakt h2{margin:0 0 1.5mm;display:flex;align-items:center;gap:3mm;
+  font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-prot-nr{flex:0 0 auto;width:6mm;height:6mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-size:8.5pt;display:flex;align-items:center;justify-content:center}
+.t-prot-feld{border:1pt solid var(--line);border-radius:2.5mm;min-height:14mm;background:var(--bg-2)}
+.t-prot-fuss{margin-top:auto;padding-top:7mm;display:flex;gap:10mm}
+.t-prot-sig{flex:1}
+.t-prot-sig span{display:block;height:9mm;border-bottom:1pt solid var(--navy)}
+.t-prot-sig i{display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted)}
+.t-prot-abs{margin:4mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-kb · Kündigungsbestätigung, A4 — Briefform
+   ========================================================================== */
+.t-kb{display:flex;flex-direction:column;padding:18mm 20mm 14mm}
+.t-kb-kopf{display:flex;justify-content:flex-end}
+.t-kb-mark{display:flex;font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy)}
+.t-kb-adress{display:flex;justify-content:space-between;align-items:flex-start;gap:10mm;margin:10mm 0 0}
+.t-kb-empf{flex:0 0 88mm}
+.t-kb-lab{margin:0 0 2mm;font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.t-kb-linien{display:flex;flex-direction:column;gap:5.5mm}
+.t-kb-linien i{border-bottom:1pt solid var(--line-2)}
+.t-kb-ort{margin:2mm 0 0;font-size:9pt;color:var(--muted)}
+.t-kb-datum{margin:0;font-size:10.5pt;color:var(--ink);align-self:flex-start}
+.t-kb-betreff{margin:12mm 0 0;font-family:var(--font-display);font-weight:700;font-size:12pt;color:var(--navy)}
+.t-kb-anrede{margin:6mm 0 0;font-size:11pt;color:var(--ink)}
+.t-kb-text{margin:4mm 0 0}
+.t-kb-text p{margin:0 0 3mm;font-size:11pt;line-height:1.55;color:var(--ink)}
+.t-kb-eckblock{margin:5mm 0 0;padding:5mm;border-radius:3mm;background:var(--bg-2);
+  display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm}
+.t-kb-eck{display:flex;align-items:baseline;gap:3mm}
+.t-kb-eck span{flex:0 0 40mm;font-size:8.4pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-kb-eck i{flex:1;border-bottom:1pt solid var(--line);min-height:5mm}
+.t-kb-gruss{margin:8mm 0 0}
+.t-kb-gruss p{margin:0;font-size:11pt;color:var(--ink)}
+.t-kb-usig{height:12mm}
+.t-kb-uname{font-family:var(--font-display);font-weight:700;color:var(--navy)}
+.t-kb-abs{margin-top:auto;padding-top:8mm;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-resv · Reservationsblatt, A4 — leere Tabelle zum Eintragen
+   ========================================================================== */
+.t-resv{display:flex;flex-direction:column;padding:15mm 16mm 12mm}
+.t-resv-kopf{display:flex;align-items:center;gap:4mm}
+.t-resv-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-resv-kopf .eyebrow{margin:0 0 1mm;font-size:22pt;color:var(--cyan);line-height:1}
+.t-resv-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.02em}
+.t-resv-ort{margin:1mm 0 0;font-size:9.5pt;color:var(--muted)}
+.t-resv-lede{margin:5mm 0 0;font-size:10pt;line-height:1.45;color:var(--ink-soft)}
+.t-resv-tab{list-style:none;margin:6mm 0 0;padding:0;display:flex;flex-direction:column}
+.t-resv-tab li{display:flex;gap:0}
+.t-resv-tab li:not(.t-resv-titel):nth-child(even){background:var(--bg-2)}
+.t-resv-z{flex:1;min-width:0;padding:3.4mm 3mm;border-bottom:1pt solid var(--line);border-right:1pt solid var(--line);font-size:10pt;color:var(--ink)}
+.t-resv-z:last-child{border-right:none}
+.t-resv-z.is-erste{flex:0 0 40mm}
+.t-resv-titel{border-top:1.4pt solid var(--navy)}
+.t-resv-titel .t-resv-z{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1.4pt solid var(--navy)}
+.t-resv-regeln{margin:6mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+.t-resv-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:6mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-resv-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-bpk · Besucher-Parkkarte, A4-Bogen — sechs Karten
+   ========================================================================== */
+.t-bpk{padding:10mm 12mm}
+.t-bpk-bogen{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.t-bpk-karte{box-sizing:border-box;height:83mm;display:flex;flex-direction:column;overflow:hidden;margin:1.5mm}
+.t-bpk-bogen.is-schnitt .t-bpk-karte{border:.6pt dashed var(--line)}
+.t-bpk-kopf{display:flex;align-items:center;gap:2.5mm;padding:3mm 4mm;background:var(--cyan);color:#fff}
+.t-bpk-ico{flex:0 0 auto;display:flex}
+.t-bpk-kopf b{flex:1;font-family:var(--font-display);font-weight:700;font-size:13pt;letter-spacing:.02em}
+.t-bpk-mark{flex:0 0 auto;display:flex}
+.t-bpk-body{flex:1;padding:4mm 4mm 3mm;display:flex;flex-direction:column;gap:3mm}
+.t-bpk-feld{display:flex;flex-direction:column;gap:1mm}
+.t-bpk-feld span{font-size:7.6pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-bpk-feld i{border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-bpk-hint{margin:auto 0 0;font-size:7.6pt;line-height:1.3;color:var(--ink-soft)}
+.t-bpk-ort{margin:0;font-size:7pt;color:var(--muted)}
+
+/* ==========================================================================
+   t-mit · Wichtige Mitteilung, A4 — farbiges Band, grosse Nachricht
+   ========================================================================== */
+.t-mit{display:flex;flex-direction:column;padding:0}
+.t-mit-band{background:var(--ton);color:var(--hell);padding:9mm 16mm;display:flex;align-items:center;gap:4mm}
+.t-mit-ico{flex:0 0 auto;display:flex}
+.t-mit-eyebrow{margin:0;font-family:var(--font-display);font-weight:700;font-size:14pt;
+  letter-spacing:.06em;text-transform:uppercase}
+.t-mit-inhalt{flex:1;padding:10mm 16mm 0}
+.t-mit-titel{margin:0;font-family:var(--font-display);font-weight:700;font-size:36pt;
+  line-height:1.04;color:var(--navy);letter-spacing:-.02em}
+.t-mit-datum{margin:4mm 0 0;font-family:var(--font-display);font-weight:700;font-size:14pt;color:var(--cyan)}
+.t-mit-text{margin:6mm 0 0;font-size:13pt;line-height:1.55;color:var(--ink)}
+.t-mit-frist{margin:8mm 0 0;padding:5mm 6mm;border-radius:4mm;background:var(--cyan-tint);
+  border:1.2pt solid var(--cyan);display:flex;flex-direction:column;gap:1mm}
+.t-mit-frist span{font-size:9pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.t-mit-frist strong{font-family:var(--font-display);font-weight:700;font-size:18pt;color:var(--navy)}
+.t-mit-frage{margin:7mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-mit-frage b{display:block;font-family:var(--font-display);font-weight:700;font-size:9.5pt;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
+.t-mit-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding:8mm 16mm 12mm;
+  border-top:.8pt solid var(--line);margin-left:16mm;margin-right:16mm;padding-left:0;padding-right:0;
+  font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-mit-mark{flex:0 0 auto;display:flex}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -4110,7 +4252,7 @@ const BEREICHE = [
     lede: 'Alles, was jemand sieht, bevor er im Haus ist: den Weg hierher, den Platz fürs Auto, die Tür zur Rezeption.',
     ids: ['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor',
           'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker',
-          'wegweiser', 'empfangstafel']
+          'wegweiser', 'empfangstafel', 'besucherkarte']
   },
   {
     id: 'zimmer',
@@ -4129,7 +4271,7 @@ const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung']
   },
   {
     id: 'sicherheit',
@@ -4145,7 +4287,7 @@ const BEREICHE = [
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus']
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt']
   },
   {
     id: 'verwaltung',
@@ -4154,7 +4296,8 @@ const BEREICHE = [
     kurz: 'Verwaltung',
     lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
     ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung',
-          'mieten', 'besichtigung', 'neuimhaus']
+          'mieten', 'besichtigung', 'neuimhaus',
+          'vollmacht', 'protokoll', 'kuendigung']
   },
   {
     id: 'team',
@@ -16727,11 +16870,645 @@ const fruehstuecktuer = {
   }
 };
 
+/* ===== js/templates/vollmacht.js ===== */
+/* Vollmacht · A4 hoch
+   --------------------------------------------------------------------------
+   Wer nicht an die Eigentümer- oder Mieterversammlung kommt, lässt sich
+   vertreten. Diese Vollmacht liegt der Einladung bei: wer wen bevollmächtigt,
+   für welche Versammlung, mit Unterschrift. Bewusst kurz — eine Vollmacht ist
+   kein Vertrag, sie muss nur eindeutig sein.
+*/
+
+
+
+
+const vollmacht = {
+  id:'vollmacht',
+  title:'Vollmacht',
+  sub:'Vertretung an der Versammlung · A4 hoch',
+  badge:'Vollmacht',
+  root:'t-vm',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="110" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="60" width="150" height="7" rx="3.5" fill="#2A3350" opacity=".55"/>
+    ${[0,1,2,3].map(i => `
+      <rect x="24" y="${92 + i*22}" width="40" height="7" rx="3.5" fill="#2A3350" opacity=".8"/>
+      <path d="M74 ${99 + i*22}h112" stroke="#C9CFDA" stroke-width="1.5" stroke-dasharray="3 3"/>`).join('')}
+    <rect x="24" y="196" width="162" height="40" rx="5" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="1.4"/>
+    <path d="M24 262h80" stroke="#2A3350" stroke-width="1.5"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'anlass', label:'Für welche Versammlung', type:'text' },
+    { k:'datum',  label:'Datum der Versammlung', type:'text' },
+
+    { t:'group', label:'Text' },
+    { k:'einleitung', label:'Einleitung', type:'textarea', rows:2 },
+    { t:'note', label:'Die Zeilen «Ich» und «bevollmächtige» sind Schreiblinien — von Hand auszufüllen.' },
+    { k:'schluss', label:'Schlusssatz', type:'textarea', rows:2 },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Vollmacht',
+    objekt:'-',
+    anlass:'Ordentliche Eigentümerversammlung',
+    datum:'',
+    einleitung:'Für die untenstehende Versammlung erteile ich, sofern ich nicht persönlich teilnehmen kann, folgende Vollmacht:',
+    schluss:'Die bevollmächtigte Person ist berechtigt, in meinem Namen an der Versammlung teilzunehmen, das Wort zu ergreifen und abzustimmen.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const linie = (label) => `
+      <div class="t-vm-zeile"><span>${esc(label)}</span><i></i></div>`;
+
+    return `
+      <header class="t-vm-kopf">
+        <div>
+          <h1>${esc(d.titel || 'Vollmacht')}</h1>
+          <p class="t-vm-anlass">${esc([d.anlass, d.datum].filter(Boolean).join(' · '))}</p>
+          ${ort ? `<p class="t-vm-ort">${esc(ort)}</p>` : ''}
+        </div>
+        <span class="t-vm-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      ${has(d.einleitung) ? `<p class="t-vm-text">${esc(d.einleitung)}</p>` : ''}
+
+      <div class="t-vm-block">
+        ${linie('Ich (Name, Wohnung)')}
+        ${linie('bevollmächtige (Name)')}
+      </div>
+
+      ${has(d.schluss) ? `<p class="t-vm-text">${esc(d.schluss)}</p>` : ''}
+
+      <div class="t-vm-mitteilung"></div>
+
+      <footer class="t-vm-fuss">
+        <div class="t-vm-sig"><span></span><i>Ort, Datum</i></div>
+        <div class="t-vm-sig"><span></span><i>Unterschrift Vollmachtgeber/in</i></div>
+      </footer>
+      <p class="t-vm-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/protokoll.js ===== */
+/* Protokoll · A4 hoch
+   --------------------------------------------------------------------------
+   Das Sitzungsprotokoll: was besprochen und beschlossen wurde. Gehört zur
+   Hausversammlung wie die Traktandenliste — ohne Protokoll gilt ein Beschluss
+   später als nicht gefasst. Kopf mit Datum, Ort, Anwesenden; dann je
+   Traktandum ein Feld für Beschluss und Verantwortliche.
+*/
+
+
+
+
+const protokoll = {
+  id:'protokoll',
+  title:'Protokoll',
+  sub:'Sitzungs- und Versammlungsprotokoll · A4 hoch',
+  badge:'Protokoll',
+  root:'t-prot',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="110" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="54" width="162" height="22" rx="4" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="1.4"/>
+    ${[0,1,2,3].map(i => `
+      <rect x="24" y="${92 + i*40}" width="36" height="7" rx="3.5" fill="#01B1E2"/>
+      <rect x="24" y="${106 + i*40}" width="162" height="22" rx="4" fill="#fff" stroke="#E5E8ED" stroke-width="1.4"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Rahmen' },
+    { k:'kopf', label:'Kopfzeilen', type:'text',
+      hint:'Kommagetrennt — je eine Schreiblinie (Datum, Ort, Vorsitz, Protokoll, Anwesende …).' },
+
+    { t:'group', label:'Traktanden' },
+    { t:'note', label:'Für jedes Traktandum bleibt ein Feld für Beschluss und Verantwortliche frei.' },
+    { k:'traktanden', label:'Traktanden', type:'list', itemLabel:'Traktandum', max:10,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Traktandum', type:'text' }] },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Protokoll',
+    objekt:'-',
+    kopf:'Datum, Ort, Vorsitz, Protokollführung, Anwesend / vertreten',
+    traktanden:[
+      { text:'Begrüssung und Beschlussfähigkeit' },
+      { text:'Jahresrechnung und Revisionsbericht' },
+      { text:'Budget und Erneuerungsfonds' },
+      { text:'Anstehende Arbeiten' },
+      { text:'Wahlen' },
+      { text:'Verschiedenes' }
+    ],
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const kopf = String(d.kopf || '').split(',').map(s => s.trim()).filter(Boolean).map(k => `
+      <div class="t-prot-kz"><span>${esc(k)}</span><i></i></div>`).join('');
+
+    const traktanden = (d.traktanden || []).filter(t => has(t.text)).map((t, i) => `
+      <section class="t-prot-trakt">
+        <h2><span class="t-prot-nr">${i + 1}</span>${esc(t.text)}</h2>
+        <div class="t-prot-feld"></div>
+      </section>`).join('');
+
+    return `
+      <header class="t-prot-kopf">
+        <div>
+          <h1>${esc(d.titel || 'Protokoll')}</h1>
+          ${ort ? `<p class="t-prot-ort">${esc(ort)}</p>` : ''}
+        </div>
+        <span class="t-prot-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      ${kopf ? `<div class="t-prot-rahmen">${kopf}</div>` : ''}
+
+      ${traktanden}
+
+      <footer class="t-prot-fuss">
+        <div class="t-prot-sig"><span></span><i>Vorsitz</i></div>
+        <div class="t-prot-sig"><span></span><i>Protokollführung</i></div>
+      </footer>
+      <p class="t-prot-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/kuendigung.js ===== */
+/* Kündigungsbestätigung · A4 hoch
+   --------------------------------------------------------------------------
+   Der Brief, der eine eingegangene Kündigung bestätigt: wir haben Ihre
+   Kündigung erhalten, das Mietverhältnis endet am … Ein Brief mit Briefkopf,
+   nicht ein Aushang — darum die klassische Briefform mit Adressfeld,
+   Betreff und Grussformel. Alle konkreten Angaben bleiben Schreiblinien.
+*/
+
+
+
+
+const kuendigung = {
+  id:'kuendigung',
+  title:'Kündigungsbestätigung',
+  sub:'Brief: Kündigung erhalten, Mietende bestätigt · A4 hoch',
+  badge:'Brief',
+  root:'t-kb',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="128" y="24" width="58" height="20" rx="4" fill="#2A3350" opacity=".85"/>
+    <rect x="24" y="70" width="90" height="7" rx="3.5" fill="#2A3350" opacity=".5"/>
+    <rect x="24" y="84" width="70" height="7" rx="3.5" fill="#2A3350" opacity=".5"/>
+    <rect x="24" y="120" width="120" height="9" rx="4.5" fill="#2A3350"/>
+    ${[0,1,2,3,4].map(i => `<rect x="24" y="${146 + i*16}" width="${162 - (i%3)*20}" height="6" rx="3" fill="#2A3350" opacity=".4"/>`).join('')}
+    <rect x="24" y="250" width="70" height="6" rx="3" fill="#2A3350" opacity=".4"/>`),
+
+  fields:[
+    { t:'group', label:'Empfänger' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'anrede', label:'Anrede', type:'text' },
+
+    { t:'group', label:'Betreff und Ort/Datum' },
+    { k:'ortDatum', label:'Ort und Datum', type:'text' },
+    { k:'betreff', label:'Betreff', type:'text' },
+
+    { t:'group', label:'Text' },
+    { k:'text', label:'Brieftext', type:'textarea', rows:6,
+      hint:'Konkrete Daten (Kündigungsdatum, Mietende) besser als Lücke lassen und von Hand oder pro Fall eintragen.' },
+
+    { t:'group', label:'Eckdaten (Schreiblinien)' },
+    { k:'eck', label:'Zeilen', type:'text',
+      hint:'Kommagetrennt — je eine Schreiblinie (Wohnung, Kündigung eingegangen am, Mietverhältnis endet am …).' },
+
+    { t:'group', label:'Gruss' },
+    { k:'gruss', label:'Grussformel', type:'text' },
+    { k:'unterschrift', label:'Unterschrift-Zeile', type:'text' },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    objekt:'-',
+    anrede:'Sehr geehrte Mieterin, sehr geehrter Mieter',
+    ortDatum:'',
+    betreff:'Bestätigung Ihrer Kündigung',
+    text:'Wir bestätigen Ihnen den Eingang Ihrer Kündigung und danken für die Mitteilung. Das Mietverhältnis endet zum unten genannten Datum.\n\nFür die Wohnungsübergabe melden wir uns rechtzeitig, um einen Termin zu vereinbaren. Bitte geben Sie sämtliche Schlüssel vollständig zurück und lesen Sie die Zähler ab; wir bringen das Übergabeprotokoll mit.',
+    eck:'Wohnung, Kündigung eingegangen am, Mietverhältnis endet am, Wohnungsübergabe',
+    gruss:'Freundliche Grüsse',
+    unterschrift:'Hans Amonn Immobilien',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const eck = String(d.eck || '').split(',').map(s => s.trim()).filter(Boolean).map(e => `
+      <div class="t-kb-eck"><span>${esc(e)}</span><i></i></div>`).join('');
+
+    const absaetze = String(d.text || '').split('\n').filter(z => z.trim()).map(z => `<p>${esc(z)}</p>`).join('');
+
+    return `
+      <header class="t-kb-kopf">
+        <span class="t-kb-mark">${istHotel(d.absender) ? logo('color', 28) : `<b>${esc(abs.name)}</b>`}</span>
+      </header>
+
+      <div class="t-kb-adress">
+        <div class="t-kb-empf">
+          <p class="t-kb-lab">An</p>
+          <div class="t-kb-linien"><i></i><i></i><i></i></div>
+          ${ort ? `<p class="t-kb-ort">${esc(ort)}</p>` : ''}
+        </div>
+        <p class="t-kb-datum">${esc(d.ortDatum || '')}</p>
+      </div>
+
+      ${has(d.betreff) ? `<p class="t-kb-betreff">${esc(d.betreff)}</p>` : ''}
+      ${has(d.anrede) ? `<p class="t-kb-anrede">${esc(d.anrede)}</p>` : ''}
+
+      <div class="t-kb-text">${absaetze}</div>
+
+      ${eck ? `<div class="t-kb-eckblock">${eck}</div>` : ''}
+
+      <div class="t-kb-gruss">
+        ${has(d.gruss) ? `<p>${esc(d.gruss)}</p>` : ''}
+        <div class="t-kb-usig"></div>
+        ${has(d.unterschrift) ? `<p class="t-kb-uname">${esc(d.unterschrift)}</p>` : ''}
+      </div>
+
+      <p class="t-kb-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/reservationsblatt.js ===== */
+/* Reservationsblatt · A4 hoch
+   --------------------------------------------------------------------------
+   Die Liste zum Eintragen: Waschküche, Gemeinschaftsraum, Grillplatz,
+   Gästezimmer. Wer wann reserviert, trägt sich mit Name und Zeit ein. Anders
+   als der Turnusplan (der teilt zu) ist hier alles leer — die Bewohner füllen
+   es selbst. Eine Tabelle mit Datum, Zeit, Name, viele Zeilen.
+*/
+
+
+
+
+
+const reservationsblatt = {
+  id:'reservationsblatt',
+  title:'Reservationsblatt',
+  sub:'Waschküche, Gemeinschaftsraum, Grill — zum Eintragen · A4 hoch',
+  badge:'Reservation',
+  root:'t-resv',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="120" height="14" rx="5" fill="#2A3350"/>
+    <rect x="24" y="60" width="162" height="18" rx="4" fill="#01B1E2" opacity=".16"/>
+    ${[0,1,2,3,4,5,6,7].map(i => `
+      <rect x="24" y="${86 + i*22}" width="162" height="18" rx="3" fill="${i%2?'#F6F7FA':'#fff'}" stroke="#E5E8ED" stroke-width="1"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'icon',  label:'Symbol', type:'select', options:[
+      { v:'waesche', t:'Waschküche' }, { v:'besteck', t:'Gemeinschaftsraum' },
+      { v:'baum', t:'Grillplatz / Garten' }, { v:'bed', t:'Gästezimmer' },
+      { v:'car', t:'Parkplatz' }, { v:'info', t:'anderes' } ] },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'lede', label:'Hinweis oben', type:'textarea', rows:2 },
+
+    { t:'group', label:'Spalten' },
+    { k:'spalten', label:'Spaltenköpfe', type:'text',
+      hint:'Kommagetrennt. Die erste Spalte ist etwas breiter.' },
+
+    { t:'group', label:'Zeilen' },
+    { k:'zeilen', label:'Anzahl leere Zeilen', type:'number', min:5, max:24, step:1 },
+
+    { t:'group', label:'Regeln' },
+    { k:'regeln', label:'Regeln unten', type:'textarea', rows:2 },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Bitte eintragen',
+    titel:'Waschküche — Reservation',
+    icon:'waesche',
+    objekt:'-',
+    lede:'Bitte gut leserlich eintragen. Eine Reservation gilt erst, wenn sie hier steht.',
+    spalten:'Datum, Zeit von–bis, Wohnung / Name',
+    zeilen:14,
+    regeln:'Bitte die reservierte Zeit einhalten und den Raum sauber hinterlassen. Nicht genutzte Reservationen bitte streichen.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const spalten = String(d.spalten || '').split(',').map(s => s.trim()).filter(Boolean);
+    const kopf = spalten.map((s, i) => `<span class="t-resv-z${i === 0 ? ' is-erste' : ''}">${esc(s)}</span>`).join('');
+    const anzahl = Math.min(24, Math.max(5, Number(d.zeilen) || 14));
+    const leer = Array.from({ length:anzahl }, () => `
+      <li>${spalten.map((_, i) => `<span class="t-resv-z${i === 0 ? ' is-erste' : ''}"></span>`).join('')}</li>`).join('');
+
+    return `
+      <header class="t-resv-kopf">
+        <span class="t-resv-ico">${icon(d.icon || 'info', 30, 1.8)}</span>
+        <div>
+          ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+          <h1>${esc(d.titel || '')}</h1>
+          ${ort ? `<p class="t-resv-ort">${esc(ort)}</p>` : ''}
+        </div>
+      </header>
+
+      ${has(d.lede) ? `<p class="t-resv-lede">${esc(d.lede)}</p>` : ''}
+
+      <ul class="t-resv-tab">
+        <li class="t-resv-titel">${kopf}</li>
+        ${leer}
+      </ul>
+
+      ${has(d.regeln) ? `<p class="t-resv-regeln">${esc(d.regeln)}</p>` : ''}
+
+      <footer class="t-resv-fuss">
+        <span class="t-resv-mark">${istHotel(d.absender) ? logo('color', 22) : ''}</span>
+        <span>${esc(abs.foot)}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/besucherkarte.js ===== */
+/* Besucher-Parkkarte · A4 hoch, Bogen zum Ausschneiden
+   --------------------------------------------------------------------------
+   Die Karte hinter die Windschutzscheibe: «Besucher — Wohnung …, gültig
+   bis …». Sechs Karten auf ein Blatt, zum Ausschneiden und Auslegen. So weiss
+   der Nachbar, dass das fremde Auto angemeldet ist, und die Verwaltung sieht,
+   zu wem es gehört.
+*/
+
+
+
+
+
+const besucherkarte = {
+  id:'besucherkarte',
+  title:'Besucher-Parkkarte',
+  sub:'Sechs Karten für die Windschutzscheibe · A4 hoch',
+  badge:'Parkieren',
+  root:'t-bpk',
+  page:'a4',
+
+  thumb: thumb(`
+    ${[0,1,2].flatMap(r => [0,1].map(c => {
+      const x = 22 + c*88, y = 30 + r*82;
+      return `<rect x="${x}" y="${y}" width="80" height="70" rx="5" fill="#fff" stroke="#C9CFDA" stroke-width="1.4" stroke-dasharray="4 3"/>
+              <rect x="${x}" y="${y}" width="80" height="18" rx="5" fill="#01B1E2"/>
+              <rect x="${x+10}" y="${y+7}" width="46" height="6" rx="3" fill="#fff"/>
+              <rect x="${x+10}" y="${y+30}" width="40" height="6" rx="3" fill="#2A3350" opacity=".6"/>
+              <rect x="${x+10}" y="${y+44}" width="56" height="6" rx="3" fill="#2A3350" opacity=".4"/>`;
+    })).join('')}`),
+
+  fields:[
+    { t:'group', label:'Karte' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Zeilen zum Ausfüllen' },
+    { k:'felder', label:'Zeilen', type:'text',
+      hint:'Kommagetrennt — je eine Schreiblinie auf jeder Karte.' },
+    { k:'hinweis', label:'Kleiner Hinweis', type:'text' },
+
+    { t:'group', label:'Bogen' },
+    { k:'anzahl', label:'Anzahl Karten', type:'number', min:1, max:6, step:1 },
+    { k:'schnitt', label:'Schnittlinien', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Besucher',
+    objekt:'-',
+    felder:'Zu Besuch bei (Wohnung), Datum, Gültig bis, Kennzeichen',
+    hinweis:'Gut sichtbar hinter die Windschutzscheibe legen.',
+    anzahl:6,
+    schnitt:'ja',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+    const felder = String(d.felder || '').split(',').map(s => s.trim()).filter(Boolean);
+    const anzahl = Math.min(6, Math.max(1, Number(d.anzahl) || 6));
+
+    const karte = `
+      <div class="t-bpk-karte">
+        <div class="t-bpk-kopf">
+          <span class="t-bpk-ico">${icon('car', 18, 1.9)}</span>
+          <b>${esc(d.titel || 'Besucher')}</b>
+          <span class="t-bpk-mark">${istHotel(d.absender) ? logo('white', 14) : ''}</span>
+        </div>
+        <div class="t-bpk-body">
+          ${felder.map(f => `<div class="t-bpk-feld"><span>${esc(f)}</span><i></i></div>`).join('')}
+          ${has(d.hinweis) ? `<p class="t-bpk-hint">${esc(d.hinweis)}</p>` : ''}
+          ${ort ? `<p class="t-bpk-ort">${esc(ort)}</p>` : ''}
+        </div>
+      </div>`;
+
+    return `
+      <div class="t-bpk-bogen${d.schnitt === 'ja' ? ' is-schnitt' : ''}">
+        ${Array.from({ length:anzahl }, () => karte).join('')}
+      </div>`;
+  }
+};
+
+/* ===== js/templates/mitteilung.js ===== */
+/* Wichtige Mitteilung · A4 hoch
+   --------------------------------------------------------------------------
+   Der Aushang, der auffallen muss: eine einzelne wichtige Nachricht, gross,
+   mit Datum und — wenn nötig — einer Frist. Anders als der Textbaustein-
+   Hinweis ist das keine Sammlung kleiner Regeln, sondern die eine Sache, die
+   heute alle sehen sollen: «Wasser am Dienstag abgestellt», «Bitte Velos
+   entfernen bis Freitag».
+*/
+
+
+
+
+
+
+const MIT_WORT = {
+  de:{ eyebrow:'Wichtige Mitteilung', frist:'Bitte bis', frage:'Fragen?' },
+  en:{ eyebrow:'Important notice', frist:'Please by', frage:'Questions?' },
+  fr:{ eyebrow:'Information importante', frist:'Merci avant le', frage:'Questions?' },
+  it:{ eyebrow:'Avviso importante', frist:'Entro il', frage:'Domande?' },
+  pt:{ eyebrow:'Aviso importante', frist:'Até', frage:'Dúvidas?' },
+  es:{ eyebrow:'Aviso importante', frist:'Antes del', frage:'¿Preguntas?' }
+};
+
+const MIT_TONE = { navy:'#2A3350', cyan:'#01B1E2', rot:'#C0271F', gelb:'#E8A93B' };
+
+const mitteilung = {
+  id:'mitteilung',
+  title:'Wichtige Mitteilung',
+  sub:'Die eine Nachricht, die heute alle sehen sollen · A4 hoch',
+  badge:'Mitteilung',
+  root:'t-mit',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="70" fill="#C0271F"/>
+    <rect x="24" y="24" width="120" height="10" rx="5" fill="#fff" opacity=".8"/>
+    <rect x="24" y="42" width="90" height="14" rx="5" fill="#fff"/>
+    <rect x="24" y="96" width="162" height="12" rx="5" fill="#2A3350"/>
+    <rect x="24" y="118" width="140" height="12" rx="5" fill="#2A3350"/>
+    ${[0,1,2].map(i => `<rect x="24" y="${150 + i*16}" width="${160 - i*20}" height="6" rx="3" fill="#2A3350" opacity=".4"/>`).join('')}
+    <rect x="24" y="220" width="162" height="30" rx="6" fill="#E7F7FC" stroke="#01B1E2" stroke-width="2"/>`),
+
+  fields:[
+    { t:'group', label:'Ton' },
+    { k:'ton', label:'Farbe des Kopfs', type:'select', options:[
+      { v:'rot', t:'Rot — dringend' }, { v:'navy', t:'Navy — neutral' },
+      { v:'cyan', t:'Cyan — freundlich' }, { v:'gelb', t:'Gelb — Achtung' } ] },
+
+    { t:'group', label:'Nachricht' },
+    { k:'eyebrow', label:'Kopfzeile', type:'text',
+      hint:'Leer lassen: nimmt «Wichtige Mitteilung» in der ersten Sprache.' },
+    { k:'titel', label:'Die Nachricht', type:'text' },
+    { k:'datum', label:'Datum / gilt am', type:'text' },
+    { k:'text', label:'Erläuterung', type:'textarea', rows:4 },
+
+    { t:'group', label:'Frist' },
+    { k:'frist', label:'Frist / bis wann', type:'text' },
+
+    { t:'group', label:'Rückfragen' },
+    { k:'kontakt', label:'Kontakt', type:'text' },
+    { k:'telefon', label:'Telefon', type:'text' },
+
+    { t:'group', label:'Objekt' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Die Sprachen betreffen Kopfzeile und Beschriftungen. Die Nachricht selbst schreiben Sie.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    ton:'rot',
+    eyebrow:'',
+    titel:'Wasser wird abgestellt',
+    datum:'Dienstag, 9. September, 08:00 – 12:00',
+    text:'Wegen einer Reparatur an der Steigleitung wird das Wasser im ganzen Haus vorübergehend abgestellt. Bitte drehen Sie danach den Hahn erst langsam wieder auf.',
+    frist:'',
+    kontakt:'Hans Amonn Immobilien',
+    telefon:'+41 31 951 85 54',
+    objekt:'-',
+    sprachen:['de','en'],
+    sprachSet:'',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+    const ton = MIT_TONE[d.ton] || MIT_TONE.rot;
+    const hell = d.ton === 'gelb' ? '#2A3350' : '#fff';
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = MIT_WORT[sprachen[0].id] || MIT_WORT.de;
+    const weitere = sprachen.slice(1).map(sp => MIT_WORT[sp.id] || MIT_WORT.de);
+    const eyebrow = has(d.eyebrow) ? d.eyebrow : w.eyebrow;
+    const eyebrowW = has(d.eyebrow) ? [] : weitere.map(m => m.eyebrow);
+
+    return `
+      <div class="t-mit-band" style="--ton:${ton};--hell:${hell}">
+        <span class="t-mit-ico">${icon('warn', 26, 2.1)}</span>
+        <p class="t-mit-eyebrow">${esc(eyebrow)}${eyebrowW.length ? ` · ${esc(eyebrowW.join(' · '))}` : ''}</p>
+      </div>
+
+      <div class="t-mit-inhalt">
+        <h1 class="t-mit-titel">${esc(d.titel || '')}</h1>
+        ${has(d.datum) ? `<p class="t-mit-datum">${esc(d.datum)}</p>` : ''}
+        ${has(d.text) ? `<p class="t-mit-text">${esc(d.text)}</p>` : ''}
+
+        ${has(d.frist) ? `
+        <div class="t-mit-frist">
+          <span>${esc([w.frist].concat(weitere.map(m => m.frist)).join(' · '))}</span>
+          <strong>${esc(d.frist)}</strong>
+        </div>` : ''}
+
+        ${(has(d.kontakt) || has(d.telefon)) ? `
+        <p class="t-mit-frage"><b>${esc([w.frage].concat(weitere.map(m => m.frage)).join(' · '))}</b>
+          ${esc([d.kontakt, d.telefon].filter(Boolean).join(' · '))}</p>` : ''}
+      </div>
+
+      <footer class="t-mit-fuss">
+        <span class="t-mit-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc([ort, abs.foot].filter(Boolean).join(' · '))}</span>
+      </footer>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
+
+
+
+
+
+
 
 
 
@@ -16846,7 +17623,13 @@ const TEMPLATES = {
   wegweiser,
   empfangstafel,
   hausordnung,
-  fruehstuecktuer
+  fruehstuecktuer,
+  vollmacht,
+  protokoll,
+  kuendigung,
+  reservationsblatt,
+  besucherkarte,
+  mitteilung
 };
 
 const ORDER = [
@@ -16860,7 +17643,8 @@ const ORDER = [
   'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
   'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
-  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer'
+  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer',
+  'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung'
 ];
 
 /* ===== js/lib/suche.js ===== */

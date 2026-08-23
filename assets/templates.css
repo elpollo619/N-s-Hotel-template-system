@@ -2458,3 +2458,145 @@
 .t-frut-fuss{margin-top:auto;display:flex;align-items:center;gap:3mm;padding-top:5mm;
   border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);text-align:left;line-height:1.35}
 .t-frut-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-vm · Vollmacht, A4 — kurzes Formular
+   ========================================================================== */
+.t-vm{display:flex;flex-direction:column;padding:16mm 17mm 12mm}
+.t-vm-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:4mm;border-bottom:1.4pt solid var(--navy)}
+.t-vm-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.01em}
+.t-vm-anlass{margin:2mm 0 0;font-size:11pt;color:var(--ink)}
+.t-vm-ort{margin:1mm 0 0;font-size:9.5pt;color:var(--muted)}
+.t-vm-mark{flex:0 0 auto;display:flex}
+.t-vm-text{margin:6mm 0 0;font-size:11pt;line-height:1.55;color:var(--ink)}
+.t-vm-block{margin:6mm 0 0;display:flex;flex-direction:column;gap:6mm}
+.t-vm-zeile{display:flex;flex-direction:column;gap:1.5mm}
+.t-vm-zeile span{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-vm-zeile i{border-bottom:1pt solid var(--navy);min-height:8mm}
+.t-vm-mitteilung{flex:1;min-height:10mm}
+.t-vm-fuss{margin-top:auto;padding-top:8mm;display:flex;gap:10mm}
+.t-vm-sig{flex:1}
+.t-vm-sig span{display:block;height:9mm;border-bottom:1pt solid var(--navy)}
+.t-vm-sig i{display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted)}
+.t-vm-abs{margin:5mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-prot · Protokoll, A4
+   ========================================================================== */
+.t-prot{display:flex;flex-direction:column;padding:15mm 17mm 12mm}
+.t-prot-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:3mm;border-bottom:1.4pt solid var(--navy)}
+.t-prot-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.01em}
+.t-prot-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-prot-mark{flex:0 0 auto;display:flex}
+.t-prot-rahmen{margin:5mm 0 0;display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 8mm}
+.t-prot-kz{display:flex;align-items:baseline;gap:3mm}
+.t-prot-kz span{flex:0 0 34mm;font-size:8.4pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-prot-kz i{flex:1;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-prot-trakt{margin:5mm 0 0}
+.t-prot-trakt h2{margin:0 0 1.5mm;display:flex;align-items:center;gap:3mm;
+  font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-prot-nr{flex:0 0 auto;width:6mm;height:6mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-size:8.5pt;display:flex;align-items:center;justify-content:center}
+.t-prot-feld{border:1pt solid var(--line);border-radius:2.5mm;min-height:14mm;background:var(--bg-2)}
+.t-prot-fuss{margin-top:auto;padding-top:7mm;display:flex;gap:10mm}
+.t-prot-sig{flex:1}
+.t-prot-sig span{display:block;height:9mm;border-bottom:1pt solid var(--navy)}
+.t-prot-sig i{display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted)}
+.t-prot-abs{margin:4mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-kb · Kündigungsbestätigung, A4 — Briefform
+   ========================================================================== */
+.t-kb{display:flex;flex-direction:column;padding:18mm 20mm 14mm}
+.t-kb-kopf{display:flex;justify-content:flex-end}
+.t-kb-mark{display:flex;font-family:var(--font-display);font-weight:700;font-size:13pt;color:var(--navy)}
+.t-kb-adress{display:flex;justify-content:space-between;align-items:flex-start;gap:10mm;margin:10mm 0 0}
+.t-kb-empf{flex:0 0 88mm}
+.t-kb-lab{margin:0 0 2mm;font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.t-kb-linien{display:flex;flex-direction:column;gap:5.5mm}
+.t-kb-linien i{border-bottom:1pt solid var(--line-2)}
+.t-kb-ort{margin:2mm 0 0;font-size:9pt;color:var(--muted)}
+.t-kb-datum{margin:0;font-size:10.5pt;color:var(--ink);align-self:flex-start}
+.t-kb-betreff{margin:12mm 0 0;font-family:var(--font-display);font-weight:700;font-size:12pt;color:var(--navy)}
+.t-kb-anrede{margin:6mm 0 0;font-size:11pt;color:var(--ink)}
+.t-kb-text{margin:4mm 0 0}
+.t-kb-text p{margin:0 0 3mm;font-size:11pt;line-height:1.55;color:var(--ink)}
+.t-kb-eckblock{margin:5mm 0 0;padding:5mm;border-radius:3mm;background:var(--bg-2);
+  display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm}
+.t-kb-eck{display:flex;align-items:baseline;gap:3mm}
+.t-kb-eck span{flex:0 0 40mm;font-size:8.4pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-kb-eck i{flex:1;border-bottom:1pt solid var(--line);min-height:5mm}
+.t-kb-gruss{margin:8mm 0 0}
+.t-kb-gruss p{margin:0;font-size:11pt;color:var(--ink)}
+.t-kb-usig{height:12mm}
+.t-kb-uname{font-family:var(--font-display);font-weight:700;color:var(--navy)}
+.t-kb-abs{margin-top:auto;padding-top:8mm;font-size:7.4pt;color:var(--muted);text-align:center}
+
+/* ==========================================================================
+   t-resv · Reservationsblatt, A4 — leere Tabelle zum Eintragen
+   ========================================================================== */
+.t-resv{display:flex;flex-direction:column;padding:15mm 16mm 12mm}
+.t-resv-kopf{display:flex;align-items:center;gap:4mm}
+.t-resv-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-resv-kopf .eyebrow{margin:0 0 1mm;font-size:22pt;color:var(--cyan);line-height:1}
+.t-resv-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;color:var(--navy);letter-spacing:-.02em}
+.t-resv-ort{margin:1mm 0 0;font-size:9.5pt;color:var(--muted)}
+.t-resv-lede{margin:5mm 0 0;font-size:10pt;line-height:1.45;color:var(--ink-soft)}
+.t-resv-tab{list-style:none;margin:6mm 0 0;padding:0;display:flex;flex-direction:column}
+.t-resv-tab li{display:flex;gap:0}
+.t-resv-tab li:not(.t-resv-titel):nth-child(even){background:var(--bg-2)}
+.t-resv-z{flex:1;min-width:0;padding:3.4mm 3mm;border-bottom:1pt solid var(--line);border-right:1pt solid var(--line);font-size:10pt;color:var(--ink)}
+.t-resv-z:last-child{border-right:none}
+.t-resv-z.is-erste{flex:0 0 40mm}
+.t-resv-titel{border-top:1.4pt solid var(--navy)}
+.t-resv-titel .t-resv-z{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1.4pt solid var(--navy)}
+.t-resv-regeln{margin:6mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+.t-resv-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:6mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-resv-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-bpk · Besucher-Parkkarte, A4-Bogen — sechs Karten
+   ========================================================================== */
+.t-bpk{padding:10mm 12mm}
+.t-bpk-bogen{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.t-bpk-karte{box-sizing:border-box;height:83mm;display:flex;flex-direction:column;overflow:hidden;margin:1.5mm}
+.t-bpk-bogen.is-schnitt .t-bpk-karte{border:.6pt dashed var(--line)}
+.t-bpk-kopf{display:flex;align-items:center;gap:2.5mm;padding:3mm 4mm;background:var(--cyan);color:#fff}
+.t-bpk-ico{flex:0 0 auto;display:flex}
+.t-bpk-kopf b{flex:1;font-family:var(--font-display);font-weight:700;font-size:13pt;letter-spacing:.02em}
+.t-bpk-mark{flex:0 0 auto;display:flex}
+.t-bpk-body{flex:1;padding:4mm 4mm 3mm;display:flex;flex-direction:column;gap:3mm}
+.t-bpk-feld{display:flex;flex-direction:column;gap:1mm}
+.t-bpk-feld span{font-size:7.6pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.t-bpk-feld i{border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-bpk-hint{margin:auto 0 0;font-size:7.6pt;line-height:1.3;color:var(--ink-soft)}
+.t-bpk-ort{margin:0;font-size:7pt;color:var(--muted)}
+
+/* ==========================================================================
+   t-mit · Wichtige Mitteilung, A4 — farbiges Band, grosse Nachricht
+   ========================================================================== */
+.t-mit{display:flex;flex-direction:column;padding:0}
+.t-mit-band{background:var(--ton);color:var(--hell);padding:9mm 16mm;display:flex;align-items:center;gap:4mm}
+.t-mit-ico{flex:0 0 auto;display:flex}
+.t-mit-eyebrow{margin:0;font-family:var(--font-display);font-weight:700;font-size:14pt;
+  letter-spacing:.06em;text-transform:uppercase}
+.t-mit-inhalt{flex:1;padding:10mm 16mm 0}
+.t-mit-titel{margin:0;font-family:var(--font-display);font-weight:700;font-size:36pt;
+  line-height:1.04;color:var(--navy);letter-spacing:-.02em}
+.t-mit-datum{margin:4mm 0 0;font-family:var(--font-display);font-weight:700;font-size:14pt;color:var(--cyan)}
+.t-mit-text{margin:6mm 0 0;font-size:13pt;line-height:1.55;color:var(--ink)}
+.t-mit-frist{margin:8mm 0 0;padding:5mm 6mm;border-radius:4mm;background:var(--cyan-tint);
+  border:1.2pt solid var(--cyan);display:flex;flex-direction:column;gap:1mm}
+.t-mit-frist span{font-size:9pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.t-mit-frist strong{font-family:var(--font-display);font-weight:700;font-size:18pt;color:var(--navy)}
+.t-mit-frage{margin:7mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-mit-frage b{display:block;font-family:var(--font-display);font-weight:700;font-size:9.5pt;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
+.t-mit-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding:8mm 16mm 12mm;
+  border-top:.8pt solid var(--line);margin-left:16mm;margin-right:16mm;padding-left:0;padding-right:0;
+  font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-mit-mark{flex:0 0 auto;display:flex}

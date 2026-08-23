@@ -25,7 +25,7 @@ export const BEREICHE = [
     lede: 'Alles, was jemand sieht, bevor er im Haus ist: den Weg hierher, den Platz fürs Auto, die Tür zur Rezeption.',
     ids: ['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor',
           'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker',
-          'wegweiser', 'empfangstafel']
+          'wegweiser', 'empfangstafel', 'besucherkarte']
   },
   {
     id: 'zimmer',
@@ -44,7 +44,7 @@ export const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung']
   },
   {
     id: 'sicherheit',
@@ -60,7 +60,7 @@ export const BEREICHE = [
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus']
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt']
   },
   {
     id: 'verwaltung',
@@ -69,7 +69,8 @@ export const BEREICHE = [
     kurz: 'Verwaltung',
     lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
     ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung',
-          'mieten', 'besichtigung', 'neuimhaus']
+          'mieten', 'besichtigung', 'neuimhaus',
+          'vollmacht', 'protokoll', 'kuendigung']
   },
   {
     id: 'team',
