@@ -231,6 +231,21 @@ a{color:var(--cyan)}
   cursor:pointer;padding:0;transition:.18s box-shadow,.18s border-color,.18s transform;
 }
 .vz-card:hover{border-color:var(--cyan);box-shadow:0 12px 28px rgba(42,51,80,.13);transform:translateY(-2px)}
+/* Karte + Stern: der Stern steht neben dem Link, nicht darin (sonst wäre er
+   ungültiges HTML und würde die Karte öffnen). */
+.vz-card-wrap{position:relative;display:flex}
+.vz-card-wrap>.vz-card{flex:1;min-width:0}
+.vz-fav{
+  position:absolute;top:9px;right:9px;z-index:2;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;padding:0;
+  border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.92);
+  color:var(--muted);cursor:pointer;transition:.15s color,.15s border-color,.15s background;
+}
+.vz-fav svg{width:18px;height:18px;fill:none}
+.vz-fav:hover{color:var(--cyan);border-color:var(--cyan)}
+.vz-fav.is-on{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-tint)}
+.vz-fav.is-on svg{fill:currentColor}
+.vz-fav:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .vz-thumb{aspect-ratio:1/1.414;background:var(--bg-2);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
 .vz-thumb svg{width:100%;height:100%;display:block}
 .vz-card-body{padding:13px 15px 15px}

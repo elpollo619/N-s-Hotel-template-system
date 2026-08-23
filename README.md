@@ -843,6 +843,10 @@ gespeichertem Entwurf steht unter «Weiterarbeiten». Das ist fast immer der
 Grund, warum jemand die Seite überhaupt öffnet. Erst danach kommen die
 Bereiche.
 
+Wer eine Vorlage oft braucht, heftet sie mit dem **Stern** auf der Karte an;
+angeheftete stehen auf der Startseite zuoberst unter «Angeheftet». Der Stern
+speichert nur das Kürzel, im Browser der jeweiligen Person.
+
 ### Die sechs Werkzeugseiten
 
 * **Anleitung** (`#/s/hilfe`) — der Ablauf in drei Schritten, die Einstellungen

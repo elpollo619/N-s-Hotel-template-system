@@ -375,6 +375,21 @@ a{color:var(--cyan)}
   cursor:pointer;padding:0;transition:.18s box-shadow,.18s border-color,.18s transform;
 }
 .vz-card:hover{border-color:var(--cyan);box-shadow:0 12px 28px rgba(42,51,80,.13);transform:translateY(-2px)}
+/* Karte + Stern: der Stern steht neben dem Link, nicht darin (sonst wäre er
+   ungültiges HTML und würde die Karte öffnen). */
+.vz-card-wrap{position:relative;display:flex}
+.vz-card-wrap>.vz-card{flex:1;min-width:0}
+.vz-fav{
+  position:absolute;top:9px;right:9px;z-index:2;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;padding:0;
+  border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.92);
+  color:var(--muted);cursor:pointer;transition:.15s color,.15s border-color,.15s background;
+}
+.vz-fav svg{width:18px;height:18px;fill:none}
+.vz-fav:hover{color:var(--cyan);border-color:var(--cyan)}
+.vz-fav.is-on{color:var(--cyan);border-color:var(--cyan);background:var(--cyan-tint)}
+.vz-fav.is-on svg{fill:currentColor}
+.vz-fav:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .vz-thumb{aspect-ratio:1/1.414;background:var(--bg-2);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
 .vz-thumb svg{width:100%;height:100%;display:block}
 .vz-card-body{padding:13px 15px 15px}
@@ -6523,6 +6538,39 @@ function merken(id){
 
 function verlaufLeeren(){ save(SCHLUESSEL, []); }
 
+/* ===== js/lib/favoriten.js ===== */
+/* ==========================================================================
+   Favoriten
+   --------------------------------------------------------------------------
+   Bei sechzig Vorlagen braucht das Team seine fünf, sechs täglichen nicht
+   jedes Mal zu suchen. Ein Stern auf der Karte heftet sie an; angeheftete
+   stehen zuoberst auf der Startseite. Gespeichert werden nur die Kürzel, im
+   Browser der jeweiligen Person — wie schon beim Verlauf.
+   ========================================================================== */
+
+const FAV_SCHLUESSEL = 'favoriten';
+
+function favoriten(){
+  const roh = load(FAV_SCHLUESSEL, []);
+  return Array.isArray(roh) ? roh.filter(x => typeof x === 'string') : [];
+}
+
+function istFavorit(id){
+  return favoriten().includes(id);
+}
+
+/** Heftet an oder löst — gibt den neuen Zustand zurück (true = angeheftet). */
+function favoritToggle(id){
+  if (!id) return false;
+  const jetzt = favoriten();
+  if (jetzt.includes(id)){
+    save(FAV_SCHLUESSEL, jetzt.filter(x => x !== id));
+    return false;
+  }
+  save(FAV_SCHLUESSEL, [...jetzt, id]);
+  return true;
+}
+
 /* ===== js/lib/schrift.js ===== */
 /* ==========================================================================
    Welche Schrift ist gerade aktiv?
@@ -6744,6 +6792,9 @@ const DICT = {
     startPage:'Startseite',
     chapters:'Kapitel',
     recent:'Zuletzt benutzt',
+    favorites:'Angeheftet',
+    favAdd:'Anheften',
+    favRemove:'Nicht mehr anheften',
     step1:'Vorlage wählen',
     step1sub:'Über die Arbeitsbereiche links oder die Suche oben — sie sucht auch in den Aushangtexten.',
     step2:'Texte anpassen',
@@ -6916,6 +6967,9 @@ const DICT = {
     startPage:'Start page',
     chapters:'Chapters',
     recent:'Recently used',
+    favorites:'Pinned',
+    favAdd:'Pin',
+    favRemove:'Unpin',
     step1:'Pick a template',
     step1sub:'From the work areas on the left or the search at the top — it looks inside the notice texts too.',
     step2:'Edit the text',
@@ -16983,6 +17037,7 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 
 
+
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
 
@@ -17293,17 +17348,24 @@ function mountSuche(){
 function karte(id){
   const tpl = TEMPLATES[id];
   if (!tpl) return '';
+  const fav = istFavorit(id);
   return `
-    <a class="vz-card" href="#/t/${esc(id)}">
-      <div class="vz-thumb">
-        <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
-        ${tpl.thumb || ''}
-      </div>
-      <div class="vz-card-body">
-        <h3>${esc(tpl.title)}</h3>
-        <p>${esc(tpl.sub || '')}</p>
-      </div>
-    </a>`;
+    <div class="vz-card-wrap">
+      <a class="vz-card" href="#/t/${esc(id)}">
+        <div class="vz-thumb">
+          <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
+          ${tpl.thumb || ''}
+        </div>
+        <div class="vz-card-body">
+          <h3>${esc(tpl.title)}</h3>
+          <p>${esc(tpl.sub || '')}</p>
+        </div>
+      </a>
+      <button type="button" class="vz-fav${fav ? ' is-on' : ''}" data-fav="${esc(id)}"
+        aria-pressed="${fav ? 'true' : 'false'}"
+        title="${esc(fav ? t('favRemove') : t('favAdd'))}"
+        aria-label="${esc(fav ? t('favRemove') : t('favAdd'))}">${icon('stern', 18, 1.8)}</button>
+    </div>`;
 }
 
 /** Brotkrumen. Erwartet Paare [Text, Ziel]; der letzte Eintrag ohne Ziel. */
@@ -17335,6 +17397,7 @@ function renderStart(){
 
   const offen = entwuerfe();
   const zuletzt = verlauf().filter(id => TEMPLATES[id] && !offen.includes(id)).slice(0, 3);
+  const angeheftet = favoriten().filter(id => TEMPLATES[id]);
 
   const zahlen = [
     { z: alleVorlagen().length,                     l: t('kpiTemplates') },
@@ -17373,6 +17436,12 @@ function renderStart(){
             <em aria-hidden="true">→</em>
           </a>`).join('')}
         </div>
+      </section>` : ''}
+
+      ${angeheftet.length ? `
+      <section class="vz-block">
+        <h2>${esc(t('favorites'))}</h2>
+        <div class="vz-cards vz-cards--klein">${angeheftet.map(karte).join('')}</div>
       </section>` : ''}
 
       <section class="vz-block">
@@ -18855,6 +18924,19 @@ document.addEventListener('keydown', ev => {
   }
 });
 
+/* Stern auf einer Karte: anheften/lösen ohne die Karte zu öffnen. Der Knopf
+   steht neben dem Link, nicht darin — darum genügt es, neu zu zeichnen und
+   die Scrollposition zu halten. */
+document.addEventListener('click', ev => {
+  const knopf = ev.target.closest('[data-fav]');
+  if (!knopf) return;
+  ev.preventDefault();
+  const y = window.scrollY;
+  favoritToggle(knopf.getAttribute('data-fav'));
+  route();
+  window.scrollTo(0, y);
+});
+
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();
 /* Die gewaehlten Schriften stehen, bevor das erste Blatt gezeichnet wird —
@@ -18866,7 +18948,8 @@ route();
 
 /* Für Tests/Automatisierung erreichbar machen. */
 window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS,
-              alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H };
+              alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H,
+              favoriten, istFavorit, favoritToggle };
 
 })();
 </script>
