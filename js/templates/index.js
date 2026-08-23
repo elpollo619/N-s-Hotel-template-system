@@ -53,6 +53,12 @@ import neuimhaus from './neuimhaus.js';
 import wlankarten from './wlankarten.js';
 import besichtigung from './besichtigung.js';
 import ruhezeiten from './ruhezeiten.js';
+import notfallblatt from './notfallblatt.js';
+import standortschild from './standortschild.js';
+import wegweiser from './wegweiser.js';
+import empfangstafel from './empfangstafel.js';
+import hausordnung from './hausordnung.js';
+import fruehstuecktuer from './fruehstuecktuer.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -105,7 +111,13 @@ export const TEMPLATES = {
   neuimhaus,
   wlankarten,
   besichtigung,
-  ruhezeiten
+  ruhezeiten,
+  notfallblatt,
+  standortschild,
+  wegweiser,
+  empfangstafel,
+  hausordnung,
+  fruehstuecktuer
 };
 
 export const ORDER = [
@@ -118,5 +130,6 @@ export const ORDER = [
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
   'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
-  'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten'
+  'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
+  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer'
 ];

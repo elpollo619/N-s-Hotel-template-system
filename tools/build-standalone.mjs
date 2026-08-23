@@ -87,6 +87,12 @@ const MODULES = [
   'js/templates/wlankarten.js',
   'js/templates/besichtigung.js',
   'js/templates/ruhezeiten.js',
+  'js/templates/notfallblatt.js',
+  'js/templates/standortschild.js',
+  'js/templates/wegweiser.js',
+  'js/templates/empfangstafel.js',
+  'js/templates/hausordnung.js',
+  'js/templates/fruehstuecktuer.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

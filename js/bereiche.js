@@ -24,7 +24,8 @@ export const BEREICHE = [
     kurz: 'Ankommen',
     lede: 'Alles, was jemand sieht, bevor er im Haus ist: den Weg hierher, den Platz fürs Auto, die Tür zur Rezeption.',
     ids: ['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor',
-          'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker']
+          'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker',
+          'wegweiser', 'empfangstafel']
   },
   {
     id: 'zimmer',
@@ -34,7 +35,7 @@ export const BEREICHE = [
     lede: 'Was im Zimmer liegt und an der Wand hängt — von der Mappe auf dem Tisch bis zum WLAN-Code neben dem Bett.',
     ids: ['checkin', 'gaestemappe', 'willkommen', 'zimmerschild', 'tuerhaenger',
           'tischaufsteller', 'foto', 'aushang', 'qrplakat', 'feedback', 'zattoo', 'notruf',
-          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten']
+          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten', 'fruehstuecktuer']
   },
   {
     id: 'hausordnung',
@@ -43,7 +44,7 @@ export const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung']
   },
   {
     id: 'sicherheit',
@@ -51,7 +52,7 @@ export const BEREICHE = [
     title: 'Sicherheit',
     kurz: 'Sicherheit',
     lede: 'Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 7010 — und dasselbe gross genug für den Hof.',
-    ids: ['sicherheit', 'grossplakat']
+    ids: ['sicherheit', 'grossplakat', 'notfallblatt', 'standortschild']
   },
   {
     id: 'unterhalt',

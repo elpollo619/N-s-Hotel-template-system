@@ -154,6 +154,12 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Turnusplan** | A4 hoch | Treppenhausreinigung, Winterdienst, Kehricht — wer wann dran ist |
 | **WLAN-Kärtchen** | A4 hoch | Bis zehn kleine Karten mit Netz, Passwort und QR zum Ausschneiden |
 | **Ruhezeiten** | A4 hoch | Nacht-, Mittags- und Sonntagsruhe, mehrsprachig |
+| **Notfallblatt** | A4 hoch | Notrufnummern gross, Verhalten im Brand- und Unfallfall, mehrsprachig |
+| **Standort-Schild** | A4 quer | Notausgang, Erste Hilfe, Sammelplatz … mit grossem Symbol und Pfeil |
+| **Wegweiser** | A4 hoch | Orientierungstafel mit mehreren Zielen und Pfeilen |
+| **Empfang-Tafel** | A4 quer | Willkommenstafel mit den Infos des Tages |
+| **Hausordnung** | A4 hoch | Das ganze Regelwerk als Aushang, nummeriert, mehrsprachig |
+| **Frühstück-Türkarte** | A5 hoch | Zum Ankreuzen und an die Klinke hängen |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -805,10 +811,10 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 
 | Bereich | Was darin steckt |
 |---|---|
-| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen |
-| **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen |
-| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten |
-| **Sicherheit** | Sicherheitszeichen, Grossflächenplakat |
+| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel |
+| **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung |
+| **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
 | **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan |
 | **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus |
 | **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
@@ -823,7 +829,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Einundfünfzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Siebenundfünfzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
