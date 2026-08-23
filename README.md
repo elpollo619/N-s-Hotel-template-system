@@ -124,6 +124,18 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
 | **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen |
 | **Gästemappe** | A4 hoch, mehrseitig | Achtseitige Mappe fürs Zimmer: Willkommen, das Wichtigste, Parken und Einkaufen, Zug und Bus, Ausflüge, Essen, Notfall und Kontakt |
+| **Self-Check-in** | A4 hoch | Die vier Schritte zum Zimmer, Zutrittscode gross — in bis zu sechs Sprachen, wahlweise eine Seite je Sprache |
+| **Türhänger** | A4 hoch | «Bitte nicht stören», «Zimmer bitte reinigen», «Zimmer ist frei», «Bitte nicht wecken» — zwei Stück von 90 × 220 mm auf ein Blatt, Loch für die Klinke |
+| **Tischaufsteller** | A4 quer | Zelt für Tisch und Theke: vorne der Gruss, hinten das Wichtigste, in der Mitte gefalzt |
+| **Zimmerschild** | A5 quer, mehrseitig | Nummernschilder für die Zimmertüren — Bereich von/bis oder eigene Liste, drei Tonlagen |
+| **Willkommenskarte** | A5 hoch | Die Karte auf dem Kissen, in bis zu sechs Sprachen |
+| **Feedback-Aushang** | A4 hoch | Fünf Sterne, grosser QR-Code auf die Bewertungsseite |
+| **Zeiten-Tafel** | A4 hoch | Öffnungs-, Frühstücks- und Waschzeiten in einer Kolonne mit Punktlinie |
+| **Termin-Aushang** | A4 hoch | Heizungswartung, Liftkontrolle, Ablesung: Datum gross, dazu «Was zu tun ist» |
+| **Umbau und Baustelle** | A4 hoch | Von wann bis wann, was betroffen ist, welche Folgen — mit Entschuldigung in allen gewählten Sprachen |
+| **Kontakt-Tafel** | A4 hoch | Wer ist wofür da — Hauswart, Verwaltung, Notfall; die Nummer rechts und gross |
+| **Preisliste** | A4 hoch | Parkplatz, Waschmarken, Extras — nach Abschnitten geordnet, Beträge mit Tabellenziffern |
+| **Klingel- und Briefkastenschilder** | A4 hoch | Namensschilder in vier Handelsgrössen oder freiem Mass, als Bogen zum Ausschneiden |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -792,7 +804,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Einundzwanzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Dreiunddreissig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist

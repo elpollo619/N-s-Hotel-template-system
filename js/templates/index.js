@@ -23,6 +23,18 @@ import etiketten from './etiketten.js';
 import qrplakat from './qrplakat.js';
 import foto from './foto.js';
 import grossplakat from './grossplakat.js';
+import checkin from './checkin.js';
+import tuerhaenger from './tuerhaenger.js';
+import tischaufsteller from './tischaufsteller.js';
+import zimmerschild from './zimmerschild.js';
+import willkommen from './willkommen.js';
+import feedback from './feedback.js';
+import zeiten from './zeiten.js';
+import termin from './termin.js';
+import klingelschild from './klingelschild.js';
+import kontakte from './kontakte.js';
+import bauarbeiten from './bauarbeiten.js';
+import preisliste from './preisliste.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -45,7 +57,19 @@ export const TEMPLATES = {
   'anfahrt-luftbild': luftbild,
   zattoo,
   'plan-editor': planeditor,
-  gaestemappe
+  gaestemappe,
+  checkin,
+  tuerhaenger,
+  tischaufsteller,
+  zimmerschild,
+  willkommen,
+  feedback,
+  zeiten,
+  termin,
+  klingelschild,
+  kontakte,
+  bauarbeiten,
+  preisliste
 };
 
 export const ORDER = [
@@ -53,5 +77,7 @@ export const ORDER = [
   'etiketten', 'qrplakat', 'kurzanleitung',
   'foto', 'grossplakat',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
-  'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
+  'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
+  'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
+  'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste'
 ];

@@ -32,15 +32,16 @@ export const BEREICHE = [
     title: 'Zimmer und Gäste',
     kurz: 'Zimmer',
     lede: 'Was im Zimmer liegt und an der Wand hängt — von der Mappe auf dem Tisch bis zum WLAN-Code neben dem Bett.',
-    ids: ['gaestemappe', 'foto', 'aushang', 'qrplakat', 'zattoo', 'notruf']
+    ids: ['checkin', 'gaestemappe', 'willkommen', 'zimmerschild', 'tuerhaenger',
+          'tischaufsteller', 'foto', 'aushang', 'qrplakat', 'feedback', 'zattoo', 'notruf']
   },
   {
     id: 'hausordnung',
     icon: 'door',
     title: 'Hausordnung',
     kurz: 'Hausordnung',
-    lede: 'Was im Haus gilt — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
-    ids: ['hinweis', 'mieterbrief']
+    lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
+    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte']
   },
   {
     id: 'sicherheit',
@@ -55,8 +56,8 @@ export const BEREICHE = [
     icon: 'trash',
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
-    lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten']
+    lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild']
   },
   {
     id: 'team',
