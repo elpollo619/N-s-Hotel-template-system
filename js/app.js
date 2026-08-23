@@ -32,6 +32,7 @@ import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
 import { suche, trefferZiel, ART_LABEL, normal } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
+import { favoriten, istFavorit, favoritToggle } from './lib/favoriten.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
 import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
 import { SPRACH_IDS } from './lib/sprachen.js';
@@ -351,17 +352,24 @@ function mountSuche(){
 function karte(id){
   const tpl = TEMPLATES[id];
   if (!tpl) return '';
+  const fav = istFavorit(id);
   return `
-    <a class="vz-card" href="#/t/${esc(id)}">
-      <div class="vz-thumb">
-        <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
-        ${tpl.thumb || ''}
-      </div>
-      <div class="vz-card-body">
-        <h3>${esc(tpl.title)}</h3>
-        <p>${esc(tpl.sub || '')}</p>
-      </div>
-    </a>`;
+    <div class="vz-card-wrap">
+      <a class="vz-card" href="#/t/${esc(id)}">
+        <div class="vz-thumb">
+          <span class="vz-badge${tpl.badgeCyan ? ' vz-badge--cyan' : ''}">${esc(tpl.badge || '')}</span>
+          ${tpl.thumb || ''}
+        </div>
+        <div class="vz-card-body">
+          <h3>${esc(tpl.title)}</h3>
+          <p>${esc(tpl.sub || '')}</p>
+        </div>
+      </a>
+      <button type="button" class="vz-fav${fav ? ' is-on' : ''}" data-fav="${esc(id)}"
+        aria-pressed="${fav ? 'true' : 'false'}"
+        title="${esc(fav ? t('favRemove') : t('favAdd'))}"
+        aria-label="${esc(fav ? t('favRemove') : t('favAdd'))}">${icon('stern', 18, 1.8)}</button>
+    </div>`;
 }
 
 /** Brotkrumen. Erwartet Paare [Text, Ziel]; der letzte Eintrag ohne Ziel. */
@@ -393,6 +401,7 @@ function renderStart(){
 
   const offen = entwuerfe();
   const zuletzt = verlauf().filter(id => TEMPLATES[id] && !offen.includes(id)).slice(0, 3);
+  const angeheftet = favoriten().filter(id => TEMPLATES[id]);
 
   const zahlen = [
     { z: alleVorlagen().length,                     l: t('kpiTemplates') },
@@ -431,6 +440,12 @@ function renderStart(){
             <em aria-hidden="true">→</em>
           </a>`).join('')}
         </div>
+      </section>` : ''}
+
+      ${angeheftet.length ? `
+      <section class="vz-block">
+        <h2>${esc(t('favorites'))}</h2>
+        <div class="vz-cards vz-cards--klein">${angeheftet.map(karte).join('')}</div>
       </section>` : ''}
 
       <section class="vz-block">
@@ -1913,6 +1928,19 @@ document.addEventListener('keydown', ev => {
   }
 });
 
+/* Stern auf einer Karte: anheften/lösen ohne die Karte zu öffnen. Der Knopf
+   steht neben dem Link, nicht darin — darum genügt es, neu zu zeichnen und
+   die Scrollposition zu halten. */
+document.addEventListener('click', ev => {
+  const knopf = ev.target.closest('[data-fav]');
+  if (!knopf) return;
+  ev.preventDefault();
+  const y = window.scrollY;
+  favoritToggle(knopf.getAttribute('data-fav'));
+  route();
+  window.scrollTo(0, y);
+});
+
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();
 /* Die gewaehlten Schriften stehen, bevor das erste Blatt gezeichnet wird —
@@ -1924,4 +1952,5 @@ route();
 
 /* Für Tests/Automatisierung erreichbar machen. */
 window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS,
-              alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H };
+              alleObjekte, alleAbsender, bestandAlsDatei, route, PAGE_MAX_H,
+              favoriten, istFavorit, favoritToggle };
