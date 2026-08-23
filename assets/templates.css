@@ -2323,3 +2323,138 @@
 .t-ruhe-fuss{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:5mm;padding-top:8mm;
   border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;text-align:left}
 .t-ruhe-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-notf · Notfallblatt, A4
+   Rote Notrufnummern zuoberst, darunter zwei Spalten Verhalten.
+   ========================================================================== */
+.t-notf{display:flex;flex-direction:column;padding:15mm 16mm 12mm}
+.t-notf-kopf{display:flex;align-items:center;gap:4mm;padding-bottom:4mm;border-bottom:2pt solid var(--red)}
+.t-notf-ico{flex:0 0 auto;color:var(--red);display:flex}
+.t-notf-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:28pt;
+  line-height:1;color:var(--red);letter-spacing:-.01em}
+.t-notf-sprachen{margin:0 0 0 auto;font-size:10pt;color:var(--muted);text-align:right}
+.t-notf-nummern{margin:6mm 0 0}
+.t-notf-nummern h2,.t-notf-block h3{margin:0 0 3mm;font-family:var(--font-display);font-weight:700;
+  font-size:10pt;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-notf-nreihe{display:flex;gap:3mm}
+.t-notf-nr{flex:1;min-width:0;padding:4mm 3mm;border-radius:3mm;background:var(--red-tint);
+  text-align:center;display:flex;flex-direction:column;gap:.6mm}
+.t-notf-nr b{font-family:var(--font-display);font-weight:700;font-size:24pt;color:var(--red);line-height:1}
+.t-notf-nr span{font-size:9pt;color:var(--navy)}
+.t-notf-zwei{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin:8mm 0 0}
+.t-notf-block{padding:5mm;border-radius:4mm;background:var(--bg-2)}
+.t-notf-block.is-brand{background:var(--red-tint)}
+.t-notf-block.is-brand h3{color:var(--red)}
+.t-notf-block ol{margin:0;padding:0 0 0 5mm;display:flex;flex-direction:column;gap:2.4mm}
+.t-notf-block li{font-size:10.5pt;line-height:1.4;color:var(--ink)}
+.t-notf-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-notf-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-stand · Standort-Schild, A4 quer — Symbol, Text, grosser Pfeil
+   ========================================================================== */
+.t-stand{padding:0}
+.t-stand-schild{height:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:8mm;padding:14mm 18mm;color:#fff;background:var(--ton)}
+.t-stand-schild.is-links{flex-direction:row}
+.t-stand-mitte{flex:1;min-width:0;display:flex;align-items:center;gap:8mm}
+.t-stand-ico{flex:0 0 auto;display:flex}
+.t-stand-ico svg{width:44mm;height:44mm}
+.t-stand-haupt{margin:0;font-family:var(--font-display);font-weight:700;font-size:44pt;
+  line-height:1.02;letter-spacing:-.02em}
+.t-stand-weitere{margin:2mm 0 0;font-size:15pt;opacity:.85}
+.t-stand-zusatz{margin:2mm 0 0;font-size:16pt;opacity:.92;font-weight:600}
+.t-stand-pfeil{flex:0 0 auto;display:flex}
+.t-stand-pfeil svg{width:52mm;height:52mm}
+
+/* ==========================================================================
+   t-weg · Wegweiser, A4 — Flughafentafel
+   ========================================================================== */
+.t-weg{padding:0}
+.t-weg-tafel{height:100%;display:flex;flex-direction:column;padding:16mm 14mm;
+  background:var(--navy);color:#fff}
+.t-weg-titel{margin:0 0 8mm;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1;color:#fff;letter-spacing:-.01em}
+.t-weg-liste{list-style:none;margin:0;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:0}
+.t-weg-liste li{display:flex;align-items:center;gap:6mm;padding:5mm 2mm;
+  border-top:1pt solid rgba(255,255,255,.16)}
+.t-weg-liste li:last-child{border-bottom:1pt solid rgba(255,255,255,.16)}
+.t-weg-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-weg-ico svg{width:13mm;height:13mm}
+.t-weg-text{flex:1;font-family:var(--font-display);font-weight:600;font-size:19pt;color:#fff}
+.t-weg-pfeil{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-weg-pfeil svg{width:15mm;height:15mm}
+.t-weg-fuss{margin-top:8mm;display:flex;justify-content:flex-end}
+
+/* ==========================================================================
+   t-emp · Empfang-Tafel, A4 quer
+   ========================================================================== */
+.t-emp{padding:0}
+.t-emp-tafel{height:100%;display:flex;flex-direction:column;padding:14mm 16mm;
+  background:var(--navy);color:#fff}
+.t-emp-kopf .eyebrow{margin:0 0 1mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-emp-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:40pt;
+  line-height:1.02;color:#fff;letter-spacing:-.02em}
+.t-emp-datum{margin:2mm 0 0;font-size:12pt;color:rgba(255,255,255,.7)}
+.t-emp-grid{flex:1;display:flex;gap:4mm;margin:8mm 0 0}
+.t-emp-kachel{flex:1;min-width:0;padding:6mm 5mm;border-radius:4mm;background:rgba(255,255,255,.08);
+  display:flex;flex-direction:column;gap:1.5mm}
+.t-emp-ico{color:var(--cyan);display:flex}
+.t-emp-kachel b{font-family:var(--font-display);font-weight:700;font-size:14pt;color:#fff}
+.t-emp-kachel span{font-size:11pt;line-height:1.35;color:rgba(255,255,255,.82)}
+.t-emp-fuss{margin-top:8mm;display:flex;justify-content:flex-end}
+
+/* ==========================================================================
+   t-ho · Hausordnung, A4 — nummeriertes Regelwerk
+   ========================================================================== */
+.t-ho{display:flex;flex-direction:column;padding:16mm 17mm 12mm}
+.t-ho-kopf .eyebrow{margin:0 0 2mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-ho-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-ho-sprachen{margin:1.5mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-ho-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-ho-lede{margin:3mm 0 0;font-size:10.5pt;line-height:1.45;color:var(--ink-soft)}
+.t-ho-liste{list-style:none;margin:7mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.6mm}
+.t-ho-liste li{display:flex;gap:3.5mm;align-items:baseline}
+.t-ho-nr{flex:0 0 6.5mm;height:6.5mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-family:var(--font-display);font-weight:700;font-size:9pt;
+  display:flex;align-items:center;justify-content:center}
+.t-ho-txt{flex:1;font-size:10.5pt;line-height:1.4;color:var(--ink)}
+.t-ho-txt b{color:var(--navy);font-family:var(--font-display);font-weight:700}
+.t-ho-schluss{margin:7mm 0 0;font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-ho-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-ho-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-frut · Frühstück-Türkarte, A5 — zum Ankreuzen
+   ========================================================================== */
+.t-frut{display:flex;flex-direction:column;padding:14mm 12mm 10mm;text-align:center}
+.t-frut-loch{width:22mm;height:6mm;border:1.4pt solid var(--line);border-radius:3mm;
+  margin:0 auto 4mm;background:var(--bg-2)}
+.t-frut-ico{display:flex;justify-content:center;color:var(--cyan);margin-bottom:1mm}
+.t-frut-kopf .eyebrow{margin:0 0 1mm;font-size:20pt;color:var(--cyan);line-height:1}
+.t-frut-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;
+  line-height:1;color:var(--navy)}
+.t-frut-unter{margin:2mm 0 0;font-size:9.5pt;line-height:1.35;color:var(--ink-soft)}
+.t-frut-posten{list-style:none;margin:6mm 0 0;padding:0;text-align:left;
+  columns:2;column-gap:8mm}
+.t-frut-posten li{display:flex;align-items:center;gap:2.5mm;font-size:10.5pt;color:var(--ink);
+  margin-bottom:2.4mm;break-inside:avoid}
+.t-frut-box{flex:0 0 auto;width:4mm;height:4mm;border:1.4pt solid var(--navy);border-radius:1mm}
+.t-frut-zeit{margin:5mm 0 0;text-align:left}
+.t-frut-zeit h2{margin:0 0 2mm;font-family:var(--font-display);font-weight:700;font-size:9pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-frut-zeit ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:2mm 6mm}
+.t-frut-zeit li{display:flex;align-items:center;gap:2.5mm;font-size:10pt;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.t-frut-felder{margin:5mm 0 0;display:flex;flex-direction:column;gap:2.5mm}
+.t-frut-feld{display:flex;align-items:baseline;gap:3mm}
+.t-frut-feld span{flex:0 0 30mm;text-align:left;font-size:8.4pt;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-frut-feld i{flex:1;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-frut-fuss{margin-top:auto;display:flex;align-items:center;gap:3mm;padding-top:5mm;
+  border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);text-align:left;line-height:1.35}
+.t-frut-mark{flex:0 0 auto;display:flex}

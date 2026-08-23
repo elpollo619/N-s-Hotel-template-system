@@ -3416,6 +3416,141 @@ a{color:var(--cyan)}
   border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;text-align:left}
 .t-ruhe-mark{flex:0 0 auto;display:flex}
 
+/* ==========================================================================
+   t-notf · Notfallblatt, A4
+   Rote Notrufnummern zuoberst, darunter zwei Spalten Verhalten.
+   ========================================================================== */
+.t-notf{display:flex;flex-direction:column;padding:15mm 16mm 12mm}
+.t-notf-kopf{display:flex;align-items:center;gap:4mm;padding-bottom:4mm;border-bottom:2pt solid var(--red)}
+.t-notf-ico{flex:0 0 auto;color:var(--red);display:flex}
+.t-notf-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:28pt;
+  line-height:1;color:var(--red);letter-spacing:-.01em}
+.t-notf-sprachen{margin:0 0 0 auto;font-size:10pt;color:var(--muted);text-align:right}
+.t-notf-nummern{margin:6mm 0 0}
+.t-notf-nummern h2,.t-notf-block h3{margin:0 0 3mm;font-family:var(--font-display);font-weight:700;
+  font-size:10pt;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-notf-nreihe{display:flex;gap:3mm}
+.t-notf-nr{flex:1;min-width:0;padding:4mm 3mm;border-radius:3mm;background:var(--red-tint);
+  text-align:center;display:flex;flex-direction:column;gap:.6mm}
+.t-notf-nr b{font-family:var(--font-display);font-weight:700;font-size:24pt;color:var(--red);line-height:1}
+.t-notf-nr span{font-size:9pt;color:var(--navy)}
+.t-notf-zwei{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin:8mm 0 0}
+.t-notf-block{padding:5mm;border-radius:4mm;background:var(--bg-2)}
+.t-notf-block.is-brand{background:var(--red-tint)}
+.t-notf-block.is-brand h3{color:var(--red)}
+.t-notf-block ol{margin:0;padding:0 0 0 5mm;display:flex;flex-direction:column;gap:2.4mm}
+.t-notf-block li{font-size:10.5pt;line-height:1.4;color:var(--ink)}
+.t-notf-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-notf-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-stand · Standort-Schild, A4 quer — Symbol, Text, grosser Pfeil
+   ========================================================================== */
+.t-stand{padding:0}
+.t-stand-schild{height:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:8mm;padding:14mm 18mm;color:#fff;background:var(--ton)}
+.t-stand-schild.is-links{flex-direction:row}
+.t-stand-mitte{flex:1;min-width:0;display:flex;align-items:center;gap:8mm}
+.t-stand-ico{flex:0 0 auto;display:flex}
+.t-stand-ico svg{width:44mm;height:44mm}
+.t-stand-haupt{margin:0;font-family:var(--font-display);font-weight:700;font-size:44pt;
+  line-height:1.02;letter-spacing:-.02em}
+.t-stand-weitere{margin:2mm 0 0;font-size:15pt;opacity:.85}
+.t-stand-zusatz{margin:2mm 0 0;font-size:16pt;opacity:.92;font-weight:600}
+.t-stand-pfeil{flex:0 0 auto;display:flex}
+.t-stand-pfeil svg{width:52mm;height:52mm}
+
+/* ==========================================================================
+   t-weg · Wegweiser, A4 — Flughafentafel
+   ========================================================================== */
+.t-weg{padding:0}
+.t-weg-tafel{height:100%;display:flex;flex-direction:column;padding:16mm 14mm;
+  background:var(--navy);color:#fff}
+.t-weg-titel{margin:0 0 8mm;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1;color:#fff;letter-spacing:-.01em}
+.t-weg-liste{list-style:none;margin:0;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:0}
+.t-weg-liste li{display:flex;align-items:center;gap:6mm;padding:5mm 2mm;
+  border-top:1pt solid rgba(255,255,255,.16)}
+.t-weg-liste li:last-child{border-bottom:1pt solid rgba(255,255,255,.16)}
+.t-weg-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-weg-ico svg{width:13mm;height:13mm}
+.t-weg-text{flex:1;font-family:var(--font-display);font-weight:600;font-size:19pt;color:#fff}
+.t-weg-pfeil{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-weg-pfeil svg{width:15mm;height:15mm}
+.t-weg-fuss{margin-top:8mm;display:flex;justify-content:flex-end}
+
+/* ==========================================================================
+   t-emp · Empfang-Tafel, A4 quer
+   ========================================================================== */
+.t-emp{padding:0}
+.t-emp-tafel{height:100%;display:flex;flex-direction:column;padding:14mm 16mm;
+  background:var(--navy);color:#fff}
+.t-emp-kopf .eyebrow{margin:0 0 1mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-emp-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:40pt;
+  line-height:1.02;color:#fff;letter-spacing:-.02em}
+.t-emp-datum{margin:2mm 0 0;font-size:12pt;color:rgba(255,255,255,.7)}
+.t-emp-grid{flex:1;display:flex;gap:4mm;margin:8mm 0 0}
+.t-emp-kachel{flex:1;min-width:0;padding:6mm 5mm;border-radius:4mm;background:rgba(255,255,255,.08);
+  display:flex;flex-direction:column;gap:1.5mm}
+.t-emp-ico{color:var(--cyan);display:flex}
+.t-emp-kachel b{font-family:var(--font-display);font-weight:700;font-size:14pt;color:#fff}
+.t-emp-kachel span{font-size:11pt;line-height:1.35;color:rgba(255,255,255,.82)}
+.t-emp-fuss{margin-top:8mm;display:flex;justify-content:flex-end}
+
+/* ==========================================================================
+   t-ho · Hausordnung, A4 — nummeriertes Regelwerk
+   ========================================================================== */
+.t-ho{display:flex;flex-direction:column;padding:16mm 17mm 12mm}
+.t-ho-kopf .eyebrow{margin:0 0 2mm;font-size:24pt;color:var(--cyan);line-height:1}
+.t-ho-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:30pt;
+  line-height:1.02;color:var(--navy);letter-spacing:-.02em}
+.t-ho-sprachen{margin:1.5mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-ho-ort{margin:1.5mm 0 0;font-size:10pt;color:var(--muted)}
+.t-ho-lede{margin:3mm 0 0;font-size:10.5pt;line-height:1.45;color:var(--ink-soft)}
+.t-ho-liste{list-style:none;margin:7mm 0 0;padding:0;display:flex;flex-direction:column;gap:2.6mm}
+.t-ho-liste li{display:flex;gap:3.5mm;align-items:baseline}
+.t-ho-nr{flex:0 0 6.5mm;height:6.5mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-family:var(--font-display);font-weight:700;font-size:9pt;
+  display:flex;align-items:center;justify-content:center}
+.t-ho-txt{flex:1;font-size:10.5pt;line-height:1.4;color:var(--ink)}
+.t-ho-txt b{color:var(--navy);font-family:var(--font-display);font-weight:700}
+.t-ho-schluss{margin:7mm 0 0;font-family:var(--font-display);font-weight:700;font-size:11pt;color:var(--navy)}
+.t-ho-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:7mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-ho-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-frut · Frühstück-Türkarte, A5 — zum Ankreuzen
+   ========================================================================== */
+.t-frut{display:flex;flex-direction:column;padding:14mm 12mm 10mm;text-align:center}
+.t-frut-loch{width:22mm;height:6mm;border:1.4pt solid var(--line);border-radius:3mm;
+  margin:0 auto 4mm;background:var(--bg-2)}
+.t-frut-ico{display:flex;justify-content:center;color:var(--cyan);margin-bottom:1mm}
+.t-frut-kopf .eyebrow{margin:0 0 1mm;font-size:20pt;color:var(--cyan);line-height:1}
+.t-frut-kopf h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:26pt;
+  line-height:1;color:var(--navy)}
+.t-frut-unter{margin:2mm 0 0;font-size:9.5pt;line-height:1.35;color:var(--ink-soft)}
+.t-frut-posten{list-style:none;margin:6mm 0 0;padding:0;text-align:left;
+  columns:2;column-gap:8mm}
+.t-frut-posten li{display:flex;align-items:center;gap:2.5mm;font-size:10.5pt;color:var(--ink);
+  margin-bottom:2.4mm;break-inside:avoid}
+.t-frut-box{flex:0 0 auto;width:4mm;height:4mm;border:1.4pt solid var(--navy);border-radius:1mm}
+.t-frut-zeit{margin:5mm 0 0;text-align:left}
+.t-frut-zeit h2{margin:0 0 2mm;font-family:var(--font-display);font-weight:700;font-size:9pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-frut-zeit ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:2mm 6mm}
+.t-frut-zeit li{display:flex;align-items:center;gap:2.5mm;font-size:10pt;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.t-frut-felder{margin:5mm 0 0;display:flex;flex-direction:column;gap:2.5mm}
+.t-frut-feld{display:flex;align-items:baseline;gap:3mm}
+.t-frut-feld span{flex:0 0 30mm;text-align:left;font-size:8.4pt;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-frut-feld i{flex:1;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-frut-fuss{margin-top:auto;display:flex;align-items:center;gap:3mm;padding-top:5mm;
+  border-top:.8pt solid var(--line);font-size:7.4pt;color:var(--muted);text-align:left;line-height:1.35}
+.t-frut-mark{flex:0 0 auto;display:flex}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -3959,7 +4094,8 @@ const BEREICHE = [
     kurz: 'Ankommen',
     lede: 'Alles, was jemand sieht, bevor er im Haus ist: den Weg hierher, den Platz fürs Auto, die Tür zur Rezeption.',
     ids: ['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor',
-          'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker']
+          'parkplatz', 'parkschild', 'rezeption', 'rezeption-sticker',
+          'wegweiser', 'empfangstafel']
   },
   {
     id: 'zimmer',
@@ -3969,7 +4105,7 @@ const BEREICHE = [
     lede: 'Was im Zimmer liegt und an der Wand hängt — von der Mappe auf dem Tisch bis zum WLAN-Code neben dem Bett.',
     ids: ['checkin', 'gaestemappe', 'willkommen', 'zimmerschild', 'tuerhaenger',
           'tischaufsteller', 'foto', 'aushang', 'qrplakat', 'feedback', 'zattoo', 'notruf',
-          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten']
+          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten', 'fruehstuecktuer']
   },
   {
     id: 'hausordnung',
@@ -3978,7 +4114,7 @@ const BEREICHE = [
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
     ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
-          'hausversammlung', 'umzug', 'ruhezeiten']
+          'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung']
   },
   {
     id: 'sicherheit',
@@ -3986,7 +4122,7 @@ const BEREICHE = [
     title: 'Sicherheit',
     kurz: 'Sicherheit',
     lede: 'Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 7010 — und dasselbe gross genug für den Hof.',
-    ids: ['sicherheit', 'grossplakat']
+    ids: ['sicherheit', 'grossplakat', 'notfallblatt', 'standortschild']
   },
   {
     id: 'unterhalt',
@@ -15842,11 +15978,712 @@ const ruhezeiten = {
   }
 };
 
+/* ===== js/templates/notfallblatt.js ===== */
+/* Notfallblatt · A4 hoch
+   --------------------------------------------------------------------------
+   Das Blatt neben dem Telefon und im Treppenhaus: die Notrufnummern gross,
+   darunter das Verhalten im Brand- und im Unfallfall in nummerierten
+   Schritten. Im Notfall liest niemand Fliesstext — man springt zur Nummer
+   und zur ersten Handlung. Mehrsprachig, denn eine Panik kennt keine
+   Fremdsprache.
+*/
+
+
+
+
+
+
+const NOT_WORT = {
+  de:{ titel:'Im Notfall', ruf:'Notrufnummern', brand:'Im Brandfall', unfall:'Bei Unfall oder Krankheit', ort:'Standort dieser Adresse' },
+  en:{ titel:'In an emergency', ruf:'Emergency numbers', brand:'In case of fire', unfall:'Accident or illness', ort:'Address of this location' },
+  fr:{ titel:'En cas d’urgence', ruf:'Numéros d’urgence', brand:'En cas d’incendie', unfall:'Accident ou maladie', ort:'Adresse de ce lieu' },
+  it:{ titel:'In caso d’emergenza', ruf:'Numeri d’emergenza', brand:'In caso d’incendio', unfall:'Infortunio o malattia', ort:'Indirizzo di questo luogo' },
+  pt:{ titel:'Em emergência', ruf:'Números de emergência', brand:'Em caso de incêndio', unfall:'Acidente ou doença', ort:'Endereço deste local' },
+  es:{ titel:'En una emergencia', ruf:'Números de emergencia', brand:'En caso de incendio', unfall:'Accidente o enfermedad', ort:'Dirección de este lugar' }
+};
+
+const notfallblatt = {
+  id:'notfallblatt',
+  title:'Notfallblatt',
+  sub:'Notrufnummern und Verhalten im Notfall · mehrsprachig · A4 hoch',
+  badge:'Notfall',
+  root:'t-notf',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="16" y="22" width="178" height="12" rx="5" fill="#C0271F"/>
+    ${[0,1,2].map(i => `
+      <rect x="${16 + i*60}" y="44" width="54" height="40" rx="5" fill="#C0271F" opacity=".12"/>
+      <rect x="${26 + i*60}" y="52" width="20" height="14" rx="3" fill="#C0271F"/>
+      <rect x="${26 + i*60}" y="72" width="34" height="6" rx="3" fill="#2A3350" opacity=".6"/>`).join('')}
+    <rect x="16" y="100" width="60" height="8" rx="4" fill="#C0271F"/>
+    ${[0,1,2].map(i => `
+      <circle cx="22" cy="${124 + i*20}" r="6" fill="none" stroke="#2A3350" stroke-width="1.6"/>
+      <rect x="34" y="${120 + i*20}" width="${150 - i*14}" height="7" rx="3.5" fill="#2A3350" opacity=".6"/>`).join('')}
+    <rect x="16" y="196" width="60" height="8" rx="4" fill="#01B1E2"/>
+    ${[0,1,2].map(i => `
+      <circle cx="22" cy="${220 + i*20}" r="6" fill="none" stroke="#2A3350" stroke-width="1.6"/>
+      <rect x="34" y="${216 + i*20}" width="${150 - i*20}" height="7" rx="3.5" fill="#2A3350" opacity=".6"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Notrufnummern' },
+    { k:'nummern', label:'Nummern', type:'list', itemLabel:'Nummer', max:5,
+      defaultItem:{ nr:'', was:'' },
+      item:[
+        { k:'nr',  label:'Nummer', type:'text' },
+        { k:'was', label:'Wofür',  type:'text' }
+      ] },
+
+    { t:'group', label:'Im Brandfall' },
+    { k:'brand', label:'Schritte', type:'list', itemLabel:'Schritt', max:6,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Schritt', type:'text' }] },
+
+    { t:'group', label:'Bei Unfall oder Krankheit' },
+    { k:'unfall', label:'Schritte', type:'list', itemLabel:'Schritt', max:6,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Schritt', type:'text' }] },
+
+    { t:'group', label:'Standort' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'sammelplatz', label:'Sammelplatz', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Die Sprachen betreffen Titel und Überschriften. Nummern und Schritte schreiben Sie selbst.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    nummern:[
+      { nr:'118', was:'Feuerwehr' },
+      { nr:'144', was:'Sanität' },
+      { nr:'117', was:'Polizei' },
+      { nr:'112', was:'Europa-Notruf' }
+    ],
+    brand:[
+      { text:'Ruhe bewahren, andere warnen, Fluchtweg nehmen.' },
+      { text:'Gebäude verlassen, keinen Lift benutzen.' },
+      { text:'Feuerwehr 118 rufen, dann am Sammelplatz melden.' }
+    ],
+    unfall:[
+      { text:'Sichern, nicht selbst in Gefahr bringen.' },
+      { text:'Sanität 144 rufen: wo, was, wie viele Betroffene.' },
+      { text:'Bei der verletzten Person bleiben, Anweisungen befolgen.' }
+    ],
+    objekt:'-',
+    sammelplatz:'',
+    sprachen:['de','en','fr'],
+    sprachSet:'',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = NOT_WORT[sprachen[0].id] || NOT_WORT.de;
+    const weitere = sprachen.slice(1).map(sp => NOT_WORT[sp.id] || NOT_WORT.de);
+    const alle = (feld) => esc([w[feld]].concat(weitere.map(m => m[feld])).join(' · '));
+
+    const nummern = (d.nummern || []).filter(n => has(n.nr)).map(n => `
+      <div class="t-notf-nr"><b>${esc(n.nr)}</b><span>${esc(n.was)}</span></div>`).join('');
+
+    const schritte = (liste) => (liste || []).filter(s => has(s.text))
+      .map(s => `<li>${esc(s.text)}</li>`).join('');
+
+    return `
+      <header class="t-notf-kopf">
+        <span class="t-notf-ico">${icon('warn', 30, 2)}</span>
+        <h1>${esc(w.titel)}</h1>
+        ${weitere.length ? `<p class="t-notf-sprachen">${esc(weitere.map(m => m.titel).join(' · '))}</p>` : ''}
+      </header>
+
+      <section class="t-notf-nummern">
+        <h2>${alle('ruf')}</h2>
+        <div class="t-notf-nreihe">${nummern}</div>
+      </section>
+
+      <div class="t-notf-zwei">
+        <section class="t-notf-block is-brand">
+          <h3>${alle('brand')}</h3>
+          <ol>${schritte(d.brand)}</ol>
+        </section>
+        <section class="t-notf-block">
+          <h3>${alle('unfall')}</h3>
+          <ol>${schritte(d.unfall)}</ol>
+        </section>
+      </div>
+
+      <footer class="t-notf-fuss">
+        <span class="t-notf-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc([ort && (alle('ort') + ': ' + ort),
+                     has(d.sammelplatz) && ('Sammelplatz: ' + d.sammelplatz),
+                     abs.foot].filter(Boolean).join(' · '))}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/standortschild.js ===== */
+/* Standort-Schild · A4 quer
+   --------------------------------------------------------------------------
+   Das Wegweiser-Schild für Sicherheit und Orientierung: ein grosses Symbol,
+   ein grosser Pfeil, ein Wort. «Notausgang →», «← Erste Hilfe», «Sammelplatz
+   ↑». Sicherheitsgrün für Rettungszeichen, Rot für Brandschutz — die
+   Farbwelt der Norm, ohne sie eins zu eins zu kopieren.
+
+   A4 quer, damit das Schild breit über einer Tür oder an einer Wand hängt.
+*/
+
+
+
+
+/* Zielarten: Symbol, Ton (grün = Rettung, rot = Brandschutz, navy = neutral)
+   und der Text in sechs Sprachen. */
+const ZIELE = {
+  notausgang: { icon:'exit',        ton:'#1F9D57',
+    de:'Notausgang', en:'Emergency exit', fr:'Sortie de secours', it:'Uscita di emergenza', pt:'Saída de emergência', es:'Salida de emergencia' },
+  ersthilfe:  { icon:'firstaid',    ton:'#1F9D57',
+    de:'Erste Hilfe', en:'First aid', fr:'Premiers secours', it:'Pronto soccorso', pt:'Primeiros socorros', es:'Primeros auxilios' },
+  defi:       { icon:'defib',       ton:'#1F9D57',
+    de:'Defibrillator', en:'Defibrillator', fr:'Défibrillateur', it:'Defibrillatore', pt:'Desfibrilhador', es:'Desfibrilador' },
+  sammelplatz:{ icon:'sammelplatz', ton:'#1F9D57',
+    de:'Sammelplatz', en:'Assembly point', fr:'Point de rassemblement', it:'Punto di raccolta', pt:'Ponto de encontro', es:'Punto de encuentro' },
+  loescher:   { icon:'extinguisher',ton:'#C0271F',
+    de:'Feuerlöscher', en:'Fire extinguisher', fr:'Extincteur', it:'Estintore', pt:'Extintor', es:'Extintor' },
+  rezeption:  { icon:'reception',   ton:'#2A3350',
+    de:'Rezeption', en:'Reception', fr:'Réception', it:'Reception', pt:'Receção', es:'Recepción' }
+};
+
+const STAND_PFEILE = { rechts:'arrowR', links:'arrowL', hoch:'arrowU', runter:'arrowD', kein:'' };
+
+function zielOptions(){
+  return Object.entries(ZIELE).map(([v, z]) => ({ v, t:z.de }));
+}
+
+const standortschild = {
+  id:'standortschild',
+  title:'Standort-Schild',
+  sub:'Notausgang, Erste Hilfe, Sammelplatz … mit Pfeil · A4 quer',
+  badge:'Wegweiser',
+  root:'t-stand',
+  page:'a4-land',
+  fern:true,
+
+  thumb: thumbLand(`
+    <rect x="0" y="0" width="297" height="210" fill="#1F9D57"/>
+    <rect x="30" y="60" width="70" height="90" rx="8" fill="#fff" opacity=".22"/>
+    <path d="M50 105h40M78 90l14 15-14 15" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="130" y="80" width="120" height="20" rx="6" fill="#fff"/>
+    <path d="M200 150h50M232 134l18 16-18 16" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+
+  fields:[
+    { t:'group', label:'Ziel' },
+    { k:'ziel', label:'Was', type:'select', options:zielOptions() },
+    { k:'eigenText', label:'Eigener Text', type:'text',
+      hint:'Leer lassen: nimmt die Bezeichnung in der ersten gewählten Sprache.' },
+    { k:'pfeil', label:'Pfeil', type:'select', options:[
+      { v:'rechts', t:'nach rechts →' }, { v:'links', t:'nach links ←' },
+      { v:'hoch', t:'geradeaus / hoch ↑' }, { v:'runter', t:'nach unten ↓' },
+      { v:'kein', t:'kein Pfeil' } ] },
+    { k:'pfeilSeite', label:'Pfeil steht', type:'select', options:[
+      { v:'rechts', t:'rechts' }, { v:'links', t:'links' } ] },
+
+    { t:'group', label:'Zusatz' },
+    { k:'zusatz', label:'Zusatz', type:'text',
+      hint:'z. B. «2. Stock», «hinter dem Lift», «beim Parkplatz».' },
+
+    { t:'group', label:'Sprachen' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() }
+  ],
+
+  defaults:{
+    ziel:'notausgang',
+    eigenText:'',
+    pfeil:'rechts',
+    pfeilSeite:'rechts',
+    zusatz:'',
+    sprachen:['de','en'],
+    sprachSet:''
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const z = ZIELE[d.ziel] || ZIELE.notausgang;
+    const sprachen = sprachObjekte(d.sprachen);
+    const haupt = has(d.eigenText) ? d.eigenText : (z[sprachen[0].id] || z.de);
+    const weitere = has(d.eigenText) ? [] : sprachen.slice(1).map(sp => z[sp.id]).filter(Boolean);
+    const pfeil = STAND_PFEILE[d.pfeil] || '';
+    const pfeilEl = pfeil ? `<span class="t-stand-pfeil">${icon(pfeil, 150, 2.2)}</span>` : '';
+    const seiteLinks = d.pfeilSeite === 'links';
+
+    return `
+      <div class="t-stand-schild${seiteLinks ? ' is-links' : ''}" style="--ton:${z.ton}">
+        ${seiteLinks ? pfeilEl : ''}
+        <div class="t-stand-mitte">
+          <span class="t-stand-ico">${icon(z.icon, 120, 1.9)}</span>
+          <div class="t-stand-text">
+            <p class="t-stand-haupt">${esc(haupt)}</p>
+            ${weitere.length ? `<p class="t-stand-weitere">${esc(weitere.join(' · '))}</p>` : ''}
+            ${has(d.zusatz) ? `<p class="t-stand-zusatz">${esc(d.zusatz)}</p>` : ''}
+          </div>
+        </div>
+        ${!seiteLinks ? pfeilEl : ''}
+      </div>`;
+  }
+};
+
+/* ===== js/templates/wegweiser.js ===== */
+/* Wegweiser · A4 hoch
+   --------------------------------------------------------------------------
+   Die Orientierungstafel im Eingang: mehrere Ziele mit Pfeil und Symbol
+   untereinander. Rezeption →, Lift ←, Frühstück ↑, WC ↓. Ein Blick, und man
+   weiss, wohin. Dunkler Grund wie eine Flughafentafel, damit die weissen
+   Pfeile aus der Distanz tragen.
+*/
+
+
+
+
+
+const WEG_PFEILE = { rechts:'arrowR', links:'arrowL', hoch:'arrowU', runter:'arrowD', kein:'' };
+
+const wegweiser = {
+  id:'wegweiser',
+  title:'Wegweiser',
+  sub:'Orientierungstafel mit mehreren Zielen und Pfeilen · A4 hoch',
+  badge:'Wegweiser',
+  root:'t-weg',
+  page:'a4',
+  fern:true,
+
+  thumb: thumb(`
+    <rect x="0" y="0" width="210" height="297" fill="#2A3350"/>
+    <rect x="24" y="28" width="120" height="14" rx="5" fill="#01B1E2"/>
+    ${[0,1,2,3,4].map(i => `
+      <circle cx="40" cy="${84 + i*40}" r="12" fill="none" stroke="#fff" stroke-width="2.4" opacity=".85"/>
+      <rect x="62" y="${77 + i*40}" width="${90 - (i%3)*14}" height="12" rx="5" fill="#fff" opacity=".92"/>
+      <path d="M176 ${84 + i*40}h14M184 ${77 + i*40}l8 7-8 7" stroke="#01B1E2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'titel', label:'Titel', type:'text' },
+
+    { t:'group', label:'Ziele' },
+    { k:'ziele', label:'Ziele', type:'list', itemLabel:'Ziel', max:10,
+      defaultItem:{ icon:'reception', text:'', pfeil:'rechts' },
+      item:[
+        { k:'icon',  label:'Symbol', type:'select', options:[
+          { v:'reception', t:'Rezeption' }, { v:'lift', t:'Lift' }, { v:'stairs', t:'Treppe' },
+          { v:'cup', t:'Frühstück' }, { v:'toilet', t:'WC' }, { v:'car', t:'Parkplatz' },
+          { v:'luggage', t:'Gepäck' }, { v:'waesche', t:'Waschküche' }, { v:'exit', t:'Ausgang' },
+          { v:'bed', t:'Zimmer' }, { v:'info', t:'Info' } ] },
+        { k:'text',  label:'Ziel', type:'text' },
+        { k:'pfeil', label:'Pfeil', type:'select', options:[
+          { v:'rechts', t:'→' }, { v:'links', t:'←' }, { v:'hoch', t:'↑' },
+          { v:'runter', t:'↓' }, { v:'kein', t:'kein' } ] }
+      ] },
+
+    { t:'group', label:'Absender' },
+    { k:'markeAn', label:'Marke unten', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Willkommen',
+    ziele:[
+      { icon:'reception', text:'Rezeption', pfeil:'hoch' },
+      { icon:'lift', text:'Lift und Zimmer', pfeil:'rechts' },
+      { icon:'cup', text:'Frühstück', pfeil:'rechts' },
+      { icon:'toilet', text:'WC', pfeil:'links' },
+      { icon:'car', text:'Parkplatz', pfeil:'runter' }
+    ],
+    markeAn:'ja',
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const ziele = (d.ziele || []).filter(z => has(z.text)).map(z => {
+      const pf = WEG_PFEILE[z.pfeil] || '';
+      return `
+      <li>
+        <span class="t-weg-ico">${icon(z.icon || 'info', 34, 1.8)}</span>
+        <span class="t-weg-text">${esc(z.text)}</span>
+        <span class="t-weg-pfeil">${pf ? icon(pf, 40, 2.4) : ''}</span>
+      </li>`;
+    }).join('');
+
+    return `
+      <div class="t-weg-tafel">
+        ${has(d.titel) ? `<h1 class="t-weg-titel">${esc(d.titel)}</h1>` : ''}
+        <ul class="t-weg-liste">${ziele}</ul>
+        ${d.markeAn === 'ja' ? `<div class="t-weg-fuss">${
+          istHotel(d.absender) ? logo('white', 24) : esc(abs.name)}</div>` : ''}
+      </div>`;
+  }
+};
+
+/* ===== js/templates/empfangstafel.js ===== */
+/* Empfang-Tafel · A4 quer
+   --------------------------------------------------------------------------
+   Die Tafel an der Rezeption oder beim Eingang, die täglich wechselt: ein
+   grosses «Willkommen», das Datum, und die drei, vier Dinge, die heute
+   gelten — Frühstückszeit, WLAN, ein Anlass, ein Hinweis. Zum Ausdrucken und
+   in den Rahmen stellen, oder mit Folienstift direkt beschreiben.
+*/
+
+
+
+
+
+const empfangstafel = {
+  id:'empfangstafel',
+  title:'Empfang-Tafel',
+  sub:'Willkommenstafel mit den Infos des Tages · A4 quer',
+  badge:'Empfang',
+  root:'t-emp',
+  page:'a4-land',
+
+  thumb: thumbLand(`
+    <rect x="0" y="0" width="297" height="210" fill="#2A3350"/>
+    <rect x="26" y="30" width="70" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="26" y="48" width="150" height="30" rx="6" fill="#fff"/>
+    <rect x="26" y="88" width="90" height="8" rx="4" fill="#fff" opacity=".5"/>
+    ${[0,1,2].map(i => `
+      <rect x="${26 + i*84}" y="120" width="76" height="64" rx="6" fill="#fff" opacity=".1"/>
+      <circle cx="${44 + i*84}" cy="140" r="9" fill="#01B1E2"/>
+      <rect x="${60 + i*84}" y="135" width="30" height="8" rx="4" fill="#fff" opacity=".8"/>
+      <rect x="${38 + i*84}" y="158" width="52" height="7" rx="3.5" fill="#fff" opacity=".5"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text' },
+    { k:'datum',   label:'Datum / Zeile darunter', type:'text' },
+    { k:'objekt',  label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Kacheln des Tages' },
+    { k:'kacheln', label:'Kacheln', type:'list', itemLabel:'Kachel', max:4,
+      defaultItem:{ icon:'cup', titel:'', text:'' },
+      item:[
+        { k:'icon',  label:'Symbol', type:'select', options:iconOptions },
+        { k:'titel', label:'Titel',  type:'text' },
+        { k:'text',  label:'Text',   type:'text' }
+      ] },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Schön, dass Sie da sind',
+    titel:'Willkommen',
+    datum:'',
+    objekt:'A14',
+    kacheln:[
+      { icon:'cup',   titel:'Frühstück', text:'07:30 – 10:00, Aufenthaltsraum' },
+      { icon:'wifi',  titel:'WLAN', text:'Netz «Gast» · Code an der Rezeption' },
+      { icon:'key',   titel:'Check-out', text:'bis 11:00' }
+    ],
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const obj = objekt(d.objekt);
+
+    const kacheln = (d.kacheln || []).filter(k => has(k.titel) || has(k.text)).map(k => `
+      <div class="t-emp-kachel">
+        <span class="t-emp-ico">${icon(k.icon || 'info', 30, 1.8)}</span>
+        <b>${esc(k.titel)}</b>
+        ${has(k.text) ? `<span>${esc(k.text)}</span>` : ''}
+      </div>`).join('');
+
+    return `
+      <div class="t-emp-tafel">
+        <header class="t-emp-kopf">
+          ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+          <h1>${esc(d.titel || '')}</h1>
+          ${(has(d.datum) || (obj.name && obj.code)) ? `<p class="t-emp-datum">${
+            esc([d.datum, obj.code && obj.name].filter(Boolean).join(' · '))}</p>` : ''}
+        </header>
+        <div class="t-emp-grid">${kacheln}</div>
+        <footer class="t-emp-fuss">${
+          istHotel(d.absender) ? logo('white', 22) : esc(abs.name)}</footer>
+      </div>`;
+  }
+};
+
+/* ===== js/templates/hausordnung.js ===== */
+/* Hausordnung · A4 hoch
+   --------------------------------------------------------------------------
+   Die Hausordnung als eigener Aushang — nicht der Baustein-Zettel für einen
+   einzelnen Hinweis, sondern das ganze Regelwerk, nummeriert, zum Aushängen
+   im Treppenhaus. Kurz gehalten: eine Hausordnung, die niemand liest, weil
+   sie zwei Seiten hat, wirkt nicht. Eine Seite, klare Punkte, ein
+   freundlicher Schluss.
+*/
+
+
+
+
+
+const HO_WORT = {
+  de:{ titel:'Hausordnung', schluss:'Danke, dass wir aufeinander Rücksicht nehmen.' },
+  en:{ titel:'House rules', schluss:'Thank you for your consideration.' },
+  fr:{ titel:'Règlement de la maison', schluss:'Merci de votre égard mutuel.' },
+  it:{ titel:'Regolamento della casa', schluss:'Grazie per il rispetto reciproco.' },
+  pt:{ titel:'Regras da casa', schluss:'Obrigado pela consideração mútua.' },
+  es:{ titel:'Normas de la casa', schluss:'Gracias por el respeto mutuo.' }
+};
+
+const hausordnung = {
+  id:'hausordnung',
+  title:'Hausordnung',
+  sub:'Das ganze Regelwerk als Aushang, nummeriert · A4 hoch',
+  badge:'Hausordnung',
+  root:'t-ho',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="110" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="52" width="80" height="8" rx="4" fill="#01B1E2"/>
+    ${[0,1,2,3,4,5,6].map(i => `
+      <circle cx="30" cy="${92 + i*24}" r="7" fill="#01B1E2" opacity=".16"/>
+      <rect x="44" y="${88 + i*24}" width="${144 - (i%4)*16}" height="7" rx="3.5" fill="#2A3350" opacity=".7"/>`).join('')}
+    <rect x="24" y="272" width="130" height="6" rx="3" fill="#C9CFDA"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text',
+      hint:'Leer lassen: nimmt «Hausordnung» in der ersten gewählten Sprache.' },
+    { k:'objekt',  label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'lede',    label:'Einleitung', type:'textarea', rows:2 },
+
+    { t:'group', label:'Regeln' },
+    { k:'regeln', label:'Regeln', type:'list', itemLabel:'Regel', max:16,
+      defaultItem:{ titel:'', text:'' },
+      item:[
+        { k:'titel', label:'Stichwort', type:'text' },
+        { k:'text',  label:'Regel', type:'text' }
+      ] },
+
+    { t:'group', label:'Schluss' },
+    { k:'schluss', label:'Schlusssatz', type:'text',
+      hint:'Leer lassen: nimmt den freundlichen Standardsatz in den gewählten Sprachen.' },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Die Sprachen betreffen Titel und Schlusssatz. Die Regeln schreiben Sie selbst.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Damit sich alle wohlfühlen',
+    titel:'',
+    objekt:'-',
+    lede:'Diese Hausordnung gilt für alle Bewohnerinnen, Bewohner und Gäste. Sie ergänzt den Mietvertrag.',
+    regeln:[
+      { titel:'Ruhezeiten', text:'22:00 – 07:00 und 12:00 – 13:00 sowie sonntags: bitte Lärm vermeiden.' },
+      { titel:'Treppenhaus', text:'Fluchtwege frei halten. Keine Schuhe, Kinderwagen oder Möbel im Gang.' },
+      { titel:'Waschküche', text:'Nach Turnusplan benutzen und sauber hinterlassen.' },
+      { titel:'Abfall', text:'Nur zu den Abfuhrtagen bereitstellen, korrekt getrennt zur Sammelstelle.' },
+      { titel:'Parkieren', text:'Nur auf dem eigenen Platz. Besucher auf den Besucherplätzen.' },
+      { titel:'Rauchen', text:'In Treppenhaus, Lift und gemeinsamen Räumen nicht gestattet.' },
+      { titel:'Haustiere', text:'Erlaubt, solange niemand gestört wird. Verschmutzungen sofort entfernen.' },
+      { titel:'Sicherheit', text:'Haustür geschlossen halten. Fremde nicht ins Haus lassen.' }
+    ],
+    schluss:'',
+    sprachen:['de','en'],
+    sprachSet:'',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = HO_WORT[sprachen[0].id] || HO_WORT.de;
+    const weitere = sprachen.slice(1).map(sp => HO_WORT[sp.id] || HO_WORT.de);
+    const titel = has(d.titel) ? d.titel : w.titel;
+    const schluss = has(d.schluss) ? d.schluss
+      : [w.schluss].concat(weitere.map(m => m.schluss)).join(' · ');
+
+    const regeln = (d.regeln || []).filter(r => has(r.text) || has(r.titel)).map((r, i) => `
+      <li>
+        <span class="t-ho-nr">${i + 1}</span>
+        <span class="t-ho-txt">${has(r.titel) ? `<b>${esc(r.titel)}</b> ` : ''}${esc(r.text)}</span>
+      </li>`).join('');
+
+    return `
+      <header class="t-ho-kopf">
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(titel)}</h1>
+        ${weitere.length ? `<p class="t-ho-sprachen">${esc(weitere.map(m => m.titel).join(' · '))}</p>` : ''}
+        ${ort ? `<p class="t-ho-ort">${esc(ort)}</p>` : ''}
+        ${has(d.lede) ? `<p class="t-ho-lede">${esc(d.lede)}</p>` : ''}
+      </header>
+
+      <ol class="t-ho-liste">${regeln}</ol>
+
+      ${schluss ? `<p class="t-ho-schluss">${esc(schluss)}</p>` : ''}
+
+      <footer class="t-ho-fuss">
+        <span class="t-ho-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc(abs.foot)}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/fruehstuecktuer.js ===== */
+/* Frühstück-Türkarte · A5 hoch
+   --------------------------------------------------------------------------
+   Die Karte, die der Gast am Abend ankreuzt und an die Türklinke hängt: was
+   er zum Frühstück möchte und zu welcher Zeit. Am Morgen weiss das Haus
+   Bescheid, ohne dass jemand klopfen muss. Zwei Spalten Kästchen, damit das
+   Ankreuzen im Halbdunkel gelingt.
+*/
+
+
+
+
+
+const fruehstuecktuer = {
+  id:'fruehstuecktuer',
+  title:'Frühstück-Türkarte',
+  sub:'Zum Ankreuzen und an die Klinke hängen · A5 hoch',
+  badge:'Frühstück',
+  root:'t-frut',
+  page:'a5',
+
+  thumb: thumb(`
+    <circle cx="105" cy="40" r="16" fill="none" stroke="#01B1E2" stroke-width="4"/>
+    <rect x="30" y="72" width="120" height="14" rx="5" fill="#2A3350"/>
+    ${[0,1,2,3,4].map(i => `
+      <rect x="30" y="${104 + i*26}" width="12" height="12" rx="2" fill="none" stroke="#2A3350" stroke-width="2"/>
+      <rect x="50" y="${107 + i*26}" width="${120 - (i%3)*16}" height="7" rx="3.5" fill="#2A3350" opacity=".6"/>`).join('')}
+    <rect x="30" y="250" width="60" height="8" rx="4" fill="#01B1E2"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'titel',   label:'Titel', type:'text' },
+    { k:'unter',   label:'Untertitel', type:'text' },
+
+    { t:'group', label:'Zum Ankreuzen' },
+    { k:'posten', label:'Posten', type:'list', itemLabel:'Posten', max:14,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Posten', type:'text' }] },
+
+    { t:'group', label:'Zeit' },
+    { k:'zeiten', label:'Zeitfenster', type:'text',
+      hint:'Kommagetrennt, jedes wird ein ankreuzbares Kästchen.' },
+
+    { t:'group', label:'Angaben des Gastes' },
+    { k:'felder', label:'Zeilen', type:'text',
+      hint:'Kommagetrennt — je eine Schreiblinie.' },
+
+    { t:'group', label:'Hinweis' },
+    { k:'hinweis', label:'Hinweis', type:'text' },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    eyebrow:'Guten Morgen im Voraus',
+    titel:'Frühstück',
+    unter:'Ankreuzen und heute Abend an die Türklinke hängen.',
+    posten:[
+      { text:'Kaffee' }, { text:'Tee' }, { text:'Milch' }, { text:'Orangensaft' },
+      { text:'Gipfeli' }, { text:'Brot' }, { text:'Butter und Konfitüre' },
+      { text:'Käse und Aufschnitt' }, { text:'Joghurt' }, { text:'Ei' }, { text:'Früchte' }
+    ],
+    zeiten:'07:00 – 07:30, 07:30 – 08:00, 08:00 – 08:30, 08:30 – 09:00',
+    felder:'Zimmer-Nr., Anzahl Personen, Name',
+    hinweis:'Bitte bis 22:00 aushängen. Änderungen gerne an der Rezeption.',
+    absender:'hotel'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'hotel');
+    const posten = (d.posten || []).filter(p => has(p.text)).map(p => `
+      <li><span class="t-frut-box"></span>${esc(p.text)}</li>`).join('');
+
+    const zeiten = String(d.zeiten || '').split(',').map(s => s.trim()).filter(Boolean).map(z => `
+      <li><span class="t-frut-box"></span>${esc(z)}</li>`).join('');
+
+    const felder = String(d.felder || '').split(',').map(s => s.trim()).filter(Boolean).map(f => `
+      <div class="t-frut-feld"><span>${esc(f)}</span><i></i></div>`).join('');
+
+    return `
+      <div class="t-frut-loch"></div>
+      <header class="t-frut-kopf">
+        <span class="t-frut-ico">${icon('cup', 34, 1.7)}</span>
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(d.titel || '')}</h1>
+        ${has(d.unter) ? `<p class="t-frut-unter">${esc(d.unter)}</p>` : ''}
+      </header>
+
+      ${posten ? `<ul class="t-frut-posten">${posten}</ul>` : ''}
+
+      ${zeiten ? `<div class="t-frut-zeit"><h2>Zeit</h2><ul>${zeiten}</ul></div>` : ''}
+
+      ${felder ? `<div class="t-frut-felder">${felder}</div>` : ''}
+
+      <footer class="t-frut-fuss">
+        <span class="t-frut-mark">${istHotel(d.absender) ? logo('color', 20) : esc(abs.name)}</span>
+        ${has(d.hinweis) ? `<span>${esc(d.hinweis)}</span>` : ''}
+      </footer>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
+
+
+
+
+
+
 
 
 
@@ -15949,7 +16786,13 @@ const TEMPLATES = {
   neuimhaus,
   wlankarten,
   besichtigung,
-  ruhezeiten
+  ruhezeiten,
+  notfallblatt,
+  standortschild,
+  wegweiser,
+  empfangstafel,
+  hausordnung,
+  fruehstuecktuer
 };
 
 const ORDER = [
@@ -15962,7 +16805,8 @@ const ORDER = [
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
   'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
   'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug',
-  'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten'
+  'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
+  'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer'
 ];
 
 /* ===== js/lib/suche.js ===== */
