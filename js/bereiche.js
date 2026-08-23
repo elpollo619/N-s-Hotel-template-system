@@ -63,9 +63,9 @@ export const BEREICHE = [
     icon: 'reception',
     title: 'Team und Werkzeug',
     kurz: 'Team',
-    lede: 'Die Anleitung fürs Schwarze Brett, die eigenen Textbausteine des Hauses und der Stand der Marke.',
+    lede: 'Die Anleitung fürs Schwarze Brett, die eigenen Textbausteine, die Schriftwahl, alle Piktogramme und der Stand der Marke.',
     ids: ['kurzanleitung'],
-    seiten: ['eigene', 'marke', 'hilfe']
+    seiten: ['eigene', 'schrift', 'piktogramme', 'marke', 'hilfe']
   }
 ];
 
@@ -78,7 +78,11 @@ export const SEITEN = {
   eigene: { id:'eigene', icon:'mail',  title:'Eigene Textbausteine',
             sub:'Sätze des Hauses sichern, ändern, weitergeben.' },
   marke:  { id:'marke',  icon:'check', title:'Marke und Schrift',
-            sub:'Farben, Schriften und was davon gerade wirklich läuft.' }
+            sub:'Farben, Schriften und was davon gerade wirklich läuft.' },
+  schrift:{ id:'schrift', icon:'stift', title:'Schriften wählen',
+            sub:'Siebzehn freie Schriften als Ersatz für die gekauften — live am echten Aushang.' },
+  piktogramme:{ id:'piktogramme', icon:'stern', title:'Piktogramme',
+            sub:'Alle 86 Zeichen des Hauses, nach Thema geordnet und durchsuchbar.' }
 };
 
 /* ---------- Nachschlagen -------------------------------------------------- */

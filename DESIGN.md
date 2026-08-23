@@ -63,6 +63,15 @@ Zentrale das selbst — auf der Startseite und auf `#/s/marke`. Ein Aushang in
 der falschen Schrift sieht nicht kaputt aus, sondern nach einem anderen Haus;
 darum muss es sichtbar sein.
 
+**Welcher Ersatz läuft, ist wählbar** (`#/s/schrift`, siebzehn freie
+Familien, alle im Projekt). Zwei Regeln dabei: die gekaufte Schrift steht
+immer an erster Stelle in der Familienliste — gewählt wird der Ersatz, nicht
+die Marke; und die Wahl gilt nur im eigenen Browser, steckt also nicht im
+Teilen-Link. Wer eine neue Familie aufnimmt, trägt sie in `KATALOG` in
+`tools/hole-schriften.mjs` **und** in `FAMILIEN` in `js/lib/schriftwahl.js`
+ein — sonst steht sie zur Wahl, ohne dass es sie gibt. Der Test
+`tests/schrift-piktogramme.mjs` misst genau das.
+
 Grössen in der Oberfläche: 33 px Seitentitel · 15 px Kartentitel ·
 13–14.5 px Fliesstext · 12 px Nebentext · 10–11 px Etiketten in Versalien
 mit `letter-spacing:.07em`. Zahlenkolonnen bekommen
@@ -114,6 +123,21 @@ Eine neue Vorlage wird in `js/templates/index.js` registriert **und** in
 schlägt fehl, wenn eine Vorlage keinem Bereich zugeteilt ist.
 
 ---
+
+## Piktogramme
+
+Sechsundachtzig Strichzeichnungen in `js/lib/icons.js`, acht Gruppen,
+Übersicht unter `#/s/piktogramme`. Regeln:
+
+* 24 × 24, `fill="none"`, `stroke="currentColor"`, Strichstärke 1.8,
+  runde Enden. Keine Flächen, keine zweite Farbe.
+* Lesbar aus fünf Metern, nicht hübsch aus fünfzig Zentimetern. Wenn ein
+  Zeichen bei 44 px nicht auf Anhieb erkannt wird, ist es falsch gezeichnet —
+  ein Kreis auf einem Stiel ist ein Ballon, keine Baumkrone.
+* Kein Zeichen zweimal denselben Pfad. Zwei Namen auf ein Bild ist immer ein
+  Versehen beim Kopieren; der Test bricht darauf ab.
+* Die **ISO-7010-Sicherheitszeichen** gehören nicht hierher. Die sind genormt
+  und stehen in `js/lib/sicherheitszeichen.js`.
 
 ## Bauteile
 
