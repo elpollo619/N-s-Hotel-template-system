@@ -1973,3 +1973,197 @@
   border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4;
 }
 .t-paket-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   Formulare · gemeinsame Bausteine
+   Übergabe, Quittung, Zähler, Mängel sind zum Ausfüllen gedacht. Sie teilen
+   die Schreiblinie und den Unterschriftenblock — hier einmal, damit die vier
+   gleich aussehen.
+   ========================================================================== */
+.t-ueb,.t-quit,.t-zael,.t-maeng{display:flex;flex-direction:column;padding:15mm 16mm 11mm}
+.t-ueb-kopf,.t-quit-kopf,.t-zael-kopf,.t-maeng-kopf{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:4mm;border-bottom:1.4pt solid var(--navy);
+}
+.t-ueb-kopf h1,.t-quit-kopf h1,.t-zael-kopf h1,.t-maeng-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:24pt;
+  line-height:1.05;color:var(--navy);letter-spacing:-.01em;
+}
+.t-ueb-art,.t-quit-unter,.t-zael-unter,.t-maeng-ort{
+  margin:1.5mm 0 0;font-size:10.5pt;color:var(--ink-soft);
+}
+.t-ueb-mark,.t-quit-mark,.t-zael-mark{flex:0 0 auto;display:flex}
+.t-maeng-ico{flex:0 0 auto;color:var(--red);display:flex}
+
+/* Kopf-Felder mit Schreiblinie (Label links, Linie rechts) */
+.t-ueb-oben,.t-quit-oben,.t-zael-oben,.t-maeng-oben{
+  margin:5mm 0 0;display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 8mm;
+}
+.t-ueb-feld,.t-maeng-feld{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-lab,.t-maeng-feld>span{
+  flex:0 0 32mm;font-size:8.6pt;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);
+}
+.t-ueb-linie,.t-maeng-linie{
+  flex:1;min-width:0;border-bottom:1pt solid var(--line-2);min-height:5.5mm;
+  font-size:11pt;color:var(--ink);
+}
+.t-quit-feld,.t-zael-feld{display:flex;flex-direction:column;gap:.8mm}
+.t-quit-feld span,.t-zael-feld span{
+  font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+}
+.t-quit-feld b,.t-zael-feld b{
+  font-family:var(--font-display);font-weight:600;font-size:11.5pt;color:var(--navy);
+  min-height:6mm;border-bottom:1pt solid var(--line-2);
+}
+
+/* Block-Titel */
+.t-ueb-block h2,.t-maeng-was h2{
+  margin:0 0 2.5mm;font-family:var(--font-display);font-weight:700;font-size:10pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-ueb-block{margin:6mm 0 0}
+.t-ueb-block h2 span{float:right;color:var(--muted);font-weight:700}
+
+/* Unterschriftenzeilen */
+.t-ueb-fuss,.t-quit-fuss,.t-zael-fuss,.t-maeng-fuss{
+  margin-top:auto;padding-top:9mm;display:flex;gap:10mm;
+}
+.t-maeng-fuss{align-items:flex-end;justify-content:space-between}
+.t-ueb-sig,.t-quit-sig,.t-zael-sig,.t-maeng-sig{flex:1;min-width:0}
+.t-ueb-sig span,.t-quit-sig span,.t-zael-sig span,.t-maeng-sig span{
+  display:block;height:9mm;border-bottom:1pt solid var(--navy);
+}
+.t-ueb-sig i,.t-quit-sig i,.t-zael-sig i,.t-maeng-sig i{
+  display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted);
+}
+.t-ueb-abs,.t-quit-abs,.t-zael-abs{
+  margin:5mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center;line-height:1.4;
+}
+
+/* ---- Übergabe: Räume, Zähler, Schlüssel ---------------------------------- */
+.t-ueb-raeume{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5mm}
+.t-ueb-raeume li{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-rname{flex:0 0 38mm;font-weight:600;font-size:10.5pt;color:var(--navy)}
+.t-ueb-rlinie{flex:1;border-bottom:1pt dotted var(--line);min-height:5mm}
+.t-ueb-zwei{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.t-ueb-zaehler,.t-ueb-schluessel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5mm}
+.t-ueb-zaehler li,.t-ueb-schluessel li{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-zname,.t-ueb-sname{flex:1;font-size:10pt;color:var(--ink)}
+.t-ueb-zname i,.t-ueb-sname i{font-style:normal;color:var(--muted);font-size:8.4pt}
+.t-ueb-zwert{flex:0 0 26mm;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-ueb-sanz{flex:0 0 16mm;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-ueb-bem{border:1pt solid var(--line);border-radius:3mm;min-height:22mm;background:var(--bg-2)}
+
+/* ---- Quittung / Zähler: Tabellen-Listen ---------------------------------- */
+.t-quit-liste,.t-zael-liste{list-style:none;margin:6mm 0 0;padding:0;display:flex;flex-direction:column;gap:0}
+.t-quit-liste li,.t-zael-liste li{
+  display:flex;align-items:center;gap:3mm;padding:3mm 3mm;border-bottom:1pt solid var(--line);
+}
+.t-quit-titel,.t-zael-titel{
+  border-bottom:1.4pt solid var(--navy)!important;padding-bottom:2mm!important;
+}
+.t-quit-titel span,.t-zael-titel span{
+  font-size:8.4pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+}
+.t-quit-ico,.t-zael-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-quit-art{flex:1;font-weight:600;font-size:11pt;color:var(--navy)}
+.t-quit-nr{flex:0 0 30mm;font-size:9.5pt;color:var(--muted)}
+.t-quit-anz{flex:0 0 20mm;text-align:right;border-bottom:1pt solid var(--line-2);min-height:6mm}
+.t-quit-titel .t-quit-anz{border-bottom:none}
+.t-zael-name{flex:1;font-size:11pt;color:var(--navy);font-weight:600}
+.t-zael-name i{font-style:normal;color:var(--muted);font-size:8.4pt;font-weight:400}
+.t-zael-wert{flex:0 0 46mm;border:1pt solid var(--line);border-radius:2mm;min-height:8mm;background:var(--bg-2)}
+.t-zael-titel .t-zael-wert{border:none;background:none;min-height:0;text-align:left}
+.t-zael-einheit{flex:0 0 14mm;font-size:9pt;color:var(--muted)}
+.t-quit-rueck,.t-zael-hinweis{margin:6mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+
+/* ---- Mängelmeldung ------------------------------------------------------- */
+.t-maeng-dring{display:flex;align-items:center;gap:6mm;margin:5mm 0 0}
+.t-maeng-dring>span{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-maeng-dring label{display:flex;align-items:center;gap:2mm;font-size:10.5pt;color:var(--ink)}
+.t-maeng-dring i{width:4mm;height:4mm;border:1.4pt solid var(--navy);border-radius:1mm;display:inline-block}
+.t-maeng-was{margin:6mm 0 0}
+.t-maeng-schreib{
+  margin-top:2mm;border:1pt solid var(--line);border-radius:3mm;min-height:40mm;
+  background:repeating-linear-gradient(var(--bg) 0 9mm, var(--line-2) 9mm 9.2mm);
+}
+.t-maeng-verw{
+  margin:6mm 0 0;padding:5mm;border-radius:3mm;background:var(--navy);color:#fff;
+}
+.t-maeng-verw h3{
+  margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:9pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);
+}
+.t-maeng-vzeilen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+.t-maeng-vzeilen span{display:block;font-size:8pt;color:rgba(255,255,255,.7);margin-bottom:1mm}
+.t-maeng-vzeilen i{display:block;height:6mm;border-bottom:1pt solid rgba(255,255,255,.4)}
+.t-maeng-abgabe{margin:5mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+.t-maeng-mark{flex:0 0 auto;display:flex;font-size:7.4pt;color:var(--muted);max-width:80mm;text-align:right}
+
+/* ==========================================================================
+   t-hv · Hausversammlung
+   ========================================================================== */
+.t-hv{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-hv-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-hv-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:28pt;
+  line-height:1.04;color:var(--navy);letter-spacing:-.02em;
+}
+.t-hv-ort{margin:2.5mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-hv-wann{display:flex;flex-direction:column;gap:2.5mm;margin:8mm 0 0;padding:5mm 6mm;
+  border-radius:4mm;background:var(--navy);color:#fff}
+.t-hv-wann>div{display:flex;align-items:center;gap:3.5mm}
+.t-hv-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-hv-ico svg{width:6mm;height:6mm}
+.t-hv-wann span{font-size:13pt}
+.t-hv-wann i{display:block;font-style:normal;font-size:8pt;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cyan)}
+.t-hv-trakt{margin:8mm 0 0}
+.t-hv-trakt h2{margin:0 0 3.5mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-hv-trakt ol{list-style:none;margin:0;padding:0;counter-reset:tr;display:flex;flex-direction:column;gap:2.4mm}
+.t-hv-trakt li{display:flex;gap:4mm;align-items:baseline;font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-hv-nr{
+  flex:0 0 7mm;height:7mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-family:var(--font-display);font-weight:700;font-size:10pt;
+  display:flex;align-items:center;justify-content:center;
+}
+.t-hv-text{margin:6mm 0 0;font-size:10pt;line-height:1.5;color:var(--ink-soft)}
+.t-hv-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-hv-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-umz · Umzugsanzeige
+   ========================================================================== */
+.t-umz{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-umz-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-umz-kopf>div{flex:1;min-width:0}
+.t-umz-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-umz-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.03;color:var(--navy);letter-spacing:-.02em;
+}
+.t-umz-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-umz-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-umz-ico svg{width:16mm;height:16mm}
+.t-umz-wann{margin:8mm 0 0;padding:5mm 6mm;border-radius:4mm;background:var(--cyan);color:#fff;
+  display:flex;flex-direction:column;gap:1.2mm}
+.t-umz-lab{font-size:8.6pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.t-umz-wann strong{font-family:var(--font-display);font-weight:700;font-size:20pt;line-height:1.05}
+.t-umz-zeit{font-size:13pt;opacity:.92;font-variant-numeric:tabular-nums}
+.t-umz-was{margin:8mm 0 0}
+.t-umz-was h2{margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-umz-was ul{margin:0;padding:0 0 0 5mm;display:flex;flex-direction:column;gap:2.2mm}
+.t-umz-was li{font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-umz-was li::marker{color:var(--cyan)}
+.t-umz-sorry{margin:8mm 0 0;padding:4.5mm 5mm;border-radius:3mm;background:var(--cyan-tint);
+  font-size:12pt;line-height:1.4;color:var(--navy)}
+.t-umz-weitere{list-style:none;margin:2.5mm 0 0;padding:0 5mm;display:flex;flex-direction:column;gap:1.6mm}
+.t-umz-weitere li{font-size:9.5pt;line-height:1.35;color:var(--ink-soft)}
+.t-umz-kontakt{margin:6mm 0 0;font-size:11pt;color:var(--ink)}
+.t-umz-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-umz-mark{flex:0 0 auto;display:flex}

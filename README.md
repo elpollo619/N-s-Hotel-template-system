@@ -142,6 +142,12 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Ausser Betrieb** | A4 hoch | Lift, Maschine, Anlage steht — «Ausser Betrieb» in vier Sprachen, dazu was stattdessen gilt |
 | **Fundgegenstände** | A4 hoch | Wo Verlorenes abzuholen ist, dazu die Liste der aktuellen Fundstücke |
 | **Paketablage** | A4 hoch | Wo Pakete abgegeben und abgeholt werden — ein Teil für den Boten, einer für die Bewohnerschaft |
+| **Übergabeprotokoll** | A4 hoch | Wohnungsübergabe: Zustand je Raum, Zählerstände, Schlüssel, zwei Unterschriften |
+| **Schlüsselquittung** | A4 hoch | Wer welche Schlüssel bekommt — Art, Nummer, Anzahl, Unterschrift |
+| **Zählerstände** | A4 hoch | Ableseformular für Strom, Wasser, Wärme — eine Zeile je Zähler |
+| **Mängelmeldung** | A4 hoch | Was ist kaputt: der Mieter füllt oben aus, der graue Kasten bleibt der Verwaltung |
+| **Hausversammlung** | A4 hoch | Einladung mit nummerierter Traktandenliste |
+| **Umzugsanzeige** | A4 hoch | Ein- oder Auszug ankündigen — Lift belegt, Entschuldigung in mehreren Sprachen |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -789,16 +795,17 @@ bin ich» und spart den Umweg über die Startseite: von jeder Vorlage direkt in
 jeden anderen Bereich. Ab Tablet-Breite und im Editor schrumpft sie zur
 Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 
-### Die sechs Arbeitsbereiche
+### Die sieben Arbeitsbereiche
 
 | Bereich | Was darin steckt |
 |---|---|
-| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Pfeil-Aufkleber, Aufkleberbogen |
-| **Zimmer und Gäste** | Gästemappe, Foto-Aushang, Gäste-Info, QR-Aushang, Zattoo, Notruf-Aushang |
-| **Hausordnung** | Hinweis / Aushang, Mieterbrief |
+| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen |
+| **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige |
 | **Sicherheit** | Sicherheitszeichen, Grossflächenplakat |
-| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen |
-| **Team und Werkzeug** | Kurzanleitung — dazu die drei Werkzeugseiten |
+| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb |
+| **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung |
+| **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
 
 Die Einteilung steht in `js/bereiche.js`. **Eine Vorlage gehört in genau einen
 Bereich**; steht sie in zweien, sucht man wieder überall. Der Test
@@ -810,7 +817,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Neununddreissig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Fünfundvierzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
@@ -865,7 +872,7 @@ assets/
   templates.css            Vorlagen-Styles, je unter .t-<id> gekapselt
 js/
   app.js                   Router, Rahmen, Seiten, Formular-Erzeugung, Vorschau
-  bereiche.js              die sechs Arbeitsbereiche und die Werkzeugseiten
+  bereiche.js              die sieben Arbeitsbereiche und die Werkzeugseiten
   objekte.js               Liegenschaften und Firmen, fest und selbst angelegt
   lib/icons.js             89 Piktogramme in acht Gruppen
   lib/schriftwahl.js       die waehlbaren Schriften und die getroffene Wahl
@@ -1017,8 +1024,8 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
 * La app está terminada y probada: **21 plantillas**, más de 250 comprobaciones
   automáticas.
 * **La herramienta está dividida en páginas por áreas de trabajo**, no por tipo
-  de documento. A la izquierda hay una barra fija con seis áreas — Ankommen,
-  Zimmer, Hausordnung, Sicherheit, Unterhalt, Team — y tres páginas de
+  de documento. A la izquierda hay una barra fija con siete áreas — Ankommen,
+  Zimmer, Hausordnung, Sicherheit, Unterhalt, Verwaltung, Team — y seis páginas de
   herramienta: Anleitung, Eigene Textbausteine, Marke und Schrift. La página de
   inicio dice cuántas plantillas hay y, sobre todo, **en qué estabas
   trabajando**. En el editor la barra se encoge a una franja de iconos para que

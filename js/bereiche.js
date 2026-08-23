@@ -42,7 +42,8 @@ export const BEREICHE = [
     title: 'Hausordnung',
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
-    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket']
+    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
+          'hausversammlung', 'umzug']
   },
   {
     id: 'sicherheit',
@@ -59,6 +60,14 @@ export const BEREICHE = [
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
     ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb']
+  },
+  {
+    id: 'verwaltung',
+    icon: 'buch',
+    title: 'Verwaltung und Übergabe',
+    kurz: 'Verwaltung',
+    lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
+    ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung']
   },
   {
     id: 'team',

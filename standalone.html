@@ -3066,6 +3066,200 @@ a{color:var(--cyan)}
 }
 .t-paket-mark{flex:0 0 auto;display:flex}
 
+/* ==========================================================================
+   Formulare · gemeinsame Bausteine
+   Übergabe, Quittung, Zähler, Mängel sind zum Ausfüllen gedacht. Sie teilen
+   die Schreiblinie und den Unterschriftenblock — hier einmal, damit die vier
+   gleich aussehen.
+   ========================================================================== */
+.t-ueb,.t-quit,.t-zael,.t-maeng{display:flex;flex-direction:column;padding:15mm 16mm 11mm}
+.t-ueb-kopf,.t-quit-kopf,.t-zael-kopf,.t-maeng-kopf{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:6mm;
+  padding-bottom:4mm;border-bottom:1.4pt solid var(--navy);
+}
+.t-ueb-kopf h1,.t-quit-kopf h1,.t-zael-kopf h1,.t-maeng-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:24pt;
+  line-height:1.05;color:var(--navy);letter-spacing:-.01em;
+}
+.t-ueb-art,.t-quit-unter,.t-zael-unter,.t-maeng-ort{
+  margin:1.5mm 0 0;font-size:10.5pt;color:var(--ink-soft);
+}
+.t-ueb-mark,.t-quit-mark,.t-zael-mark{flex:0 0 auto;display:flex}
+.t-maeng-ico{flex:0 0 auto;color:var(--red);display:flex}
+
+/* Kopf-Felder mit Schreiblinie (Label links, Linie rechts) */
+.t-ueb-oben,.t-quit-oben,.t-zael-oben,.t-maeng-oben{
+  margin:5mm 0 0;display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 8mm;
+}
+.t-ueb-feld,.t-maeng-feld{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-lab,.t-maeng-feld>span{
+  flex:0 0 32mm;font-size:8.6pt;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);
+}
+.t-ueb-linie,.t-maeng-linie{
+  flex:1;min-width:0;border-bottom:1pt solid var(--line-2);min-height:5.5mm;
+  font-size:11pt;color:var(--ink);
+}
+.t-quit-feld,.t-zael-feld{display:flex;flex-direction:column;gap:.8mm}
+.t-quit-feld span,.t-zael-feld span{
+  font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+}
+.t-quit-feld b,.t-zael-feld b{
+  font-family:var(--font-display);font-weight:600;font-size:11.5pt;color:var(--navy);
+  min-height:6mm;border-bottom:1pt solid var(--line-2);
+}
+
+/* Block-Titel */
+.t-ueb-block h2,.t-maeng-was h2{
+  margin:0 0 2.5mm;font-family:var(--font-display);font-weight:700;font-size:10pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy);
+}
+.t-ueb-block{margin:6mm 0 0}
+.t-ueb-block h2 span{float:right;color:var(--muted);font-weight:700}
+
+/* Unterschriftenzeilen */
+.t-ueb-fuss,.t-quit-fuss,.t-zael-fuss,.t-maeng-fuss{
+  margin-top:auto;padding-top:9mm;display:flex;gap:10mm;
+}
+.t-maeng-fuss{align-items:flex-end;justify-content:space-between}
+.t-ueb-sig,.t-quit-sig,.t-zael-sig,.t-maeng-sig{flex:1;min-width:0}
+.t-ueb-sig span,.t-quit-sig span,.t-zael-sig span,.t-maeng-sig span{
+  display:block;height:9mm;border-bottom:1pt solid var(--navy);
+}
+.t-ueb-sig i,.t-quit-sig i,.t-zael-sig i,.t-maeng-sig i{
+  display:block;margin-top:1.5mm;font-style:normal;font-size:8pt;color:var(--muted);
+}
+.t-ueb-abs,.t-quit-abs,.t-zael-abs{
+  margin:5mm 0 0;font-size:7.4pt;color:var(--muted);text-align:center;line-height:1.4;
+}
+
+/* ---- Übergabe: Räume, Zähler, Schlüssel ---------------------------------- */
+.t-ueb-raeume{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5mm}
+.t-ueb-raeume li{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-rname{flex:0 0 38mm;font-weight:600;font-size:10.5pt;color:var(--navy)}
+.t-ueb-rlinie{flex:1;border-bottom:1pt dotted var(--line);min-height:5mm}
+.t-ueb-zwei{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.t-ueb-zaehler,.t-ueb-schluessel{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5mm}
+.t-ueb-zaehler li,.t-ueb-schluessel li{display:flex;align-items:baseline;gap:3mm}
+.t-ueb-zname,.t-ueb-sname{flex:1;font-size:10pt;color:var(--ink)}
+.t-ueb-zname i,.t-ueb-sname i{font-style:normal;color:var(--muted);font-size:8.4pt}
+.t-ueb-zwert{flex:0 0 26mm;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-ueb-sanz{flex:0 0 16mm;border-bottom:1pt solid var(--line-2);min-height:5mm}
+.t-ueb-bem{border:1pt solid var(--line);border-radius:3mm;min-height:22mm;background:var(--bg-2)}
+
+/* ---- Quittung / Zähler: Tabellen-Listen ---------------------------------- */
+.t-quit-liste,.t-zael-liste{list-style:none;margin:6mm 0 0;padding:0;display:flex;flex-direction:column;gap:0}
+.t-quit-liste li,.t-zael-liste li{
+  display:flex;align-items:center;gap:3mm;padding:3mm 3mm;border-bottom:1pt solid var(--line);
+}
+.t-quit-titel,.t-zael-titel{
+  border-bottom:1.4pt solid var(--navy)!important;padding-bottom:2mm!important;
+}
+.t-quit-titel span,.t-zael-titel span{
+  font-size:8.4pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+}
+.t-quit-ico,.t-zael-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-quit-art{flex:1;font-weight:600;font-size:11pt;color:var(--navy)}
+.t-quit-nr{flex:0 0 30mm;font-size:9.5pt;color:var(--muted)}
+.t-quit-anz{flex:0 0 20mm;text-align:right;border-bottom:1pt solid var(--line-2);min-height:6mm}
+.t-quit-titel .t-quit-anz{border-bottom:none}
+.t-zael-name{flex:1;font-size:11pt;color:var(--navy);font-weight:600}
+.t-zael-name i{font-style:normal;color:var(--muted);font-size:8.4pt;font-weight:400}
+.t-zael-wert{flex:0 0 46mm;border:1pt solid var(--line);border-radius:2mm;min-height:8mm;background:var(--bg-2)}
+.t-zael-titel .t-zael-wert{border:none;background:none;min-height:0;text-align:left}
+.t-zael-einheit{flex:0 0 14mm;font-size:9pt;color:var(--muted)}
+.t-quit-rueck,.t-zael-hinweis{margin:6mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+
+/* ---- Mängelmeldung ------------------------------------------------------- */
+.t-maeng-dring{display:flex;align-items:center;gap:6mm;margin:5mm 0 0}
+.t-maeng-dring>span{font-size:8.6pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.t-maeng-dring label{display:flex;align-items:center;gap:2mm;font-size:10.5pt;color:var(--ink)}
+.t-maeng-dring i{width:4mm;height:4mm;border:1.4pt solid var(--navy);border-radius:1mm;display:inline-block}
+.t-maeng-was{margin:6mm 0 0}
+.t-maeng-schreib{
+  margin-top:2mm;border:1pt solid var(--line);border-radius:3mm;min-height:40mm;
+  background:repeating-linear-gradient(var(--bg) 0 9mm, var(--line-2) 9mm 9.2mm);
+}
+.t-maeng-verw{
+  margin:6mm 0 0;padding:5mm;border-radius:3mm;background:var(--navy);color:#fff;
+}
+.t-maeng-verw h3{
+  margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:9pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);
+}
+.t-maeng-vzeilen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+.t-maeng-vzeilen span{display:block;font-size:8pt;color:rgba(255,255,255,.7);margin-bottom:1mm}
+.t-maeng-vzeilen i{display:block;height:6mm;border-bottom:1pt solid rgba(255,255,255,.4)}
+.t-maeng-abgabe{margin:5mm 0 0;font-size:9pt;line-height:1.45;color:var(--ink-soft)}
+.t-maeng-mark{flex:0 0 auto;display:flex;font-size:7.4pt;color:var(--muted);max-width:80mm;text-align:right}
+
+/* ==========================================================================
+   t-hv · Hausversammlung
+   ========================================================================== */
+.t-hv{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-hv-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-hv-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:28pt;
+  line-height:1.04;color:var(--navy);letter-spacing:-.02em;
+}
+.t-hv-ort{margin:2.5mm 0 0;font-size:11pt;color:var(--ink-soft)}
+.t-hv-wann{display:flex;flex-direction:column;gap:2.5mm;margin:8mm 0 0;padding:5mm 6mm;
+  border-radius:4mm;background:var(--navy);color:#fff}
+.t-hv-wann>div{display:flex;align-items:center;gap:3.5mm}
+.t-hv-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-hv-ico svg{width:6mm;height:6mm}
+.t-hv-wann span{font-size:13pt}
+.t-hv-wann i{display:block;font-style:normal;font-size:8pt;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cyan)}
+.t-hv-trakt{margin:8mm 0 0}
+.t-hv-trakt h2{margin:0 0 3.5mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-hv-trakt ol{list-style:none;margin:0;padding:0;counter-reset:tr;display:flex;flex-direction:column;gap:2.4mm}
+.t-hv-trakt li{display:flex;gap:4mm;align-items:baseline;font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-hv-nr{
+  flex:0 0 7mm;height:7mm;border-radius:50%;background:var(--cyan-tint);color:var(--navy);
+  font-family:var(--font-display);font-weight:700;font-size:10pt;
+  display:flex;align-items:center;justify-content:center;
+}
+.t-hv-text{margin:6mm 0 0;font-size:10pt;line-height:1.5;color:var(--ink-soft)}
+.t-hv-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-hv-mark{flex:0 0 auto;display:flex}
+
+/* ==========================================================================
+   t-umz · Umzugsanzeige
+   ========================================================================== */
+.t-umz{display:flex;flex-direction:column;padding:17mm 17mm 12mm}
+.t-umz-kopf{display:flex;align-items:flex-start;gap:6mm}
+.t-umz-kopf>div{flex:1;min-width:0}
+.t-umz-kopf .eyebrow{margin:0 0 2mm;font-size:26pt;color:var(--cyan);line-height:1}
+.t-umz-kopf h1{
+  margin:0;font-family:var(--font-display);font-weight:700;font-size:32pt;
+  line-height:1.03;color:var(--navy);letter-spacing:-.02em;
+}
+.t-umz-sprachen{margin:2mm 0 0;font-size:10.5pt;color:var(--ink-soft);font-weight:600}
+.t-umz-ico{flex:0 0 auto;color:var(--cyan);display:flex}
+.t-umz-ico svg{width:16mm;height:16mm}
+.t-umz-wann{margin:8mm 0 0;padding:5mm 6mm;border-radius:4mm;background:var(--cyan);color:#fff;
+  display:flex;flex-direction:column;gap:1.2mm}
+.t-umz-lab{font-size:8.6pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.t-umz-wann strong{font-family:var(--font-display);font-weight:700;font-size:20pt;line-height:1.05}
+.t-umz-zeit{font-size:13pt;opacity:.92;font-variant-numeric:tabular-nums}
+.t-umz-was{margin:8mm 0 0}
+.t-umz-was h2{margin:0 0 3mm;font-family:var(--font-display);font-weight:700;font-size:11pt;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.t-umz-was ul{margin:0;padding:0 0 0 5mm;display:flex;flex-direction:column;gap:2.2mm}
+.t-umz-was li{font-size:11.5pt;line-height:1.4;color:var(--ink)}
+.t-umz-was li::marker{color:var(--cyan)}
+.t-umz-sorry{margin:8mm 0 0;padding:4.5mm 5mm;border-radius:3mm;background:var(--cyan-tint);
+  font-size:12pt;line-height:1.4;color:var(--navy)}
+.t-umz-weitere{list-style:none;margin:2.5mm 0 0;padding:0 5mm;display:flex;flex-direction:column;gap:1.6mm}
+.t-umz-weitere li{font-size:9.5pt;line-height:1.35;color:var(--ink-soft)}
+.t-umz-kontakt{margin:6mm 0 0;font-size:11pt;color:var(--ink)}
+.t-umz-fuss{margin-top:auto;display:flex;align-items:center;gap:5mm;padding-top:8mm;
+  border-top:.8pt solid var(--line);font-size:7.6pt;color:var(--muted);line-height:1.4}
+.t-umz-mark{flex:0 0 auto;display:flex}
+
 </style>
 <style id="vz-page-size">@page{size:A4;margin:0}</style>
 </head>
@@ -3627,7 +3821,8 @@ const BEREICHE = [
     title: 'Hausordnung',
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
-    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket']
+    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
+          'hausversammlung', 'umzug']
   },
   {
     id: 'sicherheit',
@@ -3644,6 +3839,14 @@ const BEREICHE = [
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
     ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb']
+  },
+  {
+    id: 'verwaltung',
+    icon: 'buch',
+    title: 'Verwaltung und Übergabe',
+    kurz: 'Verwaltung',
+    lede: 'Die Formulare, die den Papierweg sauber halten: Wohnungsübergabe, Schlüssel, Zählerstände, Mängelmeldung. Ausgedruckt und vor Ort von Hand ausgefüllt.',
+    ids: ['uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung']
   },
   {
     id: 'team',
@@ -13939,11 +14142,834 @@ const paket = {
   }
 };
 
+/* ===== js/templates/uebergabe.js ===== */
+/* Übergabeprotokoll · A4 hoch
+   --------------------------------------------------------------------------
+   Das Blatt, das bei jedem Ein- und Auszug ausgefüllt wird: in welchem
+   Zustand die Wohnung übergeben wurde, welche Zähler wie hoch standen,
+   wie viele Schlüssel den Besitzer wechselten. Ohne dieses Blatt streiten
+   sich Vermieter und Mieter später über den Kaffeefleck auf dem Parkett.
+
+   Es ist ein Formular, kein Aushang: Die Zentrale druckt den Rahmen, die
+   Zeilen werden vor Ort von Hand ausgefüllt. Darum steht überall eine
+   Schreiblinie statt eines fertigen Werts.
+*/
+
+
+
+
+const uebergabe = {
+  id:'uebergabe',
+  title:'Übergabeprotokoll',
+  sub:'Wohnungsübergabe: Zustand, Zähler, Schlüssel · A4 hoch',
+  badge:'Übergabe',
+  root:'t-ueb',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="120" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="54" width="162" height="26" rx="4" fill="#F6F7FA" stroke="#E5E8ED" stroke-width="1.5"/>
+    ${[0,1,2,3].map(i => `
+      <rect x="24" y="${96 + i * 20}" width="${44}" height="7" rx="3.5" fill="#2A3350" opacity=".8"/>
+      <path d="M76 ${103 + i * 20}h110" stroke="#C9CFDA" stroke-width="1.5" stroke-dasharray="3 3"/>`).join('')}
+    <rect x="24" y="192" width="70" height="7" rx="3.5" fill="#01B1E2"/>
+    ${[0,1].map(i => `
+      <rect x="${24 + i*84}" y="240" width="70" height="7" rx="3.5" fill="#2A3350" opacity=".6"/>
+      <path d="M${24 + i*84} 258h70" stroke="#2A3350" stroke-width="1.5"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Art und Objekt' },
+    { k:'art', label:'Anlass', type:'select', options:[
+      { v:'Einzug — Übergabe an Mieter', t:'Einzug — Übergabe an Mieter' },
+      { v:'Auszug — Rückgabe durch Mieter', t:'Auszug — Rückgabe durch Mieter' },
+      { v:'Zwischenabnahme', t:'Zwischenabnahme' } ] },
+    { k:'objekt',  label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'wohnung', label:'Wohnung / Lage', type:'text', hint:'z. B. «2. OG rechts, 3.5 Zimmer».' },
+    { k:'datum',   label:'Datum', type:'text' },
+
+    { t:'group', label:'Beteiligte' },
+    { k:'uebergeber', label:'Übergeber', type:'text' },
+    { k:'uebernehmer', label:'Übernehmer', type:'text' },
+
+    { t:'group', label:'Räume und Zustand' },
+    { t:'note', label:'Jede Zeile bekommt eine Schreiblinie für den Zustand. Vor Ort ausgefüllt.' },
+    { k:'raeume', label:'Räume', type:'list', itemLabel:'Raum', max:14,
+      defaultItem:{ name:'' },
+      item:[{ k:'name', label:'Raum', type:'text' }] },
+
+    { t:'group', label:'Zählerstände' },
+    { k:'zaehler', label:'Zähler', type:'list', itemLabel:'Zähler', max:8,
+      defaultItem:{ name:'', nr:'' },
+      item:[
+        { k:'name', label:'Zähler', type:'text' },
+        { k:'nr',   label:'Zähler-Nr.', type:'text' }
+      ] },
+
+    { t:'group', label:'Schlüssel' },
+    { k:'schluessel', label:'Schlüssel', type:'list', itemLabel:'Art', max:8,
+      defaultItem:{ name:'' },
+      item:[{ k:'name', label:'Art', type:'text' }] },
+
+    { t:'group', label:'Bemerkungen' },
+    { k:'bemerkung', label:'Feld für Bemerkungen', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    art:'Auszug — Rückgabe durch Mieter',
+    objekt:'-',
+    wohnung:'',
+    datum:'',
+    uebergeber:'',
+    uebernehmer:'',
+    raeume:[
+      { name:'Wohnzimmer' }, { name:'Küche' }, { name:'Bad / WC' },
+      { name:'Schlafzimmer' }, { name:'Zimmer' }, { name:'Balkon / Reduit' }
+    ],
+    zaehler:[
+      { name:'Strom', nr:'' }, { name:'Wasser kalt', nr:'' }, { name:'Wasser warm', nr:'' }
+    ],
+    schluessel:[
+      { name:'Wohnungsschlüssel' }, { name:'Haustürschlüssel' },
+      { name:'Briefkasten' }, { name:'Keller / Estrich' }
+    ],
+    bemerkung:'ja',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const feld = (label, wert) => `
+      <div class="t-ueb-feld">
+        <span class="t-ueb-lab">${esc(label)}</span>
+        <span class="t-ueb-linie">${wert ? esc(wert) : ''}</span>
+      </div>`;
+
+    const raeume = (d.raeume || []).filter(r => has(r.name)).map(r => `
+      <li><span class="t-ueb-rname">${esc(r.name)}</span><span class="t-ueb-rlinie"></span></li>`).join('');
+
+    const zaehler = (d.zaehler || []).filter(z => has(z.name)).map(z => `
+      <li>
+        <span class="t-ueb-zname">${esc(z.name)}${has(z.nr) ? ` <i>Nr. ${esc(z.nr)}</i>` : ''}</span>
+        <span class="t-ueb-zwert"></span>
+      </li>`).join('');
+
+    const schluessel = (d.schluessel || []).filter(s => has(s.name)).map(s => `
+      <li><span class="t-ueb-sname">${esc(s.name)}</span><span class="t-ueb-sanz"></span></li>`).join('');
+
+    return `
+      <header class="t-ueb-kopf">
+        <div>
+          <h1>Übergabeprotokoll</h1>
+          <p class="t-ueb-art">${esc(d.art || '')}</p>
+        </div>
+        <span class="t-ueb-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      <div class="t-ueb-oben">
+        ${feld('Liegenschaft', ort)}
+        ${feld('Wohnung / Lage', d.wohnung)}
+        ${feld('Datum', d.datum)}
+        ${feld('Übergeber', d.uebergeber)}
+        ${feld('Übernehmer', d.uebernehmer)}
+      </div>
+
+      ${raeume ? `
+      <section class="t-ueb-block">
+        <h2>Räume und Zustand</h2>
+        <ul class="t-ueb-raeume">${raeume}</ul>
+      </section>` : ''}
+
+      <div class="t-ueb-zwei">
+        ${zaehler ? `
+        <section class="t-ueb-block">
+          <h2>Zählerstände</h2>
+          <ul class="t-ueb-zaehler">${zaehler}</ul>
+        </section>` : ''}
+        ${schluessel ? `
+        <section class="t-ueb-block">
+          <h2>Schlüssel <span>Anzahl</span></h2>
+          <ul class="t-ueb-schluessel">${schluessel}</ul>
+        </section>` : ''}
+      </div>
+
+      ${d.bemerkung === 'ja' ? `
+      <section class="t-ueb-block">
+        <h2>Bemerkungen</h2>
+        <div class="t-ueb-bem"></div>
+      </section>` : ''}
+
+      <footer class="t-ueb-fuss">
+        <div class="t-ueb-sig"><span></span><i>Ort, Datum · Übergeber</i></div>
+        <div class="t-ueb-sig"><span></span><i>Ort, Datum · Übernehmer</i></div>
+      </footer>
+      <p class="t-ueb-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/schluesselquittung.js ===== */
+/* Schlüsselquittung · A4 hoch
+   --------------------------------------------------------------------------
+   Wer hat welche Schlüssel? Ein Blatt, das den Übergang festhält: so viele
+   Schlüssel welcher Art, an wen, wann zurück. Unterschrift drunter, fertig.
+   Der Klassiker beim Handwerker, beim neuen Mieter, bei der Reinigungsfirma.
+
+   Zwei Exemplare drucken: eines behält die Verwaltung, eines der Empfänger.
+*/
+
+
+
+
+
+const schluesselquittung = {
+  id:'schluesselquittung',
+  title:'Schlüsselquittung',
+  sub:'Wer welche Schlüssel bekommt — mit Unterschrift · A4 hoch',
+  badge:'Schlüssel',
+  root:'t-quit',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="120" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="60" width="162" height="7" rx="3.5" fill="#2A3350" opacity=".7"/>
+    <rect x="24" y="92" width="162" height="24" rx="4" fill="#01B1E2" opacity=".14"/>
+    ${[0,1,2].map(i => `
+      <rect x="24" y="${128 + i * 22}" width="162" height="17" rx="4" fill="#fff" stroke="#E5E8ED" stroke-width="1.4"/>
+      <circle cx="34" cy="${136 + i * 22}" r="4" fill="#01B1E2"/>
+      <rect x="44" y="${132 + i * 22}" width="${90 - i*8}" height="6" rx="3" fill="#2A3350" opacity=".7"/>
+      <rect x="164" y="${133 + i * 22}" width="14" height="6" rx="3" fill="#2A3350"/>`).join('')}
+    <path d="M24 232h70M116 232h70" stroke="#2A3350" stroke-width="1.5"/>`),
+
+  fields:[
+    { t:'group', label:'Objekt und Datum' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'wohnung', label:'Wohnung / Lage', type:'text' },
+    { k:'datum',  label:'Datum', type:'text' },
+
+    { t:'group', label:'Übergeben an' },
+    { k:'empfaenger', label:'Name', type:'text' },
+    { k:'rolle',      label:'Funktion', type:'text',
+      hint:'z. B. «Mieter», «Sanitär Meier AG», «Reinigung».' },
+
+    { t:'group', label:'Schlüssel' },
+    { t:'note', label:'Anzahl und Nummer werden vor Ort eingetragen, wenn du sie hier frei lässt.' },
+    { k:'zeilen', label:'Schlüssel', type:'list', itemLabel:'Schlüssel', max:12,
+      defaultItem:{ art:'', anzahl:'', nr:'' },
+      item:[
+        { k:'art',    label:'Art',    type:'text' },
+        { k:'anzahl', label:'Anzahl', type:'text' },
+        { k:'nr',     label:'Nummer', type:'text' }
+      ] },
+
+    { t:'group', label:'Rückgabe' },
+    { k:'rueckgabe', label:'Vereinbarung', type:'textarea', rows:2 },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    objekt:'-',
+    wohnung:'',
+    datum:'',
+    empfaenger:'',
+    rolle:'',
+    zeilen:[
+      { art:'Wohnungsschlüssel', anzahl:'', nr:'' },
+      { art:'Haustürschlüssel',  anzahl:'', nr:'' },
+      { art:'Briefkastenschlüssel', anzahl:'', nr:'' },
+      { art:'Keller / Estrich',  anzahl:'', nr:'' }
+    ],
+    rueckgabe:'Die Schlüssel bleiben Eigentum der Verwaltung und sind bei Auszug vollständig zurückzugeben. Verlorene Schlüssel werden nach Aufwand verrechnet.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const feld = (label, wert) => `
+      <div class="t-quit-feld"><span>${esc(label)}</span><b>${wert ? esc(wert) : ''}</b></div>`;
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.art)).map(z => `
+      <li>
+        <span class="t-quit-ico">${icon('key', 20, 1.9)}</span>
+        <span class="t-quit-art">${esc(z.art)}</span>
+        <span class="t-quit-nr">${has(z.nr) ? 'Nr. ' + esc(z.nr) : ''}</span>
+        <span class="t-quit-anz">${has(z.anzahl) ? esc(z.anzahl) : ''}</span>
+      </li>`).join('');
+
+    return `
+      <header class="t-quit-kopf">
+        <div>
+          <h1>Schlüsselquittung</h1>
+          <p class="t-quit-unter">Bestätigung über ausgehändigte Schlüssel</p>
+        </div>
+        <span class="t-quit-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      <div class="t-quit-oben">
+        ${feld('Liegenschaft', ort)}
+        ${feld('Wohnung / Lage', d.wohnung)}
+        ${feld('Übergeben an', [d.empfaenger, d.rolle].filter(Boolean).join(', '))}
+        ${feld('Datum', d.datum)}
+      </div>
+
+      <ul class="t-quit-liste">
+        <li class="t-quit-titel"><span></span><span class="t-quit-art">Art</span>
+          <span class="t-quit-nr">Nummer</span><span class="t-quit-anz">Anzahl</span></li>
+        ${zeilen}
+      </ul>
+
+      ${has(d.rueckgabe) ? `<p class="t-quit-rueck">${esc(d.rueckgabe)}</p>` : ''}
+
+      <footer class="t-quit-fuss">
+        <div class="t-quit-sig"><span></span><i>Verwaltung</i></div>
+        <div class="t-quit-sig"><span></span><i>Empfänger — mit dem Erhalt einverstanden</i></div>
+      </footer>
+      <p class="t-quit-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/zaehlerstaende.js ===== */
+/* Zählerstände · A4 hoch
+   --------------------------------------------------------------------------
+   Das Ableseformular: einmal im Jahr geht jemand durchs Haus und trägt ein,
+   was auf den Zählern steht. Strom, Wasser, Gas, Wärme. Danach rechnet die
+   Verwaltung ab. Ein Formular mit einer Zeile je Zähler und breiten Feldern
+   zum Eintragen — mehr braucht es nicht, aber das sauber.
+*/
+
+
+
+
+
+const zaehlerstaende = {
+  id:'zaehlerstaende',
+  title:'Zählerstände',
+  sub:'Ableseformular für Strom, Wasser, Wärme · A4 hoch',
+  badge:'Ablesen',
+  root:'t-zael',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="110" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="60" width="162" height="7" rx="3.5" fill="#2A3350" opacity=".7"/>
+    <rect x="24" y="88" width="162" height="18" rx="4" fill="#01B1E2" opacity=".16"/>
+    ${[0,1,2,3,4].map(i => `
+      <rect x="24" y="${114 + i * 24}" width="162" height="18" rx="4" fill="#fff" stroke="#E5E8ED" stroke-width="1.4"/>
+      <circle cx="34" cy="${123 + i * 24}" r="4" fill="#01B1E2"/>
+      <rect x="44" y="${119 + i * 24}" width="${50 - i*4}" height="6" rx="3" fill="#2A3350" opacity=".7"/>
+      <rect x="120" y="${120 + i * 24}" width="58" height="10" rx="2" fill="#F6F7FA" stroke="#C9CFDA" stroke-width="1"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Objekt und Datum' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'wohnung', label:'Wohnung / Lage', type:'text' },
+    { k:'datum',  label:'Ablesedatum', type:'text' },
+    { k:'abgelesen', label:'Abgelesen durch', type:'text' },
+
+    { t:'group', label:'Zähler' },
+    { t:'note', label:'Für jeden Zähler eine Zeile. Der Stand wird beim Ablesen von Hand eingetragen.' },
+    { k:'zeilen', label:'Zähler', type:'list', itemLabel:'Zähler', max:16,
+      defaultItem:{ icon:'bolt', name:'', nr:'', einheit:'' },
+      item:[
+        { k:'icon',    label:'Symbol', type:'select', options:[
+          { v:'bolt',   t:'Strom' }, { v:'wasser', t:'Wasser' },
+          { v:'heating',t:'Wärme · Heizung' }, { v:'fire', t:'Gas' },
+          { v:'info',   t:'anderes' } ] },
+        { k:'name',    label:'Bezeichnung', type:'text' },
+        { k:'nr',      label:'Zähler-Nr.',  type:'text' },
+        { k:'einheit', label:'Einheit',     type:'text' }
+      ] },
+
+    { t:'group', label:'Hinweis' },
+    { k:'hinweis', label:'Fusshinweis', type:'textarea', rows:2 },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    objekt:'-',
+    wohnung:'',
+    datum:'',
+    abgelesen:'',
+    zeilen:[
+      { icon:'bolt',   name:'Strom Haushalt', nr:'', einheit:'kWh' },
+      { icon:'bolt',   name:'Strom Wärmepumpe', nr:'', einheit:'kWh' },
+      { icon:'wasser', name:'Wasser kalt', nr:'', einheit:'m³' },
+      { icon:'wasser', name:'Wasser warm', nr:'', einheit:'m³' },
+      { icon:'heating',name:'Wärme / Heizung', nr:'', einheit:'kWh' }
+    ],
+    hinweis:'Bitte den Zählerstand vollständig ablesen, auch die Nachkommastellen. Bei Unklarheiten die Verwaltung anrufen.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const feld = (label, wert) => `
+      <div class="t-zael-feld"><span>${esc(label)}</span><b>${wert ? esc(wert) : ''}</b></div>`;
+
+    const zeilen = (d.zeilen || []).filter(z => has(z.name)).map(z => `
+      <li>
+        <span class="t-zael-ico">${icon(z.icon || 'info', 20, 1.9)}</span>
+        <span class="t-zael-name">${esc(z.name)}${has(z.nr) ? ` <i>Nr. ${esc(z.nr)}</i>` : ''}</span>
+        <span class="t-zael-wert"></span>
+        <span class="t-zael-einheit">${has(z.einheit) ? esc(z.einheit) : ''}</span>
+      </li>`).join('');
+
+    return `
+      <header class="t-zael-kopf">
+        <div>
+          <h1>Zählerstände</h1>
+          <p class="t-zael-unter">Ableseprotokoll</p>
+        </div>
+        <span class="t-zael-mark">${istHotel(d.absender) ? logo('color', 26) : ''}</span>
+      </header>
+
+      <div class="t-zael-oben">
+        ${feld('Liegenschaft', ort)}
+        ${feld('Wohnung / Lage', d.wohnung)}
+        ${feld('Ablesedatum', d.datum)}
+        ${feld('Abgelesen durch', d.abgelesen)}
+      </div>
+
+      <ul class="t-zael-liste">
+        <li class="t-zael-titel"><span></span><span class="t-zael-name">Zähler</span>
+          <span class="t-zael-wert">Stand</span><span class="t-zael-einheit"></span></li>
+        ${zeilen}
+      </ul>
+
+      ${has(d.hinweis) ? `<p class="t-zael-hinweis">${esc(d.hinweis)}</p>` : ''}
+
+      <footer class="t-zael-fuss">
+        <div class="t-zael-sig"><span></span><i>Unterschrift Ablesung</i></div>
+        <div class="t-zael-sig"><span></span><i>Unterschrift Mieter</i></div>
+      </footer>
+      <p class="t-zael-abs">${esc(abs.foot)}</p>`;
+  }
+};
+
+/* ===== js/templates/maengelmeldung.js ===== */
+/* Mängelmeldung · A4 hoch
+   --------------------------------------------------------------------------
+   Das Formular, das der Mieter ausfüllt, wenn etwas kaputt ist: was, wo,
+   seit wann, wann man in die Wohnung darf. Bisher rief man an, niemand nahm
+   ab, und der tropfende Hahn tropfte weiter. Ein Formular am Schwarzen Brett
+   und im Briefkasten der Verwaltung macht daraus einen nachvollziehbaren
+   Vorgang.
+
+   Zwei Teile: oben füllt der Mieter aus, der graue Kasten unten bleibt der
+   Verwaltung. So sieht man auf einen Blick, was schon erledigt ist.
+*/
+
+
+
+
+
+const maengelmeldung = {
+  id:'maengelmeldung',
+  title:'Mängelmeldung',
+  sub:'Was ist kaputt — das Formular für Mieter · A4 hoch',
+  badge:'Reparatur',
+  root:'t-maeng',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="120" height="16" rx="5" fill="#2A3350"/>
+    <rect x="24" y="58" width="60" height="7" rx="3.5" fill="#01B1E2"/>
+    ${[0,1,2].map(i => `
+      <rect x="24" y="${82 + i*20}" width="44" height="6" rx="3" fill="#2A3350" opacity=".7"/>
+      <path d="M78 ${88 + i*20}h108" stroke="#C9CFDA" stroke-width="1.5" stroke-dasharray="3 3"/>`).join('')}
+    <rect x="24" y="152" width="162" height="46" rx="5" fill="#2A3350" opacity=".9"/>
+    <rect x="34" y="162" width="50" height="6" rx="3" fill="#01B1E2"/>
+    <rect x="34" y="178" width="120" height="5" rx="2.5" fill="#fff" opacity=".4"/>
+    <path d="M24 236h70M116 236h70" stroke="#2A3350" stroke-width="1.5"/>`),
+
+  fields:[
+    { t:'group', label:'Kopf' },
+    { k:'titel', label:'Titel', type:'text' },
+    { k:'objekt', label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Wer meldet (füllt der Mieter aus)' },
+    { t:'note', label:'Diese Zeilen sind Schreiblinien — das Formular wird ausgedruckt und von Hand ausgefüllt.' },
+    { k:'felder', label:'Zeilen', type:'list', itemLabel:'Zeile', max:10,
+      defaultItem:{ label:'' },
+      item:[{ k:'label', label:'Beschriftung', type:'text' }] },
+
+    { t:'group', label:'Was ist das Problem' },
+    { k:'dringend', label:'Dringlichkeit ankreuzbar', type:'select',
+      options:[{ v:'ja', t:'zeigen — normal / dringend / Notfall' }, { v:'nein', t:'weglassen' }] },
+
+    { t:'group', label:'Kasten für die Verwaltung' },
+    { k:'verwaltung', label:'Feld für die Verwaltung', type:'select',
+      options:[{ v:'ja', t:'zeigen' }, { v:'nein', t:'weglassen' }] },
+
+    { t:'group', label:'Rückgabe' },
+    { k:'abgabe', label:'Wo abgeben', type:'textarea', rows:2 },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    titel:'Mängel- und Reparaturmeldung',
+    objekt:'-',
+    felder:[
+      { label:'Name' }, { label:'Wohnung / Lage' }, { label:'Telefon' },
+      { label:'Erreichbar am besten' }, { label:'Zutritt möglich ab' }
+    ],
+    dringend:'ja',
+    verwaltung:'ja',
+    abgabe:'Bitte ausgefüllt in den Briefkasten der Verwaltung werfen oder an office@… mailen. Bei Notfällen (Wasser, Strom, Heizung) zuerst anrufen.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const felder = (d.felder || []).filter(f => has(f.label)).map(f => `
+      <div class="t-maeng-feld"><span>${esc(f.label)}</span><span class="t-maeng-linie"></span></div>`).join('');
+
+    const dringend = d.dringend === 'ja' ? `
+      <div class="t-maeng-dring">
+        <span>Dringlichkeit</span>
+        <label><i></i> normal</label>
+        <label><i></i> dringend</label>
+        <label><i></i> Notfall</label>
+      </div>` : '';
+
+    return `
+      <header class="t-maeng-kopf">
+        <div>
+          <h1>${esc(d.titel || 'Mängelmeldung')}</h1>
+          ${ort ? `<p class="t-maeng-ort">${esc(ort)}</p>` : ''}
+        </div>
+        <span class="t-maeng-ico">${icon('warn', 32, 1.9)}</span>
+      </header>
+
+      ${felder ? `<div class="t-maeng-oben">${felder}</div>` : ''}
+      ${dringend}
+
+      <section class="t-maeng-was">
+        <h2>Was ist das Problem? Wo genau? Seit wann?</h2>
+        <div class="t-maeng-schreib"></div>
+      </section>
+
+      ${d.verwaltung === 'ja' ? `
+      <section class="t-maeng-verw">
+        <h3>Von der Verwaltung auszufüllen</h3>
+        <div class="t-maeng-vzeilen">
+          <div><span>Eingegangen am</span><i></i></div>
+          <div><span>Auftrag an</span><i></i></div>
+          <div><span>Erledigt am</span><i></i></div>
+        </div>
+      </section>` : ''}
+
+      ${has(d.abgabe) ? `<p class="t-maeng-abgabe">${esc(d.abgabe)}</p>` : ''}
+
+      <footer class="t-maeng-fuss">
+        <div class="t-maeng-sig"><span></span><i>Datum, Unterschrift Mieter</i></div>
+        <span class="t-maeng-mark">${istHotel(d.absender) ? logo('color', 22) : esc(abs.foot)}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/hausversammlung.js ===== */
+/* Hausversammlung · A4 hoch
+   --------------------------------------------------------------------------
+   Die Einladung zur Eigentümer- oder Mieterversammlung: wann, wo, und vor
+   allem die Traktandenliste. Eine Versammlung ohne Traktanden ist rechtlich
+   angreifbar — über nicht angekündigte Geschäfte darf nicht beschlossen
+   werden. Darum steht die Liste im Zentrum, nummeriert.
+*/
+
+
+
+
+
+const hausversammlung = {
+  id:'hausversammlung',
+  title:'Hausversammlung',
+  sub:'Einladung mit Traktandenliste · A4 hoch',
+  badge:'Versammlung',
+  root:'t-hv',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="26" width="80" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="24" y="44" width="150" height="18" rx="6" fill="#2A3350"/>
+    <rect x="24" y="84" width="162" height="34" rx="6" fill="#2A3350"/>
+    <rect x="38" y="96" width="40" height="7" rx="3.5" fill="#01B1E2"/>
+    <rect x="38" y="107" width="90" height="6" rx="3" fill="#fff" opacity=".85"/>
+    <rect x="24" y="138" width="70" height="8" rx="4" fill="#01B1E2"/>
+    ${[0,1,2,3].map(i => `
+      <circle cx="30" cy="${166 + i * 22}" r="6" fill="none" stroke="#2A3350" stroke-width="1.6"/>
+      <rect x="44" y="${162 + i * 22}" width="${132 - i*10}" height="7" rx="3.5" fill="#2A3350" opacity=".7"/>`).join('')}`),
+
+  fields:[
+    { t:'group', label:'Art und Kopf' },
+    { k:'art', label:'Versammlung', type:'select', options:[
+      { v:'Ordentliche Eigentümerversammlung', t:'Eigentümerversammlung (ordentlich)' },
+      { v:'Ausserordentliche Eigentümerversammlung', t:'Eigentümerversammlung (ausserordentlich)' },
+      { v:'Mieterversammlung', t:'Mieterversammlung' },
+      { v:'Informationsveranstaltung', t:'Informationsveranstaltung' } ] },
+    { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
+    { k:'objekt',  label:'Liegenschaft', type:'select', options:objektOptions },
+
+    { t:'group', label:'Wann und wo' },
+    { k:'datum', label:'Datum', type:'text' },
+    { k:'zeit',  label:'Zeit',  type:'text' },
+    { k:'ort',   label:'Ort',   type:'text' },
+
+    { t:'group', label:'Traktanden' },
+    { k:'traktanden', label:'Traktandenliste', type:'list', itemLabel:'Traktandum', max:16,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Traktandum', type:'text' }] },
+
+    { t:'group', label:'Hinweise' },
+    { k:'vollmacht', label:'Text zur Vertretung / Vollmacht', type:'textarea', rows:2 },
+    { k:'anmeldung', label:'Anmeldung / Rückfragen', type:'text' },
+
+    { t:'group', label:'Absender' },
+    { k:'absender', label:'Absender', type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    art:'Ordentliche Eigentümerversammlung',
+    eyebrow:'Einladung',
+    objekt:'-',
+    datum:'Donnerstag, 20. November',
+    zeit:'19:00 Uhr',
+    ort:'Restaurant Bahnhof, Kerzers',
+    traktanden:[
+      { text:'Begrüssung und Feststellung der Beschlussfähigkeit' },
+      { text:'Protokoll der letzten Versammlung' },
+      { text:'Jahresrechnung und Revisionsbericht' },
+      { text:'Budget und Erneuerungsfonds' },
+      { text:'Anstehende Arbeiten am Gebäude' },
+      { text:'Wahlen' },
+      { text:'Verschiedenes' }
+    ],
+    vollmacht:'Wer nicht teilnehmen kann, lässt sich schriftlich vertreten. Eine Vollmacht liegt dieser Einladung bei bzw. ist bei der Verwaltung erhältlich.',
+    anmeldung:'Anträge zuhanden der Versammlung bitte bis zehn Tage vorher schriftlich an die Verwaltung.',
+    absender:'immobilien'
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+
+    const traktanden = (d.traktanden || []).filter(t => has(t.text)).map((t, i) => `
+      <li><span class="t-hv-nr">${i + 1}</span><span>${esc(t.text)}</span></li>`).join('');
+
+    return `
+      <header class="t-hv-kopf">
+        ${has(d.eyebrow) ? `<p class="eyebrow">${esc(d.eyebrow)}</p>` : ''}
+        <h1>${esc(d.art || '')}</h1>
+        ${ort ? `<p class="t-hv-ort">${esc(ort)}</p>` : ''}
+      </header>
+
+      <div class="t-hv-wann">
+        <div><span class="t-hv-ico">${icon('calendar', 22, 1.9)}</span>
+          <span><i>Datum</i>${esc(d.datum || '')}${has(d.zeit) ? ` · ${esc(d.zeit)}` : ''}</span></div>
+        ${has(d.ort) ? `<div><span class="t-hv-ico">${icon('flag', 22, 1.9)}</span>
+          <span><i>Ort</i>${esc(d.ort)}</span></div>` : ''}
+      </div>
+
+      ${traktanden ? `
+      <section class="t-hv-trakt">
+        <h2>Traktanden</h2>
+        <ol>${traktanden}</ol>
+      </section>` : ''}
+
+      ${has(d.vollmacht) ? `<p class="t-hv-text">${esc(d.vollmacht)}</p>` : ''}
+      ${has(d.anmeldung) ? `<p class="t-hv-text">${esc(d.anmeldung)}</p>` : ''}
+
+      <footer class="t-hv-fuss">
+        <span class="t-hv-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc(abs.foot)}</span>
+      </footer>`;
+  }
+};
+
+/* ===== js/templates/umzug.js ===== */
+/* Umzugsanzeige · A4 hoch
+   --------------------------------------------------------------------------
+   «Am Samstag ziehe ich ein — der Lift ist zwischen 8 und 12 belegt, bitte
+   entschuldigt den Lärm.» Der kurze Aushang im Treppenhaus, der aus einem
+   Ärgernis eine angekündigte Sache macht. Freundlich, mehrsprachig, mit dem
+   einen Satz, der zählt: wann der Lift oder der Hausgang belegt ist.
+*/
+
+
+
+
+
+
+const UMZ_WORT = {
+  de:{ ein:'Wir ziehen ein', aus:'Wir ziehen aus', wann:'Wann', was:'Was das bedeutet', sorry:'Bitte entschuldigen Sie den Lärm und die Umtriebe.' },
+  en:{ ein:'We are moving in', aus:'We are moving out', wann:'When', was:'What this means', sorry:'Please excuse the noise and inconvenience.' },
+  fr:{ ein:'Nous emménageons', aus:'Nous déménageons', wann:'Quand', was:'Ce que cela implique', sorry:'Merci d’excuser le bruit et le dérangement.' },
+  it:{ ein:'Trasloco in arrivo', aus:'Trasloco in uscita', wann:'Quando', was:'Cosa comporta', sorry:'Vi preghiamo di scusare il rumore e il disturbo.' },
+  pt:{ ein:'Vamos mudar para cá', aus:'Vamos mudar-nos', wann:'Quando', was:'O que isso significa', sorry:'Desculpe o barulho e o incómodo.' },
+  es:{ ein:'Nos mudamos aquí', aus:'Nos mudamos', wann:'Cuándo', was:'Qué significa', sorry:'Disculpe las molestias y el ruido.' }
+};
+
+const umzug = {
+  id:'umzug',
+  title:'Umzugsanzeige',
+  sub:'Ein- oder Auszug ankündigen · Lift belegt · A4 hoch',
+  badge:'Umzug',
+  root:'t-umz',
+  page:'a4',
+
+  thumb: thumb(`
+    <rect x="24" y="28" width="80" height="9" rx="4.5" fill="#01B1E2"/>
+    <rect x="24" y="46" width="158" height="18" rx="6" fill="#2A3350"/>
+    <path d="M150 96 128 108v26l22 12 22-12v-26z" fill="none" stroke="#01B1E2" stroke-width="3"/>
+    <path d="M128 108 150 120l22-12M150 120v22" stroke="#01B1E2" stroke-width="3" fill="none"/>
+    <rect x="24" y="96" width="86" height="52" rx="6" fill="#2A3350"/>
+    <rect x="36" y="108" width="40" height="7" rx="3.5" fill="#01B1E2"/>
+    <rect x="36" y="122" width="60" height="14" rx="4" fill="#fff" opacity=".9"/>
+    <rect x="24" y="176" width="70" height="8" rx="4" fill="#01B1E2"/>
+    <rect x="24" y="198" width="160" height="6" rx="3" fill="#2A3350" opacity=".6"/>
+    <rect x="24" y="212" width="140" height="6" rx="3" fill="#2A3350" opacity=".6"/>`),
+
+  fields:[
+    { t:'group', label:'Art' },
+    { k:'richtung', label:'Richtung', type:'select', options:[
+      { v:'ein', t:'Einzug' }, { v:'aus', t:'Auszug' } ] },
+    { k:'wer',  label:'Wer', type:'text', hint:'z. B. «Familie Muster, 3. OG» — oder leer lassen.' },
+
+    { t:'group', label:'Wann' },
+    { k:'datum', label:'Datum', type:'text' },
+    { k:'zeit',  label:'Zeit',  type:'text' },
+
+    { t:'group', label:'Was das bedeutet' },
+    { k:'punkte', label:'Punkte', type:'list', itemLabel:'Punkt', max:6,
+      defaultItem:{ text:'' },
+      item:[{ k:'text', label:'Punkt', type:'text' }] },
+
+    { t:'group', label:'Kontakt' },
+    { k:'kontakt', label:'Ansprechperson', type:'text' },
+    { k:'telefon', label:'Telefon', type:'text' },
+
+    { t:'group', label:'Sprachen' },
+    { t:'note', label:'Die Sprachen betreffen Titel, Beschriftungen und die Entschuldigung. Wer und Punkte stehen so da, wie du sie schreibst.' },
+    { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
+    { k:'sprachSet', label:'Fertige Zusammenstellung', type:'select', options:sprachSetOptions() },
+
+    { t:'group', label:'Objekt und Absender' },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
+  ],
+
+  defaults:{
+    richtung:'ein',
+    wer:'Familie Muster, 3. OG',
+    datum:'Samstag, 4. Oktober',
+    zeit:'08:00 – 13:00',
+    punkte:[
+      { text:'Der Lift ist in dieser Zeit für den Umzug belegt.' },
+      { text:'Im Treppenhaus kann es kurz eng werden.' },
+      { text:'Wir stellen alles wieder sauber hin.' }
+    ],
+    kontakt:'',
+    telefon:'',
+    sprachen:['de','en'],
+    sprachSet:'',
+    objekt:'-',
+    absender:'immobilien'
+  },
+
+  actions:{
+    setSprachen(d){
+      const ids = sprachSet(d.sprachSet);
+      return ids ? { ...d, sprachen:ids } : d;
+    }
+  },
+
+  render(d){
+    const abs = absender(d.absender, 'immobilien');
+    const obj = objekt(d.objekt);
+    const adr = objektAdresse(d.objekt);
+    const ort = [obj.code && obj.name, adr].filter(Boolean).join(' · ');
+    const sprachen = sprachObjekte(d.sprachen);
+    const w = UMZ_WORT[sprachen[0].id] || UMZ_WORT.de;
+    const weitere = sprachen.slice(1).map(sp => UMZ_WORT[sp.id] || UMZ_WORT.de);
+    const titelFeld = d.richtung === 'aus' ? 'aus' : 'ein';
+    const alle = (feld) => esc([w[feld]].concat(weitere.map(m => m[feld])).join(' · '));
+
+    const punkte = (d.punkte || []).filter(p => has(p.text)).map(p => `
+      <li>${esc(p.text)}</li>`).join('');
+
+    return `
+      <header class="t-umz-kopf">
+        <div>
+          <p class="eyebrow">${esc(w[titelFeld])}</p>
+          <h1>${esc(has(d.wer) ? d.wer : 'Umzug im Haus')}</h1>
+          ${weitere.length ? `<p class="t-umz-sprachen">${esc(weitere.map(m => m[titelFeld]).join(' · '))}</p>` : ''}
+        </div>
+        <span class="t-umz-ico">${icon('paket', 40, 1.7)}</span>
+      </header>
+
+      <div class="t-umz-wann">
+        <span class="t-umz-lab">${alle('wann')}</span>
+        <strong>${esc(d.datum || '')}</strong>
+        ${has(d.zeit) ? `<span class="t-umz-zeit">${esc(d.zeit)}</span>` : ''}
+      </div>
+
+      ${punkte ? `
+      <section class="t-umz-was">
+        <h2>${alle('was')}</h2>
+        <ul>${punkte}</ul>
+      </section>` : ''}
+
+      <p class="t-umz-sorry">${esc(w.sorry)}</p>
+      ${weitere.length ? `<ul class="t-umz-weitere">${
+        weitere.map((m, i) => `<li lang="${sprachen[i + 1].id}">${esc(m.sorry)}</li>`).join('')}</ul>` : ''}
+
+      ${(has(d.kontakt) || has(d.telefon)) ? `
+      <p class="t-umz-kontakt">${esc([d.kontakt, d.telefon].filter(Boolean).join(' · '))}</p>` : ''}
+
+      <footer class="t-umz-fuss">
+        <span class="t-umz-mark">${istHotel(d.absender) ? logo('color', 24) : ''}</span>
+        <span>${esc([ort, abs.foot].filter(Boolean).join(' · '))}</span>
+      </footer>`;
+  }
+};
+
 /* ===== js/templates/index.js ===== */
 /* Registrierung aller Vorlagen.
    Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
+
+
+
+
+
+
 
 
 
@@ -14022,7 +15048,13 @@ const TEMPLATES = {
   veranstaltung,
   ausserbetrieb,
   fundgegenstaende,
-  paket
+  paket,
+  uebergabe,
+  schluesselquittung,
+  zaehlerstaende,
+  maengelmeldung,
+  hausversammlung,
+  umzug
 };
 
 const ORDER = [
@@ -14033,7 +15065,8 @@ const ORDER = [
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
   'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
-  'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket'
+  'gutschein', 'speisekarte', 'veranstaltung', 'ausserbetrieb', 'fundgegenstaende', 'paket',
+  'uebergabe', 'schluesselquittung', 'zaehlerstaende', 'maengelmeldung', 'hausversammlung', 'umzug'
 ];
 
 /* ===== js/lib/suche.js ===== */

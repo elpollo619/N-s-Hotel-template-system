@@ -75,6 +75,12 @@ const MODULES = [
   'js/templates/ausserbetrieb.js',
   'js/templates/fundgegenstaende.js',
   'js/templates/paket.js',
+  'js/templates/uebergabe.js',
+  'js/templates/schluesselquittung.js',
+  'js/templates/zaehlerstaende.js',
+  'js/templates/maengelmeldung.js',
+  'js/templates/hausversammlung.js',
+  'js/templates/umzug.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'
