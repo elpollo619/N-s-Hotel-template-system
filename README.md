@@ -615,19 +615,71 @@ automatisch in allen Fusszeilen.
 
 ## Aufbau der Oberfläche
 
-Drei Ebenen, damit nichts auf einem einzigen Bildschirm landet:
+Die Zentrale ist ein Werkzeug mit mehreren Seiten, nicht eine lange Seite.
+Geteilt wird nach **Arbeitsbereichen** — nach dem, was jemand am Stück
+erledigt, nicht nach der Art des Dokuments:
 
 ```
-#/              Startseite — Suche, zuletzt benutzt, die Kapitel als Kacheln
-#/k/<kapitel>   ein Kapitel mit seinen Vorlagen
+#/              Startseite — Stand, offene Entwürfe, die Arbeitsbereiche
+#/b/<bereich>   ein Arbeitsbereich mit seinen Vorlagen
 #/t/<vorlage>   der Editor
+#/s/<seite>     Werkzeug: Anleitung · Eigene Textbausteine · Marke und Schrift
 ```
 
-Warum überhaupt Kapitel? Neunzehn Vorlagen auf einer Seite sind eine Wand.
-Wer den Waschplan sucht, will nicht an Sicherheitszeichen und Etikettenbogen
-vorbeiscrollen. Dieselbe Überlegung im Editor: das Formular ist in
-aufklappbare Kapitel geteilt, statt in einer Kolonne von vierzig Feldern zu
-enden. Die Suche ist die Abkürzung für alle, die schon wissen, was sie wollen.
+Auf jeder dieser Seiten steht dieselbe **Seitenleiste**. Sie beantwortet «wo
+bin ich» und spart den Umweg über die Startseite: von jeder Vorlage direkt in
+jeden anderen Bereich. Ab Tablet-Breite und im Editor schrumpft sie zur
+Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
+
+### Die sechs Arbeitsbereiche
+
+| Bereich | Was darin steckt |
+|---|---|
+| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Pfeil-Aufkleber, Aufkleberbogen |
+| **Zimmer und Gäste** | Gästemappe, Foto-Aushang, Gäste-Info, QR-Aushang, Zattoo, Notruf-Aushang |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief |
+| **Sicherheit** | Sicherheitszeichen, Grossflächenplakat |
+| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen |
+| **Team und Werkzeug** | Kurzanleitung — dazu die drei Werkzeugseiten |
+
+Die Einteilung steht in `js/bereiche.js`. **Eine Vorlage gehört in genau einen
+Bereich**; steht sie in zweien, sucht man wieder überall. Der Test
+`tests/navigation.mjs` schlägt fehl, wenn eine Vorlage keinem Bereich
+zugeteilt ist.
+
+Alte Adressen der Form `#/k/<kapitel>` — sie stecken in verschickten Links —
+leiten automatisch auf den passenden Bereich um.
+
+### Warum überhaupt teilen?
+
+Einundzwanzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
+Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
+geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
+die Abkürzung für alle, die schon wissen, was sie wollen.
+
+### Die Startseite
+
+Sie sagt zuerst, wie gross die Zentrale ist (Vorlagen, Bereiche, Sprachen,
+Textbausteine), dann **woran zuletzt gearbeitet wurde** — jede Vorlage mit
+gespeichertem Entwurf steht unter «Weiterarbeiten». Das ist fast immer der
+Grund, warum jemand die Seite überhaupt öffnet. Erst danach kommen die
+Bereiche.
+
+### Die drei Werkzeugseiten
+
+* **Anleitung** (`#/s/hilfe`) — der Ablauf in drei Schritten, die Einstellungen
+  im Druckdialog, die Tastaturkürzel, der Weg ohne Internet.
+* **Eigene Textbausteine** (`#/s/eigene`) — die Sätze des Hauses ansehen,
+  löschen, als Datei sichern und einlesen. Vorher steckte das im Editor des
+  Hinweis-Aushangs: man musste einen Aushang öffnen, um einen Satz zu löschen,
+  der mit diesem Aushang nichts zu tun hatte.
+* **Marke und Schrift** (`#/s/marke`) — welche Hausschrift wirklich läuft und
+  welche gerade durch einen freien Ersatz vertreten wird, dazu die Farben mit
+  ihren echten Token-Werten.
+
+Wie die Oberfläche auszusehen hat, steht in **[DESIGN.md](DESIGN.md)** —
+Farben, Schriftgrössen, Bauteile und die Regeln zur Bedienbarkeit.
 
 Der Suchbestand steht in `js/lib/suche.js` und wird aus den vorhandenen Daten
 gebaut — Vorlagen, Textbausteine, Sicherheitszeichen, Abfallfraktionen. Es
@@ -639,7 +691,8 @@ automatisch auffindbar.
 ## Aufbau
 
 ```
-index.html                 Hub und Editor-Hülle
+index.html                 Rahmen: Kopfzeile, Seitenleiste, Inhalt
+DESIGN.md                  wie die Oberfläche auszusehen hat
 standalone.html            alles in einer Datei (offline, per Doppelklick)
 manifest.webmanifest, sw.js  installierbar und offline-fähig
 assets/
@@ -649,10 +702,11 @@ assets/
   app.css                  Oberfläche — alle Klassen mit .vz- vorangestellt
   templates.css            Vorlagen-Styles, je unter .t-<id> gekapselt
 js/
-  app.js                   Router, Formular-Erzeugung, Vorschau, Aktionen
+  app.js                   Router, Rahmen, Seiten, Formular-Erzeugung, Vorschau
+  bereiche.js              die sechs Arbeitsbereiche und die Werkzeugseiten
   brand-config.js          Stammdaten und Pfade zu den Marken-Assets
   lib/                     dom · icons · brand · sitemap · export · storage · i18n · thumbs
-  templates/               eine Datei pro Vorlage + index.js (Reihenfolge, Gruppen)
+  templates/               eine Datei pro Vorlage + index.js (Registrierung)
 tools/                     standalone-Bau, Schriften/Assets eintragen
 tests/                     Playwright-Prüfungen
 ```
@@ -795,7 +849,15 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
 
 ## Para Cris (resumen en español)
 
-* La app está terminada y probada: **18 plantillas**, 131 comprobaciones automáticas.
+* La app está terminada y probada: **21 plantillas**, más de 250 comprobaciones
+  automáticas.
+* **La herramienta está dividida en páginas por áreas de trabajo**, no por tipo
+  de documento. A la izquierda hay una barra fija con seis áreas — Ankommen,
+  Zimmer, Hausordnung, Sicherheit, Unterhalt, Team — y tres páginas de
+  herramienta: Anleitung, Eigene Textbausteine, Marke und Schrift. La página de
+  inicio dice cuántas plantillas hay y, sobre todo, **en qué estabas
+  trabajando**. En el editor la barra se encoge a una franja de iconos para que
+  la vista previa mande. En el móvil se convierte en un cajón.
 * El equipo entra por un enlace, edita textos y exporta **PDF** o **PNG**.
   Sin login, sin backend; los borradores se guardan en el navegador de cada uno.
 * Desde tu carpeta de Drive «carteles Ns Hotel» ya se incorporaron: el **SVG

@@ -1,19 +1,22 @@
 /* ==========================================================================
    N's Hotel · Vorlagen-Zentrale — App-Kern
 
-   Aufbau der Oberflaeche, drei Ebenen:
+   Die Zentrale ist ein Werkzeug mit mehreren Seiten, nicht eine lange
+   Seite. Geteilt wird nach Arbeitsbereichen — nach dem, was jemand am
+   Stueck erledigt, nicht nach der Art des Dokuments:
 
-     #/            Startseite — Suche, zuletzt benutzt, die Kapitel
-     #/k/<kapitel> ein Kapitel mit seinen Vorlagen
+     #/            Startseite — Stand, offene Entwuerfe, die Arbeitsbereiche
+     #/b/<bereich> ein Arbeitsbereich mit seinen Vorlagen
      #/t/<vorlage> der Editor
+     #/s/<seite>   Werkzeugseite: Anleitung, eigene Bausteine, Marke
 
-   Warum ueberhaupt Kapitel? Achtzehn Vorlagen auf einer Seite sind eine
-   Wand. Wer den Waschplan sucht, will nicht an Sicherheitszeichen und
-   Etikettenbogen vorbeiscrollen. Dieselbe Ueberlegung im Editor: das
-   Formular ist in aufklappbare Kapitel geteilt, statt in einer Kolonne von
-   vierzig Feldern zu enden.
+   Auf jeder dieser Seiten steht dieselbe Seitenleiste. Sie beantwortet
+   «wo bin ich» und spart den Umweg ueber die Startseite. Dieselbe
+   Ueberlegung im Editor: das Formular ist in aufklappbare Kapitel geteilt,
+   statt in einer Kolonne von vierzig Feldern zu enden.
    ========================================================================== */
-import { TEMPLATES, ORDER, GROUPS } from './templates/index.js';
+import { TEMPLATES, ORDER } from './templates/index.js';
+import { BEREICHE, SEITEN, BEREICH_ORDER, bereich, bereichVon } from './bereiche.js';
 import { esc, e, qs } from './lib/dom.js';
 import { logo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
@@ -22,9 +25,13 @@ import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
-import { suche, trefferZiel, gruppeVon, ART_LABEL } from './lib/suche.js';
+import { suche, trefferZiel, ART_LABEL } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
-import { schriftHinweis } from './lib/schrift.js';
+import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
+import { icon } from './lib/icons.js';
+import { SPRACH_IDS } from './lib/sprachen.js';
+import { PRESETS } from './presets.js';
+import { eigeneBausteine, bausteinLoeschen, sammlungAlsDatei, sammlungLaden } from './lib/eigene.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
@@ -73,32 +80,130 @@ function loadState(tpl){
 }
 function saveState(tpl, state){ store.save(draftKey(tpl.id), state); }
 
-/* ---------- Topbar ------------------------------------------------------- */
-/* Die Suche steht oben und ist von ueberall erreichbar — auch mitten im
-   Editor. Mit "/" springt der Fokus hinein, ohne die Maus zu bemuehen. */
+/* ---------- Rahmen: Kopfzeile und Seitenleiste --------------------------- */
+/* Die Seitenleiste steht auf jeder Seite, auch im Editor. Sie ist die
+   Antwort auf «wo bin ich gerade» und spart den Umweg über die Startseite:
+   von jeder Vorlage direkt in jeden anderen Arbeitsbereich.
+
+   Schmal wird sie zur Schiene aus Icons, auf dem Telefon zur Schublade. */
+
+/** Wie viele Vorlagen ein Arbeitsbereich wirklich hat. */
+function bereichZahl(b){ return b.ids.filter(id => TEMPLATES[id]).length; }
+
+/** Alle vorhandenen Vorlagen in Bereichsreihenfolge. */
+function alleVorlagen(){ return BEREICH_ORDER.filter(id => TEMPLATES[id]); }
+
+/** Vorlagen, an denen schon gearbeitet wurde — der gespeicherte Entwurf. */
+function entwuerfe(){
+  return store.keys()
+    .filter(k => k.startsWith('draft:'))
+    .map(k => k.slice('draft:'.length))
+    .filter(id => TEMPLATES[id]);
+}
+
+/** Heutiges Datum ausgeschrieben. Steht im Kopf, damit auf einem
+    ausgedruckten Aushang später klar ist, wann er entstanden ist. */
+function heuteText(){
+  const ort = getLang() === 'en' ? 'en-GB' : 'de-CH';
+  try{
+    return new Date().toLocaleDateString(ort,
+      { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  }catch(_){ return ''; }
+}
+
 function mountTopbar(){
   const bar = qs('.vz-topbar');
   bar.innerHTML = `
-    <button class="vz-brand" id="vz-home" title="${esc(t('back'))}">
+    <button class="vz-burger" id="vz-burger" aria-expanded="false"
+            aria-controls="vz-seitenleiste" aria-label="${esc(t('menu'))}">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="vz-brand" href="#/" id="vz-home">
       ${logo('white', 30)}
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
-    </button>
+    </a>
     <div class="vz-suche" role="search">
       <input id="vz-suchfeld" type="search" autocomplete="off" spellcheck="false"
              placeholder="${esc(t('searchPlaceholder'))}" aria-label="${esc(t('search'))}">
       <kbd>/</kbd>
       <div class="vz-treffer" id="vz-treffer" hidden></div>
     </div>
-    <span class="vz-top-spacer"></span>
-    <div class="vz-lang" role="group" aria-label="Sprache">
+    <span class="vz-heute" title="${esc(t('today'))}">${esc(heuteText())}</span>
+    <div class="vz-lang" role="group" aria-label="${esc(t('uiLang'))}">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
       <button data-lang="en" aria-pressed="${getLang() === 'en'}">EN</button>
     </div>`;
-  qs('#vz-home', bar).onclick = () => { location.hash = '#/'; };
+
   bar.querySelectorAll('[data-lang]').forEach(b => {
-    b.onclick = () => { setLang(b.dataset.lang); mountTopbar(); route(); };
+    b.onclick = () => { setLang(b.dataset.lang); mountRahmen(); route(); };
   });
+  const burger = document.getElementById('vz-burger');
+  burger.onclick = () => schubladeZeigen(!document.body.classList.contains('vz-nav-offen'));
   mountSuche();
+}
+
+/** Die Schublade auf dem Telefon auf- und zuziehen. */
+function schubladeZeigen(auf){
+  document.body.classList.toggle('vz-nav-offen', auf);
+  const burger = document.getElementById('vz-burger');
+  if (burger) burger.setAttribute('aria-expanded', String(auf));
+  const schleier = document.getElementById('vz-schleier');
+  if (schleier) schleier.hidden = !auf;
+}
+
+/* Ein Griff neben die Schublade schliesst sie — so wie es jeder von seinem
+   Telefon kennt. */
+{
+  const schleier = document.getElementById('vz-schleier');
+  if (schleier) schleier.addEventListener('click', () => schubladeZeigen(false));
+}
+
+function mountSeitenleiste(){
+  const leiste = qs('#vz-seitenleiste');
+  const werkzeug = Object.values(SEITEN).map(s => `
+    <a class="vz-nav-zeile" href="#/s/${esc(s.id)}" data-nav="s:${esc(s.id)}">
+      <span class="vz-nav-ico">${icon(s.icon, 19)}</span>
+      <span class="vz-nav-txt">${esc(s.title)}</span>
+    </a>`).join('');
+
+  leiste.innerHTML = `
+    <nav aria-label="${esc(t('areas'))}">
+      <a class="vz-nav-zeile vz-nav-zeile--start" href="#/" data-nav="start">
+        <span class="vz-nav-ico">${icon('info', 19)}</span>
+        <span class="vz-nav-txt">${esc(t('startPage'))}</span>
+        <em>${alleVorlagen().length}</em>
+      </a>
+
+      <p class="vz-nav-titel">${esc(t('areas'))}</p>
+      ${BEREICHE.map(b => `
+        <a class="vz-nav-zeile" href="#/b/${esc(b.id)}" data-nav="b:${esc(b.id)}"
+           title="${esc(b.title)}">
+          <span class="vz-nav-ico">${icon(b.icon, 19)}</span>
+          <span class="vz-nav-txt">${esc(b.kurz)}</span>
+          <em>${bereichZahl(b)}</em>
+        </a>`).join('')}
+
+      <p class="vz-nav-titel">${esc(t('tools'))}</p>
+      ${werkzeug}
+    </nav>`;
+
+  /* Ein Klick in der Schublade schliesst sie wieder — sonst verdeckt sie
+     auf dem Telefon genau die Seite, die man gerade geöffnet hat. */
+  leiste.addEventListener('click', ev => {
+    if (ev.target.closest('.vz-nav-zeile')) schubladeZeigen(false);
+  });
+}
+
+/** Kopfzeile und Seitenleiste zusammen aufbauen (nach Sprachwechsel). */
+function mountRahmen(){ mountTopbar(); mountSeitenleiste(); }
+
+/** Die aktive Zeile in der Seitenleiste markieren. */
+function markiereNav(schluessel){
+  document.querySelectorAll('#vz-seitenleiste .vz-nav-zeile').forEach(a => {
+    const an = a.dataset.nav === schluessel;
+    a.classList.toggle('is-aktiv', an);
+    if (an) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
 }
 
 /* ---------- Suche im Kopf ------------------------------------------------ */
@@ -156,19 +261,12 @@ function mountSuche(){
   });
 }
 
-/* ---------- Startseite und Kapitel --------------------------------------- */
-
-/** Wie viele Vorlagen ein Kapitel wirklich hat (leere Platzhalter zaehlen nicht). */
-function kapitelZahl(g){ return g.ids.filter(id => TEMPLATES[id]).length; }
+/* ---------- Bausteine der Seiten ----------------------------------------- */
 
 /** Eine Vorlagenkarte. */
 function karte(id){
   const tpl = TEMPLATES[id];
-  if (!tpl) return `
-    <div class="vz-card vz-card--soon">
-      <div class="vz-thumb"><span class="vz-badge vz-badge--soon">${esc(t('soon'))}</span></div>
-      <div class="vz-card-body"><h3>${esc(id)}</h3><p>${esc(t('soon'))}</p></div>
-    </div>`;
+  if (!tpl) return '';
   return `
     <a class="vz-card" href="#/t/${esc(id)}">
       <div class="vz-thumb">
@@ -182,79 +280,105 @@ function karte(id){
     </a>`;
 }
 
-/** Die Kapitelspalte links — auf jeder Uebersichtsseite dieselbe. */
-function kapitelSpalte(aktiv){
-  const zeilen = GROUPS.map(g => `
-    <a class="vz-nav-zeile${g.id === aktiv ? ' is-aktiv' : ''}" href="#/k/${esc(g.id)}">
-      <span>${esc(g.title)}</span>
-      <em>${kapitelZahl(g)}</em>
-    </a>`).join('');
-  return `
-    <nav class="vz-nav" aria-label="${esc(t('chapters'))}">
-      <a class="vz-nav-zeile${!aktiv ? ' is-aktiv' : ''}" href="#/">
-        <span>${esc(t('startPage'))}</span>
-        <em>${ORDER.filter(id => TEMPLATES[id]).length}</em>
-      </a>
-      <p class="vz-nav-titel">${esc(t('chapters'))}</p>
-      ${zeilen}
-    </nav>`;
+/** Brotkrumen. Erwartet Paare [Text, Ziel]; der letzte Eintrag ohne Ziel. */
+function krumen(teile){
+  const html = teile
+    .map(([txt, ziel]) => ziel ? `<a href="${esc(ziel)}">${esc(txt)}</a>` : `<b>${esc(txt)}</b>`)
+    .join('<span aria-hidden="true">\u203a</span>');
+  return `<nav class="vz-krumen" aria-label="${esc(t('path'))}">${html}</nav>`;
 }
 
-/** Gemeinsamer Rahmen: Kapitelspalte links, Inhalt rechts. */
-function uebersicht(aktiv, inhalt){
+/** Gemeinsamer Seitenrahmen: Krumen, Kopf, Inhalt. */
+function seite({ nav, krumenTeile, eyebrow, titel, lede, inhalt }){
+  markiereNav(nav);
   view().innerHTML = `
-    <div class="vz-uebersicht">
-      ${kapitelSpalte(aktiv)}
-      <div class="vz-inhalt">${inhalt}</div>
+    <div class="vz-seite">
+      ${krumenTeile ? krumen(krumenTeile) : ''}
+      <header class="vz-seitenkopf">
+        ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
+        <h1>${esc(titel)}</h1>
+        ${lede ? `<p class="vz-lede">${esc(lede)}</p>` : ''}
+      </header>
+      ${inhalt}
     </div>`;
 }
 
-function renderHub(){
+/* ---------- Startseite ---------------------------------------------------- */
+function renderStart(){
   setPageSize('a4');
-  const zuletzt = verlauf().filter(id => TEMPLATES[id]).slice(0, 4);
 
-  const kacheln = GROUPS.map(g => `
-    <a class="vz-kachel" href="#/k/${esc(g.id)}">
-      <span class="vz-kachel-zahl">${kapitelZahl(g)}</span>
-      <b>${esc(g.title)}</b>
-      ${g.note ? `<i>${esc(g.note)}</i>` : ''}
+  const offen = entwuerfe();
+  const zuletzt = verlauf().filter(id => TEMPLATES[id] && !offen.includes(id)).slice(0, 3);
+
+  const zahlen = [
+    { z: alleVorlagen().length,                     l: t('kpiTemplates') },
+    { z: BEREICHE.length,                           l: t('kpiAreas') },
+    { z: SPRACH_IDS.length,                         l: t('kpiLanguages') },
+    { z: PRESETS.length + eigeneBausteine().length, l: t('kpiBlocks') }
+  ];
+
+  const kacheln = BEREICHE.map(b => `
+    <a class="vz-kachel" href="#/b/${esc(b.id)}">
+      <span class="vz-kachel-ico">${icon(b.icon, 22)}</span>
+      <b>${esc(b.title)}</b>
+      <i>${esc(b.lede)}</i>
+      <em>${bereichZahl(b)} ${esc(bereichZahl(b) === 1 ? t('templateOne') : t('templateMany'))}</em>
     </a>`).join('');
 
-  uebersicht(null, `
-    <header class="vz-hero">
-      <p class="eyebrow">${esc(t('heroEyebrow'))}</p>
-      <h1>${esc(t('heroTitle'))}</h1>
-      <p>${esc(t('heroLede'))}</p>
-    </header>
+  seite({
+    nav: 'start',
+    eyebrow: t('heroEyebrow'),
+    titel: t('heroTitle'),
+    lede: t('heroLede'),
+    inhalt: `
+      <div class="vz-zahlen">${zahlen.map(k => `
+        <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
+      </div>
 
-    ${zuletzt.length ? `
-    <section class="vz-block">
-      <h2>${esc(t('recent'))}</h2>
-      <div class="vz-cards vz-cards--klein">${zuletzt.map(karte).join('')}</div>
-    </section>` : ''}
+      ${offen.length ? `
+      <section class="vz-block">
+        <h2>${esc(t('continue'))}</h2>
+        <p class="vz-block-note">${esc(t('continueNote'))}</p>
+        <div class="vz-weiter">${offen.map(id => `
+          <a class="vz-weiter-zeile" href="#/t/${esc(id)}">
+            <span class="vz-weiter-punkt" aria-hidden="true"></span>
+            <b>${esc(TEMPLATES[id].title)}</b>
+            <i>${esc((bereichVon(id) || {}).title || '')}</i>
+            <em aria-hidden="true">→</em>
+          </a>`).join('')}
+        </div>
+      </section>` : ''}
 
-    <section class="vz-block">
-      <h2>${esc(t('chapters'))}</h2>
-      <div class="vz-kacheln">${kacheln}</div>
-    </section>
+      <section class="vz-block">
+        <h2>${esc(t('areas'))}</h2>
+        <p class="vz-block-note">${esc(t('areasNote'))}</p>
+        <div class="vz-kacheln">${kacheln}</div>
+      </section>
 
-    <div class="vz-schriftwarnung" id="vz-schrift" hidden></div>
+      ${zuletzt.length ? `
+      <section class="vz-block">
+        <h2>${esc(t('recent'))}</h2>
+        <div class="vz-cards vz-cards--klein">${zuletzt.map(karte).join('')}</div>
+      </section>` : ''}
 
-    <section class="vz-block">
-      <h2>${esc(t('help'))}</h2>
-      <ol class="vz-schritte">
-        <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
-        <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
-        <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
-      </ol>
-      <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
-    </section>`);
+      <div class="vz-schriftwarnung" id="vz-schrift" hidden></div>
+
+      <section class="vz-block">
+        <h2>${esc(t('help'))}</h2>
+        <ol class="vz-schritte">
+          <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
+          <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
+          <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+        </ol>
+        <p class="vz-hilfe-fuss"><a class="vz-textlink" href="#/s/hilfe">${esc(t('helpMore'))}</a></p>
+      </section>`
+  });
 
   zeigeSchrift();
 }
 
 /* Der Schrifthinweis kann erst beurteilt werden, wenn der Browser mit dem
-   Laden fertig ist — vorher meldet fonts.check() immer false. */
+   Laden fertig ist — vorher misst der Vergleich immer daneben. */
 function zeigeSchrift(){
   const kasten = document.getElementById('vz-schrift');
   if (!kasten) return;
@@ -263,26 +387,41 @@ function zeigeSchrift(){
     if (!text) return;
     kasten.hidden = false;
     kasten.innerHTML = `<b>${esc(t('fontSub'))}</b> ${esc(text)} `
-      + `<span>${t('fontHow')}</span>`;
+      + `<a class="vz-textlink" href="#/s/marke">${esc(t('fontWhere'))}</a>`;
   };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(sage);
   else sage();
 }
 
-function renderKategorie(katId){
+/* ---------- Ein Arbeitsbereich -------------------------------------------- */
+function renderBereich(id){
   setPageSize('a4');
-  const g = GROUPS.find(x => x.id === katId);
-  if (!g){ renderHub(); return; }
+  const b = bereich(id);
+  if (!b){ renderStart(); return; }
 
-  uebersicht(g.id, `
-    <nav class="vz-krumen" aria-label="Pfad">
-      <a href="#/">${esc(t('startPage'))}</a><span>›</span><b>${esc(g.title)}</b>
-    </nav>
-    <header class="vz-kap-kopf">
-      <h1>${esc(g.title)}</h1>
-      ${g.note ? `<p>${esc(g.note)}</p>` : ''}
-    </header>
-    <div class="vz-cards">${g.ids.map(karte).join('')}</div>`);
+  const werkzeug = (b.seiten || []).map(sid => {
+    const s = SEITEN[sid];
+    return s ? `
+      <a class="vz-werkzeug" href="#/s/${esc(s.id)}">
+        <span class="vz-werkzeug-ico">${icon(s.icon, 20)}</span>
+        <b>${esc(s.title)}</b><i>${esc(s.sub)}</i>
+      </a>` : '';
+  }).join('');
+
+  seite({
+    nav: 'b:' + b.id,
+    krumenTeile: [[t('startPage'), '#/'], [b.title, null]],
+    eyebrow: t('areaEyebrow'),
+    titel: b.title,
+    lede: b.lede,
+    inhalt: `
+      <div class="vz-cards">${b.ids.map(karte).join('')}</div>
+      ${werkzeug ? `
+      <section class="vz-block">
+        <h2>${esc(t('tools'))}</h2>
+        <div class="vz-werkzeuge">${werkzeug}</div>
+      </section>` : ''}`
+  });
 }
 
 /* ---------- Formular-Erzeugung ------------------------------------------- */
@@ -447,7 +586,8 @@ function setPath(state, path, value){
 /* ---------- Editor -------------------------------------------------------- */
 function renderEditor(id, geteilt, suchwert){
   const tpl = TEMPLATES[id];
-  if (!tpl){ view().innerHTML = `<div class="vz-hub"><p>${esc(t('notFound'))}</p></div>`; return; }
+  if (!tpl){ view().innerHTML = `<div class="vz-seite"><p class="vz-leer">${esc(t('notFound'))}</p></div>`;
+    markiereNav('start'); return; }
   if (geteilt){ uebernehmeGeteilt(tpl, geteilt); return; }
 
   const state = loadState(tpl);
@@ -469,15 +609,16 @@ function renderEditor(id, geteilt, suchwert){
   unmountActive();
   setPageSize(pageOf(tpl, state));
 
-  const gruppe = gruppeVon(tpl.id);
+  const gruppe = bereichVon(tpl.id);
   merken(tpl.id);
+  markiereNav(gruppe ? 'b:' + gruppe.id : 'start');
 
   view().innerHTML = `
     <div class="vz-editor">
       <aside class="vz-panel no-print">
         <nav class="vz-krumen" aria-label="Pfad">
-          <a href="#/">${esc(t('startPage'))}</a><span>›</span>
-          ${gruppe ? `<a href="#/k/${esc(gruppe.id)}">${esc(gruppe.title)}</a><span>›</span>` : ''}
+          <a href="#/">${esc(t('startPage'))}</a><span aria-hidden="true">\u203a</span>
+          ${gruppe ? `<a href="#/b/${esc(gruppe.id)}">${esc(gruppe.title)}</a><span aria-hidden="true">\u203a</span>` : ''}
           <b>${esc(tpl.title)}</b>
         </nav>
         <div class="vz-panel-head">
@@ -925,15 +1066,236 @@ function toast(msg){
   toastTimer = setTimeout(() => el.classList.remove('is-on'), 2600);
 }
 
+/* ---------- Werkzeugseiten ------------------------------------------------ */
+/* Seiten ohne Druckvorlage. Sie erklären, verwalten oder zeigen den Stand —
+   und gehören darum nicht in den Editor einer einzelnen Vorlage. */
+
+function renderSeite(id){
+  setPageSize('a4');
+  if (id === 'hilfe')  return seiteHilfe();
+  if (id === 'eigene') return seiteEigene();
+  if (id === 'marke')  return seiteMarke();
+  renderStart();
+}
+
+/* --- Anleitung ------------------------------------------------------------ */
+function seiteHilfe(){
+  const s = SEITEN.hilfe;
+  seite({
+    nav: 's:hilfe',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <section class="vz-block">
+        <h2>${esc(t('helpFlow'))}</h2>
+        <ol class="vz-schritte">
+          <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
+          <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
+          <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+        </ol>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpPrint'))}</h2>
+        <p class="vz-hilfe-fuss">${t('helpFoot')}</p>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpKeys'))}</h2>
+        <dl class="vz-tasten">
+          <dt><kbd>/</kbd></dt><dd>${esc(t('keySearch'))}</dd>
+          <dt><kbd>Esc</kbd></dt><dd>${esc(t('keyEsc'))}</dd>
+          <dt><kbd>Tab</kbd></dt><dd>${esc(t('keyTab'))}</dd>
+        </dl>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpOffline'))}</h2>
+        <p class="vz-hilfe-fuss">${t('helpOfflineText')}</p>
+      </section>`
+  });
+}
+
+/* --- Eigene Textbausteine -------------------------------------------------- */
+/* Bisher steckte die Verwaltung im Editor des Hinweis-Aushangs — man musste
+   also erst einen Aushang öffnen, um einen Satz zu löschen, der mit diesem
+   Aushang nichts zu tun hatte. Hier steht sie für sich. */
+function seiteEigene(){
+  const s = SEITEN.eigene;
+  const liste = eigeneBausteine();
+
+  const zeilen = liste.length ? liste.map(p => `
+    <div class="vz-baustein" data-baustein="${esc(p.id)}">
+      <div class="vz-baustein-kopf">
+        <span class="vz-baustein-ico">${icon(p.icon || 'info', 20)}</span>
+        <b>${esc(p.label)}</b>
+        <span class="vz-baustein-ton vz-baustein-ton--${esc(p.ton || 'info')}">${esc(p.ton || 'info')}</span>
+      </div>
+      <p class="vz-baustein-text">${esc(p.titel && p.titel.de || '')}${
+        p.text && p.text.de ? ' — ' + esc(p.text.de) : ''}</p>
+      <div class="vz-baustein-btns">
+        <a class="vz-btn vz-btn--sm" href="#/t/hinweis?w=${encodeURIComponent(p.id)}">${esc(t('blockOpen'))}</a>
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost"
+                data-loeschen="${esc(p.id)}">${esc(t('blockDelete'))}</button>
+      </div>
+    </div>`).join('')
+    : `<p class="vz-leer">${esc(t('blockNone'))}</p>`;
+
+  seite({
+    nav: 's:eigene',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <section class="vz-block">
+        <div class="vz-block-kopf">
+          <h2>${esc(t('blockYours'))} <em>${liste.length}</em></h2>
+          <div class="vz-block-btns">
+            <a class="vz-btn vz-btn--sm vz-btn--navy" href="#/t/hinweis">${esc(t('blockNew'))}</a>
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-eigen-export"
+              ${liste.length ? '' : 'disabled'}>${esc(t('blockExport'))}</button>
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-eigen-import">${esc(t('blockImport'))}</button>
+            <input type="file" id="vz-eigen-datei" accept="application/json" hidden>
+          </div>
+        </div>
+        <p class="vz-block-note">${esc(t('blockNote'))}</p>
+        <div class="vz-bausteine">${zeilen}</div>
+      </section>`
+  });
+
+  const wurzel = view();
+  wurzel.addEventListener('click', ev => {
+    const del = ev.target.closest('[data-loeschen]');
+    if (!del) return;
+    if (!confirm(t('blockDeleteAsk'))) return;
+    bausteinLoeschen(del.dataset.loeschen);
+    seiteEigene();
+    toast(t('blockDeleted'));
+  });
+
+  document.getElementById('vz-eigen-export').onclick = () => {
+    const blob = new Blob([sammlungAlsDatei()], { type:'application/json' });
+    downloadBlob(blob, 'ns-hotel-bausteine.json');
+    toast(t('saved'));
+  };
+  const datei = document.getElementById('vz-eigen-datei');
+  document.getElementById('vz-eigen-import').onclick = () => datei.click();
+  datei.onchange = () => {
+    const f = datei.files[0]; if (!f) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try{
+        const { dazu, ersetzt } = sammlungLaden(fr.result);
+        seiteEigene();
+        toast(`${t('blockLoaded')} · +${dazu} / ~${ersetzt}`);
+      }catch(err){ alert(t('blockBadFile')); }
+    };
+    fr.readAsText(f);
+  };
+}
+
+/* --- Marke und Schrift ----------------------------------------------------- */
+/* Ein Aushang in der Ersatzschrift sieht nicht falsch aus — er sieht nur nach
+   einem anderen Haus aus. Damit das nicht unbemerkt bleibt, steht der Stand
+   hier schwarz auf weiss. */
+function seiteMarke(){
+  const s = SEITEN.marke;
+  const farben = [
+    ['--navy',  'Navy',        'Text, Fusszeilen, N’s-Pin'],
+    ['--cyan',  'Cyan',        'Markenakzent, Handschrift-Zeile'],
+    ['--green', 'Grün',        'Grünzonen und Fusswege'],
+    ['--red',   'Rot',         'Notfall und Verbot'],
+    ['--ink-soft', 'Grauton',  'Nebentexte'],
+    ['--line',  'Linie',       'Trennlinien und Rahmen']
+  ];
+
+  seite({
+    nav: 's:marke',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <section class="vz-block">
+        <h2>${esc(t('brandFonts'))}</h2>
+        <div class="vz-schriftstand" id="vz-schriftstand"></div>
+        <p class="vz-block-note">${t('fontHow')}</p>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('brandColours'))}</h2>
+        <div class="vz-farben">${farben.map(([v, name, wofuer]) => `
+          <div class="vz-farbe">
+            <span class="vz-farbe-feld" style="background:var(${v})"></span>
+            <b>${esc(name)}</b>
+            <code data-token="${esc(v)}">${esc(v)}</code>
+            <i>${esc(wofuer)}</i>
+          </div>`).join('')}
+        </div>
+        <p class="vz-block-note">${esc(t('brandColoursNote'))}</p>
+      </section>`
+  });
+
+  /* Die tatsächlichen Werte aus den Tokens nachtragen — so steht hier immer,
+     was wirklich gilt, und nicht eine abgeschriebene Kopie davon. */
+  const stil = getComputedStyle(document.documentElement);
+  view().querySelectorAll('[data-token]').forEach(el => {
+    const wert = stil.getPropertyValue(el.dataset.token).trim();
+    if (wert) el.textContent = wert;
+  });
+
+  const kasten = document.getElementById('vz-schriftstand');
+  const zeige = () => {
+    const b = schriftBefund();
+    kasten.innerHTML = MARKEN_SCHRIFTEN.map(f => {
+      const da = b.vorhanden.some(x => x.id === f.id);
+      return `
+        <div class="vz-schriftzeile vz-schriftzeile--${da ? 'ok' : 'ersatz'}">
+          <span class="vz-schriftzeile-punkt" aria-hidden="true"></span>
+          <b style="font-family:${da ? `'${f.familie}', ` : ''}var(--font-body)">${esc(f.familie)}</b>
+          <i>${esc(f.wofuer)}</i>
+          <em>${da ? esc(t('fontLive')) : esc(t('fontFallback')) + ': ' + esc(f.ersatz)}</em>
+        </div>`;
+    }).join('');
+  };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(zeige);
+  else zeige();
+}
+
 /* ---------- Router -------------------------------------------------------- */
+/* Die alten Kapitel-Adressen (#/k/...) stecken in verschickten Links und in
+   ausgedruckten Anleitungen. Sie fuehren weiter — auf den Arbeitsbereich,
+   in dem die Vorlagen von damals heute stehen. */
+const ALTE_KAPITEL = {
+  hausordnung:'hausordnung', sicherheit:'sicherheit', parken:'ankommen',
+  abfall:'unterhalt', waesche:'unterhalt', hotel:'zimmer',
+  wegweiser:'ankommen', etiketten:'unterhalt', hilfe:'team', plaene:'ankommen'
+};
+
 function route(){
   unmountActive();
   const hash = location.hash || '#/';
   window.scrollTo(0, 0);
+  schubladeZeigen(false);
+  /* Im Editor schrumpft die Seitenleiste zur Schiene aus Icons. Die Vorschau
+     ist dort das Wichtigste auf dem Schirm; die Navigation muss nur noch
+     erreichbar bleiben, nicht lesbar. */
+  document.body.classList.toggle('vz-im-editor', /^#\/t\//.test(hash));
 
-  /* #/k/<kapitel> — eine Kategorieseite */
+  /* #/b/<bereich> — ein Arbeitsbereich */
+  const b = /^#\/b\/([\w-]+)/.exec(hash);
+  if (b){ renderBereich(b[1]); return; }
+
+  /* #/s/<seite> — Anleitung, eigene Bausteine, Marke */
+  const w = /^#\/s\/([\w-]+)/.exec(hash);
+  if (w){ renderSeite(w[1]); return; }
+
+  /* #/k/<kapitel> — alte Adresse, umgeleitet */
   const k = /^#\/k\/([\w-]+)/.exec(hash);
-  if (k){ renderKategorie(k[1]); return; }
+  if (k){ location.replace('#/b/' + (ALTE_KAPITEL[k[1]] || 'ankommen')); return; }
 
   /* #/t/<vorlage> — der Editor. Optional:
        ?d=<Nutzlast>  ein geteilter Entwurf
@@ -943,7 +1305,7 @@ function route(){
     renderEditor(m[1], m[2] || null, m[3] ? decodeURIComponent(m[3]) : null);
     return;
   }
-  renderHub();
+  renderStart();
 }
 
 /* ---------- Tastatur ------------------------------------------------------ */
@@ -963,8 +1325,8 @@ document.addEventListener('keydown', ev => {
 
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();
-mountTopbar();
+mountRahmen();
 route();
 
 /* Für Tests/Automatisierung erreichbar machen. */
-window.VZ = { TEMPLATES, ORDER, GROUPS, route, PAGE_MAX_H };
+window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, route, PAGE_MAX_H };

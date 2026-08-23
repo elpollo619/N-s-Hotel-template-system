@@ -1,6 +1,7 @@
 /* Registrierung aller Vorlagen.
-   Der Hub gruppiert nach Kategorie — dieselbe Einteilung, nach der die
-   Aushänge im Laufwerk sortiert sind. */
+   Wie sie auf der Oberflaeche gruppiert werden, steht in ../bereiche.js —
+   nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
+   Vorlagen selbst. */
 import notruf from './notruf.js';
 import rezeption from './rezeption.js';
 import sticker from './sticker.js';
@@ -53,46 +54,4 @@ export const ORDER = [
   'foto', 'grossplakat',
   'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe'
-];
-
-export const GROUPS = [
-  { id:'hausordnung', title:'Hausordnung und Verbote',
-    note:'Rauchverbot, Betäubungsmittel, Videoüberwachung, Türen — als Aushang oder als Brief.',
-    ids:['hinweis', 'mieterbrief'] },
-
-  { id:'sicherheit', title:'Sicherheitszeichen',
-    note:'Verbot, Warnung, Gebot, Rettung und Brandschutz — in der Formensprache von ISO 7010, selber gedruckt. Dazu das Grossflächenplakat aus mehreren A4-Blättern.',
-    ids:['sicherheit', 'grossplakat'] },
-
-  { id:'parken', title:'Parkieren',
-    note:'Reservierte Plätze, Besucherparkplätze, Parkverbot.',
-    ids:['parkschild', 'parkplatz'] },
-
-  { id:'abfall', title:'Abfall und Recycling',
-    note:'Behälter beschriften — Papier, PET, Glas, Kehricht und die anderen Fraktionen.',
-    ids:['sammelstelle'] },
-
-  { id:'waesche', title:'Waschen und Trocknen',
-    note:'Waschplan zum Aushängen.',
-    ids:['waschplan'] },
-
-  { id:'hotel', title:'Hotel und Gäste',
-    note:'Alles rund um Check-in, Zimmer und Aufenthalt.',
-    ids:['notruf', 'aushang', 'foto', 'gaestemappe', 'zattoo'] },
-
-  { id:'wegweiser', title:'Wegweiser und Aufkleber',
-    note:'Pfeile und runde Aufkleber in Originalgrösse.',
-    ids:['rezeption', 'rezeption-sticker'] },
-
-  { id:'etiketten', title:'Etiketten und Beschriftung',
-    note:'Klebeetiketten auf A4 — Schlüssel, Schränke, Vorräte, Namensschilder.',
-    ids:['etiketten'] },
-
-  { id:'hilfe', title:'QR-Codes und Anleitung',
-    note:'WLAN, Links und Telefonnummern als Code zum Scannen — und die Kurzanleitung fürs Team.',
-    ids:['qrplakat', 'kurzanleitung'] },
-
-  { id:'plaene', title:'Karten und Pläne',
-    note:'Anfahrt, Luftbild und der interaktive Lageplan.',
-    ids:['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor'] }
 ];

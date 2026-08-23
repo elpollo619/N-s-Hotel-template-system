@@ -16,7 +16,8 @@
    dieser Menge lohnt der Aufwand nicht, und ein falscher Treffer ist
    ärgerlicher als keiner.
    ========================================================================== */
-import { TEMPLATES, ORDER, GROUPS } from '../templates/index.js';
+import { TEMPLATES, ORDER } from '../templates/index.js';
+import { bereichVon } from '../bereiche.js';
 import { PRESETS, KATEGORIEN } from '../presets.js';
 import { SZ_ZEICHEN } from './sicherheitszeichen.js';
 import { FRAKTIONEN } from '../templates/sammelstelle.js';
@@ -34,10 +35,9 @@ export function normal(s){
     .trim();
 }
 
-/** Zu welcher Kategorie gehört eine Vorlage? */
-const KAT_VON = {};
-for (const g of GROUPS) for (const id of g.ids) KAT_VON[id] = g;
-export function gruppeVon(id){ return KAT_VON[id] || null; }
+/* Der Arbeitsbereich einer Vorlage fliesst in den Suchschluessel ein: wer
+   «parkieren» tippt, findet auch das Parkplatz-Schild, dessen Titel das Wort
+   gar nicht enthaelt. */
 
 function eintrag(art, id, titel, unter, ziel, wert, extra){
   return { art, id, titel, unter, ziel, wert,
@@ -51,9 +51,9 @@ export const BESTAND = (() => {
   for (const id of ORDER){
     const tpl = TEMPLATES[id];
     if (!tpl) continue;
-    const g = gruppeVon(id);
+    const g = bereichVon(id);
     aus.push(eintrag('vorlage', id, tpl.title, tpl.sub || '', id, null,
-      [tpl.badge, g && g.title, g && g.note].filter(Boolean).join(' ')));
+      [tpl.badge, g && g.title, g && g.lede].filter(Boolean).join(' ')));
   }
 
   const katName = {};
