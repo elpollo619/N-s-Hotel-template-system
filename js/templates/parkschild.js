@@ -10,7 +10,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumb } from '../lib/thumbs.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const PARK_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
 
@@ -63,8 +63,8 @@ export default {
       options:[{v:'nein',t:'nein'},{v:'ja',t:'ja — nur ein Schild ohne Platznummer'}] },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
 
     { t:'group', label:'Text' },
     { k:'titel',  label:'Titelzeile', type:'text',
@@ -89,7 +89,7 @@ export default {
 
   render(d){
     const art = ART[d.art] || ART.reserviert;
-    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const abs = absender(d.absender, 'immobilien');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const titel = has(d.titel) ? d.titel : art.title;

@@ -65,7 +65,7 @@ export const BEREICHE = [
     kurz: 'Team',
     lede: 'Die Anleitung fürs Schwarze Brett, die eigenen Textbausteine, die Schriftwahl, alle Piktogramme und der Stand der Marke.',
     ids: ['kurzanleitung'],
-    seiten: ['eigene', 'schrift', 'piktogramme', 'marke', 'hilfe']
+    seiten: ['liegenschaften', 'eigene', 'schrift', 'piktogramme', 'marke', 'hilfe']
   }
 ];
 
@@ -73,6 +73,8 @@ export const BEREICHE = [
 /* Seiten ohne Druckvorlage. Sie stehen im Bereich «Team und Werkzeug» und
    sind zugleich über die Seitenleiste direkt erreichbar. */
 export const SEITEN = {
+  liegenschaften:{ id:'liegenschaften', icon:'door', title:'Liegenschaften',
+            sub:'Die Häuser des Hauses — wählen, neue anlegen, weitergeben.' },
   hilfe:  { id:'hilfe',  icon:'info',  title:'Anleitung',
             sub:'Wie die Zentrale bedient wird — in drei Schritten.' },
   eigene: { id:'eigene', icon:'mail',  title:'Eigene Textbausteine',

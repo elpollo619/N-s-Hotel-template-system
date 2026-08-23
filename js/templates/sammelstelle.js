@@ -11,7 +11,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumb } from '../lib/thumbs.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
 
 const SAMMEL_PAGES = { a5:'a5', 'a5-land':'a5-land', a4:'a4', 'a4-land':'a4-land' };
@@ -175,8 +175,8 @@ export default {
     { k:'setzeSprachen', label:'Zusammenstellung übernehmen', type:'action' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
 
     { t:'group', label:'Behälter' },
     { t:'note', label:'Jede Zeile ergibt eine Druckseite. Nicht benötigte Zeilen löschen.' },
@@ -222,7 +222,7 @@ export default {
   },
 
   render(d){
-    const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+    const abs = absender(d.absender, 'immobilien');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const sprachen = sprachObjekte(d.sprachen);

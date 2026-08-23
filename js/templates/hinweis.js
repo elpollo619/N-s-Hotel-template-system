@@ -26,7 +26,7 @@ import { eigeneBausteine, bausteinSichern, bausteinLoeschen, istEigener,
 import { downloadBlob } from '../lib/export.js';
 import { SPRACHEN, sprachOptions, sprachSetOptions, sprachSet,
          sprachObjekte, sprachListe } from '../lib/sprachen.js';
-import { ABSENDER, objekt, objektAdresse, adresseFehlt, istHotel,
+import { absender, objekt, objektAdresse, adresseFehlt, istHotel,
          objektOptions, absenderOptions, objektCheckOptions, objektListe } from '../objekte.js';
 
 const TONE = {
@@ -114,8 +114,8 @@ export default {
     { k:'eigenImport', label:'Sammlung laden (Datei)', type:'action' },
 
     { t:'group', label:'Objekt und Absender' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
     { k:'zeigeAdresse', label:'Adresse im Kopf zeigen', type:'select',
       options:[{v:'ja',t:'ja'},{v:'nein',t:'nein'}] },
 
@@ -125,7 +125,7 @@ export default {
       { v:'nein', t:'nein — nur die Liegenschaft oben' },
       { v:'auswahl', t:'ja — die angehakten Liegenschaften' }
     ] },
-    { k:'serieObjekte', label:'Liegenschaften', type:'checks', options:objektCheckOptions() },
+    { k:'serieObjekte', label:'Liegenschaften', type:'checks', options:objektCheckOptions },
     { k:'serieAlle', label:'Alle anhaken', type:'action' },
     { k:'serieAbsender', label:'Absender je Seite', type:'select', options:[
       { v:'objekt', t:'der zur Liegenschaft gehörende' },
@@ -328,7 +328,7 @@ export default {
    -------------------------------------------------------------------------- */
 function blatt(d){
   const t = TONE[d.ton] || TONE.info;
-  const abs = ABSENDER[d.absender] || ABSENDER.immobilien;
+  const abs = absender(d.absender, 'immobilien');
   const obj = objekt(d.objekt);
   const adr = objektAdresse(d.objekt);
 

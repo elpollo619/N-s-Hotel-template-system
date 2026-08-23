@@ -9,7 +9,7 @@
 import { esc, fmt, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumb, lines } from '../lib/thumbs.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 const BRIEFE = {
   frei: {
@@ -60,8 +60,8 @@ export default {
       hint:'Überschreibt Betreff und Text.' },
 
     { t:'group', label:'Absender und Objekt' },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions },
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
 
     { t:'group', label:'Empfänger' },
     { k:'empfaenger', label:'Anschrift', type:'textarea',
@@ -97,7 +97,7 @@ export default {
   },
 
   render(d){
-    const abs = ABSENDER[d.absender] || ABSENDER.architektur;
+    const abs = absender(d.absender, 'architektur');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const body = String(d.text || '')

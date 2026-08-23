@@ -16,7 +16,7 @@ import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { szSvg, szZeichen, szOptions } from '../lib/sicherheitszeichen.js';
 import { sprachOptions, sprachObjekte } from '../lib/sprachen.js';
-import { ABSENDER, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
+import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
 /* A4 hoch in Millimetern — das Papier, auf dem gedruckt wird. */
 const BLATT_B = 210, BLATT_H = 297;
@@ -108,8 +108,8 @@ export default {
     { k:'es', label:'Español',   type:'text' },
 
     { t:'group', label:'Objekt' },
-    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions() },
-    { k:'absender', label:'Absender',     type:'select', options:absenderOptions() }
+    { k:'objekt',   label:'Liegenschaft', type:'select', options:objektOptions },
+    { k:'absender', label:'Absender',     type:'select', options:absenderOptions }
   ],
 
   defaults:{
@@ -135,7 +135,7 @@ export default {
 
   render(d){
     const m = plakatMass(d.spalten, d.zeilen, d.ueberlappung);
-    const abs = ABSENDER[d.absender] || ABSENDER.hotel;
+    const abs = absender(d.absender, 'hotel');
     const obj = objekt(d.objekt);
     const adr = objektAdresse(d.objekt);
     const zahl = (v, min, max, weich) =>
