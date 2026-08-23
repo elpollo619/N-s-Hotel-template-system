@@ -160,6 +160,12 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Empfang-Tafel** | A4 quer | Willkommenstafel mit den Infos des Tages |
 | **Hausordnung** | A4 hoch | Das ganze Regelwerk als Aushang, nummeriert, mehrsprachig |
 | **Frühstück-Türkarte** | A5 hoch | Zum Ankreuzen und an die Klinke hängen |
+| **Vollmacht** | A4 hoch | Vertretung an der Versammlung — Vollmachtgeber, Bevollmächtigte, Unterschrift |
+| **Protokoll** | A4 hoch | Sitzungs- und Versammlungsprotokoll: Kopf, je Traktandum ein Beschlussfeld |
+| **Kündigungsbestätigung** | A4 hoch | Brief mit Briefkopf: Kündigung erhalten, Mietende und Übergabe |
+| **Reservationsblatt** | A4 hoch | Waschküche, Gemeinschaftsraum, Grill — leere Tabelle zum Eintragen |
+| **Besucher-Parkkarte** | A4 hoch | Sechs Karten für die Windschutzscheibe zum Ausschneiden |
+| **Wichtige Mitteilung** | A4 hoch | Die eine Nachricht, gross, mit Datum und Frist — Ton wählbar, mehrsprachig |
 
 **So funktioniert der Plan-Editor:** ein Element anklicken und ziehen. Bei
 Zonen und Wegen erscheinen blaue Punkte zum Umformen — Doppelklick auf einen
@@ -811,12 +817,12 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 
 | Bereich | Was darin steckt |
 |---|---|
-| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel |
+| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte |
-| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung |
 | **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
-| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan |
-| **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus |
+| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt |
+| **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung |
 | **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
 
 Die Einteilung steht in `js/bereiche.js`. **Eine Vorlage gehört in genau einen
@@ -829,7 +835,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Siebenundfünfzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Dreiundsechzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
