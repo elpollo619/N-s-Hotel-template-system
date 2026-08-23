@@ -24,6 +24,7 @@ const MODULES = [
   'js/lib/qr.js',
   'js/lib/sicherheitszeichen.js',
   'js/lib/storage.js',
+  'js/lib/schriftwahl.js',
   'js/lib/teilen.js',
   'js/lib/lesbarkeit.js',
   'js/lib/kontrast.js',
@@ -150,6 +151,27 @@ async function bundle(){
     console.error('\nAbbruch: diese Module fehlen in der Liste MODULES:');
     [...new Set(fehlend)].forEach(f => console.error('  · ' + f));
     console.error('Bitte in tools/build-standalone.mjs eintragen — Abhaengigkeiten zuerst.\n');
+    process.exit(1);
+  }
+
+  /* Umbenennende Importe (`import { a as b }`) ueberleben das Buendeln nicht:
+     die Importzeilen fallen weg, und im gemeinsamen Geltungsbereich heisst
+     die Funktion weiter `a`. In der Einzeldatei gaebe das ein nacktes
+     «b is not defined» — erst im Browser, nicht hier. Also hier abbrechen. */
+  const aliasse = [];
+  for (const rel of MODULES){
+    const src = await fs.readFile(p(rel), 'utf8');
+    for (const m of src.matchAll(/^import\s*\{([^}]*)\}\s*from\s*['"][^'"]+['"];?\s*$/gm)){
+      for (const teil of m[1].split(',')){
+        const um = /([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)/.exec(teil);
+        if (um) aliasse.push(`${um[1]} as ${um[2]}  (in ${rel})`);
+      }
+    }
+  }
+  if (aliasse.length){
+    console.error('\nAbbruch: umbenennende Importe funktionieren im Buendel nicht:');
+    [...new Set(aliasse)].forEach(a => console.error('  · ' + a));
+    console.error('Bitte die Funktion selbst eindeutig benennen und ohne «as» importieren.\n');
     process.exit(1);
   }
 

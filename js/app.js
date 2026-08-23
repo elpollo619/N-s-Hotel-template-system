@@ -25,13 +25,16 @@ import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
-import { suche, trefferZiel, ART_LABEL } from './lib/suche.js';
+import { suche, trefferZiel, ART_LABEL, normal } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
-import { icon } from './lib/icons.js';
+import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
 import { SPRACH_IDS } from './lib/sprachen.js';
 import { PRESETS } from './presets.js';
 import { eigeneBausteine, bausteinLoeschen, sammlungAlsDatei, sammlungLaden } from './lib/eigene.js';
+import { ROLLEN, FAMILIEN, EIGEN_FAMILIE, familienFuer, wahl, setzeWahl, wahlZuruecksetzen,
+         istVoreinstellung, eigeneSchrift, eigeneSchriftSichern, eigeneSchriftLoeschen,
+         schriftAnwenden } from './lib/schriftwahl.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
@@ -161,14 +164,16 @@ function schubladeZeigen(auf){
 function mountSeitenleiste(){
   const leiste = qs('#vz-seitenleiste');
   const werkzeug = Object.values(SEITEN).map(s => `
-    <a class="vz-nav-zeile" href="#/s/${esc(s.id)}" data-nav="s:${esc(s.id)}">
+    <a class="vz-nav-zeile" href="#/s/${esc(s.id)}" data-nav="s:${esc(s.id)}"
+       title="${esc(s.title)}">
       <span class="vz-nav-ico">${icon(s.icon, 19)}</span>
       <span class="vz-nav-txt">${esc(s.title)}</span>
     </a>`).join('');
 
   leiste.innerHTML = `
     <nav aria-label="${esc(t('areas'))}">
-      <a class="vz-nav-zeile vz-nav-zeile--start" href="#/" data-nav="start">
+      <a class="vz-nav-zeile vz-nav-zeile--start" href="#/" data-nav="start"
+         title="${esc(t('startPage'))}">
         <span class="vz-nav-ico">${icon('info', 19)}</span>
         <span class="vz-nav-txt">${esc(t('startPage'))}</span>
         <em>${alleVorlagen().length}</em>
@@ -445,9 +450,7 @@ function fieldHtml(f, value, path){
          Zeichnen neu geholt. Gebraucht fuer die eigenen Textbausteine, die
          waehrend der Arbeit dazukommen koennen. */
       return `<div class="vz-field">${lbl}
-        <select id="${id}" data-path="${esc(path)}">${
-          optionen(f).map(o => `<option value="${esc(o.v)}"${String(o.v) === String(v) ? ' selected' : ''}>${esc(o.t)}</option>`).join('')
-        }</select>${hint}</div>`;
+        <select id="${id}" data-path="${esc(path)}">${wahlListe(optionen(f), v)}</select>${hint}</div>`;
     case 'color':
       return `<div class="vz-field vz-field--color">
         <input id="${id}" type="color" data-path="${esc(path)}" value="${esc(v || '#2A3350')}">${lbl}</div>`;
@@ -458,7 +461,7 @@ function fieldHtml(f, value, path){
          Gebraucht für die Sprachen eines Aushangs. */
       return `<div class="vz-field"><label>${esc(f.label || f.k)}</label>
         <div class="vz-checks" data-checks="${esc(path)}">${
-          optionen(f).map(o => {
+          optionen(f).filter(o => o && o.gruppe == null).map(o => {
             const an = Array.isArray(v) ? v.includes(o.v) : String(v) === String(o.v);
             return `<label class="vz-check${an ? ' is-on' : ''}">
               <input type="checkbox" value="${esc(o.v)}"${an ? ' checked' : ''}>
@@ -558,6 +561,27 @@ function buildForm(tpl, state){
         <div class="vz-kap-inhalt">${inhalt}</div>
       </section>`;
   }).join('');
+}
+
+/**
+ * Die Eintraege eines Auswahlfeldes als HTML.
+ * Ein Eintrag mit `gruppe` statt `v` beginnt eine neue Gruppe — bei
+ * sechsundachtzig Piktogrammen ist eine flache Liste nicht mehr zu
+ * ueberblicken, und <optgroup> kostet nichts.
+ */
+function wahlListe(liste, wert){
+  let html = '';
+  let offen = false;
+  for (const o of liste){
+    if (o && o.gruppe != null){
+      if (offen) html += '</optgroup>';
+      html += `<optgroup label="${esc(o.gruppe)}">`;
+      offen = true;
+      continue;
+    }
+    html += `<option value="${esc(o.v)}"${String(o.v) === String(wert) ? ' selected' : ''}>${esc(o.t)}</option>`;
+  }
+  return html + (offen ? '</optgroup>' : '');
 }
 
 /** Auswahlliste eines Feldes — fest hinterlegt oder bei Bedarf berechnet. */
@@ -1075,6 +1099,8 @@ function renderSeite(id){
   if (id === 'hilfe')  return seiteHilfe();
   if (id === 'eigene') return seiteEigene();
   if (id === 'marke')  return seiteMarke();
+  if (id === 'schrift') return seiteSchrift();
+  if (id === 'piktogramme') return seitePiktogramme();
   renderStart();
 }
 
@@ -1265,6 +1291,204 @@ function seiteMarke(){
   else zeige();
 }
 
+/* --- Schriften waehlen ------------------------------------------------------ */
+/* Die gekaufte Schrift steht immer vorn: gewaehlt wird der Ersatz, nicht die
+   Marke. Wer Gotham auf dem Rechner hat, sieht weiterhin Gotham. */
+function seiteSchrift(){
+  const s = SEITEN.schrift;
+  const gewaehlt = wahl();
+  const eigen = eigeneSchrift();
+
+  const bloecke = ROLLEN.map(r => {
+    const kandidaten = familienFuer(r.id).slice();
+    if (eigen) kandidaten.push({ id:EIGEN_FAMILIE, grund:r.grund, rollen:[r.id],
+                                 urteil:`Selbst hochgeladen: ${eigen.datei || eigen.name}` });
+    const karten = kandidaten.map(f => {
+      const an = gewaehlt[r.id] === f.id;
+      /* Die Probe steht in der Groesse, in der die Rolle wirklich arbeitet:
+         ein Titel gross, ein Fliesstext klein. `skala` gleicht dabei die
+         unterschiedlichen x-Hoehen aus — sonst vergliche man die Skalierung
+         statt der Form. */
+      const stil = `font-family:'${f.id}', ${f.grund};font-weight:${f.gewicht || 400};`
+                 + `font-size:${Math.round((r.probeGroesse || 26) * (f.skala || 1))}px`;
+      return `
+        <button type="button" class="vz-schriftkarte${an ? ' is-an' : ''}"
+                data-rolle="${esc(r.id)}" data-familie="${esc(f.id)}"
+                aria-pressed="${an}">
+          <span class="vz-schriftkarte-kopf">
+            <b>${esc(f.id)}</b>
+            ${an ? `<em>${esc(t('fontInUse'))}</em>` : ''}
+          </span>
+          <span class="vz-schriftkarte-probe" style="${stil}">${esc(r.probe)}</span>
+          <span class="vz-schriftkarte-urteil">${esc(f.urteil)}</span>
+        </button>`;
+    }).join('');
+
+    return `
+      <section class="vz-block">
+        <div class="vz-block-kopf">
+          <h2>${esc(r.titel)}</h2>
+          <span class="vz-rolle-jetzt">${esc(t('fontChosen'))}: <b>${esc(gewaehlt[r.id])}</b></span>
+        </div>
+        <p class="vz-block-note">${esc(r.was)}${
+          r.marke ? ` ${esc(t('fontBrandFirst').replaceAll('%s', r.marke))}` : ''}</p>
+        <div class="vz-schriftkarten">${karten}</div>
+      </section>`;
+  }).join('');
+
+  seite({
+    nav: 's:schrift',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <div class="vz-hinweiskasten">
+        <b>${esc(t('fontScopeTitle'))}</b>
+        <span>${esc(t('fontScopeText'))}</span>
+      </div>
+
+      ${bloecke}
+
+      <section class="vz-block">
+        <div class="vz-block-kopf">
+          <h2>${esc(t('fontOwn'))}</h2>
+          <div class="vz-block-btns">
+            <button type="button" class="vz-btn vz-btn--sm vz-btn--navy" id="vz-schrift-laden">${esc(t('fontOwnAdd'))}</button>
+            ${eigen ? `<button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-schrift-weg">${esc(t('fontOwnRemove'))}</button>` : ''}
+            <input type="file" id="vz-schrift-datei" accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,font/ttf,font/otf" hidden>
+          </div>
+        </div>
+        <p class="vz-block-note">${esc(t('fontOwnNote'))}</p>
+        ${eigen ? `
+        <div class="vz-schriftzeile vz-schriftzeile--ok">
+          <span class="vz-schriftzeile-punkt" aria-hidden="true"></span>
+          <b style="font-family:'${EIGEN_FAMILIE}', sans-serif">${esc(eigen.datei || eigen.name)}</b>
+          <i>${esc(t('fontOwnLive'))}</i>
+        </div>` : `<p class="vz-leer">${esc(t('fontOwnNone'))}</p>`}
+      </section>
+
+      <section class="vz-block">
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-schrift-reset"
+                ${istVoreinstellung() ? 'disabled' : ''}>${esc(t('fontReset'))}</button>
+      </section>`
+  });
+
+  view().addEventListener('click', ev => {
+    const karte = ev.target.closest('[data-familie]');
+    if (!karte) return;
+    setzeWahl(karte.dataset.rolle, karte.dataset.familie);
+    seiteSchrift();
+    toast(t('fontSaved'));
+  });
+
+  const datei = document.getElementById('vz-schrift-datei');
+  document.getElementById('vz-schrift-laden').onclick = () => datei.click();
+  datei.onchange = () => {
+    const f = datei.files[0]; if (!f) return;
+    /* Der Browser-Speicher fasst ungefähr fünf Megabyte, und als Data-URI
+       wächst eine Datei um ein Drittel. Über ein Megabyte lohnt der Versuch
+       nicht mehr. */
+    if (f.size > 1024 * 1024){ alert(t('fontOwnTooBig')); return; }
+    const fr = new FileReader();
+    fr.onload = () => {
+      const ok = eigeneSchriftSichern({ name:f.name.replace(/\.[^.]+$/, ''), datei:f.name, datenUri:fr.result });
+      if (!ok){ alert(t('fontOwnTooBig')); return; }
+      seiteSchrift();
+      toast(t('fontOwnDone'));
+    };
+    fr.readAsDataURL(f);
+  };
+
+  const weg = document.getElementById('vz-schrift-weg');
+  if (weg) weg.onclick = () => {
+    if (!confirm(t('fontOwnRemoveAsk'))) return;
+    eigeneSchriftLoeschen();
+    seiteSchrift();
+    toast(t('fontOwnGone'));
+  };
+
+  document.getElementById('vz-schrift-reset').onclick = () => {
+    wahlZuruecksetzen();
+    seiteSchrift();
+    toast(t('fontReset'));
+  };
+}
+
+/* --- Piktogramme ------------------------------------------------------------ */
+/* Sechsundachtzig Zeichen sind zu viele für ein Auswahlfeld allein. Hier
+   liegen sie ausgebreitet: suchen, ansehen, den Namen mitnehmen. */
+function seitePiktogramme(){
+  const s = SEITEN.piktogramme;
+  const alle = iconListe();
+
+  seite({
+    nav: 's:piktogramme',
+    krumenTeile: [[t('startPage'), '#/'], [s.title, null]],
+    eyebrow: t('toolEyebrow'),
+    titel: s.title,
+    lede: s.sub,
+    inhalt: `
+      <div class="vz-piktoleiste">
+        <label for="vz-pikto-suche">${esc(t('search'))}</label>
+        <input id="vz-pikto-suche" type="search" autocomplete="off"
+               placeholder="${esc(t('pictoSearch'))}">
+        <span class="vz-pikto-zahl" id="vz-pikto-zahl">${alle.length}</span>
+      </div>
+      <div id="vz-pikto-liste"></div>
+      <p class="vz-block-note" style="margin-top:22px">${t('pictoNote')}</p>`
+  });
+
+  const liste = document.getElementById('vz-pikto-liste');
+  const feld = document.getElementById('vz-pikto-suche');
+  const zahl = document.getElementById('vz-pikto-zahl');
+
+  function zeichne(){
+    const frage = normal(feld.value);
+    const treffer = frage
+      ? alle.filter(p => normal(p.label + ' ' + p.id + ' ' + p.gruppeTitel).includes(frage))
+      : alle;
+    zahl.textContent = String(treffer.length);
+
+    if (!treffer.length){
+      liste.innerHTML = `<p class="vz-leer">${esc(t('pictoNone'))}</p>`;
+      return;
+    }
+    liste.innerHTML = GRUPPEN.map(g => {
+      const drin = treffer.filter(p => p.gruppe === g.id);
+      if (!drin.length) return '';
+      return `
+        <section class="vz-block">
+          <h2>${esc(g.titel)} <em>${drin.length}</em></h2>
+          <div class="vz-piktos">${drin.map(p => `
+            <button type="button" class="vz-pikto" data-pikto="${esc(p.id)}"
+                    title="${esc(t('pictoCopy'))}">
+              <span class="vz-pikto-bild">${icon(p.id, 30, 1.7)}</span>
+              <b>${esc(p.label)}</b>
+              <code>${esc(p.id)}</code>
+            </button>`).join('')}
+          </div>
+        </section>`;
+    }).join('');
+  }
+
+  feld.addEventListener('input', zeichne);
+  liste.addEventListener('click', async ev => {
+    const p = ev.target.closest('[data-pikto]');
+    if (!p) return;
+    const name = p.dataset.pikto;
+    try{
+      await navigator.clipboard.writeText(name);
+      toast(`${t('pictoCopied')}: ${name}`);
+    }catch(_){
+      /* Ohne Zwischenablage — etwa als lokale Datei — bleibt der Name
+         wenigstens sichtbar zum Abschreiben. */
+      window.prompt(t('pictoCopy'), name);
+    }
+  });
+  zeichne();
+}
+
 /* ---------- Router -------------------------------------------------------- */
 /* Die alten Kapitel-Adressen (#/k/...) stecken in verschickten Links und in
    ausgedruckten Anleitungen. Sie fuehren weiter — auf den Arbeitsbereich,
@@ -1325,8 +1549,12 @@ document.addEventListener('keydown', ev => {
 
 window.addEventListener('hashchange', route);
 document.documentElement.lang = getLang();
+/* Die gewaehlten Schriften stehen, bevor das erste Blatt gezeichnet wird —
+   sonst blitzt kurz die Voreinstellung auf und die Hoehenpruefung misst
+   das falsche Blatt. */
+schriftAnwenden();
 mountRahmen();
 route();
 
 /* Für Tests/Automatisierung erreichbar machen. */
-window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, route, PAGE_MAX_H };
+window.VZ = { TEMPLATES, ORDER, BEREICHE, SEITEN, ROLLEN, FAMILIEN, ICON_KEYS, route, PAGE_MAX_H };

@@ -537,6 +537,98 @@ Dancing Script bleibt als zweiter Fallback in der Kette, falls Parisienne
 einmal fehlt. Sobald die echten Schriften im Ordner liegen, gewinnen sie
 automatisch — an den Vorlagen ändert sich nichts.
 
+### Schriften wählen
+
+`#/s/schrift`. Für jede der drei Rollen — Titel, Fliesstext, Handschrift-Zeile
+— stehen freie Familien zur Wahl, siebzehn insgesamt. Jede Karte zeigt die
+Schrift in sich selbst, mit einer echten Zeile aus einem Aushang.
+
+Zwei Regeln, die nicht verhandelbar sind:
+
+1. **Die gekaufte Schrift steht immer an erster Stelle.** Gewählt wird der
+   Ersatz, nicht die Marke. Sobald Gotham auf einem Rechner liegt, sieht
+   dieser Rechner wieder Gotham — ganz gleich, was hier gewählt ist. Im CSS
+   heisst das `"Gotham", "<Wahl>", system-ui, sans-serif`.
+2. **Die Wahl gilt nur im eigenen Browser.** Sie steckt nicht im Teilen-Link
+   und nicht im Entwurf. Derselbe Aushang kann auf einem anderen Rechner also
+   anders aussehen — zum Weitergeben darum das PDF nehmen, nicht den Link.
+
+| Rolle | Zur Wahl |
+|---|---|
+| Titel | Montserrat · Oswald · Archivo · Playfair Display · Bebas Neue · Atkinson Hyperlegible |
+| Fliesstext | Montserrat · Archivo · Atkinson Hyperlegible · Source Sans 3 · Inter · Lora |
+| Handschrift | Parisienne · Caveat · Marck Script · Bad Script · Sacramento · Cedarville Cursive · Petit Formal Script · Dancing Script |
+
+Alle stehen unter der **SIL Open Font License 1.1** — Weitergabe und
+Einbettung sind ausdrücklich erlaubt. Sie liegen im Projekt und werden **nie
+nachgeladen**: die Zentrale muss als einzelne Datei ohne Netz laufen.
+
+Nachgeführt wird der Bestand mit
+
+```bash
+npm run schriften        # tools/hole-schriften.mjs
+```
+
+Das Werkzeug holt die woff2-Dateien einmalig von Google Fonts, legt sie nach
+`assets/fonts/` und schreibt `assets/fonts.css` neu. Wer eine Familie ergänzen
+oder streichen will, ändert die Liste `KATALOG` in
+`tools/hole-schriften.mjs` und lässt es erneut laufen; was nicht mehr im
+Katalog steht, wird gelöscht.
+
+Die meisten Familien kommen nur mit dem Subset **latin**. Die Aushänge
+sprechen DE EN FR IT PT ES, und deren Sonderzeichen — ä ö ü ß é à ç ñ ã õ —
+stecken alle darin. `latin-ext` bräuchte man erst für Polnisch oder
+Tschechisch; es überall mitzunehmen würde die Einzeldatei ohne Gegenwert
+verdoppeln. Die drei Marken-Ersatzschriften führen es trotzdem mit, weil sie
+in jedem Aushang stehen.
+
+#### Eine eigene Schriftdatei
+
+Auf derselben Seite. Wer bei Google Fonts oder anderswo etwas findet, das
+nicht in der Liste steht, lädt die Datei hoch — `.woff2`, `.woff`, `.ttf`
+oder `.otf`, höchstens 1 MB. Sie landet im Browser-Speicher, wird beim Start
+als `FontFace` angemeldet und steht danach in allen drei Rollen zur Wahl.
+Sie wird **nie** irgendwohin hochgeladen und liegt nicht im Repository.
+
+Damit ist auch der Weg offen für die gekauften Schriften auf einem einzelnen
+Rechner, ohne `npm run fonts` — die Datei bleibt dann im Browser dieser einen
+Person. Für alle im Haus ist der Weg unten der richtige.
+
+---
+
+## Piktogramme
+
+`#/s/piktogramme`. Sechsundachtzig Strichzeichnungen, 24 × 24, immer in
+`currentColor`, in acht Gruppen:
+
+| Gruppe | Beispiele |
+|---|---|
+| Wegweiser und Orientierung | Pfeile, Tür, Treppe, Lift, Rollstuhl, Rezeption |
+| Zimmer und Bad | Bett, Dusche, Badewanne, WC, Tresor, Bitte nicht stören |
+| Haus und Technik | WLAN, Steckdose, Heizung, Klima, Videoüberwachung, Kalender |
+| Essen und Trinken | Frühstück, Besteck, Bar, Wasser, Kühlschrank |
+| Sicherheit und Notfall | Notausgang, Erste Hilfe, Feuerlöscher, Defibrillator, Sammelplatz |
+| Abfall und Recycling | Kehricht, PET, Papier, Dose, Grünabfall |
+| Draussen und Umgebung | Auto, Velo, Bus, Zug, Baum, Hund |
+| Allgemein | Info, Haken, Kreuz, Person, Familie, Waschmaschine, Bügeln |
+
+Sie stehen in jedem Auswahlfeld **«Symbol»** — im Hinweis-Aushang, in der
+Gäste-Info, auf den Etiketten, in der Orientierungskarte und in der
+Gästemappe. Das Feld ist nach denselben Gruppen geordnet; eine flache Liste
+mit 86 Einträgen wäre nicht mehr zu überblicken.
+
+**Nicht zu verwechseln mit den Sicherheitszeichen.** Die nach ISO 7010
+genormten Zeichen stehen getrennt in `js/lib/sicherheitszeichen.js` und
+gehören zur Vorlage «Sicherheitszeichen». Sie sind genormt und dürfen nicht
+frei gezeichnet werden. Alles unter «Piktogramme» ist Hausgebrauch.
+
+Ein neues Zeichen: Pfad in die passende Gruppe in `js/lib/icons.js`
+eintragen, Namen in `LABEL` dazu. Auswahlfelder und Übersicht führen es
+danach von selbst. `tests/schrift-piktogramme.mjs` prüft, dass keines leer
+und keines doppelt gezeichnet ist.
+
+---
+
 ### Echte Schriften und Logos nachrüsten
 
 Gotham und Caflisch Script Pro sind lizenzpflichtig und deshalb **nicht** im
@@ -666,7 +758,7 @@ gespeichertem Entwurf steht unter «Weiterarbeiten». Das ist fast immer der
 Grund, warum jemand die Seite überhaupt öffnet. Erst danach kommen die
 Bereiche.
 
-### Die drei Werkzeugseiten
+### Die fünf Werkzeugseiten
 
 * **Anleitung** (`#/s/hilfe`) — der Ablauf in drei Schritten, die Einstellungen
   im Druckdialog, die Tastaturkürzel, der Weg ohne Internet.
@@ -674,6 +766,9 @@ Bereiche.
   löschen, als Datei sichern und einlesen. Vorher steckte das im Editor des
   Hinweis-Aushangs: man musste einen Aushang öffnen, um einen Satz zu löschen,
   der mit diesem Aushang nichts zu tun hatte.
+* **Schriften wählen** (`#/s/schrift`) — siehe unten.
+* **Piktogramme** (`#/s/piktogramme`) — alle 86 Zeichen des Hauses, nach Thema
+  geordnet und durchsuchbar. Ein Klick kopiert den Namen.
 * **Marke und Schrift** (`#/s/marke`) — welche Hausschrift wirklich läuft und
   welche gerade durch einen freien Ersatz vertreten wird, dazu die Farben mit
   ihren echten Token-Werten.
@@ -704,10 +799,12 @@ assets/
 js/
   app.js                   Router, Rahmen, Seiten, Formular-Erzeugung, Vorschau
   bereiche.js              die sechs Arbeitsbereiche und die Werkzeugseiten
+  lib/icons.js             86 Piktogramme in acht Gruppen
+  lib/schriftwahl.js       die waehlbaren Schriften und die getroffene Wahl
   brand-config.js          Stammdaten und Pfade zu den Marken-Assets
   lib/                     dom · icons · brand · sitemap · export · storage · i18n · thumbs
   templates/               eine Datei pro Vorlage + index.js (Registrierung)
-tools/                     standalone-Bau, Schriften/Assets eintragen
+tools/                     standalone-Bau, Schriften holen, Marken-Assets eintragen
 tests/                     Playwright-Prüfungen
 ```
 
@@ -868,6 +965,16 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   para Allmendstrasse 14 y lleva la atribución «© swisstopo» que exige la
   licencia. Está en `assets/img/aerial-site.jpg`.
 * La **marca de Zattoo** original está incrustada en la plantilla de TV.
+* **Puedes elegir la tipografía dentro de la herramienta** (`#/s/schrift`):
+  diecisiete familias libres para los tres papeles — título, texto y la línea
+  manuscrita — con vista previa sobre un cartel real. La comprada siempre va
+  primero: si algún día instalas Gotham, ese ordenador vuelve a Gotham solo.
+  También puedes **subir tu propio archivo** de fuente (.woff2/.ttf/.otf) si
+  encuentras algo en Google Fonts que no esté en la lista; se queda en tu
+  navegador y no se sube a ninguna parte.
+* **Hay 86 pictogramas** (`#/s/piktogramme`), agrupados por tema y buscables.
+  Salen en todos los desplegables «Symbol» de las plantillas. Ojo: las señales
+  de seguridad ISO 7010 son otra cosa y viven en su propia plantilla.
 * **Las fuentes y los logos siguen pendientes.** Están en tu Drive, pero son
   binarios y no pueden pasar por este canal sin riesgo de corromperse. Además,
   este repositorio es **público**: Gotham y Caflisch son de pago y no pueden

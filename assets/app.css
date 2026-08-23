@@ -532,7 +532,13 @@ a{color:var(--cyan)}
   .vz-seitenleiste{padding:14px 8px 32px}
   .vz-nav-txt,.vz-nav-zeile em{display:none}
   .vz-nav-zeile{justify-content:center;padding:10px 0}
-  .vz-nav-titel{margin:16px 0 6px;text-align:center;font-size:9px;letter-spacing:.08em}
+  /* «Arbeitsbereiche» passt nicht in 64 px. Statt den Text abzuschneiden,
+     wird er unsichtbar und hinterlaesst eine Trennlinie — vorgelesen wird
+     er weiterhin. */
+  .vz-nav-titel{
+    font-size:0;line-height:0;height:1px;margin:14px 12px;
+    background:var(--line);border-radius:1px;
+  }
   .vz-seite{padding:24px 22px 64px}
   .vz-heute{display:none}
 }
@@ -548,7 +554,10 @@ a{color:var(--cyan)}
   }
   .vz-nav-txt,.vz-nav-zeile em{display:flex}
   .vz-nav-zeile{justify-content:space-between;padding:9px 11px}
-  .vz-nav-titel{margin:20px 12px 7px;text-align:left;font-size:10px;letter-spacing:.13em}
+  .vz-nav-titel{
+    font-size:10px;line-height:1.3;height:auto;background:none;
+    margin:20px 12px 7px;text-align:left;letter-spacing:.13em;
+  }
   .vz-nav-em{display:block}
   body.vz-nav-offen .vz-seitenleiste{transform:none}
   .vz-brand-txt small{display:none}
@@ -740,5 +749,95 @@ a{color:var(--cyan)}
   body.vz-im-editor .vz-nav-txt,
   body.vz-im-editor .vz-nav-zeile em{display:none}
   body.vz-im-editor .vz-nav-zeile{justify-content:center;padding:10px 0}
-  body.vz-im-editor .vz-nav-titel{margin:16px 0 6px;text-align:center;font-size:9px;letter-spacing:.08em}
+  body.vz-im-editor .vz-nav-titel{
+    font-size:0;line-height:0;height:1px;margin:14px 12px;
+    background:var(--line);border-radius:1px;
+  }
+}
+
+/* ==========================================================================
+   Schriftwahl
+   Jede Karte zeigt die Schrift in sich selbst — mit einer echten Zeile aus
+   einem Aushang, nicht mit «Lorem ipsum». Nur so sieht man, worüber man
+   entscheidet.
+   ========================================================================== */
+.vz-hinweiskasten{
+  margin-bottom:22px;padding:13px 16px;border-radius:12px;
+  background:var(--cyan-tint);border:1px solid var(--cyan-soft);
+  font-size:12.5px;line-height:1.6;color:var(--ink);max-width:86ch;
+}
+.vz-hinweiskasten b{display:block;color:var(--navy);margin-bottom:2px}
+.vz-hinweiskasten span{color:var(--ink-soft)}
+
+.vz-rolle-jetzt{font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.vz-rolle-jetzt b{color:var(--navy)}
+
+.vz-schriftkarten{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:12px}
+.vz-schriftkarte{
+  display:block;width:100%;text-align:left;cursor:pointer;
+  background:#fff;border:1px solid var(--line);border-radius:13px;
+  padding:13px 15px 14px;font:inherit;color:inherit;
+  transition:.14s border-color,.14s box-shadow;
+}
+.vz-schriftkarte:hover{border-color:var(--cyan);box-shadow:0 8px 20px rgba(42,51,80,.1)}
+.vz-schriftkarte.is-an{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy) inset}
+.vz-schriftkarte-kopf{display:flex;align-items:baseline;gap:9px;margin-bottom:8px}
+.vz-schriftkarte-kopf b{
+  flex:1;font-family:var(--font-body);font-size:12.5px;font-weight:700;color:var(--navy);
+}
+.vz-schriftkarte-kopf em{
+  font-style:normal;font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#fff;background:var(--navy);
+  border-radius:999px;padding:2px 8px;
+}
+.vz-schriftkarte-probe{
+  display:block;color:var(--cyan);line-height:1.25;margin-bottom:9px;
+  word-break:break-word;
+}
+.vz-schriftkarte-urteil{
+  display:block;font-size:11.5px;line-height:1.5;color:var(--ink-soft);
+}
+
+/* ==========================================================================
+   Piktogramme
+   ========================================================================== */
+.vz-piktoleiste{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:11px 15px;margin-bottom:6px;
+}
+.vz-piktoleiste label{
+  font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3, var(--muted));white-space:nowrap;
+}
+.vz-piktoleiste input{
+  flex:1;min-width:180px;border:1px solid var(--line);background:#fff;
+  color:var(--ink);border-radius:9px;padding:8px 12px;font:inherit;font-size:14px;
+}
+.vz-piktoleiste input:focus{outline:0;border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-tint)}
+.vz-pikto-zahl{
+  font-size:11px;font-weight:700;background:var(--bg-2);color:var(--muted);
+  border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums;
+}
+
+.vz-piktos{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.vz-pikto{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:14px 8px 11px;cursor:pointer;font:inherit;color:inherit;
+  transition:.14s border-color,.14s transform;
+}
+.vz-pikto:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.vz-pikto-bild{display:flex;color:var(--navy)}
+.vz-pikto b{
+  font-family:var(--font-body);font-size:11.5px;font-weight:600;color:var(--navy);
+  text-align:center;line-height:1.3;
+}
+.vz-pikto code{
+  font-size:10px;color:var(--muted);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.vz-block h2 em{
+  font-style:normal;font-size:11px;font-weight:700;background:var(--bg-2);
+  color:var(--muted);border-radius:999px;padding:2px 8px;
 }
