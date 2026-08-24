@@ -12,6 +12,9 @@ import { BRAND, contactLine } from '../brand-config.js';
 const PAGES = {
   'A4-quer':'a4-land', 'A4-hoch':'a4',
   'A3-quer':'a3-land', 'A3-hoch':'a3',
+  'A2-quer':'a2-land', 'A2-hoch':'a2',
+  'A1-quer':'a1-land', 'A1-hoch':'a1',
+  'A0-quer':'a0-land', 'A0-hoch':'a0',
   'A5-quer':'a5-land', 'A5-hoch':'a5',
   'Letter-quer':'letter-land', 'Letter-hoch':'letter'
 };

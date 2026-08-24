@@ -43,8 +43,10 @@ heruntergeladene Kopie veraltet — für den täglichen Gebrauch ist der Link be
    * **Ränder: keine**
    * **Hintergrundgrafiken: einschalten**
    * **Skalierung: 100 %**
-5. Fertig. Wer lieber ein Bild braucht: **PNG speichern**. Wer es
-   weitergeben will: **Link teilen**.
+5. Fertig. Wer lieber ein Bild braucht: **PNG speichern**. Wer eine fertige
+   Datei für die Druckerei oder fürs Handy braucht: **PDF / Teilen** — auf
+   dem Telefon öffnet sich das Teilen-Menü (WhatsApp, Mail …), am Rechner
+   wird die PDF-Datei gespeichert. Wer es weitergeben will: **Link teilen**.
 
 Nützlich zu wissen:
 
@@ -110,7 +112,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
 | **Waschplan** | A4 hoch | Wochenraster zum Eintragen, Tage und Zeitfenster einstellbar |
 | **Sammelstelle beschriften** | A5/A4, mehrseitig | Papier, PET, Glas, Kehricht … — eine Seite je Behälter, mit «gehört hinein / gehört nicht hinein» |
-| **Foto-Aushang** | A4/A5 | Ein Bild und ein Satz — Frühstück, Hausregeln, Hinweise. Wahlweise randabfallend mit Text darüber; für die Druckerei mit Schnittmarken und Beschnitt |
+| **Foto-Aushang** | A5–A0 | Ein Bild und ein Satz — Frühstück, Hausregeln, Hinweise. Wahlweise randabfallend mit Text darüber; für die Druckerei mit Schnittmarken und Beschnitt |
 | **Grossflächenplakat** | mehrere A4 | Ein grosses Plakat aus 2 × 2 bis 4 × 4 A4-Blättern zum Zusammenkleben — mit Bauanleitung als erster Seite |
 | **QR-Aushang** | A4 hoch | WLAN-Zugang, Link, Telefonnummer oder Adresse als grosser Code — mit Anleitung in bis zu sechs Sprachen |
 | **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die vier Schritte, die Druckeinstellungen |
@@ -125,7 +127,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Luftbild hochladen **oder** per swisstopo-Link laden; beliebig viele Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
-| **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen; Hintergrund per swisstopo-Link ladbar |
+| **Plan-Editor** | A5–A0/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen; Hintergrund per swisstopo-Link ladbar |
 | **Gästemappe** | A4 hoch, mehrseitig | Achtseitige Mappe fürs Zimmer: Willkommen, das Wichtigste, Parken und Einkaufen, Zug und Bus, Ausflüge, Essen, Notfall und Kontakt |
 | **Self-Check-in** | A4 hoch | Die vier Schritte zum Zimmer, Zutrittscode gross — in bis zu sechs Sprachen, wahlweise eine Seite je Sprache |
 | **Türhänger** | A4 hoch | «Bitte nicht stören», «Zimmer bitte reinigen», «Zimmer ist frei», «Bitte nicht wecken» — zwei Stück von 90 × 220 mm auf ein Blatt, Loch für die Klinke |
@@ -1052,6 +1054,11 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
 * **PNG ohne html2canvas.** Das Blatt wird als SVG mit `foreignObject`
   serialisiert (Schriften als Data-URI eingebettet) und auf ein Canvas
   gezeichnet — dreifache Auflösung, keine Fremdbibliothek.
+* **PDF ohne jsPDF.** `js/lib/pdf.js` schreibt die Datei selbst: jede Seite
+  wird als JPEG gebacken und unverändert eingebettet (`/DCTDecode`), die
+  Seitengrösse stimmt millimetergenau mit dem gewählten Papier überein —
+  bis A0. «PDF / Teilen» reicht die Datei auf dem Telefon direkt an
+  WhatsApp und Co. weiter (Web-Share), am Rechner wird sie gespeichert.
 * **Eine Seite, garantiert.** Nach jedem Tastendruck wird die Blatthöhe gegen
   das Papierformat geprüft; der Test in `tests/print.mjs` misst zusätzlich das
   echte PDF.
