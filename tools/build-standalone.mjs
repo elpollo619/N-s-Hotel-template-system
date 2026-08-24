@@ -107,6 +107,8 @@ const MODULES = [
   'js/templates/tuerschild.js',
   'js/templates/pinnwand.js',
   'js/templates/parkplatznah.js',
+  'js/templates/kalender.js',
+  'js/templates/checkliste.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

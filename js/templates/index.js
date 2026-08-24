@@ -69,6 +69,8 @@ import inventar from './inventar.js';
 import tuerschild from './tuerschild.js';
 import pinnwand from './pinnwand.js';
 import parkplatznah from './parkplatznah.js';
+import kalender from './kalender.js';
+import checkliste from './checkliste.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -137,7 +139,9 @@ export const TEMPLATES = {
   inventar,
   tuerschild,
   pinnwand,
-  parkplatznah
+  parkplatznah,
+  kalender,
+  checkliste
 };
 
 export const ORDER = [
@@ -153,5 +157,5 @@ export const ORDER = [
   'mieten', 'turnus', 'neuimhaus', 'wlankarten', 'besichtigung', 'ruhezeiten',
   'notfallblatt', 'standortschild', 'wegweiser', 'empfangstafel', 'hausordnung', 'fruehstuecktuer',
   'vollmacht', 'protokoll', 'kuendigung', 'reservationsblatt', 'besucherkarte', 'mitteilung',
-  'inventar', 'tuerschild', 'pinnwand', 'parkplatznah'
+  'inventar', 'tuerschild', 'pinnwand', 'parkplatznah', 'kalender', 'checkliste'
 ];
