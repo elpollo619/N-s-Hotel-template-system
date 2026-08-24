@@ -14,7 +14,7 @@
      B22   "Information Waschmaschine B22.docx" → Bernstrasse 22, Münchenbuchsee
      H8    Ordner Dossier Liegenschaften → Höheweg 8
 
-   Offen bleibt nur I16 — dafür liegt noch keine Adresse vor. Das Feld bleibt
+   Alle Adressen sind hinterlegt (I16 = Insstrasse 16, 3236 Gampelen). Sonst bleibt
    leer, statt geraten zu werden; der Editor weist darauf hin, ohne dass es
    mitgedruckt wird.
 
@@ -90,7 +90,7 @@ export const OBJEKTE = [
   { id:'B7',       code:'B7',    name:'Burgstatt 7',       street:'Burgstatt 7',          zip:'3210', city:'Kerzers',       absender:'immobilien' },
   { id:'B22',      code:'B22',   name:'Bernstrasse 22',    street:'Bernstrasse 22',       zip:'3053', city:'Münchenbuchsee',absender:'immobilien' },
   { id:'H8',       code:'H8',    name:'Höheweg 8',         street:'Höheweg 8',            zip:'3074', city:'Muri bei Bern', absender:'immobilien' },
-  { id:'I16',      code:'I16',   name:'I16',               street:'',                     zip:'',     city:'',              absender:'immobilien' },
+  { id:'I16',      code:'I16-1', name:'Insstrasse 16',     street:'Insstrasse 16',        zip:'3236', city:'Gampelen',      absender:'immobilien' },
   { id:'S17',      code:'S17',   name:'Sahlistrasse 17',   street:'Sahlistrasse 17',      zip:'3012', city:'Bern',          absender:'immobilien' },
   { id:'CasaReto', code:'CR',    name:'Casa Reto',         street:'Via Loco Coste 51',    zip:'6596', city:'Gordola',       absender:'immobilien' }
 ];

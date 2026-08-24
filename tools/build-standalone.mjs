@@ -253,7 +253,18 @@ html = html.replace(/\s*<script>[^<]*serviceWorker[\s\S]*?<\/script>/g, '');
 html = html.replace(/\s*<link rel="manifest"[^>]*>/g, '');
 
 // JavaScript einbetten
-const js = await bundle();
+let js = await bundle();
+
+// Marken-Bilder aus brand-config.js als Data-URI einbetten, damit die
+// Einzeldatei per file:// keine 404/Fetch-Fehler wirft (Logo im Kopf, in
+// den Fusszeilen und beim PNG-Export). Das Luftbild bleibt aussen vor: es
+// ist gross und nur im interaktiven Plan-Editor nötig.
+for (const rel of ['assets/brand/logo.png', 'assets/brand/logo-white.png', 'assets/brand/favicon.png']){
+  try{
+    const uri = await dataUri(p(rel));
+    js = js.split(`"${rel}"`).join(`"${uri}"`).split(`'${rel}'`).join(`'${uri}'`);
+  }catch(_){ console.warn(`  · Marken-Bild fehlt: ${rel}`); }
+}
 html = html.replace(/<script type="module" src="[^"]+"><\/script>/,
   `<script>\n"use strict";\n(function(){\n${js}\n})();\n</script>`);
 
