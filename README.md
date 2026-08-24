@@ -121,9 +121,9 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
 | **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan (gezeichnet, eigenes Bild **oder** swisstopo-Ausschnitt per Link — wird ins Blatt gebacken; frei einpassbar: Ziehen, Rad-Zoom, Drehen, Pinch), Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
-| **Luftbild mit Pins** | A4 quer | Eigenes Luftbild hochladen, Pins frei platzieren |
+| **Luftbild mit Pins** | A4 quer | Luftbild hochladen **oder** per swisstopo-Link laden; beliebig viele Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
-| **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen |
+| **Plan-Editor** | A4/A3/A5/Letter | Lageplan auf dem Luftbild frei bearbeiten — Zonen, Wege, Pins, Piktogramme und Beschriftungen ziehen; Hintergrund per swisstopo-Link ladbar |
 | **Gästemappe** | A4 hoch, mehrseitig | Achtseitige Mappe fürs Zimmer: Willkommen, das Wichtigste, Parken und Einkaufen, Zug und Bus, Ausflüge, Essen, Notfall und Kontakt |
 | **Self-Check-in** | A4 hoch | Die vier Schritte zum Zimmer, Zutrittscode gross — in bis zu sechs Sprachen, wahlweise eine Seite je Sprache |
 | **Türhänger** | A4 hoch | «Bitte nicht stören», «Zimmer bitte reinigen», «Zimmer ist frei», «Bitte nicht wecken» — zwei Stück von 90 × 220 mm auf ein Blatt, Loch für die Klinke |

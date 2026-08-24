@@ -32,6 +32,7 @@ const MODULES = [
   'js/lib/favoriten.js',
   'js/lib/sicherung.js',
   'js/lib/geokarte.js',
+  'js/lib/staende.js',
   'js/lib/schrift.js',
   'js/lib/eigene.js',
   'js/lib/i18n.js',

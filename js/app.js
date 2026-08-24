@@ -34,6 +34,7 @@ import { suche, trefferZiel, ART_LABEL, normal } from './lib/suche.js';
 import { verlauf, merken } from './lib/verlauf.js';
 import { favoriten, istFavorit, favoritToggle } from './lib/favoriten.js';
 import { sicherungAlsDatei, sicherungLaden } from './lib/sicherung.js';
+import { staende, standSpeichern, stand, standLoeschen } from './lib/staende.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
 import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
 import { SPRACH_IDS } from './lib/sprachen.js';
@@ -751,6 +752,9 @@ function renderEditor(id, geteilt, suchwert){
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
+          <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-objekthinweis" id="vz-objekthinweis" hidden></div>
@@ -1128,6 +1132,51 @@ function renderEditor(id, geteilt, suchwert){
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
     renderEditor(tpl.id);
+  };
+
+  /* Benannte Stände: mehrere Fassungen je Vorlage — «Placa I16»,
+     «Sommerfest», eine Idee für später. Liegen im Browser und damit
+     automatisch auch in der Sicherungsdatei. */
+  const standWahl = document.getElementById('vz-staende');
+  const standDel  = document.getElementById('vz-stand-del');
+  function standListe(){
+    const a = staende(tpl.id);
+    standWahl.innerHTML = `<option value="">${esc(t('standNone'))}</option>`
+      + a.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
+    standWahl.hidden = !a.length;
+    standDel.hidden = true;
+  }
+  standListe();
+  document.getElementById('vz-stand').onclick = () => {
+    const name = prompt(t('standAsk'), standWahl.value || '');
+    if (name == null) return;
+    if (standSpeichern(tpl.id, name, state)){
+      standListe();
+      standWahl.value = String(name).trim().slice(0, 60);
+      standDel.hidden = !standWahl.value;
+      toast(t('standDone'));
+    }
+  };
+  standWahl.onchange = () => {
+    const name = standWahl.value;
+    standDel.hidden = !name;
+    if (!name) return;
+    const s = stand(tpl.id, name);
+    if (!s) return;
+    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = true; return; }
+    Object.keys(state).forEach(k => { delete state[k]; });
+    Object.assign(state, JSON.parse(JSON.stringify(s.zustand)));
+    commit(); rebuild();
+    toast(t('standLoaded'));
+    standWahl.value = name;
+    standDel.hidden = false;
+  };
+  standDel.onclick = () => {
+    const name = standWahl.value;
+    if (!name || !confirm(t('standDelAsk').replace('%s', name))) return;
+    standLoeschen(tpl.id, name);
+    standListe();
+    toast(t('standDeleted'));
   };
   document.getElementById('vz-json-save').onclick = () => {
     const blob = new Blob([JSON.stringify({ template: tpl.id, data: state }, null, 2)], { type:'application/json' });

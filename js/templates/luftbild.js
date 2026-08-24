@@ -5,6 +5,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo, pin } from '../lib/brand.js';
 import { icon } from '../lib/icons.js';
 import { thumbLand } from '../lib/thumbs.js';
+import { kartenWerkzeug, kartenFelder } from '../lib/geokarte.js';
 import { BRAND, contactLine } from '../brand-config.js';
 
 function marker(kind, x, y, label){
@@ -35,6 +36,7 @@ export default {
     { t:'group', label:'Luftbild' },
     { k:'img', label:'Bild', type:'image',
       hint:'Querformat, z. B. der Ausschnitt aus swisstopo. Wird auf das Blatt zugeschnitten.' },
+    ...kartenFelder(),
 
     { t:'group', label:'Pin N’s Hotel' },
     { k:'nsX', label:'Position von links in %', type:'number', min:0, max:100, step:1 },
@@ -48,6 +50,18 @@ export default {
     { k:'showP', label:'Parkplatz-Pin zeigen', type:'select',
       options:[{ v:'ja', t:'ja' }, { v:'nein', t:'nein' }] },
 
+    { t:'group', label:'Weitere Pins' },
+    { t:'note', label:'So viele Pins, wie das Bild braucht — Eingang, Velo-Raum, Sammelstelle …' },
+    { k:'extra', label:'Pins', type:'list', itemLabel:'Pin', max:10,
+      defaultItem:{ art:'p', x:50, y:50, label:'' },
+      item:[
+        { k:'art', label:'Art', type:'select', options:[
+          { v:'p', t:'P — cyan' }, { v:'ns', t:'N’s — navy' }, { v:'plain', t:'neutral — grau' } ] },
+        { k:'x', label:'von links in %', type:'number', min:0, max:100, step:1 },
+        { k:'y', label:'von oben in %',  type:'number', min:0, max:100, step:1 },
+        { k:'label', label:'Beschriftung', type:'text' }
+      ] },
+
     { t:'group', label:'Text' },
     { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
     { k:'title',   label:'Titel', type:'text' },
@@ -60,8 +74,10 @@ export default {
 
   defaults:{
     img: BRAND.aerial || '',
+    mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
     nsX:42, nsY:56, nsLabel:"N's Hotel",
     pX:64, pY:48, pLabel:'Gästeparkplatz', showP:'ja',
+    extra:[],
     eyebrow:'So finden Sie uns',
     title:'Anfahrt und Parken',
     sub:'Luftbild mit Eingang und Gästeparkplatz · Aerial view with entrance and guest parking',
@@ -82,7 +98,9 @@ export default {
     // Ohne Bild keine Pins — sonst schweben sie über dem Hinweistext.
     const pins = has(d.img)
       ? marker('ns', Number(d.nsX) || 0, Number(d.nsY) || 0, d.nsLabel) +
-        (d.showP !== 'nein' ? marker('p', Number(d.pX) || 0, Number(d.pY) || 0, d.pLabel) : '')
+        (d.showP !== 'nein' ? marker('p', Number(d.pX) || 0, Number(d.pY) || 0, d.pLabel) : '') +
+        (Array.isArray(d.extra) ? d.extra : [])
+          .map(p => marker(p.art || 'p', Number(p.x) || 0, Number(p.y) || 0, p.label)).join('')
       : '';
 
     return `
@@ -99,5 +117,14 @@ export default {
       ${has(d.footer) ? `<p class="t-luft-addr">${esc(d.footer)}</p>` : ''}
       ${has(d.credit) ? `<span class="t-luft-credit">${esc(d.credit)}</span>` : ''}
     </div>`;
+  },
+
+  /* Werkzeugleiste: den swisstopo-Ausschnitt per Link laden — das Bild wird
+     ins Blatt gebacken und die Quellenangabe gesetzt, falls sie leer ist. */
+  mount(ctx){
+    return kartenWerkzeug(ctx, {
+      ziel:'img', breite:1680, hoehe:1188,
+      nachher(d){ if (!has(d.credit)) d.credit = '© swisstopo'; }
+    });
   }
 };

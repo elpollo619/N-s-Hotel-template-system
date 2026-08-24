@@ -6,6 +6,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumbLand } from '../lib/thumbs.js';
 import { mountPlanEditor, seedPlan } from '../lib/planeditor.js';
+import { kartenWerkzeug, kartenFelder } from '../lib/geokarte.js';
 import { BRAND, contactLine } from '../brand-config.js';
 
 const PAGES = {
@@ -48,6 +49,7 @@ export default {
     { t:'group', label:'Hintergrundbild' },
     { k:'img', label:'Luftbild', type:'image',
       hint:'Leer lassen für das hinterlegte Bild (swisstopo).' },
+    ...kartenFelder(),
 
     { t:'group', label:'Seite' },
     { k:'format', label:'Format', type:'select',
@@ -71,6 +73,7 @@ export default {
     title:'Anfahrt und Parkplätze',
     sub:'Arrival and parking',
     img:'',
+    mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
     format:'A4-quer',
     legend:[
       { color:'#1F9D57', label:'Garten' },
@@ -121,5 +124,20 @@ export default {
     ${has(d.footer) ? `<p class="t-plan-addr">${esc(d.footer)}</p>` : ''}`;
   },
 
-  mount(ctx){ return mountPlanEditor(ctx); }
+  mount(ctx){
+    /* Zwei Mieter im Panel: oben der swisstopo-Lader, darunter der
+       Plan-Editor mit seinem eigenen, sich selbst neu zeichnenden Bereich. */
+    const editorDiv = document.createElement('div');
+    ctx.panel.append(editorDiv);
+    const wegKarte  = kartenWerkzeug(ctx, {
+      ziel:'img', breite:1920, hoehe:1316,   /* Proportion des Plan-Lienzos (2414:1654) */
+      nachher(d){ if (!d.credit) d.credit = '© swisstopo'; }
+    });
+    const wegEditor = mountPlanEditor({ ...ctx, panel: editorDiv });
+    return () => {
+      if (typeof wegKarte === 'function') wegKarte();
+      if (typeof wegEditor === 'function') wegEditor();
+      editorDiv.remove();
+    };
+  }
 };
