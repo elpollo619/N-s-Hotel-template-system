@@ -1025,3 +1025,37 @@ a{color:var(--cyan)}
   .vz-objekt{display:none}
   .vz-objekt-nav{display:block;padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:10px}
 }
+
+/* --------------------------------------------------------------------------
+   Druckerei-Werkzeuge: Schnittmarken und Raster
+   -------------------------------------------------------------------------- */
+/* Schnittmarken: Eckmarken, die MITDRUCKEN — zum Zuschneiden, wenn ein
+   kleines Format auf grösserem Papier gedruckt wird. */
+.sheet--marken:not(.sheet--multi)::before,
+.sheet--marken [data-page]::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+  background-image:
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350);
+  background-repeat:no-repeat;
+  background-size:5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm,
+                  5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm;
+  background-position:top left,top left,top right,top right,
+                      bottom left,bottom left,bottom right,bottom right;
+}
+
+/* Raster: 10-mm-Gitter plus 10-mm-Randzone — NUR in der Vorschau.
+   Wird vor dem PNG-Export entfernt und druckt nie mit. */
+.vz-raster{
+  position:absolute;inset:0;pointer-events:none;z-index:6;display:block;
+  background:
+    repeating-linear-gradient(0deg, rgba(1,177,226,.20) 0 .25mm, transparent .25mm 10mm),
+    repeating-linear-gradient(90deg, rgba(1,177,226,.20) 0 .25mm, transparent .25mm 10mm);
+  box-shadow:inset 0 0 0 10mm rgba(229,56,126,.06);
+}
+@media print{ .vz-raster{display:none!important} }
+
+.vz-mini.is-an{background:var(--cyan);border-color:var(--cyan);color:#fff}
+.vz-mini.is-an:hover{color:#fff}

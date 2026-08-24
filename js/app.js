@@ -792,9 +792,17 @@ function renderEditor(id, geteilt, suchwert){
   function paint(){
     unmountActive();
     const page = pageOf(tpl, state);
-    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}`;
+    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}` +
+      (store.load('schnittmarken', '') === 'ja' ? ' sheet--marken' : '');
     setPageSize(page);
     sheet.innerHTML = tpl.render(state);
+    /* Raster-Overlay (nur Vorschau): ein echtes Element je Blatt, damit es
+       sich vor dem PNG-Export sauber entfernen laesst. */
+    if (store.load('raster', '') === 'ja'){
+      const ziele = sheet.querySelectorAll('[data-page]');
+      (ziele.length ? Array.from(ziele) : [sheet]).forEach(el =>
+        el.insertAdjacentHTML('beforeend', '<i class="vz-raster" aria-hidden="true"></i>'));
+    }
     if (typeof tpl.mount === 'function'){
       activeUnmount = tpl.mount({
         sheet,
@@ -851,6 +859,10 @@ function renderEditor(id, geteilt, suchwert){
         <button type="button" class="vz-mini" data-seite="1" title="${esc(t('pageOf'))} vor">&#8595;</button>` : ''}
       </div>
       <div class="vz-leiste-rechts">
+        <button type="button" class="vz-mini${store.load('schnittmarken', '') === 'ja' ? ' is-an' : ''}"
+          data-schalter="schnittmarken" title="${esc(t('leisteMarken'))}">&#9986;</button>
+        <button type="button" class="vz-mini${store.load('raster', '') === 'ja' ? ' is-an' : ''}"
+          data-schalter="raster" title="${esc(t('leisteRaster'))}">&#8862;</button>
         <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
         <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
           ${stufen.map(([v, l]) =>
@@ -881,6 +893,13 @@ function renderEditor(id, geteilt, suchwert){
 
   if (leiste){
     leiste.addEventListener('click', ev => {
+      const w = ev.target.closest('[data-schalter]');
+      if (w){
+        const k = w.dataset.schalter;
+        store.save(k, store.load(k, '') === 'ja' ? 'nein' : 'ja');
+        paint(); zeichneLeiste();
+        return;
+      }
       const s = ev.target.closest('[data-seite]');
       if (s){
         const wahl = document.getElementById('vz-seitenwahl');
@@ -1133,6 +1152,7 @@ function renderEditor(id, geteilt, suchwert){
     const btn = ev.currentTarget; const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     try{
+      sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
       const pages = sheetPages(sheet);
       if (pages.length > 1){
         /* Jede Seite als eigene Datei — ein Bild ueber neun Seiten waere unbrauchbar.
@@ -1149,7 +1169,7 @@ function renderEditor(id, geteilt, suchwert){
     }catch(err){
       console.warn(err);
       toast(t('pngFail'));
-    }finally{ btn.disabled = false; btn.textContent = old; }
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;

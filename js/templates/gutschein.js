@@ -31,6 +31,8 @@ export default {
   badge:'Empfang',
   root:'t-gut',
   page:'a5-land',
+  multipage:true,
+  pageOf(){ return 'a5-land'; },
 
   thumb: thumbLand(`
     <rect x="0" y="0" width="297" height="210" fill="#2A3350"/>
@@ -68,6 +70,15 @@ export default {
     { k:'qrText',  label:'Adresse für den QR-Code', type:'text',
       hint:'Leer lassen: kein Code. Sonst die Buchungsseite.' },
 
+    { t:'group', label:'Serie' },
+    { t:'note', label:'Ein Blatt je Gutschein, fortlaufend nummeriert — für den Stapel am Empfang. Die Nummer ersetzt das Feld «Gutschein-Nr.».' },
+    { k:'serie', label:'Serie drucken', type:'select', options:[
+      { v:'nein', t:'nein — ein einzelner Gutschein' },
+      { v:'ja',   t:'ja — nummerierte Blätter' } ] },
+    { k:'serieVon', label:'von Nr.', type:'number', min:1, max:999, step:1 },
+    { k:'serieBis', label:'bis Nr.', type:'number', min:1, max:999, step:1,
+      hint:'Höchstens 60 Blätter aufs Mal — sonst wird der Browser zäh.' },
+
     { t:'group', label:'Sprachen' },
     { t:'note',  label:'Die Sprachen betreffen das Wort «Gutschein». Wert und Widmung stehen so da, wie du sie schreibst.' },
     { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
@@ -90,6 +101,7 @@ export default {
     gueltig:'gültig zwei Jahre ab Ausstellung',
     bedingungen:'Nicht in bar auszahlbar. Restguthaben bleibt bestehen. Bitte bei der Buchung angeben.',
     qrText:'',
+    serie:'nein', serieVon:1, serieBis:20,
     sprachen:['de','en'],
     sprachSet:'',
     objekt:'A14',
@@ -113,7 +125,18 @@ export default {
       ? `<div class="t-gut-qr">${qrSvg(d.qrText, { stufe:'M', groesse:'22mm', farbe:'#fff', rand:0 })}</div>`
       : '';
 
-    return `
+    /* Serie: je Blatt ein Gutschein mit fortlaufender Nummer. */
+    if (d.serie === 'ja'){
+      const von = Math.max(1, Math.min(999, Number(d.serieVon) || 1));
+      const bis = Math.min(von + 59, Math.max(von, Math.min(999, Number(d.serieBis) || von)));
+      let seiten = '';
+      for (let n = von; n <= bis; n++) seiten += blatt(String(n).padStart(3, '0'));
+      return seiten;
+    }
+    return blatt(d.code);
+
+    function blatt(code){
+      return `<article data-page class="t-gut-seite">
       <div class="t-gut-karte">
         <section class="t-gut-links">
           <header class="t-gut-kopf">
@@ -133,8 +156,8 @@ export default {
 
           <footer class="t-gut-fuss">
             <span class="t-gut-mark">${istHotel(d.absender) ? logo('white', 24) : esc(abs.name)}</span>
-            ${(has(d.code) || has(d.gueltig)) ? `<span class="t-gut-meta">${
-              esc([d.code && ('Nr. ' + d.code), d.gueltig].filter(Boolean).join(' · '))}</span>` : ''}
+            ${(has(code) || has(d.gueltig)) ? `<span class="t-gut-meta">${
+              esc([code && ('Nr. ' + code), d.gueltig].filter(Boolean).join(' · '))}</span>` : ''}
           </footer>
         </section>
 
@@ -145,6 +168,8 @@ export default {
           ${qr}
         </aside>
       </div>
-      ${has(d.bedingungen) ? `<p class="t-gut-bed">${esc(d.bedingungen)} · ${esc(abs.foot)}</p>` : ''}`;
+      ${has(d.bedingungen) ? `<p class="t-gut-bed">${esc(d.bedingungen)} · ${esc(abs.foot)}</p>` : ''}
+      </article>`;
+    }
   }
 };

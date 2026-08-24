@@ -1171,6 +1171,40 @@ a{color:var(--cyan)}
   .vz-objekt-nav{display:block;padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:10px}
 }
 
+/* --------------------------------------------------------------------------
+   Druckerei-Werkzeuge: Schnittmarken und Raster
+   -------------------------------------------------------------------------- */
+/* Schnittmarken: Eckmarken, die MITDRUCKEN — zum Zuschneiden, wenn ein
+   kleines Format auf grösserem Papier gedruckt wird. */
+.sheet--marken:not(.sheet--multi)::before,
+.sheet--marken [data-page]::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+  background-image:
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350);
+  background-repeat:no-repeat;
+  background-size:5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm,
+                  5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm;
+  background-position:top left,top left,top right,top right,
+                      bottom left,bottom left,bottom right,bottom right;
+}
+
+/* Raster: 10-mm-Gitter plus 10-mm-Randzone — NUR in der Vorschau.
+   Wird vor dem PNG-Export entfernt und druckt nie mit. */
+.vz-raster{
+  position:absolute;inset:0;pointer-events:none;z-index:6;display:block;
+  background:
+    repeating-linear-gradient(0deg, rgba(1,177,226,.20) 0 .25mm, transparent .25mm 10mm),
+    repeating-linear-gradient(90deg, rgba(1,177,226,.20) 0 .25mm, transparent .25mm 10mm);
+  box-shadow:inset 0 0 0 10mm rgba(229,56,126,.06);
+}
+@media print{ .vz-raster{display:none!important} }
+
+.vz-mini.is-an{background:var(--cyan);border-color:var(--cyan);color:#fff}
+.vz-mini.is-an:hover{color:#fff}
+
 /* ===== assets/templates.css ===== */
 /* ==========================================================================
    N's Hotel · Vorlagen-Styles
@@ -2883,7 +2917,8 @@ a{color:var(--cyan)}
    Papier, das Geld wert ist: dunkle Karte, der Wert im eigenen Cyanfeld
    rechts, damit er an der Kasse sofort zu finden ist.
    ========================================================================== */
-.t-gut{display:flex;flex-direction:column;padding:0}
+.t-gut{padding:0}
+.t-gut-seite{display:flex;flex-direction:column;padding:0;box-sizing:border-box}
 .t-gut-karte{flex:1;display:flex;color:#fff;background:var(--navy)}
 .t-gut-links{flex:1;min-width:0;display:flex;flex-direction:column;padding:12mm 12mm 10mm}
 .t-gut-kopf .eyebrow{margin:0 0 2mm;font-size:22pt;color:var(--cyan);line-height:1}
@@ -7607,6 +7642,8 @@ const DICT = {
     standDel:'Stand löschen',
     standDelAsk:'Den gespeicherten Stand «%s» wirklich löschen?',
     standDeleted:'Stand gelöscht',
+    leisteMarken:'Schnittmarken drucken — Eckmarken zum Zuschneiden',
+    leisteRaster:'Raster zeigen — 10-mm-Gitter, nur in der Vorschau',
     resetAsk:'Alle Aenderungen dieser Vorlage verwerfen und zum Original zurück?',
     fitOk:'Passt auf eine Seite',
     fitWarn:'Zu lang für eine Seite — Texte kürzen',
@@ -7809,6 +7846,8 @@ const DICT = {
     standDel:'Delete version',
     standDelAsk:'Really delete the saved version “%s”?',
     standDeleted:'Version deleted',
+    leisteMarken:'Print crop marks — corner ticks for trimming',
+    leisteRaster:'Show grid — 10 mm grid, preview only',
     resetAsk:'Discard all changes to this template and restore the original?',
     fitOk:'Fits on one page',
     fitWarn:'Too long for one page — shorten the text',
@@ -14499,6 +14538,8 @@ const gutschein = {
   badge:'Empfang',
   root:'t-gut',
   page:'a5-land',
+  multipage:true,
+  pageOf(){ return 'a5-land'; },
 
   thumb: thumbLand(`
     <rect x="0" y="0" width="297" height="210" fill="#2A3350"/>
@@ -14536,6 +14577,15 @@ const gutschein = {
     { k:'qrText',  label:'Adresse für den QR-Code', type:'text',
       hint:'Leer lassen: kein Code. Sonst die Buchungsseite.' },
 
+    { t:'group', label:'Serie' },
+    { t:'note', label:'Ein Blatt je Gutschein, fortlaufend nummeriert — für den Stapel am Empfang. Die Nummer ersetzt das Feld «Gutschein-Nr.».' },
+    { k:'serie', label:'Serie drucken', type:'select', options:[
+      { v:'nein', t:'nein — ein einzelner Gutschein' },
+      { v:'ja',   t:'ja — nummerierte Blätter' } ] },
+    { k:'serieVon', label:'von Nr.', type:'number', min:1, max:999, step:1 },
+    { k:'serieBis', label:'bis Nr.', type:'number', min:1, max:999, step:1,
+      hint:'Höchstens 60 Blätter aufs Mal — sonst wird der Browser zäh.' },
+
     { t:'group', label:'Sprachen' },
     { t:'note',  label:'Die Sprachen betreffen das Wort «Gutschein». Wert und Widmung stehen so da, wie du sie schreibst.' },
     { k:'sprachen',  label:'Sprachen', type:'checks', options:sprachOptions() },
@@ -14558,6 +14608,7 @@ const gutschein = {
     gueltig:'gültig zwei Jahre ab Ausstellung',
     bedingungen:'Nicht in bar auszahlbar. Restguthaben bleibt bestehen. Bitte bei der Buchung angeben.',
     qrText:'',
+    serie:'nein', serieVon:1, serieBis:20,
     sprachen:['de','en'],
     sprachSet:'',
     objekt:'A14',
@@ -14581,7 +14632,18 @@ const gutschein = {
       ? `<div class="t-gut-qr">${qrSvg(d.qrText, { stufe:'M', groesse:'22mm', farbe:'#fff', rand:0 })}</div>`
       : '';
 
-    return `
+    /* Serie: je Blatt ein Gutschein mit fortlaufender Nummer. */
+    if (d.serie === 'ja'){
+      const von = Math.max(1, Math.min(999, Number(d.serieVon) || 1));
+      const bis = Math.min(von + 59, Math.max(von, Math.min(999, Number(d.serieBis) || von)));
+      let seiten = '';
+      for (let n = von; n <= bis; n++) seiten += blatt(String(n).padStart(3, '0'));
+      return seiten;
+    }
+    return blatt(d.code);
+
+    function blatt(code){
+      return `<article data-page class="t-gut-seite">
       <div class="t-gut-karte">
         <section class="t-gut-links">
           <header class="t-gut-kopf">
@@ -14601,8 +14663,8 @@ const gutschein = {
 
           <footer class="t-gut-fuss">
             <span class="t-gut-mark">${istHotel(d.absender) ? logo('white', 24) : esc(abs.name)}</span>
-            ${(has(d.code) || has(d.gueltig)) ? `<span class="t-gut-meta">${
-              esc([d.code && ('Nr. ' + d.code), d.gueltig].filter(Boolean).join(' · '))}</span>` : ''}
+            ${(has(code) || has(d.gueltig)) ? `<span class="t-gut-meta">${
+              esc([code && ('Nr. ' + code), d.gueltig].filter(Boolean).join(' · '))}</span>` : ''}
           </footer>
         </section>
 
@@ -14613,7 +14675,9 @@ const gutschein = {
           ${qr}
         </aside>
       </div>
-      ${has(d.bedingungen) ? `<p class="t-gut-bed">${esc(d.bedingungen)} · ${esc(abs.foot)}</p>` : ''}`;
+      ${has(d.bedingungen) ? `<p class="t-gut-bed">${esc(d.bedingungen)} · ${esc(abs.foot)}</p>` : ''}
+      </article>`;
+    }
   }
 };
 
@@ -20838,9 +20902,17 @@ function renderEditor(id, geteilt, suchwert){
   function paint(){
     unmountActive();
     const page = pageOf(tpl, state);
-    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}`;
+    sheet.className = `sheet sheet--${page} ${istMehrseitig(tpl, state) ? 'sheet--multi ' : ''}${tpl.root}` +
+      (store.load('schnittmarken', '') === 'ja' ? ' sheet--marken' : '');
     setPageSize(page);
     sheet.innerHTML = tpl.render(state);
+    /* Raster-Overlay (nur Vorschau): ein echtes Element je Blatt, damit es
+       sich vor dem PNG-Export sauber entfernen laesst. */
+    if (store.load('raster', '') === 'ja'){
+      const ziele = sheet.querySelectorAll('[data-page]');
+      (ziele.length ? Array.from(ziele) : [sheet]).forEach(el =>
+        el.insertAdjacentHTML('beforeend', '<i class="vz-raster" aria-hidden="true"></i>'));
+    }
     if (typeof tpl.mount === 'function'){
       activeUnmount = tpl.mount({
         sheet,
@@ -20897,6 +20969,10 @@ function renderEditor(id, geteilt, suchwert){
         <button type="button" class="vz-mini" data-seite="1" title="${esc(t('pageOf'))} vor">&#8595;</button>` : ''}
       </div>
       <div class="vz-leiste-rechts">
+        <button type="button" class="vz-mini${store.load('schnittmarken', '') === 'ja' ? ' is-an' : ''}"
+          data-schalter="schnittmarken" title="${esc(t('leisteMarken'))}">&#9986;</button>
+        <button type="button" class="vz-mini${store.load('raster', '') === 'ja' ? ' is-an' : ''}"
+          data-schalter="raster" title="${esc(t('leisteRaster'))}">&#8862;</button>
         <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
         <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
           ${stufen.map(([v, l]) =>
@@ -20927,6 +21003,13 @@ function renderEditor(id, geteilt, suchwert){
 
   if (leiste){
     leiste.addEventListener('click', ev => {
+      const w = ev.target.closest('[data-schalter]');
+      if (w){
+        const k = w.dataset.schalter;
+        store.save(k, store.load(k, '') === 'ja' ? 'nein' : 'ja');
+        paint(); zeichneLeiste();
+        return;
+      }
       const s = ev.target.closest('[data-seite]');
       if (s){
         const wahl = document.getElementById('vz-seitenwahl');
@@ -21179,6 +21262,7 @@ function renderEditor(id, geteilt, suchwert){
     const btn = ev.currentTarget; const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     try{
+      sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
       const pages = sheetPages(sheet);
       if (pages.length > 1){
         /* Jede Seite als eigene Datei — ein Bild ueber neun Seiten waere unbrauchbar.
@@ -21195,7 +21279,7 @@ function renderEditor(id, geteilt, suchwert){
     }catch(err){
       console.warn(err);
       toast(t('pngFail'));
-    }finally{ btn.disabled = false; btn.textContent = old; }
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;
