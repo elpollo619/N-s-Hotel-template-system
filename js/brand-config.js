@@ -7,9 +7,9 @@
    Pfad eintragen — oder `node tools/install-brand-assets.mjs` ausführen.
    ========================================================================== */
 export const BRAND = {
-  logo:      null,   // "assets/brand/logo.png"        — farbig auf hell
-  logoWhite: null,   // "assets/brand/logo-white.png"  — weiss auf dunkel/cyan
-  favicon:   null,   // "assets/brand/favicon.png"     — der N's-"Mark" im Pin
+  logo:      "assets/brand/logo.png",        // farbig auf hell
+  logoWhite: "assets/brand/logo-white.png",  // weiss auf dunkel/cyan
+  favicon:   "assets/brand/favicon.png",     // der N's-"Mark" im Pin
   aerial:    "assets/img/aerial-site.jpg",   // Luftbild swisstopo (swissimage, 10 cm)
   phonePhoto:null,   // "assets/img/phone-yealink.jpg" — Foto des Tischtelefons
 

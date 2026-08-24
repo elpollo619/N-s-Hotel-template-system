@@ -442,7 +442,7 @@ Sprache, das Feld dafür ist im Hinweis vorhanden.
 | B22 | Bernstrasse 22, 3053 Münchenbuchsee | `Information gebrauch Waschmaschine B22.docx` |
 | H8 | Höheweg 8 | Ordner `Dossier Liegenschaften` |
 
-Bei **A12, A12a, B7, B22, I16, S17 und Casa Reto** steht die Adresse bewusst
+Bei **A12, A12a, B7, B22, S17 und Casa Reto** steht die Adresse bewusst
 leer. Ein falscher Strassenname auf einem Aushang wäre schlimmer als gar
 keiner. Sobald sie bekannt sind, in `js/objekte.js` eintragen — alle Vorlagen
 ziehen automatisch nach. Solange etwas fehlt, zeigt der Editor einen Hinweis,
@@ -729,23 +729,29 @@ Repository. Ausgeliefert wird der im Handbuch vorgesehene Fallback
 (Montserrat und Dancing Script), lokal eingebunden — ohne CDN, damit die App
 auch offline funktioniert.
 
-Die Dateien liegen im Google-Drive-Ordner unter `assets/fonts` und
-`assets/brand`. Sie müssen von Hand in den lokalen Klon kopiert werden — die
-Schriften dürfen aus Lizenzgründen nicht über das Repository verteilt werden.
+Die **Logos** (`assets/brand/logo.png`, `logo-white.png`, `favicon.png`) liegen
+im Repository — sie sind das eigene Zeichen des Hauses und in `js/brand-config.js`
+bereits eingetragen; sie erscheinen auf jedem Blatt und in der Einzeldatei.
+
+Die **lizenzpflichtigen Schriften** dürfen dagegen *nicht* über das öffentliche
+Repository verteilt werden (Gotham von Hoefler & Co, Caflisch Script Pro von
+Adobe). Wer sie besitzt, legt sie lokal ab und baut die Einzeldatei damit neu:
 
 ```bash
-# 1. Dateien ablegen
-#    assets/fonts/Gotham-Bold.otf              (bleibt lokal, nicht versioniert)
-#    assets/fonts/CaflischScriptPro-Regular.otf (bleibt lokal, nicht versioniert)
-#    assets/brand/logo.png · logo-white.png · favicon.png
+# 1. Schriftdateien ablegen (bleiben lokal, nicht versioniert)
+#    assets/fonts/Gotham-Bold.otf
+#    assets/fonts/CaflischScriptPro-Regular.otf
 
 # 2. eintragen lassen
 npm run fonts     # schreibt assets/brand-fonts.css
-npm run assets    # trägt die Bildpfade in js/brand-config.js ein
 
 # 3. Einzeldatei neu bauen
 npm run build
 ```
+
+Auf der öffentlichen Seite bleibt aus Lizenzgründen die Ersatzschrift aktiv;
+die echten Schriften wirken nur im lokalen Klon und in der lokal gebauten
+Einzeldatei.
 
 Solange die Dateien fehlen, zeichnet die App eine saubere Platzhalter-Wortmarke
 — es entstehen **keine** Fehler in der Konsole.
