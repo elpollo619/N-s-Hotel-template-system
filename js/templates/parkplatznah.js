@@ -16,6 +16,7 @@ import { esc, has } from '../lib/dom.js';
 import { logo } from '../lib/brand.js';
 import { thumb } from '../lib/thumbs.js';
 import { sprachObjekte, sprachOptions } from '../lib/sprachen.js';
+import { KARTEN_STILE, KARTEN_ZOOM, kartenLink, kartenAdresse, kartenAusschnitt } from '../lib/geokarte.js';
 
 /* ---------- Piktogramme des Aushangs (aus dem Kit übernommen) ---------- */
 const OPP_IC = {
@@ -492,9 +493,14 @@ export default {
     { k:'plan', label:'Kartenbild', type:'select', options:[
       { v:'gezeichnet', t:'Gezeichneter Plan (offline)' },
       { v:'bild', t:'Eigenes Bild / Karten-Ausschnitt' } ],
-      hint:'Der gezeichnete Plan braucht kein Netz. «Eigenes Bild» zeigt stattdessen dein hochgeladenes Foto oder einen Karten-Ausschnitt.' },
-    { k:'planBild', label:'Bild hochladen', type:'image',
-      hint:'Eigenes Foto oder ein Ausschnitt von map.geo.admin.ch (dort «Drucken» → als PNG/PDF exportieren, dann hier ablegen). Wird ins Blatt eingebettet und läuft offline.' },
+      hint:'Der gezeichnete Plan braucht kein Netz. «Eigenes Bild» zeigt stattdessen einen swisstopo-Ausschnitt oder dein Foto.' },
+    { t:'note', label:'Am einfachsten: in map.geo.admin.ch den Ort einstellen, den Link aus der Adresszeile kopieren, unten einsetzen und oben «Karten-Ausschnitt laden» drücken. Der Ausschnitt wird ins Blatt gebacken und läuft danach offline.' },
+    { k:'mapLink', label:'Link von map.geo.admin.ch', type:'text',
+      hint:'Der ganze Link aus der Adresszeile — oder nur die Koordinaten «2604566, 1197171».' },
+    { k:'mapStil', label:'Kartenstil', type:'select', options:KARTEN_STILE.map(s => ({ v:s.v, t:s.t })) },
+    { k:'mapZoom', label:'Nähe', type:'select', options:KARTEN_ZOOM.map(s => ({ v:s.v, t:s.t })) },
+    { k:'planBild', label:'Oder Bild hochladen', type:'image',
+      hint:'Eigenes Foto oder ein selbst exportierter Karten-Ausschnitt. Wird ins Blatt eingebettet und läuft offline.' },
     { k:'planPins', label:'Marken-Pins und Weg aufs Bild', type:'select', options:[
       { v:'ein', t:'ja — Hotel + P und Fussweg zeigen' },
       { v:'aus', t:'nein — Bild unverändert lassen' } ] },
@@ -525,6 +531,7 @@ export default {
   defaults:{
     sprachen:['de','en','fr','it','pt','es'],
     plan:'gezeichnet', planBild:'', planPins:'ein',
+    mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
     parkX:22, parkY:72, hotelX:78, hotelY:40,
     adresse:'Allmendstrasse 14 · 3210 Kerzers',
     adresseKurz:'Allmendstrasse 14',
@@ -541,5 +548,55 @@ export default {
       const t = OPP_DATA[l.id] || OPP_DATA.de;
       return oppSheet(t, d, l.id + '-' + i);
     }).join('');
+  },
+
+  /* Werkzeugleiste über dem Formular: den swisstopo-Ausschnitt mit einem
+     Klick laden. Der Link kommt aus dem Feld «Link von map.geo.admin.ch»;
+     das fertige Bild wird in den Zustand gebacken (planBild) — danach
+     braucht das Blatt kein Netz mehr. */
+  mount({ panel, state, rebuild }){
+    panel.innerHTML = `
+      <div class="vz-tools">
+        <button type="button" class="vz-btn vz-btn--sm" data-opp="laden">Karten-Ausschnitt laden</button>
+        <a class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="offen" target="_blank" rel="noopener"
+           href="${esc(kartenAdresse(kartenLink(state.mapLink)))}">map.geo.admin.ch öffnen</a>
+        <span class="vz-tools-status" data-opp="status"></span>
+      </div>`;
+
+    const status = panel.querySelector('[data-opp="status"]');
+    const knopf  = panel.querySelector('[data-opp="laden"]');
+    const offen  = panel.querySelector('[data-opp="offen"]');
+
+    const klick = async () => {
+      const ort = kartenLink(state.mapLink);
+      if (!ort){
+        status.textContent = 'Zuerst unten den Link von map.geo.admin.ch einsetzen (Feld «Link von map.geo.admin.ch»).';
+        return;
+      }
+      knopf.disabled = true;
+      status.textContent = 'Karten-Ausschnitt wird geladen …';
+      try{
+        const bild = await kartenAusschnitt(ort, state.mapStil, state.mapZoom);
+        state.planBild = bild;
+        state.plan = 'bild';
+        rebuild();
+        /* rebuild zeichnet das Panel neu — kein Status nötig, das Blatt zeigt das Bild. */
+      }catch(err){
+        status.textContent = String(err && err.message || err);
+        knopf.disabled = false;
+      }
+    };
+    knopf.addEventListener('click', klick);
+
+    /* Der Öffnen-Link folgt dem Feld: sobald ein gültiger Link drinsteht,
+       zentriert er den Viewer auf denselben Ort. */
+    const folge = () => { offen.href = kartenAdresse(kartenLink(state.mapLink)); };
+    document.addEventListener('input', folge);
+
+    return () => {
+      knopf.removeEventListener('click', klick);
+      document.removeEventListener('input', folge);
+      panel.innerHTML = '';
+    };
   }
 };
