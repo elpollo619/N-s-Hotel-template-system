@@ -139,7 +139,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Kontakt-Tafel** | A4 hoch | Wer ist wofür da — Hauswart, Verwaltung, Notfall; die Nummer rechts und gross |
 | **Preisliste** | A4 hoch | Parkplatz, Waschmarken, Extras — nach Abschnitten geordnet, Beträge mit Tabellenziffern |
 | **Klingel- und Briefkastenschilder** | A4 hoch | Namensschilder in vier Handelsgrössen oder freiem Mass, als Bogen zum Ausschneiden |
-| **Gutschein** | A5 quer | Wertgutschein fürs Haus — Betrag im Cyanfeld, Code und Gültigkeit; sechs Sprachen |
+| **Gutschein** | A5 quer, mehrseitig | Wertgutschein fürs Haus, auch als nummerierte Serie (Nr. 001 …) — Betrag im Cyanfeld, Code und Gültigkeit; sechs Sprachen |
 | **Speisekarte** | A4 hoch | Frühstücks- und Getränkekarte nach Abschnitten, Preis rechts |
 | **Veranstaltungsplakat** | A4 hoch | Apéro, Fest, Markt — Datum als farbiger Block, dazu ein Programm |
 | **Ausser Betrieb** | A4 hoch | Lift, Maschine, Anlage steht — «Ausser Betrieb» in vier Sprachen, dazu was stattdessen gilt |
