@@ -127,3 +127,74 @@ export async function kartenAusschnitt(mitte, stil, zoom, breite, hoehe){
 
   return canvas.toDataURL('image/jpeg', 0.9);
 }
+
+/**
+ * Fertige Werkzeugzeile «Karten-Ausschnitt laden» für eine Vorlage.
+ * Erwartet im Zustand die Felder mapLink, mapStil, mapZoom (kommen aus dem
+ * Formular der Vorlage) und schreibt das gebackene Bild nach state[ziel].
+ *
+ * @param {{panel:Element,state:object,rebuild:Function}} ctx  aus mount()
+ * @param {{ziel?:string,breite?:number,hoehe?:number,nachher?:Function}} opts
+ * @returns {Function} Aufräum-Funktion
+ */
+export function kartenWerkzeug(ctx, opts){
+  const o = opts || {};
+  const ziel = o.ziel || 'img';
+  const wrap = document.createElement('div');
+  wrap.className = 'vz-tools';
+
+  const knopf = document.createElement('button');
+  knopf.type = 'button'; knopf.className = 'vz-btn vz-btn--sm';
+  knopf.textContent = 'Karten-Ausschnitt laden';
+
+  const offen = document.createElement('a');
+  offen.className = 'vz-btn vz-btn--sm vz-btn--ghost';
+  offen.target = '_blank'; offen.rel = 'noopener';
+  offen.textContent = 'map.geo.admin.ch öffnen';
+  offen.href = kartenAdresse(kartenLink(ctx.state.mapLink));
+
+  const status = document.createElement('span');
+  status.className = 'vz-tools-status';
+
+  wrap.append(knopf, offen, status);
+  ctx.panel.prepend(wrap);
+
+  const klick = async () => {
+    const ort = kartenLink(ctx.state.mapLink);
+    if (!ort){
+      status.textContent = 'Zuerst im Formular den Link von map.geo.admin.ch einsetzen (Feld «Link von map.geo.admin.ch»).';
+      return;
+    }
+    knopf.disabled = true;
+    status.textContent = 'Karten-Ausschnitt wird geladen …';
+    try{
+      const bild = await kartenAusschnitt(ort, ctx.state.mapStil, ctx.state.mapZoom, o.breite, o.hoehe);
+      ctx.state[ziel] = bild;
+      if (typeof o.nachher === 'function') o.nachher(ctx.state);
+      ctx.rebuild();
+    }catch(err){
+      status.textContent = String(err && err.message || err);
+      knopf.disabled = false;
+    }
+  };
+  knopf.addEventListener('click', klick);
+
+  const folge = () => { offen.href = kartenAdresse(kartenLink(ctx.state.mapLink)); };
+  document.addEventListener('input', folge);
+
+  return () => {
+    knopf.removeEventListener('click', klick);
+    document.removeEventListener('input', folge);
+    wrap.remove();
+  };
+}
+
+/** Die drei Formularfelder für den swisstopo-Lader — in jede Vorlage einsetzbar. */
+export function kartenFelder(){
+  return [
+    { k:'mapLink', label:'Link von map.geo.admin.ch', type:'text',
+      hint:'In map.geo.admin.ch den Ort einstellen, den Link aus der Adresszeile kopieren und hier einsetzen — dann oben «Karten-Ausschnitt laden» drücken. Oder nur die Koordinaten «2604566, 1197171».' },
+    { k:'mapStil', label:'Kartenstil', type:'select', options:KARTEN_STILE.map(s => ({ v:s.v, t:s.t })) },
+    { k:'mapZoom', label:'Nähe', type:'select', options:KARTEN_ZOOM.map(s => ({ v:s.v, t:s.t })) }
+  ];
+}

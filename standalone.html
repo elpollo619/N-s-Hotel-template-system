@@ -471,7 +471,15 @@ a{color:var(--cyan)}
 .vz-panel .vz-krumen{margin-bottom:10px}
 .vz-panel-head h2{font-family:var(--font-display);font-size:19px;font-weight:700;margin:12px 0 3px;color:var(--navy);line-height:1.2}
 .vz-panel-head p{margin:0;font-size:12px;color:var(--ink-soft)}
-.vz-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.vz-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--line);align-items:center}
+/* Benannte Stände — die Auswahl neben «Speichern unter …» */
+.vz-staende{
+  font:inherit;font-size:12.5px;color:var(--navy);
+  background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;max-width:180px;cursor:pointer;
+}
+.vz-staende:hover{border-color:var(--cyan)}
+.vz-staende[hidden]{display:none}
 .vz-fit{
   display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
   padding:8px 11px;border-radius:9px;margin-bottom:16px;
@@ -7132,6 +7140,117 @@ async function kartenAusschnitt(mitte, stil, zoom, breite, hoehe){
   return canvas.toDataURL('image/jpeg', 0.9);
 }
 
+/**
+ * Fertige Werkzeugzeile «Karten-Ausschnitt laden» für eine Vorlage.
+ * Erwartet im Zustand die Felder mapLink, mapStil, mapZoom (kommen aus dem
+ * Formular der Vorlage) und schreibt das gebackene Bild nach state[ziel].
+ *
+ * @param {{panel:Element,state:object,rebuild:Function}} ctx  aus mount()
+ * @param {{ziel?:string,breite?:number,hoehe?:number,nachher?:Function}} opts
+ * @returns {Function} Aufräum-Funktion
+ */
+function kartenWerkzeug(ctx, opts){
+  const o = opts || {};
+  const ziel = o.ziel || 'img';
+  const wrap = document.createElement('div');
+  wrap.className = 'vz-tools';
+
+  const knopf = document.createElement('button');
+  knopf.type = 'button'; knopf.className = 'vz-btn vz-btn--sm';
+  knopf.textContent = 'Karten-Ausschnitt laden';
+
+  const offen = document.createElement('a');
+  offen.className = 'vz-btn vz-btn--sm vz-btn--ghost';
+  offen.target = '_blank'; offen.rel = 'noopener';
+  offen.textContent = 'map.geo.admin.ch öffnen';
+  offen.href = kartenAdresse(kartenLink(ctx.state.mapLink));
+
+  const status = document.createElement('span');
+  status.className = 'vz-tools-status';
+
+  wrap.append(knopf, offen, status);
+  ctx.panel.prepend(wrap);
+
+  const klick = async () => {
+    const ort = kartenLink(ctx.state.mapLink);
+    if (!ort){
+      status.textContent = 'Zuerst im Formular den Link von map.geo.admin.ch einsetzen (Feld «Link von map.geo.admin.ch»).';
+      return;
+    }
+    knopf.disabled = true;
+    status.textContent = 'Karten-Ausschnitt wird geladen …';
+    try{
+      const bild = await kartenAusschnitt(ort, ctx.state.mapStil, ctx.state.mapZoom, o.breite, o.hoehe);
+      ctx.state[ziel] = bild;
+      if (typeof o.nachher === 'function') o.nachher(ctx.state);
+      ctx.rebuild();
+    }catch(err){
+      status.textContent = String(err && err.message || err);
+      knopf.disabled = false;
+    }
+  };
+  knopf.addEventListener('click', klick);
+
+  const folge = () => { offen.href = kartenAdresse(kartenLink(ctx.state.mapLink)); };
+  document.addEventListener('input', folge);
+
+  return () => {
+    knopf.removeEventListener('click', klick);
+    document.removeEventListener('input', folge);
+    wrap.remove();
+  };
+}
+
+/** Die drei Formularfelder für den swisstopo-Lader — in jede Vorlage einsetzbar. */
+function kartenFelder(){
+  return [
+    { k:'mapLink', label:'Link von map.geo.admin.ch', type:'text',
+      hint:'In map.geo.admin.ch den Ort einstellen, den Link aus der Adresszeile kopieren und hier einsetzen — dann oben «Karten-Ausschnitt laden» drücken. Oder nur die Koordinaten «2604566, 1197171».' },
+    { k:'mapStil', label:'Kartenstil', type:'select', options:KARTEN_STILE.map(s => ({ v:s.v, t:s.t })) },
+    { k:'mapZoom', label:'Nähe', type:'select', options:KARTEN_ZOOM.map(s => ({ v:s.v, t:s.t })) }
+  ];
+}
+
+/* ===== js/lib/staende.js ===== */
+/* ==========================================================================
+   Benannte Stände
+   --------------------------------------------------------------------------
+   Der Entwurf einer Vorlage speichert sich von selbst — aber es gibt nur
+   EINEN je Vorlage. Wer mehrere Fassungen braucht («Placa I16», «Sommerfest»,
+   eine Idee für später), legt sie hier unter einem Namen ab und holt sie
+   wieder hervor. Gespeichert wird im Browser (nsvz:staende:*) — und damit
+   automatisch auch in der Sicherungsdatei («Sichern und übertragen»).
+   ========================================================================== */
+
+const STAENDE_MAX = 24;
+const standKey = tplId => 'staende:' + tplId;
+
+/** Alle gespeicherten Stände einer Vorlage, neuste zuerst. */
+function staende(tplId){
+  const a = load(standKey(tplId), []);
+  return Array.isArray(a) ? a : [];
+}
+
+/** Zustand unter einem Namen ablegen; gleicher Name überschreibt. */
+function standSpeichern(tplId, name, zustand){
+  const sauber = String(name || '').trim().slice(0, 60);
+  if (!sauber) return false;
+  const a = staende(tplId).filter(s => s.name !== sauber);
+  a.unshift({ name: sauber, zeit: Date.now(), zustand: JSON.parse(JSON.stringify(zustand)) });
+  save(standKey(tplId), a.slice(0, STAENDE_MAX));
+  return true;
+}
+
+/** Einen Stand nach Namen holen — oder null. */
+function stand(tplId, name){
+  return staende(tplId).find(s => s.name === name) || null;
+}
+
+/** Einen Stand löschen. */
+function standLoeschen(tplId, name){
+  save(standKey(tplId), staende(tplId).filter(s => s.name !== name));
+}
+
 /* ===== js/lib/schrift.js ===== */
 /* ==========================================================================
    Welche Schrift ist gerade aktiv?
@@ -7372,6 +7491,15 @@ const DICT = {
     pageOf:'Seite',
     saveJson:'Entwurf sichern',
     loadJson:'Entwurf laden',
+    standSave:'Speichern unter …',
+    standAsk:'Name für diesen Stand — z. B. «Placa I16» oder «Sommerfest»:',
+    standDone:'Stand gespeichert',
+    standNone:'— Gespeicherte Stände —',
+    standLoadAsk:'Diesen Stand laden? Der aktuelle Entwurf wird ersetzt.',
+    standLoaded:'Stand geladen',
+    standDel:'Stand löschen',
+    standDelAsk:'Den gespeicherten Stand «%s» wirklich löschen?',
+    standDeleted:'Stand gelöscht',
     resetAsk:'Alle Aenderungen dieser Vorlage verwerfen und zum Original zurück?',
     fitOk:'Passt auf eine Seite',
     fitWarn:'Zu lang für eine Seite — Texte kürzen',
@@ -7565,6 +7693,15 @@ const DICT = {
     pageOf:'Page',
     saveJson:'Save draft',
     loadJson:'Load draft',
+    standSave:'Save as …',
+    standAsk:'Name for this version — e.g. “Sign I16” or “Summer party”:',
+    standDone:'Version saved',
+    standNone:'— Saved versions —',
+    standLoadAsk:'Load this version? The current draft will be replaced.',
+    standLoaded:'Version loaded',
+    standDel:'Delete version',
+    standDelAsk:'Really delete the saved version “%s”?',
+    standDeleted:'Version deleted',
     resetAsk:'Discard all changes to this template and restore the original?',
     fitOk:'Fits on one page',
     fitWarn:'Too long for one page — shorten the text',
@@ -9420,6 +9557,7 @@ const anfahrt = {
 
 
 
+
 function marker(kind, x, y, label){
   return `<div class="t-luft-pin" style="left:${x}%;top:${y}%">
     <svg viewBox="-60 -110 120 130">${pin(kind, 0, 0, 0.9)}</svg>
@@ -9448,6 +9586,7 @@ const luftbild = {
     { t:'group', label:'Luftbild' },
     { k:'img', label:'Bild', type:'image',
       hint:'Querformat, z. B. der Ausschnitt aus swisstopo. Wird auf das Blatt zugeschnitten.' },
+    ...kartenFelder(),
 
     { t:'group', label:'Pin N’s Hotel' },
     { k:'nsX', label:'Position von links in %', type:'number', min:0, max:100, step:1 },
@@ -9461,6 +9600,18 @@ const luftbild = {
     { k:'showP', label:'Parkplatz-Pin zeigen', type:'select',
       options:[{ v:'ja', t:'ja' }, { v:'nein', t:'nein' }] },
 
+    { t:'group', label:'Weitere Pins' },
+    { t:'note', label:'So viele Pins, wie das Bild braucht — Eingang, Velo-Raum, Sammelstelle …' },
+    { k:'extra', label:'Pins', type:'list', itemLabel:'Pin', max:10,
+      defaultItem:{ art:'p', x:50, y:50, label:'' },
+      item:[
+        { k:'art', label:'Art', type:'select', options:[
+          { v:'p', t:'P — cyan' }, { v:'ns', t:'N’s — navy' }, { v:'plain', t:'neutral — grau' } ] },
+        { k:'x', label:'von links in %', type:'number', min:0, max:100, step:1 },
+        { k:'y', label:'von oben in %',  type:'number', min:0, max:100, step:1 },
+        { k:'label', label:'Beschriftung', type:'text' }
+      ] },
+
     { t:'group', label:'Text' },
     { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
     { k:'title',   label:'Titel', type:'text' },
@@ -9473,8 +9624,10 @@ const luftbild = {
 
   defaults:{
     img: BRAND.aerial || '',
+    mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
     nsX:42, nsY:56, nsLabel:"N's Hotel",
     pX:64, pY:48, pLabel:'Gästeparkplatz', showP:'ja',
+    extra:[],
     eyebrow:'So finden Sie uns',
     title:'Anfahrt und Parken',
     sub:'Luftbild mit Eingang und Gästeparkplatz · Aerial view with entrance and guest parking',
@@ -9495,7 +9648,9 @@ const luftbild = {
     // Ohne Bild keine Pins — sonst schweben sie über dem Hinweistext.
     const pins = has(d.img)
       ? marker('ns', Number(d.nsX) || 0, Number(d.nsY) || 0, d.nsLabel) +
-        (d.showP !== 'nein' ? marker('p', Number(d.pX) || 0, Number(d.pY) || 0, d.pLabel) : '')
+        (d.showP !== 'nein' ? marker('p', Number(d.pX) || 0, Number(d.pY) || 0, d.pLabel) : '') +
+        (Array.isArray(d.extra) ? d.extra : [])
+          .map(p => marker(p.art || 'p', Number(p.x) || 0, Number(p.y) || 0, p.label)).join('')
       : '';
 
     return `
@@ -9512,6 +9667,15 @@ const luftbild = {
       ${has(d.footer) ? `<p class="t-luft-addr">${esc(d.footer)}</p>` : ''}
       ${has(d.credit) ? `<span class="t-luft-credit">${esc(d.credit)}</span>` : ''}
     </div>`;
+  },
+
+  /* Werkzeugleiste: den swisstopo-Ausschnitt per Link laden — das Bild wird
+     ins Blatt gebacken und die Quellenangabe gesetzt, falls sie leer ist. */
+  mount(ctx){
+    return kartenWerkzeug(ctx, {
+      ziel:'img', breite:1680, hoehe:1188,
+      nachher(d){ if (!has(d.credit)) d.credit = '© swisstopo'; }
+    });
   }
 };
 
@@ -9653,6 +9817,7 @@ const zattoo = {
 
 
 
+
 const PAGES = {
   'A4-quer':'a4-land', 'A4-hoch':'a4',
   'A3-quer':'a3-land', 'A3-hoch':'a3',
@@ -9693,6 +9858,7 @@ const planeditor = {
     { t:'group', label:'Hintergrundbild' },
     { k:'img', label:'Luftbild', type:'image',
       hint:'Leer lassen für das hinterlegte Bild (swisstopo).' },
+    ...kartenFelder(),
 
     { t:'group', label:'Seite' },
     { k:'format', label:'Format', type:'select',
@@ -9716,6 +9882,7 @@ const planeditor = {
     title:'Anfahrt und Parkplätze',
     sub:'Arrival and parking',
     img:'',
+    mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
     format:'A4-quer',
     legend:[
       { color:'#1F9D57', label:'Garten' },
@@ -9766,7 +9933,22 @@ const planeditor = {
     ${has(d.footer) ? `<p class="t-plan-addr">${esc(d.footer)}</p>` : ''}`;
   },
 
-  mount(ctx){ return mountPlanEditor(ctx); }
+  mount(ctx){
+    /* Zwei Mieter im Panel: oben der swisstopo-Lader, darunter der
+       Plan-Editor mit seinem eigenen, sich selbst neu zeichnenden Bereich. */
+    const editorDiv = document.createElement('div');
+    ctx.panel.append(editorDiv);
+    const wegKarte  = kartenWerkzeug(ctx, {
+      ziel:'img', breite:1920, hoehe:1316,   /* Proportion des Plan-Lienzos (2414:1654) */
+      nachher(d){ if (!d.credit) d.credit = '© swisstopo'; }
+    });
+    const wegEditor = mountPlanEditor({ ...ctx, panel: editorDiv });
+    return () => {
+      if (typeof wegKarte === 'function') wegKarte();
+      if (typeof wegEditor === 'function') wegEditor();
+      editorDiv.remove();
+    };
+  }
 };
 
 /* ===== js/templates/gaestemappe.js ===== */
@@ -19371,6 +19553,7 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 
 
+
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
 
@@ -20079,6 +20262,9 @@ function renderEditor(id, geteilt, suchwert){
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
+          <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-objekthinweis" id="vz-objekthinweis" hidden></div>
@@ -20456,6 +20642,51 @@ function renderEditor(id, geteilt, suchwert){
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
     renderEditor(tpl.id);
+  };
+
+  /* Benannte Stände: mehrere Fassungen je Vorlage — «Placa I16»,
+     «Sommerfest», eine Idee für später. Liegen im Browser und damit
+     automatisch auch in der Sicherungsdatei. */
+  const standWahl = document.getElementById('vz-staende');
+  const standDel  = document.getElementById('vz-stand-del');
+  function standListe(){
+    const a = staende(tpl.id);
+    standWahl.innerHTML = `<option value="">${esc(t('standNone'))}</option>`
+      + a.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
+    standWahl.hidden = !a.length;
+    standDel.hidden = true;
+  }
+  standListe();
+  document.getElementById('vz-stand').onclick = () => {
+    const name = prompt(t('standAsk'), standWahl.value || '');
+    if (name == null) return;
+    if (standSpeichern(tpl.id, name, state)){
+      standListe();
+      standWahl.value = String(name).trim().slice(0, 60);
+      standDel.hidden = !standWahl.value;
+      toast(t('standDone'));
+    }
+  };
+  standWahl.onchange = () => {
+    const name = standWahl.value;
+    standDel.hidden = !name;
+    if (!name) return;
+    const s = stand(tpl.id, name);
+    if (!s) return;
+    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = true; return; }
+    Object.keys(state).forEach(k => { delete state[k]; });
+    Object.assign(state, JSON.parse(JSON.stringify(s.zustand)));
+    commit(); rebuild();
+    toast(t('standLoaded'));
+    standWahl.value = name;
+    standDel.hidden = false;
+  };
+  standDel.onclick = () => {
+    const name = standWahl.value;
+    if (!name || !confirm(t('standDelAsk').replace('%s', name))) return;
+    standLoeschen(tpl.id, name);
+    standListe();
+    toast(t('standDeleted'));
   };
   document.getElementById('vz-json-save').onclick = () => {
     const blob = new Blob([JSON.stringify({ template: tpl.id, data: state }, null, 2)], { type:'application/json' });
