@@ -1091,9 +1091,32 @@ function renderEditor(id, geteilt, suchwert){
     });
   });
 
+  /* Bilder beim Ablegen verkleinern: ein Handy-Foto hat 8 MB — der
+     Browser-Speicher (und der Teilen-Link) verträgt das nicht. Alles über
+     2200 px Kante oder 1.5 MB wird auf 2200 px verkleinert und als JPEG
+     gespeichert; kleine PNG (Logos, Transparenz) bleiben unangetastet. */
   function readImage(file, path){
     const fr = new FileReader();
-    fr.onload = () => { setPath(state, path, fr.result); commit(); rebuild(); };
+    fr.onload = () => {
+      const roh = fr.result;
+      const gross = file.size > 1.5 * 1024 * 1024;
+      const img = new Image();
+      img.onload = () => {
+        const kante = Math.max(img.width, img.height);
+        if (!gross && kante <= 2200){ setPath(state, path, roh); commit(); rebuild(); return; }
+        const s = Math.min(1, 2200 / kante);
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        const klein = file.type === 'image/png' && !gross
+          ? c.toDataURL('image/png')
+          : c.toDataURL('image/jpeg', 0.85);
+        setPath(state, path, klein.length < roh.length ? klein : roh);
+        commit(); rebuild();
+      };
+      img.onerror = () => { setPath(state, path, roh); commit(); rebuild(); };
+      img.src = roh;
+    };
     fr.readAsDataURL(file);
   }
   function rebuild(){
