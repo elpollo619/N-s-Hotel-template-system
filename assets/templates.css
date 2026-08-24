@@ -2666,3 +2666,100 @@
   text-align:center;white-space:nowrap;overflow:hidden;
 }
 .t-pin-fransen span:first-child{border-left:none}
+
+/* ==========================================================================
+   t-opp · Öffentlicher Parkplatz in der Nähe (A4 hoch, je Sprache ein Blatt)
+   Portiert aus dem Kit "Öffentlicher Parkplatz - Kit".
+   ========================================================================== */
+.t-opp-page{display:flex;flex-direction:column;background:var(--bg);color:var(--ink)}
+.opp-band{height:2.4mm;flex:0 0 auto;
+  background:linear-gradient(90deg,var(--navy) 0 62%,var(--cyan) 62% 100%)}
+.opp-inner{flex:1;display:flex;flex-direction:column;padding:7mm 12mm 6mm;gap:3mm}
+
+/* Kopf */
+.opp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8mm}
+.opp-logo{flex:0 0 auto}
+.opp-tag{text-align:right;font-size:8pt;font-weight:600;letter-spacing:.02em;
+  color:var(--muted);line-height:1.35;text-transform:uppercase}
+.opp-tag b{display:block;color:var(--navy);font-size:9pt;letter-spacing:0}
+
+/* Held */
+.opp-hero{margin-top:.5mm}
+.opp-eyebrow{font-size:8.5pt;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cyan)}
+.opp-hero h1{margin:1.2mm 0 0;font-family:var(--font-display);font-weight:700;
+  font-size:20pt;line-height:1.03;color:var(--navy);letter-spacing:-.01em}
+.opp-script{display:block;font-family:var(--font-script);font-weight:400;
+  font-size:14pt;line-height:1.1;color:var(--cyan);margin-top:.8mm;letter-spacing:0}
+.opp-lede{margin:2mm 0 0;font-size:9.2pt;line-height:1.45;color:var(--ink);max-width:170mm}
+.opp-lede b{color:var(--navy);font-weight:700}
+.opp-rule{height:1.2pt;background:var(--cyan);width:26mm;margin-top:2.4mm;border-radius:1pt}
+
+/* Abschnittstitel */
+.opp-sec{display:flex;align-items:center;gap:2.4mm;font-family:var(--font-display);
+  font-weight:700;font-size:10.5pt;color:var(--navy);margin-bottom:1.8mm}
+.opp-ic{display:inline-flex;color:var(--cyan)}
+.opp-ic svg{width:5mm;height:5mm;display:block}
+
+/* Lageplan */
+.opp-map-wrap{margin-top:.5mm}
+.opp-map{border-radius:3.5mm;overflow:hidden;border:1pt solid var(--line);background:#E8EDE7;
+  max-width:150mm;margin-inline:auto}
+.opp-map svg{display:block;width:100%;height:auto}
+.opp-map-cap{margin:1.8mm 0 0;font-size:7.6pt;color:var(--muted);text-align:center;letter-spacing:.02em}
+
+/* Zwei Spalten: Tarif + Bezahlen */
+.opp-cols{display:grid;grid-template-columns:1fr 1fr;gap:8mm;margin-top:1mm}
+.opp-card{border:1pt solid var(--line);border-radius:3mm;overflow:hidden;background:var(--bg)}
+.opp-card-h{display:flex;justify-content:space-between;align-items:center;
+  background:var(--navy);color:#fff;padding:2.4mm 3.4mm}
+.opp-card-h .opp-t{font-weight:700;font-size:9.5pt}
+.opp-card-h .opp-clock{font-size:8pt;font-weight:600;opacity:.85;
+  background:rgba(255,255,255,.16);padding:.8mm 2mm;border-radius:999px}
+.opp-trow{display:flex;justify-content:space-between;align-items:center;gap:3mm;
+  padding:2.4mm 3.4mm;border-top:1pt solid var(--line)}
+.opp-trow:first-of-type{border-top:none}
+.opp-trow .opp-l{font-size:9pt;color:var(--ink);font-weight:600;line-height:1.25}
+.opp-trow .opp-l small{display:block;font-size:7.5pt;font-weight:500;color:var(--muted)}
+.opp-price{font-family:var(--font-display);font-weight:700;font-size:11pt;
+  color:var(--navy);font-variant-numeric:tabular-nums}
+.opp-free{display:inline-block;background:var(--green-tint);color:#146c3c;
+  font-weight:700;font-size:8.5pt;padding:.9mm 2.6mm;border-radius:999px}
+.opp-trow.note{background:var(--bg-2)}
+.opp-trow.note .opp-l{font-size:7.5pt;color:var(--muted);font-weight:600}
+
+.opp-pay{display:flex;flex-direction:column;gap:2.4mm}
+.opp-pitem{display:flex;gap:3mm;align-items:flex-start;background:var(--bg-2);
+  border-radius:2.6mm;padding:2.6mm 3mm}
+.opp-pic{flex:0 0 auto;width:9mm;height:9mm;border-radius:2.2mm;display:inline-flex;
+  align-items:center;justify-content:center}
+.opp-pic svg{width:5mm;height:5mm}
+.opp-pitem h4{margin:0;font-size:9pt;font-weight:700;color:var(--navy);
+  display:flex;align-items:baseline;gap:1.6mm;flex-wrap:wrap}
+.opp-code{font-size:7pt;font-weight:600;color:#0a6f8c;background:var(--cyan-tint);
+  padding:.4mm 1.6mm;border-radius:999px;letter-spacing:.02em}
+.opp-pitem p{margin:.6mm 0 0;font-size:7.6pt;line-height:1.35;color:var(--ink-soft)}
+
+/* Wichtig-Kasten */
+.opp-important{display:flex;gap:3mm;align-items:flex-start;background:var(--red-tint);
+  border:1pt solid #F3C7C2;border-radius:3mm;padding:3mm 3.6mm;margin-top:1mm}
+.opp-important .opp-ic{color:var(--red)}
+.opp-important b{font-size:9.5pt;color:#B02A20;font-family:var(--font-display)}
+.opp-important p{margin:1mm 0 0;font-size:8.4pt;line-height:1.42;color:var(--ink)}
+.opp-important p b{color:#B02A20;font-family:inherit}
+
+/* Kennzeichen-Hinweis */
+.opp-plate{display:flex;gap:3mm;align-items:center;background:var(--cyan-tint);
+  border-radius:3mm;padding:2.6mm 3.6mm}
+.opp-plate span{flex:0 0 auto;color:#0a6f8c}
+.opp-plate span svg{width:7mm;height:7mm;display:block}
+.opp-plate div{font-size:8.4pt;line-height:1.42;color:var(--ink)}
+.opp-plate b{color:var(--navy);font-weight:700}
+
+/* Fuss */
+.opp-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;
+  gap:8mm;padding-top:3mm;border-top:1pt solid var(--line)}
+.opp-brand{font-family:var(--font-display);font-weight:700;font-size:9pt;color:var(--navy)}
+.opp-tagline{font-family:var(--font-script);font-size:12pt;color:var(--cyan);line-height:1}
+.opp-meta{text-align:right;font-size:8pt;color:var(--muted);line-height:1.4}
+.opp-meta b{color:var(--navy)}
