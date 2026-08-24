@@ -119,7 +119,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
 | **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
-| **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan, Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
+| **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan (gezeichnet **oder** eigenes Kartenbild), Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Eigenes Luftbild hochladen, Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |

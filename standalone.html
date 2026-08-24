@@ -3813,6 +3813,16 @@ a{color:var(--cyan)}
 .opp-map{border-radius:3.5mm;overflow:hidden;border:1pt solid var(--line);background:#E8EDE7;
   max-width:150mm;margin-inline:auto}
 .opp-map svg{display:block;width:100%;height:auto}
+/* Eigenes Kartenbild mit Pin- und Weg-Ebene darüber.
+   Der Rahmen schmiegt sich ans Bild (width:fit-content), damit die Pins in
+   Prozent exakt aufs Bild fallen; die Höhe ist gedeckelt, damit auch ein
+   hochformatiges Bild das A4-Blatt nicht sprengt. */
+.opp-map--img{position:relative;width:fit-content;margin-inline:auto}
+.opp-map--img img{display:block;max-width:100%;max-height:82mm;width:auto;height:auto}
+.opp-map--img .opp-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.opp-pin{position:absolute;transform:translate(-50%,-100%);pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(18,26,46,.35))}
+.opp-pin svg{display:block}
 .opp-map-cap{margin:1.8mm 0 0;font-size:7.6pt;color:var(--muted);text-align:center;letter-spacing:.02em}
 
 /* Zwei Spalten: Tarif + Bezahlen */
@@ -18207,10 +18217,7 @@ function oppSheet(t, d, uid){
       '</div>' +
       '<div class="opp-map-wrap">' +
         '<div class="opp-sec"><span class="opp-ic">' + OPP_IC.map + '</span>' + esc(t.mapTitle) + '</div>' +
-        '<div class="opp-map">' + oppMap({
-          mapTitle: t.mapTitle, mapPark: t.mapPark, mapParkSub: oppFill(t.mapParkSub, d),
-          mapHotelSub: d.adresseKurz, strasseHotel: t.strasseHotel, strassePark: t.strassePark
-        }, uid) + '</div>' +
+        oppPlan(t, d, uid) +
         '<div class="opp-map-cap">' + oppFill(t.mapCap, d) + '</div>' +
       '</div>' +
       '<div class="opp-cols">' +
@@ -18239,6 +18246,47 @@ function oppSheet(t, d, uid){
       '</div>' +
     '</div>' +
   '</article>';
+}
+
+/* ---------- Pin für das eigene Kartenbild ----------
+   Fester Massstab (verzerrt nicht mit dem Bild), Spitze exakt im Punkt. */
+function oppPinAt(x, y, kind){
+  const isP = kind === 'p';
+  const body = isP
+    ? '<path d="M0 0 C 18 -15, 18 -39, 0 -39 C -18 -39, -18 -15, 0 0 Z" fill="#01B1E2" stroke="#0e9ec9" stroke-width="1"/>' +
+      '<circle cx="0" cy="-25" r="11.5" fill="#fff"/>' +
+      '<text x="0" y="-19.6" text-anchor="middle" font-family="var(--font-display),Montserrat,sans-serif" font-size="16" font-weight="700" fill="#01B1E2">P</text>'
+    : '<path d="M0 0 C 18 -15, 18 -39, 0 -39 C -18 -39, -18 -15, 0 0 Z" fill="#2A3350" stroke="#1c2238" stroke-width="1"/>' +
+      '<rect x="-8.5" y="-33" width="17" height="16.5" rx="2" fill="#fff"/>' +
+      '<rect x="-2" y="-27" width="5.5" height="10.5" fill="#2A3350"/>' +
+      '<rect x="-8.5" y="-36" width="13" height="3.4" fill="#01B1E2"/>';
+  return '<span class="opp-pin" style="left:' + x + '%;top:' + y + '%">' +
+    '<svg viewBox="-20 -42 40 42" width="30" height="31.5" aria-hidden="true">' + body + '</svg></span>';
+}
+
+/* ---------- Lageplan: gezeichnete Karte ODER eigenes Bild ---------- */
+function oppPlan(t, d, uid){
+  const useImg = d.plan === 'bild' && has(d.planBild);
+  if (useImg){
+    const zahl = n => Math.max(0, Math.min(100, Number(n) || 0));
+    const hx = zahl(d.hotelX), hy = zahl(d.hotelY), px = zahl(d.parkX), py = zahl(d.parkY);
+    const pins = d.planPins !== 'aus';
+    const linie = 'M' + px + ' ' + py + ' L' + hx + ' ' + hy;
+    return '<div class="opp-map opp-map--img">' +
+      '<img src="' + esc(d.planBild) + '" alt="' + esc(t.mapTitle) + '">' +
+      (pins
+        ? '<svg class="opp-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+            '<path d="' + linie + '" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
+            '<path d="' + linie + '" fill="none" stroke="#1F9D57" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="0.1 8" vector-effect="non-scaling-stroke"/>' +
+          '</svg>' +
+          oppPinAt(px, py, 'p') + oppPinAt(hx, hy, 'hotel')
+        : '') +
+    '</div>';
+  }
+  return '<div class="opp-map">' + oppMap({
+    mapTitle: t.mapTitle, mapPark: t.mapPark, mapParkSub: oppFill(t.mapParkSub, d),
+    mapHotelSub: d.adresseKurz, strasseHotel: t.strasseHotel, strassePark: t.strassePark
+  }, uid) + '</div>';
 }
 
 /* ---------- Texte in sechs Sprachen ----------
@@ -18456,6 +18504,22 @@ const parkplatznah = {
     { t:'note', label:'Je Sprache entsteht eine eigene A4-Seite. Deutsch steht zuoberst.' },
     { k:'sprachen', label:'Sprachen', type:'checks', options:sprachOptions() },
 
+    { t:'group', label:'Lageplan' },
+    { k:'plan', label:'Kartenbild', type:'select', options:[
+      { v:'gezeichnet', t:'Gezeichneter Plan (offline)' },
+      { v:'bild', t:'Eigenes Bild / Karten-Ausschnitt' } ],
+      hint:'Der gezeichnete Plan braucht kein Netz. «Eigenes Bild» zeigt stattdessen dein hochgeladenes Foto oder einen Karten-Ausschnitt.' },
+    { k:'planBild', label:'Bild hochladen', type:'image',
+      hint:'Eigenes Foto oder ein Ausschnitt von map.geo.admin.ch (dort «Drucken» → als PNG/PDF exportieren, dann hier ablegen). Wird ins Blatt eingebettet und läuft offline.' },
+    { k:'planPins', label:'Marken-Pins und Weg aufs Bild', type:'select', options:[
+      { v:'ein', t:'ja — Hotel + P und Fussweg zeigen' },
+      { v:'aus', t:'nein — Bild unverändert lassen' } ] },
+    { t:'note', label:'Pins nur beim eigenen Bild. Position in Prozent: 0 = links bzw. oben, 100 = rechts bzw. unten.' },
+    { k:'parkX', label:'Parkplatz-Pin — von links %', type:'number', min:0, max:100, step:1 },
+    { k:'parkY', label:'Parkplatz-Pin — von oben %', type:'number', min:0, max:100, step:1 },
+    { k:'hotelX', label:'Hotel-Pin — von links %', type:'number', min:0, max:100, step:1 },
+    { k:'hotelY', label:'Hotel-Pin — von oben %', type:'number', min:0, max:100, step:1 },
+
     { t:'group', label:'Standort und Weg' },
     { k:'adresse',   label:'Adresse Hotel (Kopf und Fuss)', type:'text' },
     { k:'adresseKurz', label:'Kurzform Hotel (Pin)', type:'text',
@@ -18476,6 +18540,8 @@ const parkplatznah = {
 
   defaults:{
     sprachen:['de','en','fr','it','pt','es'],
+    plan:'gezeichnet', planBild:'', planPins:'ein',
+    parkX:22, parkY:72, hotelX:78, hotelY:40,
     adresse:'Allmendstrasse 14 · 3210 Kerzers',
     adresseKurz:'Allmendstrasse 14',
     parkName:'Chutzenhütte',
