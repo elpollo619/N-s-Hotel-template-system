@@ -2706,6 +2706,16 @@
 .opp-map{border-radius:3.5mm;overflow:hidden;border:1pt solid var(--line);background:#E8EDE7;
   max-width:150mm;margin-inline:auto}
 .opp-map svg{display:block;width:100%;height:auto}
+/* Eigenes Kartenbild mit Pin- und Weg-Ebene darüber.
+   Der Rahmen schmiegt sich ans Bild (width:fit-content), damit die Pins in
+   Prozent exakt aufs Bild fallen; die Höhe ist gedeckelt, damit auch ein
+   hochformatiges Bild das A4-Blatt nicht sprengt. */
+.opp-map--img{position:relative;width:fit-content;margin-inline:auto}
+.opp-map--img img{display:block;max-width:100%;max-height:82mm;width:auto;height:auto}
+.opp-map--img .opp-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.opp-pin{position:absolute;transform:translate(-50%,-100%);pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(18,26,46,.35))}
+.opp-pin svg{display:block}
 .opp-map-cap{margin:1.8mm 0 0;font-size:7.6pt;color:var(--muted);text-align:center;letter-spacing:.02em}
 
 /* Zwei Spalten: Tarif + Bezahlen */
