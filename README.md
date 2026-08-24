@@ -120,7 +120,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
 | **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
 | **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan (gezeichnet, eigenes Bild **oder** swisstopo-Ausschnitt per Link — wird ins Blatt gebacken; frei einpassbar: Ziehen, Rad-Zoom, Drehen, Pinch), Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
-| **Monatskalender** | A4 hoch | Der Monat baut sich selbst: Wochen ab Montag, Kalenderwochen, Feiertage (Ostern gerechnet), eigene Einträge als farbige Chips |
+| **Monatskalender** | A4 hoch/quer, mehrseitig | Ein Monat, zwölf Monate (je Blatt einer) oder der Jahresplaner auf einem Blatt — Wochen ab Montag, Kalenderwochen, Feiertage (Ostern gerechnet), Einträge auch «jeden Monat» |
 | **Checkliste** | A4 hoch | Abhak-Liste für Reinigung, Rundgang und Kontrolle — je Zeile ein Kästchen; wahlweise mit Bemerkung oder als Wochenkontrolle Mo–So |
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Luftbild hochladen **oder** per swisstopo-Link laden; beliebig viele Pins frei platzieren |
