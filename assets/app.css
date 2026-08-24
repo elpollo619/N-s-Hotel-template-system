@@ -477,7 +477,9 @@ a{color:var(--cyan)}
 /* Werkzeugbereich interaktiver Vorlagen (unter den Aktionen, ueber dem Formular) */
 .vz-extra:empty{display:none}
 .vz-extra{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
-.vz-tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.vz-tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.vz-tools-status{font-size:12px;line-height:1.5;color:var(--ink-soft)}
+.vz-tools-status:empty{display:none}
 .vz-tool{
   border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;
   font-family:var(--font-display);font-weight:700;font-size:12px;color:var(--navy);cursor:pointer;

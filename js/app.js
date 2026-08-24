@@ -799,7 +799,10 @@ function renderEditor(id, geteilt, suchwert){
         /* Nur sichern — ohne Neuzeichnen, damit das Ziehen fluessig bleibt. */
         save: () => saveState(tpl, state),
         /* Alles neu zeichnen, z. B. nach einem Formatwechsel. */
-        repaint: () => { saveState(tpl, state); paint(); }
+        repaint: () => { saveState(tpl, state); paint(); },
+        /* Auch das Formular neu aufbauen — wenn eine Vorlagen-Funktion den
+           Zustand asynchron ändert (z. B. ein geladener Karten-Ausschnitt). */
+        rebuild: () => { saveState(tpl, state); paint(); rebuild(); }
       }) || null;
     }
     fitScaler();
