@@ -3871,16 +3871,17 @@ a{color:var(--cyan)}
 .opp-map{border-radius:3.5mm;overflow:hidden;border:1pt solid var(--line);background:#E8EDE7;
   max-width:150mm;margin-inline:auto}
 .opp-map svg{display:block;width:100%;height:auto}
-/* Eigenes Kartenbild mit Pin- und Weg-Ebene darüber.
-   Der Rahmen schmiegt sich ans Bild (width:fit-content), damit die Pins in
-   Prozent exakt aufs Bild fallen; die Höhe ist gedeckelt, damit auch ein
-   hochformatiges Bild das A4-Blatt nicht sprengt. */
-.opp-map--img{position:relative;width:fit-content;margin-inline:auto}
-.opp-map--img img{display:block;max-width:100%;max-height:82mm;width:auto;height:auto}
+/* Eigenes Kartenbild im festen Rahmen (gleiche Proportion wie der
+   gezeichnete Plan). Das Bild füllt den Rahmen (cover) und wird über
+   bildZoom/bildX/bildY frei eingepasst; Pins und Weg stehen in Prozent
+   des Rahmens. Im Editor lassen sich Bild und Pins direkt ziehen. */
+.opp-map--img{position:relative;width:100%;max-width:150mm;aspect-ratio:760/384;margin-inline:auto}
+.opp-map--img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform-origin:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
 .opp-map--img .opp-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.opp-pin{position:absolute;transform:translate(-50%,-100%);pointer-events:none;
+.opp-pin{position:absolute;transform:translate(-50%,-100%);cursor:grab;touch-action:none;
   filter:drop-shadow(0 2px 3px rgba(18,26,46,.35))}
-.opp-pin svg{display:block}
+.opp-pin svg{display:block;pointer-events:none}
 .opp-map-cap{margin:1.8mm 0 0;font-size:7.6pt;color:var(--muted);text-align:center;letter-spacing:.02em}
 
 /* Zwei Spalten: Tarif + Bezahlen */
@@ -18472,8 +18473,20 @@ function oppPinAt(x, y, kind){
       '<rect x="-8.5" y="-33" width="17" height="16.5" rx="2" fill="#fff"/>' +
       '<rect x="-2" y="-27" width="5.5" height="10.5" fill="#2A3350"/>' +
       '<rect x="-8.5" y="-36" width="13" height="3.4" fill="#01B1E2"/>';
-  return '<span class="opp-pin" style="left:' + x + '%;top:' + y + '%">' +
+  return '<span class="opp-pin" data-rolle="' + (isP ? 'park' : 'hotel') + '" style="left:' + x + '%;top:' + y + '%">' +
     '<svg viewBox="-20 -42 40 42" width="30" height="31.5" aria-hidden="true">' + body + '</svg></span>';
+}
+
+/* ---------- Bild-Einpassung ----------
+   Das eigene Kartenbild sitzt in einem Rahmen mit fester Proportion (wie der
+   gezeichnete Plan) und lässt sich darin frei einpassen: bildZoom in Prozent
+   (100 = eingepasst), bildX/bildY verschieben in Prozent der Rahmenbreite.
+   Dieselbe Transformation nutzt auch das Ziehen in der Vorschau. */
+function oppBildTransform(d){
+  const z = Math.max(50, Math.min(300, Number(d.bildZoom) || 100)) / 100;
+  const kx = Math.max(-120, Math.min(120, Number(d.bildX) || 0));
+  const ky = Math.max(-120, Math.min(120, Number(d.bildY) || 0));
+  return 'translate(' + kx + '%,' + ky + '%) scale(' + z + ')';
 }
 
 /* ---------- Lageplan: gezeichnete Karte ODER eigenes Bild ---------- */
@@ -18485,7 +18498,8 @@ function oppPlan(t, d, uid){
     const pins = d.planPins !== 'aus';
     const linie = 'M' + px + ' ' + py + ' L' + hx + ' ' + hy;
     return '<div class="opp-map opp-map--img">' +
-      '<img src="' + esc(d.planBild) + '" alt="' + esc(t.mapTitle) + '">' +
+      '<img src="' + esc(d.planBild) + '" alt="' + esc(t.mapTitle) + '" draggable="false"' +
+        ' style="transform:' + oppBildTransform(d) + '">' +
       (pins
         ? '<svg class="opp-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
             '<path d="' + linie + '" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
@@ -18728,6 +18742,11 @@ const parkplatznah = {
     { k:'mapZoom', label:'Nähe', type:'select', options:KARTEN_ZOOM.map(s => ({ v:s.v, t:s.t })) },
     { k:'planBild', label:'Oder Bild hochladen', type:'image',
       hint:'Eigenes Foto oder ein selbst exportierter Karten-Ausschnitt. Wird ins Blatt eingebettet und läuft offline.' },
+    { t:'note', label:'Einpassen geht direkt in der Vorschau: Bild ziehen zum Verschieben, Pins ziehen zum Platzieren, ＋/− oben zoomen. Die Zahlen hier sind für die Feinjustierung.' },
+    { k:'bildZoom', label:'Bild-Zoom in %', type:'number', min:50, max:300, step:5,
+      hint:'100 = eingepasst. Mehr = näher heran, weniger = ganzes Bild mit Rand.' },
+    { k:'bildX', label:'Bild waagrecht verschieben in %', type:'number', min:-120, max:120, step:1 },
+    { k:'bildY', label:'Bild senkrecht verschieben in %', type:'number', min:-120, max:120, step:1 },
     { k:'planPins', label:'Marken-Pins und Weg aufs Bild', type:'select', options:[
       { v:'ein', t:'ja — Hotel + P und Fussweg zeigen' },
       { v:'aus', t:'nein — Bild unverändert lassen' } ] },
@@ -18759,6 +18778,7 @@ const parkplatznah = {
     sprachen:['de','en','fr','it','pt','es'],
     plan:'gezeichnet', planBild:'', planPins:'ein',
     mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
+    bildZoom:100, bildX:0, bildY:0,
     parkX:22, parkY:72, hotelX:78, hotelY:40,
     adresse:'Allmendstrasse 14 · 3210 Kerzers',
     adresseKurz:'Allmendstrasse 14',
@@ -18781,12 +18801,17 @@ const parkplatznah = {
      Klick laden. Der Link kommt aus dem Feld «Link von map.geo.admin.ch»;
      das fertige Bild wird in den Zustand gebacken (planBild) — danach
      braucht das Blatt kein Netz mehr. */
-  mount({ panel, state, rebuild }){
+  mount({ sheet, panel, state, save, repaint, rebuild }){
     panel.innerHTML = `
       <div class="vz-tools">
         <button type="button" class="vz-btn vz-btn--sm" data-opp="laden">Karten-Ausschnitt laden</button>
         <a class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="offen" target="_blank" rel="noopener"
            href="${esc(kartenAdresse(kartenLink(state.mapLink)))}">map.geo.admin.ch öffnen</a>
+        ${state.plan === 'bild' ? `
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="plus" title="Bild näher heran">＋ näher</button>
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="minus" title="Bild weiter weg">− weiter</button>
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="mitte" title="Zoom 100 %, Bild zentriert">Bild einpassen</button>
+        <span class="vz-tools-status">Bild in der Vorschau ziehen · Pins ziehen</span>` : ''}
         <span class="vz-tools-status" data-opp="status"></span>
       </div>`;
 
@@ -18820,9 +18845,83 @@ const parkplatznah = {
     const folge = () => { offen.href = kartenAdresse(kartenLink(state.mapLink)); };
     document.addEventListener('input', folge);
 
+    /* ---------- Bild einpassen: Zoom-Knöpfe + Formular-Abgleich ---------- */
+    const klemm = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const feldAbgleich = () => {
+      for (const k of ['bildZoom', 'bildX', 'bildY', 'parkX', 'parkY', 'hotelX', 'hotelY']){
+        const el = document.querySelector('[data-path="' + k + '"]');
+        if (el) el.value = state[k];
+      }
+    };
+    const zoomAuf = wert => {
+      state.bildZoom = klemm(Math.round(wert), 50, 300);
+      repaint(); feldAbgleich();
+    };
+    const plus  = panel.querySelector('[data-opp="plus"]');
+    const minus = panel.querySelector('[data-opp="minus"]');
+    const mitte = panel.querySelector('[data-opp="mitte"]');
+    if (plus)  plus.onclick  = () => zoomAuf((Number(state.bildZoom) || 100) + 25);
+    if (minus) minus.onclick = () => zoomAuf((Number(state.bildZoom) || 100) - 25);
+    if (mitte) mitte.onclick = () => {
+      state.bildZoom = 100; state.bildX = 0; state.bildY = 0;
+      repaint(); feldAbgleich();
+    };
+
+    /* ---------- Ziehen in der Vorschau ----------
+       Bild ziehen = verschieben, Pin ziehen = platzieren. Während des Zugs
+       wird nur gesichert und das Sichtbare direkt bewegt (flüssig); erst
+       beim Loslassen zeichnen alle Sprachseiten neu. */
+    let zug = null;
+    const abwaerts = ev => {
+      const rahmen = ev.target.closest('.opp-map--img');
+      if (!rahmen || ev.button > 0) return;
+      const pinEl = ev.target.closest('.opp-pin');
+      ev.preventDefault();
+      const r = rahmen.getBoundingClientRect();
+      if (pinEl){
+        zug = { art:'pin', rolle:pinEl.dataset.rolle, rahmen, r, el:pinEl };
+      } else {
+        zug = { art:'bild', rahmen, r, sx:ev.clientX, sy:ev.clientY,
+                bx:Number(state.bildX) || 0, by:Number(state.bildY) || 0,
+                img:rahmen.querySelector('img') };
+      }
+      try{ rahmen.setPointerCapture(ev.pointerId); }catch(_){ }
+    };
+    const bewegt = ev => {
+      if (!zug) return;
+      if (zug.art === 'pin'){
+        const x = klemm(Math.round((ev.clientX - zug.r.left) / zug.r.width * 100), 0, 100);
+        const y = klemm(Math.round((ev.clientY - zug.r.top) / zug.r.height * 100), 0, 100);
+        if (zug.rolle === 'park'){ state.parkX = x; state.parkY = y; }
+        else { state.hotelX = x; state.hotelY = y; }
+        zug.el.style.left = x + '%'; zug.el.style.top = y + '%';
+        const weg = zug.rahmen.querySelectorAll('.opp-route path');
+        const linie = 'M' + state.parkX + ' ' + state.parkY + ' L' + state.hotelX + ' ' + state.hotelY;
+        weg.forEach(p => p.setAttribute('d', linie));
+      } else {
+        state.bildX = klemm(Math.round(zug.bx + (ev.clientX - zug.sx) / zug.r.width * 100), -120, 120);
+        state.bildY = klemm(Math.round(zug.by + (ev.clientY - zug.sy) / zug.r.height * 100), -120, 120);
+        if (zug.img) zug.img.style.transform = oppBildTransform(state);
+      }
+      save();
+    };
+    const los = () => {
+      if (!zug) return;
+      zug = null;
+      repaint(); feldAbgleich();
+    };
+    sheet.addEventListener('pointerdown', abwaerts);
+    sheet.addEventListener('pointermove', bewegt);
+    sheet.addEventListener('pointerup', los);
+    sheet.addEventListener('pointercancel', los);
+
     return () => {
       knopf.removeEventListener('click', klick);
       document.removeEventListener('input', folge);
+      sheet.removeEventListener('pointerdown', abwaerts);
+      sheet.removeEventListener('pointermove', bewegt);
+      sheet.removeEventListener('pointerup', los);
+      sheet.removeEventListener('pointercancel', los);
       panel.innerHTML = '';
     };
   }
