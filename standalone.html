@@ -357,6 +357,62 @@ a{color:var(--cyan)}
 .vz-hilfe-fuss{margin:14px 0 0;font-size:12.5px;line-height:1.7;color:var(--ink-soft);max-width:80ch}
 .vz-hilfe-fuss b{color:var(--navy)}
 
+/* Anleitung: der Ablauf als drei Bild-Karten mit Pfeil dazwischen */
+.vz-fluss{
+  list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;counter-reset:f;
+}
+.vz-fluss li{
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  position:relative;counter-increment:f;
+}
+.vz-fluss li::before{
+  content:counter(f);position:absolute;top:14px;right:14px;
+  display:grid;place-items:center;width:24px;height:24px;border-radius:999px;
+  background:var(--bg-2);color:var(--muted);
+  font-family:var(--font-display);font-size:12px;font-weight:700;
+}
+.vz-fluss li:not(:last-child)::after{
+  content:"→";position:absolute;top:50%;right:-19px;transform:translateY(-50%);
+  color:var(--cyan);font-size:17px;font-weight:700;
+}
+.vz-fluss-ico{
+  display:grid;place-items:center;width:44px;height:44px;border-radius:12px;
+  background:var(--cyan-tint);color:var(--cyan);margin-bottom:12px;
+}
+.vz-fluss b{display:block;font-family:var(--font-display);font-size:14.5px;color:var(--navy);margin-bottom:4px}
+.vz-fluss span{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+.vz-fluss li .vz-fluss-ico + b{margin-right:30px}
+@media (max-width:760px){ .vz-fluss li::after{display:none} }
+
+/* Anleitung: Bereichs- und Werkzeug-Chips */
+.vz-hilfe-chips{display:flex;flex-wrap:wrap;gap:8px}
+.vz-hilfe-chip{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 11px;
+  color:var(--navy);transition:border-color .12s,box-shadow .12s;
+}
+.vz-hilfe-chip:hover{border-color:var(--cyan);box-shadow:0 6px 14px rgba(42,51,80,.10)}
+.vz-hilfe-chip svg{color:var(--cyan)}
+.vz-hilfe-chip b{font-family:var(--font-display);font-size:12.5px;font-weight:700}
+.vz-hilfe-chip em{
+  font-style:normal;font-size:11px;font-weight:700;color:var(--muted);
+  background:var(--bg-2);border-radius:999px;padding:1px 7px;
+}
+.vz-hilfe-chip--werkzeug svg{color:var(--muted)}
+
+/* Anleitung: Gut-zu-wissen-Liste */
+.vz-tipps{
+  list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:10px 22px;
+}
+.vz-tipps li{display:flex;gap:11px;align-items:flex-start;font-size:12.5px;line-height:1.6;color:var(--ink-soft)}
+.vz-tipps li b{color:var(--navy)}
+.vz-tipp-ico{
+  flex:0 0 auto;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;
+  background:var(--bg-2);color:var(--cyan);margin-top:1px;
+}
+
 /* ---------- Kapitelseite ------------------------------------------------ */
 .vz-krumen{
   display:flex;align-items:center;gap:7px;flex-wrap:wrap;
@@ -7224,6 +7280,17 @@ const DICT = {
     backupAsk:'Die Sicherung überschreibt gleiche Einträge in diesem Browser. Fortfahren?',
     helpOffline:'Ohne Internet',
     helpOfflineText:'Die Datei <b>standalone.html</b> enthält die ganze Zentrale in einer einzigen Datei. Auf den Rechner legen, doppelklicken — fertig. Sie braucht keinen Server und kein Netz.',
+    helpMap:'Alles auf einen Blick',
+    helpMapSub:'Jede Vorlage steht in genau einem Arbeitsbereich. Wer etwas sucht, fragt sich nur: zu welcher Arbeit gehört es?',
+    helpToolPages:'Werkzeugseiten',
+    helpTips:'Gut zu wissen',
+    tipSearch:'<b>Suchen statt blättern:</b> «/» drücken und lostippen — die Suche findet Vorlagen, Textbausteine und Zeichen.',
+    tipStar:'<b>Der Stern</b> an einer Karte heftet die Vorlage zuoberst auf der Startseite an — für die drei Dinge, die man dauernd braucht.',
+    tipDraft:'<b>Nichts geht verloren:</b> Jede Änderung speichert sich sofort als Entwurf in diesem Browser. Offene Entwürfe stehen auf der Startseite.',
+    tipLang:'<b>Sprachen sind Kästchen:</b> ankreuzen, was gebraucht wird — je Sprache entsteht ein Block oder eine eigene Seite. Deutsch steht immer zuoberst.',
+    tipHouse:'<b>Die Liegenschaft</b> oben in der Kopfleiste gilt überall: einmal wählen, und jede Vorlage trägt die richtige Adresse.',
+    tipImage:'<b>Eigene Bilder</b> — ein Foto oder ein Karten-Ausschnitt — lassen sich in Vorlagen ablegen. Sie stecken danach mit im Blatt und brauchen kein Netz.',
+    tipPdf:'<b>Drucken heisst auch PDF:</b> im Druckdialog «Als PDF speichern» wählen — das ist die Datei zum Verschicken.',
     blockYours:'Bausteine des Hauses',
     blockNew:'Neuen anlegen',
     blockOpen:'Öffnen',
@@ -7406,6 +7473,17 @@ const DICT = {
     backupAsk:'Loading a backup overwrites matching entries in this browser. Continue?',
     helpOffline:'Without internet',
     helpOfflineText:'The file <b>standalone.html</b> holds the whole centre in a single file. Put it on the computer, double-click it — done. No server, no network.',
+    helpMap:'Everything at a glance',
+    helpMapSub:'Every template lives in exactly one work area. To find something, ask one question: which job does it belong to?',
+    helpToolPages:'Tool pages',
+    helpTips:'Good to know',
+    tipSearch:'<b>Search instead of browsing:</b> press “/” and start typing — search looks through templates, text blocks and signs.',
+    tipStar:'<b>The star</b> on a card pins the template to the top of the start page — for the three things you use all the time.',
+    tipDraft:'<b>Nothing gets lost:</b> every change is saved instantly as a draft in this browser. Open drafts appear on the start page.',
+    tipLang:'<b>Languages are checkboxes:</b> tick what you need — each language becomes a block or its own page. German always comes first.',
+    tipHouse:'<b>The property</b> in the header applies everywhere: choose it once and every template carries the right address.',
+    tipImage:'<b>Your own pictures</b> — a photo or a map excerpt — can be dropped into templates. They are embedded in the sheet and need no network.',
+    tipPdf:'<b>Printing also means PDF:</b> choose “Save as PDF” in the print dialog — that is the file to send around.',
     blockYours:'Blocks of this house',
     blockNew:'Create a new one',
     blockOpen:'Open',
@@ -20086,11 +20164,48 @@ function seiteHilfe(){
     inhalt: `
       <section class="vz-block">
         <h2>${esc(t('helpFlow'))}</h2>
-        <ol class="vz-schritte">
-          <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
-          <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
-          <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+        <ol class="vz-fluss">
+          ${[
+            { ico:'lupe',    b:t('step1'), s:t('step1sub') },
+            { ico:'stift',   b:t('step2'), s:t('step2sub') },
+            { ico:'printer', b:t('step3'), s:t('step3sub') }
+          ].map(x => `<li>
+            <span class="vz-fluss-ico">${icon(x.ico, 26)}</span>
+            <b>${esc(x.b)}</b><span>${esc(x.s)}</span>
+          </li>`).join('')}
         </ol>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpMap'))}</h2>
+        <p class="vz-block-note">${esc(t('helpMapSub'))}</p>
+        <div class="vz-hilfe-chips">
+          ${BEREICHE.map(b => `<a class="vz-hilfe-chip" href="#/b/${esc(b.id)}">
+            ${icon(b.icon, 18)}<b>${esc(b.kurz)}</b><em>${bereichZahl(b)}</em>
+          </a>`).join('')}
+        </div>
+        <p class="vz-block-note" style="margin:14px 0 10px">${esc(t('helpToolPages'))}</p>
+        <div class="vz-hilfe-chips">
+          ${Object.values(SEITEN).filter(s => s.id !== 'hilfe').map(s => `
+            <a class="vz-hilfe-chip vz-hilfe-chip--werkzeug" href="#/s/${esc(s.id)}">
+              ${icon(s.icon, 18)}<b>${esc(s.title)}</b>
+            </a>`).join('')}
+        </div>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpTips'))}</h2>
+        <ul class="vz-tipps">
+          ${[
+            { ico:'lupe',    txt:t('tipSearch') },
+            { ico:'stern',   txt:t('tipStar') },
+            { ico:'stift',   txt:t('tipDraft') },
+            { ico:'globe',   txt:t('tipLang') },
+            { ico:'door',    txt:t('tipHouse') },
+            { ico:'photo',   txt:t('tipImage') },
+            { ico:'printer', txt:t('tipPdf') }
+          ].map(x => `<li><span class="vz-tipp-ico">${icon(x.ico, 18)}</span><span>${x.txt}</span></li>`).join('')}
+        </ul>
       </section>
 
       <section class="vz-block">
