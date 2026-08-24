@@ -600,6 +600,12 @@ a{color:var(--cyan)}
 .sheet--a3-land{width:420mm;min-height:297mm}
 .sheet--letter{width:216mm;min-height:279mm}
 .sheet--letter-land{width:279mm;min-height:216mm}
+.sheet--a2{width:420mm;min-height:594mm}
+.sheet--a2-land{width:594mm;min-height:420mm}
+.sheet--a1{width:594mm;min-height:841mm}
+.sheet--a1-land{width:841mm;min-height:594mm}
+.sheet--a0{width:841mm;min-height:1189mm}
+.sheet--a0-land{width:1189mm;min-height:841mm}
 
 /* --------------------------------------------------------------------------
    Mehrseitige Vorlagen (Gaestemappe).
@@ -620,6 +626,14 @@ a{color:var(--cyan)}
 .sheet--multi.sheet--a5-land [data-page]{width:210mm;min-height:148mm}
 .sheet--multi.sheet--a3 [data-page]{width:297mm;min-height:420mm}
 .sheet--multi.sheet--a3-land [data-page]{width:420mm;min-height:297mm}
+.sheet--multi.sheet--letter [data-page]{width:216mm;min-height:279mm}
+.sheet--multi.sheet--letter-land [data-page]{width:279mm;min-height:216mm}
+.sheet--multi.sheet--a2 [data-page]{width:420mm;min-height:594mm}
+.sheet--multi.sheet--a2-land [data-page]{width:594mm;min-height:420mm}
+.sheet--multi.sheet--a1 [data-page]{width:594mm;min-height:841mm}
+.sheet--multi.sheet--a1-land [data-page]{width:841mm;min-height:594mm}
+.sheet--multi.sheet--a0 [data-page]{width:841mm;min-height:1189mm}
+.sheet--multi.sheet--a0-land [data-page]{width:1189mm;min-height:841mm}
 
 @media print{
   .sheet--multi{gap:0!important;display:block!important}
@@ -1204,6 +1218,22 @@ a{color:var(--cyan)}
 
 .vz-mini.is-an{background:var(--cyan);border-color:var(--cyan);color:#fff}
 .vz-mini.is-an:hover{color:#fff}
+
+/* Schnittmarken als ECHTES Element — nur waehrend des PNG/PDF-Exports
+   eingehaengt, weil Pseudo-Elemente die SVG-Serialisierung nicht ueberleben. */
+.vz-marken{
+  position:absolute;inset:0;pointer-events:none;z-index:4;display:block;
+  background-image:
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350);
+  background-repeat:no-repeat;
+  background-size:5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm,
+                  5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm;
+  background-position:top left,top left,top right,top right,
+                      bottom left,bottom left,bottom right,bottom right;
+}
 
 /* ===== assets/templates.css ===== */
 /* ==========================================================================
@@ -7644,6 +7674,16 @@ const DICT = {
     standDeleted:'Stand gelöscht',
     leisteMarken:'Schnittmarken drucken — Eckmarken zum Zuschneiden',
     leisteRaster:'Raster zeigen — 10-mm-Gitter, nur in der Vorschau',
+    pdfBtn:'PDF / Teilen',
+    pdfShared:'PDF geteilt',
+    pdfSaved:'PDF gespeichert',
+    pdfFail:'PDF fehlgeschlagen — bitte «Drucken / PDF» nutzen',
+    rowUp:'nach oben',
+    rowDown:'nach unten',
+    rowDel:'löschen',
+    zoomSmaller:'kleiner',
+    zoomBigger:'grösser',
+    jsonBad:'Diese Datei ist kein gültiger Entwurf.',
     resetAsk:'Alle Aenderungen dieser Vorlage verwerfen und zum Original zurück?',
     fitOk:'Passt auf eine Seite',
     fitWarn:'Zu lang für eine Seite — Texte kürzen',
@@ -7848,6 +7888,16 @@ const DICT = {
     standDeleted:'Version deleted',
     leisteMarken:'Print crop marks — corner ticks for trimming',
     leisteRaster:'Show grid — 10 mm grid, preview only',
+    pdfBtn:'PDF / Share',
+    pdfShared:'PDF shared',
+    pdfSaved:'PDF saved',
+    pdfFail:'PDF failed — please use “Print / PDF”',
+    rowUp:'move up',
+    rowDown:'move down',
+    rowDel:'delete',
+    zoomSmaller:'smaller',
+    zoomBigger:'bigger',
+    jsonBad:'This file is not a valid draft.',
     resetAsk:'Discard all changes to this template and restore the original?',
     fitOk:'Fits on one page',
     fitWarn:'Too long for one page — shorten the text',
@@ -8194,6 +8244,92 @@ function mapLegend(items){
     </span>`).join('')}</div>`;
 }
 
+/* ===== js/lib/pdf.js ===== */
+/* ==========================================================================
+   Eigener PDF-Schreiber — ohne Fremdbibliothek.
+   --------------------------------------------------------------------------
+   Ein PDF ist am Ende eine Liste nummerierter Objekte mit einer
+   Querverweistabelle (xref), in der die BYTE-Position jedes Objekts steht.
+   Wer die Positionen falsch zählt, bekommt ein «beschädigtes» PDF — darum
+   wird hier ausschliesslich in Byte-Stücken gearbeitet (TextEncoder), nie
+   mit string.length.
+
+   Der Schreiber kann genau das, was die Zentrale braucht: fertige
+   JPEG-Bilder (aus dem Canvas-Export) als je eine Seite einbetten
+   (/Filter /DCTDecode — das JPEG bleibt unangetastet, keine Neukompression).
+   Text, Schriften, Formen: bewusst nicht — die stecken schon im Bild.
+   ========================================================================== */
+
+const PDF_ENC = new TextEncoder();
+const MM_ZU_PT = 72 / 25.4;
+
+/**
+ * PDF aus fertigen JPEG-Seiten bauen.
+ * @param {Array<{jpeg:Uint8Array, wmm:number, hmm:number}>} seiten
+ * @returns {Blob} application/pdf
+ */
+function pdfAusJpegSeiten(seiten){
+  const teile = [];
+  let lage = 0;
+  const positionen = [];   /* Objekt-Nr. -> Byte-Position */
+
+  const roh = bytes => { teile.push(bytes); lage += bytes.length; };
+  const txt = s => roh(PDF_ENC.encode(s));
+  const objekt = (nr, kopf, stream) => {
+    positionen[nr] = lage;
+    txt(`${nr} 0 obj\n${kopf}\n`);
+    if (stream){ txt('stream\n'); roh(stream); txt('\nendstream\n'); }
+    txt('endobj\n');
+  };
+
+  /* Kopf: Version plus vier Bytes über 0x7F, damit nichts das PDF für
+     eine Textdatei hält. */
+  txt('%PDF-1.4\n');
+  roh(new Uint8Array([0x25, 0xE2, 0xE3, 0xCF, 0xD3, 0x0A]));
+
+  /* Objekt-Nummern: 1 Katalog, 2 Seitenbaum, danach je Seite drei Objekte
+     (Seite, Inhalt, Bild). */
+  const seitenNr = seiten.map((_, i) => 3 + i * 3);
+  objekt(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  objekt(2, `<< /Type /Pages /Kids [${seitenNr.map(n => n + ' 0 R').join(' ')}] /Count ${seiten.length} >>`);
+
+  seiten.forEach((s, i) => {
+    const nr = seitenNr[i];
+    const w = (s.wmm * MM_ZU_PT).toFixed(2);
+    const h = (s.hmm * MM_ZU_PT).toFixed(2);
+    /* Das Bild füllt die ganze Seite: Skalierungsmatrix auf Seitengrösse. */
+    const inhalt = PDF_ENC.encode(`q ${w} 0 0 ${h} 0 0 cm /Im${i} Do Q`);
+    objekt(nr,
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] ` +
+      `/Resources << /XObject << /Im${i} ${nr + 2} 0 R >> >> /Contents ${nr + 1} 0 R >>`);
+    objekt(nr + 1, `<< /Length ${inhalt.length} >>`, inhalt);
+    objekt(nr + 2,
+      `<< /Type /XObject /Subtype /Image /Width ${s.wpx} /Height ${s.hpx} ` +
+      `/ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${s.jpeg.length} >>`,
+      s.jpeg);
+  });
+
+  /* Querverweistabelle: jede Zeile exakt 20 Bytes. */
+  const xrefLage = lage;
+  const anzahl = 2 + seiten.length * 3;
+  txt(`xref\n0 ${anzahl + 1}\n0000000000 65535 f \n`);
+  for (let nr = 1; nr <= anzahl; nr++){
+    txt(String(positionen[nr]).padStart(10, '0') + ' 00000 n \n');
+  }
+  txt(`trailer\n<< /Size ${anzahl + 1} /Root 1 0 R >>\nstartxref\n${xrefLage}\n%%EOF\n`);
+
+  return new Blob(teile, { type:'application/pdf' });
+}
+
+/** JPEG-Data-URL in rohe Bytes samt Pixelmass. */
+function jpegBytes(dataUrl, wpx, hpx){
+  const b64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { jpeg: bytes, wpx, hpx };
+}
+
 /* ===== js/lib/export.js ===== */
 /* ==========================================================================
    Export: "Drucken / PDF" (vektoriell, über den Browser) und PNG.
@@ -8202,13 +8338,30 @@ function mapLegend(items){
    Vorteil gegenüber html2canvas: kein CDN nötig, läuft auch offline.
    ========================================================================== */
 
+
+/* Papiermasse in Millimetern — fuer den PDF-Export. */
+const PAGE_MM = {
+  'a4':[210,297], 'a4-land':[297,210], 'a5':[148,210], 'a5-land':[210,148],
+  'a3':[297,420], 'a3-land':[420,297], 'letter':[216,279], 'letter-land':[279,216],
+  'a2':[420,594], 'a2-land':[594,420], 'a1':[594,841], 'a1-land':[841,594],
+  'a0':[841,1189], 'a0-land':[1189,841]
+};
+
 const PAGE_CSS = {
   'a4':      '@page{size:A4;margin:0}',
   'a4-land': '@page{size:A4 landscape;margin:0}',
   'a5':      '@page{size:A5;margin:0}',
   'a5-land': '@page{size:A5 landscape;margin:0}',
   'a3':      '@page{size:A3;margin:0}',
-  'a3-land': '@page{size:A3 landscape;margin:0}'
+  'a3-land': '@page{size:A3 landscape;margin:0}',
+  'letter':      '@page{size:Letter;margin:0}',
+  'letter-land': '@page{size:Letter landscape;margin:0}',
+  'a2':      '@page{size:420mm 594mm;margin:0}',
+  'a2-land': '@page{size:594mm 420mm;margin:0}',
+  'a1':      '@page{size:594mm 841mm;margin:0}',
+  'a1-land': '@page{size:841mm 594mm;margin:0}',
+  'a0':      '@page{size:841mm 1189mm;margin:0}',
+  'a0-land': '@page{size:1189mm 841mm;margin:0}'
 };
 
 /** Papierformat für den Druck setzen. */
@@ -8318,14 +8471,17 @@ async function inlineImages(root){
  * @param {string} filename    z. B. "ns-hotel-notruf.png"
  * @param {number} scale       Standard 3 (druckfeine Auflösung)
  */
-async function sheetToPng(sheet, filename, scale = 3){
+async function elementToCanvas(el, scale){
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
 
-  const w = sheet.offsetWidth;
-  const h = sheet.offsetHeight;
+  const w = el.offsetWidth;
+  const h = el.offsetHeight;
+  /* Grossformate (A0 hat 14 Mio. Pixel) wuerden mit Faktor 3 jedes Canvas
+     sprengen — die Flaeche wird auf ~22 Mio. Pixel gedeckelt. */
+  const s = Math.min(scale, Math.sqrt(22e6 / Math.max(1, w * h)));
 
-  const clone = sheet.cloneNode(true);
-  inlineStyles(sheet, clone);
+  const clone = el.cloneNode(true);
+  inlineStyles(el, clone);
   await inlineImages(clone);
   clone.style.margin = '0';
   clone.style.boxShadow = 'none';
@@ -8341,28 +8497,49 @@ async function sheetToPng(sheet, filename, scale = 3){
   // Wichtig: als Data-URL laden. Ein blob:-Link würde das Canvas "verunreinigen"
   // (tainted canvas) und toBlob() wäre danach gesperrt.
   const url = await blobToDataUrl(new Blob([svg], { type:'image/svg+xml;charset=utf-8' }));
-  try{
-    const img = await new Promise((res, rej) => {
-      const i = new Image();
-      i.onload = () => res(i);
-      i.onerror = () => rej(new Error('SVG konnte nicht gerendert werden'));
-      i.src = url;
-    });
-    const canvas = document.createElement('canvas');
-    canvas.width  = Math.round(w * scale);
-    canvas.height = Math.round(h * scale);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    ctx.drawImage(img, 0, 0);
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = () => rej(new Error('SVG konnte nicht gerendert werden'));
+    i.src = url;
+  });
+  const canvas = document.createElement('canvas');
+  canvas.width  = Math.round(w * s);
+  canvas.height = Math.round(h * s);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.setTransform(s, 0, 0, s, 0, 0);
+  ctx.drawImage(img, 0, 0);
+  return canvas;
+}
 
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-    if (!blob) throw new Error('Canvas leer');
-    downloadBlob(blob, filename);
-  } finally {
-    /* Data-URL braucht kein Aufräumen. */
+async function sheetToPng(sheet, filename, scale = 3){
+  const canvas = await elementToCanvas(sheet, scale);
+  const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+  if (!blob) throw new Error('Canvas leer');
+  downloadBlob(blob, filename);
+}
+
+/**
+ * Blatt (ein- oder mehrseitig) als echtes PDF — eigener Schreiber, das
+ * JPEG jeder Seite wird unveraendert eingebettet.
+ * @param {HTMLElement} sheet  das .sheet-Element
+ * @param {string} page        Format-Kennung, z. B. 'a4' oder 'a0-land'
+ * @param {number} scale       Ziel-Aufloesung (wird bei Grossformaten gedeckelt)
+ * @returns {Promise<Blob>}
+ */
+async function sheetToPdfBlob(sheet, page, scale = 2.5){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  const einzeln = Array.from(sheet.querySelectorAll('[data-page]'));
+  const elemente = einzeln.length ? einzeln : [sheet];
+  const seiten = [];
+  for (const el of elemente){
+    const canvas = await elementToCanvas(el, scale);
+    const uri = canvas.toDataURL('image/jpeg', 0.92);
+    seiten.push({ ...jpegBytes(uri, canvas.width, canvas.height), wmm, hmm });
   }
+  return pdfAusJpegSeiten(seiten);
 }
 
 function downloadBlob(blob, filename){
@@ -9967,6 +10144,9 @@ const zattoo = {
 const PAGES = {
   'A4-quer':'a4-land', 'A4-hoch':'a4',
   'A3-quer':'a3-land', 'A3-hoch':'a3',
+  'A2-quer':'a2-land', 'A2-hoch':'a2',
+  'A1-quer':'a1-land', 'A1-hoch':'a1',
+  'A0-quer':'a0-land', 'A0-hoch':'a0',
   'A5-quer':'a5-land', 'A5-hoch':'a5',
   'Letter-quer':'letter-land', 'Letter-hoch':'letter'
 };
@@ -12176,7 +12356,9 @@ const qrplakat = {
 
 
 
-const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land' };
+const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land',
+                     a3:'a3', 'a3-land':'a3-land', a2:'a2', 'a2-land':'a2-land',
+                     a1:'a1', 'a1-land':'a1-land', a0:'a0', 'a0-land':'a0-land' };
 
 /* Wie viel Platz das Bild bekommt. */
 const FOTO_ANTEIL = { klein:'42%', halb:'55%', gross:'68%', voll:'100%' };
@@ -12224,8 +12406,13 @@ const foto = {
     { t:'group', label:'Format' },
     { k:'format', label:'Papier', type:'select', options:[
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' },
-      { v:'a5', t:'A5 hoch' }, { v:'a5-land', t:'A5 quer' }
-    ] },
+      { v:'a5', t:'A5 hoch' }, { v:'a5-land', t:'A5 quer' },
+      { v:'a3', t:'A3 hoch' }, { v:'a3-land', t:'A3 quer' },
+      { v:'a2', t:'A2 hoch' }, { v:'a2-land', t:'A2 quer' },
+      { v:'a1', t:'A1 hoch' }, { v:'a1-land', t:'A1 quer' },
+      { v:'a0', t:'A0 hoch — Druckerei/Plotter' }, { v:'a0-land', t:'A0 quer — Druckerei/Plotter' }
+    ],
+      hint:'Ab A2 druckt das die Druckerei oder ein Plotter — «PDF / Teilen» erzeugt die Datei dafür.' },
 
     { t:'group', label:'Text' },
     { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },
@@ -20155,7 +20342,9 @@ const store = { load: load, save: save, remove: remove, keys: keys };
 
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
-                     'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
+                     'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816,
+                     'a2':2245, 'a2-land':1587, 'a1':3179, 'a1-land':2245,
+                     'a0':4494, 'a0-land':3179 };
 
 /* Klartext fuer die Leiste ueber der Vorschau — damit man sieht, auf welchem
    Papier man gerade arbeitet, ohne im Formular nachzusehen. */
@@ -20163,7 +20352,10 @@ const PAGE_NAME = {
   'a4':'A4 hoch · 210 × 297 mm',       'a4-land':'A4 quer · 297 × 210 mm',
   'a5':'A5 hoch · 148 × 210 mm',       'a5-land':'A5 quer · 210 × 148 mm',
   'a3':'A3 hoch · 297 × 420 mm',       'a3-land':'A3 quer · 420 × 297 mm',
-  'letter':'Letter hoch',              'letter-land':'Letter quer'
+  'letter':'Letter hoch',              'letter-land':'Letter quer',
+  'a2':'A2 hoch · 420 × 594 mm',       'a2-land':'A2 quer · 594 × 420 mm',
+  'a1':'A1 hoch · 594 × 841 mm',       'a1-land':'A1 quer · 841 × 594 mm',
+  'a0':'A0 hoch · 841 × 1189 mm',      'a0-land':'A0 quer · 1189 × 841 mm'
 };
 
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
@@ -20705,9 +20897,9 @@ function listHtml(f, arr, base){
       <div class="vz-item-head">
         <span>${esc(f.itemLabel || t('row'))} ${i + 1}</span>
         <div class="vz-item-btns">
-          <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="nach oben">&#8593;</button>
-          <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="nach unten">&#8595;</button>
-          <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="löschen">&#215;</button>
+          <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="${esc(t('rowUp'))}">&#8593;</button>
+          <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="${esc(t('rowDown'))}">&#8595;</button>
+          <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="${esc(t('rowDel'))}">&#215;</button>
         </div>
       </div>
       ${f.item.map(sf => fieldHtml(sf, item[sf.k], `${base}.${i}.${sf.k}`)).join('')}
@@ -20858,6 +21050,7 @@ function renderEditor(id, geteilt, suchwert){
         <div class="vz-actions">
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
+          <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
@@ -20973,12 +21166,12 @@ function renderEditor(id, geteilt, suchwert){
           data-schalter="schnittmarken" title="${esc(t('leisteMarken'))}">&#9986;</button>
         <button type="button" class="vz-mini${store.load('raster', '') === 'ja' ? ' is-an' : ''}"
           data-schalter="raster" title="${esc(t('leisteRaster'))}">&#8862;</button>
-        <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
+        <button type="button" class="vz-mini" data-zoom="raus" title="${esc(t('zoomSmaller'))}">&#8722;</button>
         <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
           ${stufen.map(([v, l]) =>
             `<option value="${v}"${String(v) === String(zoom) ? ' selected' : ''}>${esc(l)}</option>`).join('')}
         </select>
-        <button type="button" class="vz-mini" data-zoom="rein" title="grösser">&#43;</button>
+        <button type="button" class="vz-mini" data-zoom="rein" title="${esc(t('zoomBigger'))}">&#43;</button>
       </div>`;
   }
 
@@ -21104,6 +21297,13 @@ function renderEditor(id, geteilt, suchwert){
     const el = ev.target.closest('[data-path]');
     if (el && (el.tagName === 'SELECT' || el.type === 'color')){
       setPath(state, el.dataset.path, el.value);
+      /* «Fertige Zusammenstellung»: die Auswahl setzt die Sprach-Kaestchen
+         direkt — zentral, statt in jeder Vorlage einen eigenen Knopf zu
+         verlangen (der in den meisten fehlte). */
+      if (el.dataset.path === 'sprachSet' && el.value){
+        const ids = sprachSet(el.value);
+        if (ids){ state.sprachen = ids; commit(); rebuild(); return; }
+      }
       commit();
       return;
     }
@@ -21262,7 +21462,7 @@ function renderEditor(id, geteilt, suchwert){
     const btn = ev.currentTarget; const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     try{
-      sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
+      exportVorbereiten();
       const pages = sheetPages(sheet);
       if (pages.length > 1){
         /* Jede Seite als eigene Datei — ein Bild ueber neun Seiten waere unbrauchbar.
@@ -21281,6 +21481,50 @@ function renderEditor(id, geteilt, suchwert){
       toast(t('pngFail'));
     }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
+  /* Vor jedem Export: Raster entfernen (nur Vorschau) und die
+     Schnittmarken als echte Elemente einhaengen — Pseudo-Elemente
+     ueberleben die SVG-Serialisierung des Canvas-Exports nicht.
+     Danach stellt paint() (im finally der Handler) alles wieder her. */
+  function exportVorbereiten(){
+    sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
+    if (sheet.classList.contains('sheet--marken')){
+      const ziele = sheet.querySelectorAll('[data-page]');
+      (ziele.length ? Array.from(ziele) : [sheet]).forEach(el =>
+        el.insertAdjacentHTML('beforeend', '<i class="vz-marken" aria-hidden="true"></i>'));
+    }
+  }
+
+  /* PDF erzeugen und teilen: auf dem Telefon oeffnet sich das Teilen-Blatt
+     (WhatsApp, Mail, ...), am Rechner wird die Datei gespeichert.
+     Wichtig fuers iPhone: NUR files uebergeben — title/text daneben
+     lassen die Datei auf mehreren iOS-Versionen verschwinden. */
+  document.getElementById('vz-pdf').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    try{
+      exportVorbereiten();
+      const blob = await sheetToPdfBlob(sheet, pageOf(tpl, state));
+      const file = new File([blob], `ns-hotel-${tpl.id}.pdf`, { type:'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        try{
+          await navigator.share({ files:[file] });
+          toast(t('pdfShared'));
+        }catch(err){
+          if (!err || err.name !== 'AbortError'){
+            downloadBlob(blob, file.name);
+            toast(t('pdfSaved'));
+          }
+        }
+      } else {
+        downloadBlob(blob, file.name);
+        toast(t('pdfSaved'));
+      }
+    }catch(err){
+      console.warn(err);
+      toast(t('pdfFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
+  };
+
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
@@ -21368,7 +21612,7 @@ function renderEditor(id, geteilt, suchwert){
         store.save(draftKey(tpl.id), Object.assign({}, structuredClone(tpl.defaults), data));
         renderEditor(tpl.id);
         toast(t('loaded'));
-      }catch(err){ alert('Diese Datei ist kein gültiger Entwurf.'); }
+      }catch(err){ alert(t('jsonBad')); }
     };
     fr.readAsText(f);
   };

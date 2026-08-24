@@ -26,7 +26,7 @@ import { esc, e, qs } from './lib/dom.js';
 import { logo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
 import * as store from './lib/storage.js';
-import { setPageSize, printSheet, sheetToPng, downloadBlob } from './lib/export.js';
+import { setPageSize, printSheet, sheetToPng, sheetToPdfBlob, downloadBlob } from './lib/export.js';
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
@@ -37,7 +37,7 @@ import { sicherungAlsDatei, sicherungLaden } from './lib/sicherung.js';
 import { staende, standSpeichern, stand, standLoeschen } from './lib/staende.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
 import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
-import { SPRACH_IDS } from './lib/sprachen.js';
+import { SPRACH_IDS, sprachSet } from './lib/sprachen.js';
 import { PRESETS } from './presets.js';
 import { eigeneBausteine, bausteinLoeschen, sammlungAlsDatei, sammlungLaden } from './lib/eigene.js';
 import { ROLLEN, FAMILIEN, EIGEN_FAMILIE, familienFuer, wahl, setzeWahl, wahlZuruecksetzen,
@@ -45,7 +45,9 @@ import { ROLLEN, FAMILIEN, EIGEN_FAMILIE, familienFuer, wahl, setzeWahl, wahlZur
          schriftAnwenden } from './lib/schriftwahl.js';
 
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
-                     'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816 };
+                     'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816,
+                     'a2':2245, 'a2-land':1587, 'a1':3179, 'a1-land':2245,
+                     'a0':4494, 'a0-land':3179 };
 
 /* Klartext fuer die Leiste ueber der Vorschau — damit man sieht, auf welchem
    Papier man gerade arbeitet, ohne im Formular nachzusehen. */
@@ -53,7 +55,10 @@ const PAGE_NAME = {
   'a4':'A4 hoch · 210 × 297 mm',       'a4-land':'A4 quer · 297 × 210 mm',
   'a5':'A5 hoch · 148 × 210 mm',       'a5-land':'A5 quer · 210 × 148 mm',
   'a3':'A3 hoch · 297 × 420 mm',       'a3-land':'A3 quer · 420 × 297 mm',
-  'letter':'Letter hoch',              'letter-land':'Letter quer'
+  'letter':'Letter hoch',              'letter-land':'Letter quer',
+  'a2':'A2 hoch · 420 × 594 mm',       'a2-land':'A2 quer · 594 × 420 mm',
+  'a1':'A1 hoch · 594 × 841 mm',       'a1-land':'A1 quer · 841 × 594 mm',
+  'a0':'A0 hoch · 841 × 1189 mm',      'a0-land':'A0 quer · 1189 × 841 mm'
 };
 
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
@@ -595,9 +600,9 @@ function listHtml(f, arr, base){
       <div class="vz-item-head">
         <span>${esc(f.itemLabel || t('row'))} ${i + 1}</span>
         <div class="vz-item-btns">
-          <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="nach oben">&#8593;</button>
-          <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="nach unten">&#8595;</button>
-          <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="löschen">&#215;</button>
+          <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="${esc(t('rowUp'))}">&#8593;</button>
+          <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="${esc(t('rowDown'))}">&#8595;</button>
+          <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="${esc(t('rowDel'))}">&#215;</button>
         </div>
       </div>
       ${f.item.map(sf => fieldHtml(sf, item[sf.k], `${base}.${i}.${sf.k}`)).join('')}
@@ -748,6 +753,7 @@ function renderEditor(id, geteilt, suchwert){
         <div class="vz-actions">
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
+          <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
@@ -863,12 +869,12 @@ function renderEditor(id, geteilt, suchwert){
           data-schalter="schnittmarken" title="${esc(t('leisteMarken'))}">&#9986;</button>
         <button type="button" class="vz-mini${store.load('raster', '') === 'ja' ? ' is-an' : ''}"
           data-schalter="raster" title="${esc(t('leisteRaster'))}">&#8862;</button>
-        <button type="button" class="vz-mini" data-zoom="raus" title="kleiner">&#8722;</button>
+        <button type="button" class="vz-mini" data-zoom="raus" title="${esc(t('zoomSmaller'))}">&#8722;</button>
         <select class="vz-zoomwahl" id="vz-zoomwahl" aria-label="${esc(t('preview'))}">
           ${stufen.map(([v, l]) =>
             `<option value="${v}"${String(v) === String(zoom) ? ' selected' : ''}>${esc(l)}</option>`).join('')}
         </select>
-        <button type="button" class="vz-mini" data-zoom="rein" title="grösser">&#43;</button>
+        <button type="button" class="vz-mini" data-zoom="rein" title="${esc(t('zoomBigger'))}">&#43;</button>
       </div>`;
   }
 
@@ -994,6 +1000,13 @@ function renderEditor(id, geteilt, suchwert){
     const el = ev.target.closest('[data-path]');
     if (el && (el.tagName === 'SELECT' || el.type === 'color')){
       setPath(state, el.dataset.path, el.value);
+      /* «Fertige Zusammenstellung»: die Auswahl setzt die Sprach-Kaestchen
+         direkt — zentral, statt in jeder Vorlage einen eigenen Knopf zu
+         verlangen (der in den meisten fehlte). */
+      if (el.dataset.path === 'sprachSet' && el.value){
+        const ids = sprachSet(el.value);
+        if (ids){ state.sprachen = ids; commit(); rebuild(); return; }
+      }
       commit();
       return;
     }
@@ -1152,7 +1165,7 @@ function renderEditor(id, geteilt, suchwert){
     const btn = ev.currentTarget; const old = btn.textContent;
     btn.disabled = true; btn.textContent = '…';
     try{
-      sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
+      exportVorbereiten();
       const pages = sheetPages(sheet);
       if (pages.length > 1){
         /* Jede Seite als eigene Datei — ein Bild ueber neun Seiten waere unbrauchbar.
@@ -1171,6 +1184,50 @@ function renderEditor(id, geteilt, suchwert){
       toast(t('pngFail'));
     }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
+  /* Vor jedem Export: Raster entfernen (nur Vorschau) und die
+     Schnittmarken als echte Elemente einhaengen — Pseudo-Elemente
+     ueberleben die SVG-Serialisierung des Canvas-Exports nicht.
+     Danach stellt paint() (im finally der Handler) alles wieder her. */
+  function exportVorbereiten(){
+    sheet.querySelectorAll('.vz-raster').forEach(el => el.remove());
+    if (sheet.classList.contains('sheet--marken')){
+      const ziele = sheet.querySelectorAll('[data-page]');
+      (ziele.length ? Array.from(ziele) : [sheet]).forEach(el =>
+        el.insertAdjacentHTML('beforeend', '<i class="vz-marken" aria-hidden="true"></i>'));
+    }
+  }
+
+  /* PDF erzeugen und teilen: auf dem Telefon oeffnet sich das Teilen-Blatt
+     (WhatsApp, Mail, ...), am Rechner wird die Datei gespeichert.
+     Wichtig fuers iPhone: NUR files uebergeben — title/text daneben
+     lassen die Datei auf mehreren iOS-Versionen verschwinden. */
+  document.getElementById('vz-pdf').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    try{
+      exportVorbereiten();
+      const blob = await sheetToPdfBlob(sheet, pageOf(tpl, state));
+      const file = new File([blob], `ns-hotel-${tpl.id}.pdf`, { type:'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        try{
+          await navigator.share({ files:[file] });
+          toast(t('pdfShared'));
+        }catch(err){
+          if (!err || err.name !== 'AbortError'){
+            downloadBlob(blob, file.name);
+            toast(t('pdfSaved'));
+          }
+        }
+      } else {
+        downloadBlob(blob, file.name);
+        toast(t('pdfSaved'));
+      }
+    }catch(err){
+      console.warn(err);
+      toast(t('pdfFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
+  };
+
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
@@ -1258,7 +1315,7 @@ function renderEditor(id, geteilt, suchwert){
         store.save(draftKey(tpl.id), Object.assign({}, structuredClone(tpl.defaults), data));
         renderEditor(tpl.id);
         toast(t('loaded'));
-      }catch(err){ alert('Diese Datei ist kein gültiger Entwurf.'); }
+      }catch(err){ alert(t('jsonBad')); }
     };
     fr.readAsText(f);
   };

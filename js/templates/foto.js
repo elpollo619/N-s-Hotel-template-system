@@ -15,7 +15,9 @@ import { thumb } from '../lib/thumbs.js';
 import { sprachOptions, sprachSetOptions, sprachSet, sprachObjekte } from '../lib/sprachen.js';
 import { absender, objekt, objektAdresse, istHotel, objektOptions, absenderOptions } from '../objekte.js';
 
-const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land' };
+const FOTO_PAGES = { a4:'a4', 'a4-land':'a4-land', a5:'a5', 'a5-land':'a5-land',
+                     a3:'a3', 'a3-land':'a3-land', a2:'a2', 'a2-land':'a2-land',
+                     a1:'a1', 'a1-land':'a1-land', a0:'a0', 'a0-land':'a0-land' };
 
 /* Wie viel Platz das Bild bekommt. */
 const FOTO_ANTEIL = { klein:'42%', halb:'55%', gross:'68%', voll:'100%' };
@@ -63,8 +65,13 @@ export default {
     { t:'group', label:'Format' },
     { k:'format', label:'Papier', type:'select', options:[
       { v:'a4', t:'A4 hoch' }, { v:'a4-land', t:'A4 quer' },
-      { v:'a5', t:'A5 hoch' }, { v:'a5-land', t:'A5 quer' }
-    ] },
+      { v:'a5', t:'A5 hoch' }, { v:'a5-land', t:'A5 quer' },
+      { v:'a3', t:'A3 hoch' }, { v:'a3-land', t:'A3 quer' },
+      { v:'a2', t:'A2 hoch' }, { v:'a2-land', t:'A2 quer' },
+      { v:'a1', t:'A1 hoch' }, { v:'a1-land', t:'A1 quer' },
+      { v:'a0', t:'A0 hoch — Druckerei/Plotter' }, { v:'a0-land', t:'A0 quer — Druckerei/Plotter' }
+    ],
+      hint:'Ab A2 druckt das die Druckerei oder ein Plotter — «PDF / Teilen» erzeugt die Datei dafür.' },
 
     { t:'group', label:'Text' },
     { k:'eyebrow', label:'Handschrift-Zeile', type:'text' },

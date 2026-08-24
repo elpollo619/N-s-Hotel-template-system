@@ -5,13 +5,31 @@
    Vorteil gegenüber html2canvas: kein CDN nötig, läuft auch offline.
    ========================================================================== */
 
+import { pdfAusJpegSeiten, jpegBytes } from './pdf.js';
+
+/* Papiermasse in Millimetern — fuer den PDF-Export. */
+const PAGE_MM = {
+  'a4':[210,297], 'a4-land':[297,210], 'a5':[148,210], 'a5-land':[210,148],
+  'a3':[297,420], 'a3-land':[420,297], 'letter':[216,279], 'letter-land':[279,216],
+  'a2':[420,594], 'a2-land':[594,420], 'a1':[594,841], 'a1-land':[841,594],
+  'a0':[841,1189], 'a0-land':[1189,841]
+};
+
 const PAGE_CSS = {
   'a4':      '@page{size:A4;margin:0}',
   'a4-land': '@page{size:A4 landscape;margin:0}',
   'a5':      '@page{size:A5;margin:0}',
   'a5-land': '@page{size:A5 landscape;margin:0}',
   'a3':      '@page{size:A3;margin:0}',
-  'a3-land': '@page{size:A3 landscape;margin:0}'
+  'a3-land': '@page{size:A3 landscape;margin:0}',
+  'letter':      '@page{size:Letter;margin:0}',
+  'letter-land': '@page{size:Letter landscape;margin:0}',
+  'a2':      '@page{size:420mm 594mm;margin:0}',
+  'a2-land': '@page{size:594mm 420mm;margin:0}',
+  'a1':      '@page{size:594mm 841mm;margin:0}',
+  'a1-land': '@page{size:841mm 594mm;margin:0}',
+  'a0':      '@page{size:841mm 1189mm;margin:0}',
+  'a0-land': '@page{size:1189mm 841mm;margin:0}'
 };
 
 /** Papierformat für den Druck setzen. */
@@ -121,14 +139,17 @@ async function inlineImages(root){
  * @param {string} filename    z. B. "ns-hotel-notruf.png"
  * @param {number} scale       Standard 3 (druckfeine Auflösung)
  */
-export async function sheetToPng(sheet, filename, scale = 3){
+async function elementToCanvas(el, scale){
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
 
-  const w = sheet.offsetWidth;
-  const h = sheet.offsetHeight;
+  const w = el.offsetWidth;
+  const h = el.offsetHeight;
+  /* Grossformate (A0 hat 14 Mio. Pixel) wuerden mit Faktor 3 jedes Canvas
+     sprengen — die Flaeche wird auf ~22 Mio. Pixel gedeckelt. */
+  const s = Math.min(scale, Math.sqrt(22e6 / Math.max(1, w * h)));
 
-  const clone = sheet.cloneNode(true);
-  inlineStyles(sheet, clone);
+  const clone = el.cloneNode(true);
+  inlineStyles(el, clone);
   await inlineImages(clone);
   clone.style.margin = '0';
   clone.style.boxShadow = 'none';
@@ -144,28 +165,49 @@ export async function sheetToPng(sheet, filename, scale = 3){
   // Wichtig: als Data-URL laden. Ein blob:-Link würde das Canvas "verunreinigen"
   // (tainted canvas) und toBlob() wäre danach gesperrt.
   const url = await blobToDataUrl(new Blob([svg], { type:'image/svg+xml;charset=utf-8' }));
-  try{
-    const img = await new Promise((res, rej) => {
-      const i = new Image();
-      i.onload = () => res(i);
-      i.onerror = () => rej(new Error('SVG konnte nicht gerendert werden'));
-      i.src = url;
-    });
-    const canvas = document.createElement('canvas');
-    canvas.width  = Math.round(w * scale);
-    canvas.height = Math.round(h * scale);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    ctx.drawImage(img, 0, 0);
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = () => rej(new Error('SVG konnte nicht gerendert werden'));
+    i.src = url;
+  });
+  const canvas = document.createElement('canvas');
+  canvas.width  = Math.round(w * s);
+  canvas.height = Math.round(h * s);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.setTransform(s, 0, 0, s, 0, 0);
+  ctx.drawImage(img, 0, 0);
+  return canvas;
+}
 
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-    if (!blob) throw new Error('Canvas leer');
-    downloadBlob(blob, filename);
-  } finally {
-    /* Data-URL braucht kein Aufräumen. */
+export async function sheetToPng(sheet, filename, scale = 3){
+  const canvas = await elementToCanvas(sheet, scale);
+  const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+  if (!blob) throw new Error('Canvas leer');
+  downloadBlob(blob, filename);
+}
+
+/**
+ * Blatt (ein- oder mehrseitig) als echtes PDF — eigener Schreiber, das
+ * JPEG jeder Seite wird unveraendert eingebettet.
+ * @param {HTMLElement} sheet  das .sheet-Element
+ * @param {string} page        Format-Kennung, z. B. 'a4' oder 'a0-land'
+ * @param {number} scale       Ziel-Aufloesung (wird bei Grossformaten gedeckelt)
+ * @returns {Promise<Blob>}
+ */
+export async function sheetToPdfBlob(sheet, page, scale = 2.5){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  const einzeln = Array.from(sheet.querySelectorAll('[data-page]'));
+  const elemente = einzeln.length ? einzeln : [sheet];
+  const seiten = [];
+  for (const el of elemente){
+    const canvas = await elementToCanvas(el, scale);
+    const uri = canvas.toDataURL('image/jpeg', 0.92);
+    seiten.push({ ...jpegBytes(uri, canvas.width, canvas.height), wmm, hmm });
   }
+  return pdfAusJpegSeiten(seiten);
 }
 
 export function downloadBlob(blob, filename){

@@ -5,7 +5,10 @@ import fs from 'node:fs/promises';
 
 const BASE = process.argv[2] || 'http://127.0.0.1:8099';
 const OUT  = 'tests/out';
-const MAXH = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559 };
+const MAXH = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
+               'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816,
+               'a2':2245, 'a2-land':1587, 'a1':3179, 'a1-land':2245,
+               'a0':4494, 'a0-land':3179 };
 
 await fs.mkdir(OUT, { recursive:true });
 const browser = await chromium.launch();

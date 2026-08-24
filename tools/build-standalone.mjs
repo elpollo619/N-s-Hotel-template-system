@@ -38,6 +38,7 @@ const MODULES = [
   'js/lib/i18n.js',
   'js/lib/brand.js',
   'js/lib/sitemap.js',
+  'js/lib/pdf.js',
   'js/lib/export.js',
   'js/lib/planeditor.js',
   'js/templates/notruf.js',
@@ -131,6 +132,13 @@ async function inlineCssUrls(css, cssFile){
   const urls = [...scan.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)]
     .map(m => m[1]).filter(u => !u.startsWith('data:') && !/^https?:/.test(u));
   for (const u of new Set(urls)){
+    /* Lizenzschutz: OTF/TTF (die gekauften Markenschriften) duerfen NIE in
+       die oeffentliche Einzeldatei wandern — auch nicht, wenn jemand die
+       brand-fonts.css lokal aktiviert hat und dann baut. */
+    if (/\.(otf|ttf)(\?|$)/i.test(u)){
+      console.warn(`  · NICHT eingebettet (Lizenzschrift): ${u}`);
+      continue;
+    }
     const file = path.join(dir, u);
     try{
       const uri = await dataUri(file);

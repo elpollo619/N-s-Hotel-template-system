@@ -455,6 +455,12 @@ a{color:var(--cyan)}
 .sheet--a3-land{width:420mm;min-height:297mm}
 .sheet--letter{width:216mm;min-height:279mm}
 .sheet--letter-land{width:279mm;min-height:216mm}
+.sheet--a2{width:420mm;min-height:594mm}
+.sheet--a2-land{width:594mm;min-height:420mm}
+.sheet--a1{width:594mm;min-height:841mm}
+.sheet--a1-land{width:841mm;min-height:594mm}
+.sheet--a0{width:841mm;min-height:1189mm}
+.sheet--a0-land{width:1189mm;min-height:841mm}
 
 /* --------------------------------------------------------------------------
    Mehrseitige Vorlagen (Gaestemappe).
@@ -475,6 +481,14 @@ a{color:var(--cyan)}
 .sheet--multi.sheet--a5-land [data-page]{width:210mm;min-height:148mm}
 .sheet--multi.sheet--a3 [data-page]{width:297mm;min-height:420mm}
 .sheet--multi.sheet--a3-land [data-page]{width:420mm;min-height:297mm}
+.sheet--multi.sheet--letter [data-page]{width:216mm;min-height:279mm}
+.sheet--multi.sheet--letter-land [data-page]{width:279mm;min-height:216mm}
+.sheet--multi.sheet--a2 [data-page]{width:420mm;min-height:594mm}
+.sheet--multi.sheet--a2-land [data-page]{width:594mm;min-height:420mm}
+.sheet--multi.sheet--a1 [data-page]{width:594mm;min-height:841mm}
+.sheet--multi.sheet--a1-land [data-page]{width:841mm;min-height:594mm}
+.sheet--multi.sheet--a0 [data-page]{width:841mm;min-height:1189mm}
+.sheet--multi.sheet--a0-land [data-page]{width:1189mm;min-height:841mm}
 
 @media print{
   .sheet--multi{gap:0!important;display:block!important}
@@ -1059,3 +1073,19 @@ a{color:var(--cyan)}
 
 .vz-mini.is-an{background:var(--cyan);border-color:var(--cyan);color:#fff}
 .vz-mini.is-an:hover{color:#fff}
+
+/* Schnittmarken als ECHTES Element — nur waehrend des PNG/PDF-Exports
+   eingehaengt, weil Pseudo-Elemente die SVG-Serialisierung nicht ueberleben. */
+.vz-marken{
+  position:absolute;inset:0;pointer-events:none;z-index:4;display:block;
+  background-image:
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350),
+    linear-gradient(#2A3350,#2A3350),linear-gradient(#2A3350,#2A3350);
+  background-repeat:no-repeat;
+  background-size:5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm,
+                  5mm .35mm,.35mm 5mm,5mm .35mm,.35mm 5mm;
+  background-position:top left,top left,top right,top right,
+                      bottom left,bottom left,bottom right,bottom right;
+}
