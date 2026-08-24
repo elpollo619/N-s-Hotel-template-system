@@ -1235,11 +1235,48 @@ function seiteHilfe(){
     inhalt: `
       <section class="vz-block">
         <h2>${esc(t('helpFlow'))}</h2>
-        <ol class="vz-schritte">
-          <li><b>${esc(t('step1'))}</b><span>${esc(t('step1sub'))}</span></li>
-          <li><b>${esc(t('step2'))}</b><span>${esc(t('step2sub'))}</span></li>
-          <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
+        <ol class="vz-fluss">
+          ${[
+            { ico:'lupe',    b:t('step1'), s:t('step1sub') },
+            { ico:'stift',   b:t('step2'), s:t('step2sub') },
+            { ico:'printer', b:t('step3'), s:t('step3sub') }
+          ].map(x => `<li>
+            <span class="vz-fluss-ico">${icon(x.ico, 26)}</span>
+            <b>${esc(x.b)}</b><span>${esc(x.s)}</span>
+          </li>`).join('')}
         </ol>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpMap'))}</h2>
+        <p class="vz-block-note">${esc(t('helpMapSub'))}</p>
+        <div class="vz-hilfe-chips">
+          ${BEREICHE.map(b => `<a class="vz-hilfe-chip" href="#/b/${esc(b.id)}">
+            ${icon(b.icon, 18)}<b>${esc(b.kurz)}</b><em>${bereichZahl(b)}</em>
+          </a>`).join('')}
+        </div>
+        <p class="vz-block-note" style="margin:14px 0 10px">${esc(t('helpToolPages'))}</p>
+        <div class="vz-hilfe-chips">
+          ${Object.values(SEITEN).filter(s => s.id !== 'hilfe').map(s => `
+            <a class="vz-hilfe-chip vz-hilfe-chip--werkzeug" href="#/s/${esc(s.id)}">
+              ${icon(s.icon, 18)}<b>${esc(s.title)}</b>
+            </a>`).join('')}
+        </div>
+      </section>
+
+      <section class="vz-block">
+        <h2>${esc(t('helpTips'))}</h2>
+        <ul class="vz-tipps">
+          ${[
+            { ico:'lupe',    txt:t('tipSearch') },
+            { ico:'stern',   txt:t('tipStar') },
+            { ico:'stift',   txt:t('tipDraft') },
+            { ico:'globe',   txt:t('tipLang') },
+            { ico:'door',    txt:t('tipHouse') },
+            { ico:'photo',   txt:t('tipImage') },
+            { ico:'printer', txt:t('tipPdf') }
+          ].map(x => `<li><span class="vz-tipp-ico">${icon(x.ico, 18)}</span><span>${x.txt}</span></li>`).join('')}
+        </ul>
       </section>
 
       <section class="vz-block">
