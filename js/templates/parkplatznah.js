@@ -258,7 +258,8 @@ function oppBildTransform(d){
   const z = Math.max(50, Math.min(300, Number(d.bildZoom) || 100)) / 100;
   const kx = Math.max(-120, Math.min(120, Number(d.bildX) || 0));
   const ky = Math.max(-120, Math.min(120, Number(d.bildY) || 0));
-  return 'translate(' + kx + '%,' + ky + '%) scale(' + z + ')';
+  const w = Math.max(-180, Math.min(180, Number(d.bildDreh) || 0));
+  return 'translate(' + kx + '%,' + ky + '%)' + (w ? ' rotate(' + w + 'deg)' : '') + ' scale(' + z + ')';
 }
 
 /* ---------- Lageplan: gezeichnete Karte ODER eigenes Bild ---------- */
@@ -519,6 +520,8 @@ export default {
       hint:'100 = eingepasst. Mehr = näher heran, weniger = ganzes Bild mit Rand.' },
     { k:'bildX', label:'Bild waagrecht verschieben in %', type:'number', min:-120, max:120, step:1 },
     { k:'bildY', label:'Bild senkrecht verschieben in %', type:'number', min:-120, max:120, step:1 },
+    { k:'bildDreh', label:'Bild drehen in Grad', type:'number', min:-180, max:180, step:1,
+      hint:'Zum Geraderichten — z. B. damit eine Strasse waagrecht liegt. Beim Drehen etwas näher zoomen, damit keine Ecken frei bleiben.' },
     { k:'planPins', label:'Marken-Pins und Weg aufs Bild', type:'select', options:[
       { v:'ein', t:'ja — Hotel + P und Fussweg zeigen' },
       { v:'aus', t:'nein — Bild unverändert lassen' } ] },
@@ -550,7 +553,7 @@ export default {
     sprachen:['de','en','fr','it','pt','es'],
     plan:'gezeichnet', planBild:'', planPins:'ein',
     mapLink:'', mapStil:'luftbild', mapZoom:'mittel',
-    bildZoom:100, bildX:0, bildY:0,
+    bildZoom:100, bildX:0, bildY:0, bildDreh:0,
     parkX:22, parkY:72, hotelX:78, hotelY:40,
     adresse:'Allmendstrasse 14 · 3210 Kerzers',
     adresseKurz:'Allmendstrasse 14',
@@ -582,8 +585,9 @@ export default {
         ${state.plan === 'bild' ? `
         <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="plus" title="Bild näher heran">＋ näher</button>
         <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="minus" title="Bild weiter weg">− weiter</button>
-        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="mitte" title="Zoom 100 %, Bild zentriert">Bild einpassen</button>
-        <span class="vz-tools-status">Bild in der Vorschau ziehen · Pins ziehen</span>` : ''}
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="dreh" title="Bild um 90° drehen">↻ 90°</button>
+        <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-opp="mitte" title="Zoom 100 %, gerade, zentriert">Bild einpassen</button>
+        <span class="vz-tools-status">Bild ziehen · Rad zoomt · Doppelklick näher · Pins ziehen</span>` : ''}
         <span class="vz-tools-status" data-opp="status"></span>
       </div>`;
 
@@ -620,10 +624,34 @@ export default {
     /* ---------- Bild einpassen: Zoom-Knöpfe + Formular-Abgleich ---------- */
     const klemm = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
     const feldAbgleich = () => {
-      for (const k of ['bildZoom', 'bildX', 'bildY', 'parkX', 'parkY', 'hotelX', 'hotelY']){
+      for (const k of ['bildZoom', 'bildX', 'bildY', 'bildDreh', 'parkX', 'parkY', 'hotelX', 'hotelY']){
         const el = document.querySelector('[data-path="' + k + '"]');
         if (el) el.value = state[k];
       }
+    };
+    /* Nach Rad- und Fingergesten nicht bei jedem Tick alles neu zeichnen —
+       das Sichtbare bewegt sich direkt, das grosse Neuzeichnen kommt nach. */
+    let ruheTimer = null;
+    const ruhigNeu = () => {
+      clearTimeout(ruheTimer);
+      ruheTimer = setTimeout(() => { repaint(); feldAbgleich(); }, 350);
+    };
+    /* Zoom, der den Punkt unterm Zeiger festhält:
+       T' = C − (z'/z)·(C − T), alles in Prozent der Rahmenbreite/-höhe. */
+    const zoomZuPunkt = (rahmen, neuZoom, clientX, clientY) => {
+      const r = rahmen.getBoundingClientRect();
+      const alt = klemm(Number(state.bildZoom) || 100, 50, 300);
+      const neu = klemm(Math.round(neuZoom), 50, 300);
+      if (neu === alt) return;
+      const cx = (clientX - r.left) / r.width * 100 - 50;
+      const cy = (clientY - r.top) / r.height * 100 - 50;
+      const f = neu / alt;
+      state.bildX = klemm(Math.round(cx - f * (cx - (Number(state.bildX) || 0))), -120, 120);
+      state.bildY = klemm(Math.round(cy - f * (cy - (Number(state.bildY) || 0))), -120, 120);
+      state.bildZoom = neu;
+      const img = rahmen.querySelector('img');
+      if (img) img.style.transform = oppBildTransform(state);
+      save(); ruhigNeu();
     };
     const zoomAuf = wert => {
       state.bildZoom = klemm(Math.round(wert), 50, 300);
@@ -632,24 +660,51 @@ export default {
     const plus  = panel.querySelector('[data-opp="plus"]');
     const minus = panel.querySelector('[data-opp="minus"]');
     const mitte = panel.querySelector('[data-opp="mitte"]');
+    const dreh  = panel.querySelector('[data-opp="dreh"]');
     if (plus)  plus.onclick  = () => zoomAuf((Number(state.bildZoom) || 100) + 25);
     if (minus) minus.onclick = () => zoomAuf((Number(state.bildZoom) || 100) - 25);
     if (mitte) mitte.onclick = () => {
-      state.bildZoom = 100; state.bildX = 0; state.bildY = 0;
+      state.bildZoom = 100; state.bildX = 0; state.bildY = 0; state.bildDreh = 0;
+      repaint(); feldAbgleich();
+    };
+    if (dreh) dreh.onclick = () => {
+      const w = ((Number(state.bildDreh) || 0) + 90 + 540) % 360 - 180;
+      state.bildDreh = w === -180 ? 180 : w;
       repaint(); feldAbgleich();
     };
 
-    /* ---------- Ziehen in der Vorschau ----------
-       Bild ziehen = verschieben, Pin ziehen = platzieren. Während des Zugs
-       wird nur gesichert und das Sichtbare direkt bewegt (flüssig); erst
-       beim Loslassen zeichnen alle Sprachseiten neu. */
+    /* ---------- Gesten in der Vorschau ----------
+       Bild ziehen = verschieben · Pin ziehen = platzieren · Rad = zoomen
+       (zum Zeiger hin) · Doppelklick = näher · zwei Finger = kneifen.
+       Während einer Geste wird nur gesichert und das Sichtbare direkt
+       bewegt; erst am Ende zeichnen alle Sprachseiten neu. */
+    const finger = new Map();
     let zug = null;
+    const abstand = () => {
+      const [a, b] = [...finger.values()];
+      return Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    };
+    const mittePkt = () => {
+      const [a, b] = [...finger.values()];
+      return { x:(a.x + b.x) / 2, y:(a.y + b.y) / 2 };
+    };
     const abwaerts = ev => {
       const rahmen = ev.target.closest('.opp-map--img');
       if (!rahmen || ev.button > 0) return;
-      const pinEl = ev.target.closest('.opp-pin');
       ev.preventDefault();
+      finger.set(ev.pointerId, { x:ev.clientX, y:ev.clientY });
+      try{ rahmen.setPointerCapture(ev.pointerId); }catch(_){ }
+      rahmen.classList.add('is-zug');
       const r = rahmen.getBoundingClientRect();
+      if (finger.size === 2){
+        /* Kneifen: Ausgangslage merken, Pin-Zug abbrechen */
+        zug = { art:'kneif', rahmen, r, d0:abstand(), m0:mittePkt(),
+                z0:klemm(Number(state.bildZoom) || 100, 50, 300),
+                bx0:Number(state.bildX) || 0, by0:Number(state.bildY) || 0,
+                img:rahmen.querySelector('img') };
+        return;
+      }
+      const pinEl = ev.target.closest('.opp-pin');
       if (pinEl){
         zug = { art:'pin', rolle:pinEl.dataset.rolle, rahmen, r, el:pinEl };
       } else {
@@ -657,11 +712,26 @@ export default {
                 bx:Number(state.bildX) || 0, by:Number(state.bildY) || 0,
                 img:rahmen.querySelector('img') };
       }
-      try{ rahmen.setPointerCapture(ev.pointerId); }catch(_){ }
     };
     const bewegt = ev => {
-      if (!zug) return;
-      if (zug.art === 'pin'){
+      if (!zug || !finger.has(ev.pointerId)) return;
+      finger.set(ev.pointerId, { x:ev.clientX, y:ev.clientY });
+      zug.bewegt = true;
+      if (zug.art === 'kneif' && finger.size >= 2){
+        /* Zoom um die Fingermitte, Verschieben der Mitte nimmt das Bild mit:
+           T' = M − (z'/z0)·(M0 − T0) — M in Rahmen-Prozent. */
+        const z = klemm(Math.round(zug.z0 * abstand() / zug.d0), 50, 300);
+        const m = mittePkt();
+        const mx = (m.x - zug.r.left) / zug.r.width * 100 - 50;
+        const my = (m.y - zug.r.top) / zug.r.height * 100 - 50;
+        const m0x = (zug.m0.x - zug.r.left) / zug.r.width * 100 - 50;
+        const m0y = (zug.m0.y - zug.r.top) / zug.r.height * 100 - 50;
+        const f = z / zug.z0;
+        state.bildZoom = z;
+        state.bildX = klemm(Math.round(mx - f * (m0x - zug.bx0)), -120, 120);
+        state.bildY = klemm(Math.round(my - f * (m0y - zug.by0)), -120, 120);
+        if (zug.img) zug.img.style.transform = oppBildTransform(state);
+      } else if (zug.art === 'pin'){
         const x = klemm(Math.round((ev.clientX - zug.r.left) / zug.r.width * 100), 0, 100);
         const y = klemm(Math.round((ev.clientY - zug.r.top) / zug.r.height * 100), 0, 100);
         if (zug.rolle === 'park'){ state.parkX = x; state.parkY = y; }
@@ -670,30 +740,63 @@ export default {
         const weg = zug.rahmen.querySelectorAll('.opp-route path');
         const linie = 'M' + state.parkX + ' ' + state.parkY + ' L' + state.hotelX + ' ' + state.hotelY;
         weg.forEach(p => p.setAttribute('d', linie));
-      } else {
+      } else if (zug.art === 'bild'){
         state.bildX = klemm(Math.round(zug.bx + (ev.clientX - zug.sx) / zug.r.width * 100), -120, 120);
         state.bildY = klemm(Math.round(zug.by + (ev.clientY - zug.sy) / zug.r.height * 100), -120, 120);
         if (zug.img) zug.img.style.transform = oppBildTransform(state);
       }
       save();
     };
-    const los = () => {
+    const los = ev => {
+      finger.delete(ev.pointerId);
       if (!zug) return;
+      if (zug.art === 'kneif' && finger.size === 1){
+        /* Ein Finger bleibt: nahtlos ins Verschieben wechseln */
+        const rest = [...finger.values()][0];
+        zug = { art:'bild', rahmen:zug.rahmen, r:zug.r, sx:rest.x, sy:rest.y,
+                bx:Number(state.bildX) || 0, by:Number(state.bildY) || 0, img:zug.img };
+        return;
+      }
+      if (finger.size) return;
+      zug.rahmen.classList.remove('is-zug');
+      const war = zug.bewegt;
       zug = null;
+      /* Ohne Bewegung (blosser Klick, Doppelklick-Auftakt) nichts neu
+         zeichnen — sonst zerreisst das Neuzeichnen den Doppelklick. */
+      if (!war) return;
+      clearTimeout(ruheTimer);
       repaint(); feldAbgleich();
+    };
+    const rad = ev => {
+      const rahmen = ev.target.closest('.opp-map--img');
+      if (!rahmen) return;
+      ev.preventDefault();
+      const schritt = ev.deltaY < 0 ? 10 : -10;
+      zoomZuPunkt(rahmen, (Number(state.bildZoom) || 100) + schritt, ev.clientX, ev.clientY);
+    };
+    const doppel = ev => {
+      const rahmen = ev.target.closest('.opp-map--img');
+      if (!rahmen || ev.target.closest('.opp-pin')) return;
+      ev.preventDefault();
+      zoomZuPunkt(rahmen, (Number(state.bildZoom) || 100) + 25, ev.clientX, ev.clientY);
     };
     sheet.addEventListener('pointerdown', abwaerts);
     sheet.addEventListener('pointermove', bewegt);
     sheet.addEventListener('pointerup', los);
     sheet.addEventListener('pointercancel', los);
+    sheet.addEventListener('wheel', rad, { passive:false });
+    sheet.addEventListener('dblclick', doppel);
 
     return () => {
+      clearTimeout(ruheTimer);
       knopf.removeEventListener('click', klick);
       document.removeEventListener('input', folge);
       sheet.removeEventListener('pointerdown', abwaerts);
       sheet.removeEventListener('pointermove', bewegt);
       sheet.removeEventListener('pointerup', los);
       sheet.removeEventListener('pointercancel', los);
+      sheet.removeEventListener('wheel', rad, { passive:false });
+      sheet.removeEventListener('dblclick', doppel);
       panel.innerHTML = '';
     };
   }

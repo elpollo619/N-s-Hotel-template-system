@@ -2717,6 +2717,13 @@
 .opp-pin{position:absolute;transform:translate(-50%,-100%);cursor:grab;touch-action:none;
   filter:drop-shadow(0 2px 3px rgba(18,26,46,.35))}
 .opp-pin svg{display:block;pointer-events:none}
+/* Drittel-Raster als Einpass-Hilfe — nur während einer Geste im Editor. */
+.opp-map--img.is-zug::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg, transparent calc(33.33% - .5px), rgba(255,255,255,.55) calc(33.33% - .5px) calc(33.33% + .5px), transparent calc(33.33% + .5px) calc(66.66% - .5px), rgba(255,255,255,.55) calc(66.66% - .5px) calc(66.66% + .5px), transparent calc(66.66% + .5px)),
+    linear-gradient(180deg, transparent calc(33.33% - .5px), rgba(255,255,255,.55) calc(33.33% - .5px) calc(33.33% + .5px), transparent calc(33.33% + .5px) calc(66.66% - .5px), rgba(255,255,255,.55) calc(66.66% - .5px) calc(66.66% + .5px), transparent calc(66.66% + .5px));
+}
 .opp-map-cap{margin:1.8mm 0 0;font-size:7.6pt;color:var(--muted);text-align:center;letter-spacing:.02em}
 
 /* Zwei Spalten: Tarif + Bezahlen */
