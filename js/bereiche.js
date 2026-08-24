@@ -60,7 +60,7 @@ export const BEREICHE = [
     title: 'Unterhalt und Ordnung',
     kurz: 'Unterhalt',
     lede: 'Waschküche, Sammelstelle, Schränke und Schlüssel — alles, was angeschrieben sein muss, damit es von allein läuft. Dazu Zeiten und Preise.',
-    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt', 'tuerschild']
+    ids: ['waschplan', 'sammelstelle', 'etiketten', 'zeiten', 'preisliste', 'klingelschild', 'ausserbetrieb', 'turnus', 'reservationsblatt', 'tuerschild', 'kalender', 'checkliste']
   },
   {
     id: 'verwaltung',

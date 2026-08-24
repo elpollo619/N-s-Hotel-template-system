@@ -120,6 +120,8 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
 | **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
 | **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan (gezeichnet, eigenes Bild **oder** swisstopo-Ausschnitt per Link — wird ins Blatt gebacken; frei einpassbar: Ziehen, Rad-Zoom, Drehen, Pinch), Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
+| **Monatskalender** | A4 hoch | Der Monat baut sich selbst: Wochen ab Montag, Kalenderwochen, Feiertage (Ostern gerechnet), eigene Einträge als farbige Chips |
+| **Checkliste** | A4 hoch | Abhak-Liste für Reinigung, Rundgang und Kontrolle — je Zeile ein Kästchen; wahlweise mit Bemerkung oder als Wochenkontrolle Mo–So |
 | **Orientierungskarte** | A4 quer | Anfahrtswege und gezeichneter Plan nebeneinander |
 | **Luftbild mit Pins** | A4 quer | Luftbild hochladen **oder** per swisstopo-Link laden; beliebig viele Pins frei platzieren |
 | **TV-Anleitung (Zattoo)** | A4 hoch | Fernsehen im Zimmer, Schritt für Schritt |
@@ -831,7 +833,7 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte |
 | **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
 | **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
-| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt, Türschild |
+| **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt, Türschild, Monatskalender, Checkliste |
 | **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung, Inventarliste |
 | **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
 
@@ -845,7 +847,7 @@ leiten automatisch auf den passenden Bereich um.
 
 ### Warum überhaupt teilen?
 
-Siebenundsechzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
+Neunundsechzig Vorlagen auf einer Seite sind eine Wand. Wer den Waschplan
 sucht, will nicht an Sicherheitszeichen und Etikettenbogen vorbeiscrollen.
 Dieselbe Überlegung im Editor: das Formular ist in aufklappbare Kapitel
 geteilt, statt in einer Kolonne von vierzig Feldern zu enden. Die Suche ist
