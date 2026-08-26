@@ -573,6 +573,26 @@ a{color:var(--cyan)}
 }
 .vz-toast.is-on{opacity:1;transform:translateX(-50%) translateY(-4px)}
 
+/* ---------- Kleines Fenster («Liste einfügen») --------------------------- */
+.vz-dialog{
+  position:fixed;inset:0;z-index:98;
+  background:rgba(42,51,80,.45);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.vz-dialog-box{
+  background:#fff;border-radius:12px;padding:18px;
+  width:min(460px,100%);
+  display:flex;flex-direction:column;gap:10px;
+  box-shadow:0 18px 50px rgba(16,22,40,.35);
+}
+.vz-dialog-box h3{margin:0;font-size:16px;color:var(--navy)}
+.vz-dialog-box textarea{
+  width:100%;resize:vertical;min-height:130px;
+  border:1px solid var(--line);border-radius:8px;padding:8px 10px;
+  font:inherit;font-size:13px;color:var(--navy);
+}
+.vz-dialog-btns{display:flex;justify-content:flex-end;gap:8px}
+
 /* ---------- Responsiv --------------------------------------------------- */
 @media (max-width:940px){
   .vz-editor{grid-template-columns:1fr}
@@ -7681,6 +7701,19 @@ const DICT = {
     rowUp:'nach oben',
     rowDown:'nach unten',
     rowDel:'löschen',
+    rowDup:'Zeile kopieren',
+    listPaste:'Liste einfügen …',
+    listPasteAsk:'Liste einfügen',
+    listPasteHint:'Je Zeile ein Eintrag. Tab oder Semikolon trennt die Spalten — so lässt sich direkt aus Excel kopieren.',
+    listPasted:'%s Zeilen übernommen',
+    ok:'Übernehmen',
+    undoDone:'Rückgängig gemacht',
+    redoDone:'Wiederhergestellt',
+    kachelnBtn:'A4-Kacheln',
+    kachelnHint:'Das Grossformat auf A4-Blätter verteilt — mit Klebeplan, zum Selberdrucken',
+    kachelnDone:'Kachel-PDF gespeichert — Blatt 1 ist der Klebeplan',
+    standDup:'Kopie',
+    standDupAsk:'Name für die Kopie:',
     zoomSmaller:'kleiner',
     zoomBigger:'grösser',
     jsonBad:'Diese Datei ist kein gültiger Entwurf.',
@@ -7895,6 +7928,19 @@ const DICT = {
     rowUp:'move up',
     rowDown:'move down',
     rowDel:'delete',
+    rowDup:'duplicate row',
+    listPaste:'Paste list …',
+    listPasteAsk:'Paste a list',
+    listPasteHint:'One entry per line. Tab or semicolon separates columns — paste straight from Excel.',
+    listPasted:'%s rows added',
+    ok:'Apply',
+    undoDone:'Undone',
+    redoDone:'Redone',
+    kachelnBtn:'A4 tiles',
+    kachelnHint:'Splits the large format onto A4 sheets — with a glue plan, for office printers',
+    kachelnDone:'Tile PDF saved — sheet 1 is the glue plan',
+    standDup:'Copy',
+    standDupAsk:'Name for the copy:',
     zoomSmaller:'smaller',
     zoomBigger:'bigger',
     jsonBad:'This file is not a valid draft.',
@@ -8540,6 +8586,176 @@ async function sheetToPdfBlob(sheet, page, scale = 2.5){
     seiten.push({ ...jpegBytes(uri, canvas.width, canvas.height), wmm, hmm });
   }
   return pdfAusJpegSeiten(seiten);
+}
+
+/* ---------- Kacheldruck: Grossformat auf A4-Blaetter verteilen ------------ */
+/* Nach dem Vorbild von PosteRazor: das Plakat wird in A4-Kacheln zerlegt,
+   die jeder Buerodrucker schafft. Jede Kachel traegt 10 mm Ueberlappung zum
+   Nachbarblatt (gestrichelte Klebelinie), dazu kommt ein Uebersichtsblatt
+   mit Klebeplan und einer 100-mm-Kontrolllinie — misst sie nicht genau
+   100 mm, hat der Druckdialog skaliert. */
+
+const K_RAND = 10;    /* weisser Rand je Blatt — Buerodrucker drucken nicht randlos */
+const K_UEBER = 10;   /* Ueberlappung zum Nachbarblatt */
+const K_PPM = 6;      /* Pixel je Millimeter der Kachel-Seiten (≈152 dpi) */
+
+function kachelRaster(wmm, hmm){
+  const kw = 210 - 2 * K_RAND, kh = 297 - 2 * K_RAND;
+  const schrittW = kw - K_UEBER, schrittH = kh - K_UEBER;
+  return {
+    kw, kh, schrittW, schrittH,
+    spalten: Math.max(1, Math.ceil((wmm - K_UEBER) / schrittW)),
+    reihen:  Math.max(1, Math.ceil((hmm - K_UEBER) / schrittH))
+  };
+}
+
+function a4Canvas(){
+  const c = document.createElement('canvas');
+  c.width = 210 * K_PPM; c.height = 297 * K_PPM;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, c.width, c.height);
+  return { c, ctx };
+}
+
+function alsSeite(c){
+  return { ...jpegBytes(c.toDataURL('image/jpeg', 0.92), c.width, c.height), wmm:210, hmm:297 };
+}
+
+function kachelName(spalte, reihe){
+  return String.fromCharCode(65 + spalte) + (reihe + 1);
+}
+
+function kachelSchrift(ctx, mm, fett){
+  ctx.font = `${fett ? '700 ' : ''}${Math.round(mm * K_PPM)}px "Kumbh Sans", Arial, sans-serif`;
+}
+
+/** Uebersichtsblatt: Klebeplan, Anleitung, Kontrolllinie. */
+function uebersichtsSeite(quelle, wmm, hmm, raster){
+  const { c, ctx } = a4Canvas();
+  const mm = v => v * K_PPM;
+
+  ctx.fillStyle = '#2A3350';
+  kachelSchrift(ctx, 7, true);
+  ctx.fillText(`Kacheldruck: ${raster.spalten} × ${raster.reihen} Blätter A4`, mm(20), mm(28));
+  ctx.fillStyle = '#5B6474';
+  kachelSchrift(ctx, 4);
+  ctx.fillText(`Plakat ${wmm} × ${hmm} mm · ${raster.spalten * raster.reihen} Kacheln · 10 mm Überlappung`, mm(20), mm(36));
+
+  /* Klebeplan: das Plakat verkleinert, darueber das Kachelgitter. */
+  const boxW = 170, boxH = 130;
+  const s = Math.min(boxW / wmm, boxH / hmm);
+  const pw = wmm * s, ph = hmm * s;
+  const px = 20 + (boxW - pw) / 2, py = 46;
+  ctx.drawImage(quelle, mm(px), mm(py), mm(pw), mm(ph));
+  ctx.strokeStyle = '#2A3350'; ctx.lineWidth = 2;
+  ctx.strokeRect(mm(px), mm(py), mm(pw), mm(ph));
+  ctx.strokeStyle = '#01B1E2'; ctx.lineWidth = 1.5;
+  ctx.fillStyle = '#01B1E2';
+  kachelSchrift(ctx, 3.6, true);
+  for (let r = 0; r < raster.reihen; r++){
+    for (let sp = 0; sp < raster.spalten; sp++){
+      const x = px + sp * raster.schrittW * s, y = py + r * raster.schrittH * s;
+      const w = Math.min(raster.kw, wmm - sp * raster.schrittW) * s;
+      const h = Math.min(raster.kh, hmm - r * raster.schrittH) * s;
+      ctx.strokeRect(mm(x), mm(y), mm(w), mm(h));
+      ctx.fillText(kachelName(sp, r), mm(x + 2), mm(y + 5));
+    }
+  }
+
+  /* Anleitung. */
+  ctx.fillStyle = '#2A3350';
+  kachelSchrift(ctx, 4);
+  const zeilen = [
+    '1.  Alle Blätter auf A4 drucken — Skalierung 100 % («Tatsächliche Grösse»).',
+    '2.  Kontrolllinie unten nachmessen: genau 100 mm — sonst skaliert der Drucker.',
+    '3.  Weisse Ränder bis zum grauen Rahmen abschneiden (Rahmen = 190 × 277 mm).',
+    '4.  Blätter Reihe für Reihe kleben: das nächste Blatt bis zur blauen',
+    '     gestrichelten Linie über das vorige legen (10 mm Überlappung).'
+  ];
+  zeilen.forEach((z, i) => ctx.fillText(z, mm(20), mm(192 + i * 8)));
+
+  /* Kontrolllinie: exakt 100 mm mit Zehner-Marken. */
+  const ly = 250;
+  ctx.strokeStyle = '#2A3350'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(mm(20), mm(ly)); ctx.lineTo(mm(120), mm(ly));
+  for (let i = 0; i <= 10; i++){
+    ctx.moveTo(mm(20 + i * 10), mm(ly)); ctx.lineTo(mm(20 + i * 10), mm(ly - (i % 5 ? 2.5 : 4)));
+  }
+  ctx.stroke();
+  kachelSchrift(ctx, 3.5);
+  ctx.fillText('Kontrolllinie — muss gedruckt genau 100 mm messen', mm(20), mm(ly + 7));
+
+  return alsSeite(c);
+}
+
+/** Eine Kachel: Bildausschnitt, grauer Schneide-Rahmen, blaue Klebelinien. */
+function kachelSeite(quelle, wmm, hmm, raster, spalte, reihe){
+  const { c, ctx } = a4Canvas();
+  const mm = v => v * K_PPM;
+  const qx = quelle.width / wmm, qy = quelle.height / hmm;
+
+  const sx = spalte * raster.schrittW, sy = reihe * raster.schrittH;
+  const sw = Math.min(raster.kw, wmm - sx), sh = Math.min(raster.kh, hmm - sy);
+  ctx.drawImage(quelle, sx * qx, sy * qy, sw * qx, sh * qy,
+                mm(K_RAND), mm(K_RAND), mm(sw), mm(sh));
+
+  /* Schneide-Rahmen (hellgrau) um den bedruckten Bereich. */
+  ctx.strokeStyle = '#B9C0CC'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(mm(K_RAND), mm(K_RAND), mm(sw), mm(sh));
+
+  /* Klebelinien: dort endet das naechste Blatt nach dem Aufkleben. */
+  ctx.strokeStyle = '#01B1E2'; ctx.lineWidth = 2;
+  ctx.setLineDash([mm(2), mm(1.6)]);
+  ctx.beginPath();
+  if (spalte < raster.spalten - 1){
+    ctx.moveTo(mm(K_RAND + sw - K_UEBER), mm(K_RAND));
+    ctx.lineTo(mm(K_RAND + sw - K_UEBER), mm(K_RAND + sh));
+  }
+  if (reihe < raster.reihen - 1){
+    ctx.moveTo(mm(K_RAND), mm(K_RAND + sh - K_UEBER));
+    ctx.lineTo(mm(K_RAND + sw), mm(K_RAND + sh - K_UEBER));
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#5B6474';
+  kachelSchrift(ctx, 3.5, true);
+  ctx.fillText(`Blatt ${kachelName(spalte, reihe)}`, mm(K_RAND), mm(7));
+  kachelSchrift(ctx, 3.2);
+  ctx.fillText(`Reihe ${reihe + 1}/${raster.reihen} · Spalte ${spalte + 1}/${raster.spalten} · Skalierung 100 %`,
+               mm(K_RAND + 22), mm(7));
+
+  return alsSeite(c);
+}
+
+/**
+ * Grossformat als A4-Kachel-PDF: Uebersichtsblatt + eine Kachel je Seite.
+ * Bei mehrseitigen Vorlagen wird das erste Blatt gekachelt.
+ * @param {HTMLElement} sheet  das .sheet-Element
+ * @param {string} page        Format-Kennung, z. B. 'a0'
+ * @returns {Promise<Blob>}
+ */
+async function sheetToKachelPdf(sheet, page){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  const raster = kachelRaster(wmm, hmm);
+  const erste = sheet.querySelector('[data-page]') || sheet;
+  const quelle = await elementToCanvas(erste, 4);
+
+  const seiten = [uebersichtsSeite(quelle, wmm, hmm, raster)];
+  for (let r = 0; r < raster.reihen; r++){
+    for (let s = 0; s < raster.spalten; s++){
+      seiten.push(kachelSeite(quelle, wmm, hmm, raster, s, r));
+    }
+  }
+  return pdfAusJpegSeiten(seiten);
+}
+
+/** Lohnt sich Kacheln fuer dieses Format? (groesser als ein A4-Blatt) */
+function kachelbar(page){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  return wmm * hmm > 210 * 297 + 1;
 }
 
 function downloadBlob(blob, filename){
@@ -20361,6 +20577,7 @@ const PAGE_NAME = {
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
    Aufraeum-Funktion zurueck. Sie wird vor dem naechsten Zeichnen aufgerufen. */
 let activeUnmount = null;
+let tastenAbmelden = null;   /* Ctrl+Z-Handler der zuletzt geoeffneten Vorlage */
 function unmountActive(){
   if (activeUnmount){ try{ activeUnmount(); }catch(err){ console.warn(err); } activeUnmount = null; }
 }
@@ -20899,6 +21116,7 @@ function listHtml(f, arr, base){
         <div class="vz-item-btns">
           <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="${esc(t('rowUp'))}">&#8593;</button>
           <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="${esc(t('rowDown'))}">&#8595;</button>
+          <button type="button" class="vz-mini" data-dup="${i}" title="${esc(t('rowDup'))}">&#10697;</button>
           <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="${esc(t('rowDel'))}">&#215;</button>
         </div>
       </div>
@@ -20908,6 +21126,7 @@ function listHtml(f, arr, base){
   return `<div class="vz-field"><label>${esc(f.label)}</label>
     <div class="vz-list" data-list="${esc(base)}">${items}</div>
     ${canAdd ? `<button type="button" class="vz-btn vz-btn--sm" data-add="${esc(base)}" style="margin-top:8px">+ ${esc(t('add'))}</button>` : ''}
+    ${canAdd ? `<button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-paste="${esc(base)}" style="margin-top:8px">${esc(t('listPaste'))}</button>` : ''}
     ${f.hint ? `<span class="vz-hint">${f.hint}</span>` : ''}</div>`;
 }
 
@@ -21051,12 +21270,14 @@ function renderEditor(id, geteilt, suchwert){
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
           <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
+          <button class="vz-btn" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
           <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
@@ -21112,12 +21333,12 @@ function renderEditor(id, geteilt, suchwert){
         panel: document.getElementById('vz-extra'),
         state,
         /* Nur sichern — ohne Neuzeichnen, damit das Ziehen fluessig bleibt. */
-        save: () => saveState(tpl, state),
+        save: () => { verlaufMerken(); saveState(tpl, state); },
         /* Alles neu zeichnen, z. B. nach einem Formatwechsel. */
-        repaint: () => { saveState(tpl, state); paint(); },
+        repaint: () => { verlaufMerken(); saveState(tpl, state); paint(); },
         /* Auch das Formular neu aufbauen — wenn eine Vorlagen-Funktion den
            Zustand asynchron ändert (z. B. ein geladener Karten-Ausschnitt). */
-        rebuild: () => { saveState(tpl, state); paint(); rebuild(); }
+        rebuild: () => { verlaufMerken(); saveState(tpl, state); paint(); rebuild(); }
       }) || null;
     }
     fitScaler();
@@ -21126,6 +21347,9 @@ function renderEditor(id, geteilt, suchwert){
     checkKontrast();
     zeigeObjektHinweis();
     zeichneLeiste();
+    /* Kacheldruck lohnt sich erst oberhalb von A4. */
+    const kachelnBtn = document.getElementById('vz-kacheln');
+    if (kachelnBtn) kachelnBtn.hidden = !kachelbar(page);
   }
 
   /** Der Massstab, mit dem gerade gezeichnet wird. */
@@ -21283,7 +21507,67 @@ function renderEditor(id, geteilt, suchwert){
     };
   }
 
-  function commit(){ saveState(tpl, state); paint(); }
+  function commit(){ verlaufMerken(); saveState(tpl, state); paint(); }
+
+  /* ---------- Rueckgaengig (Ctrl+Z) ---------------------------------------
+     Ein Verlauf aus ganzen Zustands-Schnappschuessen. Getippte Zeichen
+     werden gebuendelt: erst nach 600 ms Ruhe entsteht ein Eintrag — sonst
+     waere jeder Buchstabe ein eigener Schritt. In Textfeldern gilt weiter
+     das eingebaute Rueckgaengig des Browsers (es loest ein input-Ereignis
+     aus und landet damit ebenfalls im Zustand). */
+  const verlauf = { rueck:[], vor:[], letzte: JSON.stringify(state), timer: 0 };
+  function verlaufMerken(){
+    clearTimeout(verlauf.timer);
+    verlauf.timer = setTimeout(() => {
+      const jetzt = JSON.stringify(state);
+      if (jetzt === verlauf.letzte) return;
+      verlauf.rueck.push(verlauf.letzte);
+      /* Hoechstens 60 Schritte — und bei Entwuerfen mit eingebetteten Fotos
+         zusaetzlich ein Speicherdeckel, sonst frisst der Verlauf den RAM. */
+      if (verlauf.rueck.length > 60) verlauf.rueck.shift();
+      let bytes = verlauf.rueck.reduce((s, x) => s + x.length, 0);
+      while (verlauf.rueck.length > 1 && bytes > 30e6) bytes -= verlauf.rueck.shift().length;
+      verlauf.vor.length = 0;
+      verlauf.letzte = jetzt;
+    }, 600);
+  }
+  function widerrufen(richtung){
+    clearTimeout(verlauf.timer);
+    const jetzt = JSON.stringify(state);
+    if (jetzt !== verlauf.letzte){
+      verlauf.rueck.push(verlauf.letzte);
+      verlauf.vor.length = 0;
+      verlauf.letzte = jetzt;
+    }
+    const von = richtung < 0 ? verlauf.rueck : verlauf.vor;
+    const nach = richtung < 0 ? verlauf.vor : verlauf.rueck;
+    if (!von.length) return false;
+    nach.push(verlauf.letzte);
+    verlauf.letzte = von.pop();
+    Object.keys(state).forEach(k => { delete state[k]; });
+    Object.assign(state, JSON.parse(verlauf.letzte));
+    saveState(tpl, state); paint(); rebuild();
+    return true;
+  }
+  if (tastenAbmelden) tastenAbmelden();
+  const tastenHandler = ev => {
+    if (!document.body.contains(sheet)) return;   /* Editor schon verlassen */
+    if (!(ev.ctrlKey || ev.metaKey)) return;
+    const k = ev.key.toLowerCase();
+    if (k !== 'z' && k !== 'y') return;
+    const el = document.activeElement;
+    /* Im Textfeld arbeitet das eingebaute Rueckgaengig zeichenweise weiter;
+       Kaestchen und Auswahlfelder haben keins — dort greift der Verlauf. */
+    const tippfeld = el && (
+      (el.tagName === 'INPUT' && !['checkbox', 'radio', 'file', 'range', 'color'].includes(el.type)) ||
+      el.tagName === 'TEXTAREA' || el.isContentEditable);
+    if (tippfeld) return;
+    ev.preventDefault();
+    const wieder = k === 'y' || ev.shiftKey;
+    if (widerrufen(wieder ? 1 : -1)) toast(t(wieder ? 'redoDone' : 'undoDone'));
+  };
+  document.addEventListener('keydown', tastenHandler);
+  tastenAbmelden = () => document.removeEventListener('keydown', tastenHandler);
 
   /* Live-Bindung: nur die Vorschau neu zeichnen, damit der Fokus bleibt. */
   form.addEventListener('input', ev => {
@@ -21409,7 +21693,45 @@ function renderEditor(id, geteilt, suchwert){
       if (j >= 0 && j < arr.length){ const x = arr[i]; arr[i] = arr[j]; arr[j] = x; commit(); rebuild(); }
       return;
     }
+    const dup = ev.target.closest('[data-dup]');
+    if (dup){
+      const key = dup.closest('[data-list]').dataset.list;
+      const f = tpl.fields.find(x => x.k === key);
+      const arr = state[key] || [];
+      if (!f.max || arr.length < f.max){
+        const i = Number(dup.dataset.dup);
+        arr.splice(i + 1, 0, structuredClone(arr[i]));
+        commit(); rebuild();
+      }
+      return;
+    }
+    const paste = ev.target.closest('[data-paste]');
+    if (paste){ listeEinfuegen(paste.dataset.paste); return; }
   });
+
+  /* Eine ganze Liste auf einmal: Zeilen aus Excel oder den Notizen einfuegen.
+     Je Zeile ein Eintrag; Tab oder Semikolon trennt die Spalten und fuellt
+     die Text- und Zahlenfelder des Eintrags der Reihe nach. */
+  async function listeEinfuegen(key){
+    const f = tpl.fields.find(x => x.k === key);
+    if (!f) return;
+    const text = await frageMehrzeilig(t('listPasteAsk'), t('listPasteHint'));
+    if (!text) return;
+    const schluessel = f.item
+      .filter(sf => !sf.type || ['text', 'textarea', 'number'].includes(sf.type))
+      .map(sf => sf.k);
+    const zeilen = text.split(/\r?\n/).map(z => z.trim()).filter(Boolean);
+    const arr = state[key] = state[key] || [];
+    let n = 0;
+    for (const zeile of zeilen){
+      if (f.max && arr.length >= f.max) break;
+      const teile = zeile.split(/\t|;/).map(x => x.trim());
+      const item = structuredClone(f.defaultItem || {});
+      schluessel.forEach((k2, i2) => { if (teile[i2]) item[k2] = teile[i2]; });
+      arr.push(item); n++;
+    }
+    if (n){ commit(); rebuild(); toast(t('listPasted').replace('%s', String(n))); }
+  }
   ['dragover','dragleave','drop'].forEach(type => {
     form.addEventListener(type, ev => {
       const slot = ev.target.closest('[data-imgslot]');
@@ -21525,6 +21847,22 @@ function renderEditor(id, geteilt, suchwert){
     }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
 
+  /* Kacheldruck: das Grossformat als Stapel von A4-Blaettern samt
+     Klebeplan — fuer den Buerodrucker statt der Druckerei. */
+  document.getElementById('vz-kacheln').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    try{
+      exportVorbereiten();
+      const blob = await sheetToKachelPdf(sheet, pageOf(tpl, state));
+      downloadBlob(blob, `ns-hotel-${tpl.id}-kacheln-a4.pdf`);
+      toast(t('kachelnDone'));
+    }catch(err){
+      console.warn(err);
+      toast(t('pdfFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
+  };
+
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
@@ -21536,12 +21874,13 @@ function renderEditor(id, geteilt, suchwert){
      automatisch auch in der Sicherungsdatei. */
   const standWahl = document.getElementById('vz-staende');
   const standDel  = document.getElementById('vz-stand-del');
+  const standDup  = document.getElementById('vz-stand-dup');
   function standListe(){
     const a = staende(tpl.id);
     standWahl.innerHTML = `<option value="">${esc(t('standNone'))}</option>`
       + a.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
     standWahl.hidden = !a.length;
-    standDel.hidden = true;
+    standDel.hidden = standDup.hidden = true;
   }
   standListe();
   document.getElementById('vz-stand').onclick = () => {
@@ -21550,23 +21889,38 @@ function renderEditor(id, geteilt, suchwert){
     if (standSpeichern(tpl.id, name, state)){
       standListe();
       standWahl.value = String(name).trim().slice(0, 60);
-      standDel.hidden = !standWahl.value;
+      standDel.hidden = standDup.hidden = !standWahl.value;
+      toast(t('standDone'));
+    }
+  };
+  /* Einen gespeicherten Stand unter neuem Namen kopieren — «Placa I16»
+     wird so mit zwei Klicks zur Vorlage fuer «Placa I18». */
+  standDup.onclick = () => {
+    const name = standWahl.value;
+    const s = name ? stand(tpl.id, name) : null;
+    if (!s) return;
+    const neu = prompt(t('standDupAsk'), name + ' 2');
+    if (neu == null) return;
+    if (standSpeichern(tpl.id, neu, s.zustand)){
+      standListe();
+      standWahl.value = String(neu).trim().slice(0, 60);
+      standDel.hidden = standDup.hidden = !standWahl.value;
       toast(t('standDone'));
     }
   };
   standWahl.onchange = () => {
     const name = standWahl.value;
-    standDel.hidden = !name;
+    standDel.hidden = standDup.hidden = !name;
     if (!name) return;
     const s = stand(tpl.id, name);
     if (!s) return;
-    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = true; return; }
+    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = standDup.hidden = true; return; }
     Object.keys(state).forEach(k => { delete state[k]; });
     Object.assign(state, JSON.parse(JSON.stringify(s.zustand)));
     commit(); rebuild();
     toast(t('standLoaded'));
     standWahl.value = name;
-    standDel.hidden = false;
+    standDel.hidden = standDup.hidden = false;
   };
   standDel.onclick = () => {
     const name = standWahl.value;
@@ -21655,6 +22009,33 @@ function toast(msg){
   el.classList.add('is-on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('is-on'), 2600);
+}
+
+/* ---------- Mehrzeilige Eingabe ------------------------------------------- */
+/* window.prompt schluckt Zeilenumbrueche — fuer «Liste einfuegen» braucht es
+   ein eigenes kleines Fenster mit Textfeld. Klick daneben bricht ab. */
+function frageMehrzeilig(titel, hinweis){
+  return new Promise(res => {
+    const wrap = e('div', { class:'vz-dialog no-print' });
+    wrap.innerHTML = `
+      <div class="vz-dialog-box" role="dialog" aria-label="${esc(titel)}">
+        <h3>${esc(titel)}</h3>
+        <textarea rows="8"></textarea>
+        ${hinweis ? `<span class="vz-hint">${esc(hinweis)}</span>` : ''}
+        <div class="vz-dialog-btns">
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-weg>${esc(t('cancel'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--navy" data-ok>${esc(t('ok'))}</button>
+        </div>
+      </div>`;
+    const fertig = wert => { wrap.remove(); res(wert); };
+    wrap.addEventListener('click', ev => {
+      if (ev.target === wrap || ev.target.closest('[data-weg]')){ fertig(null); return; }
+      if (ev.target.closest('[data-ok]')) fertig(wrap.querySelector('textarea').value);
+    });
+    wrap.addEventListener('keydown', ev => { if (ev.key === 'Escape') fertig(null); });
+    document.body.appendChild(wrap);
+    wrap.querySelector('textarea').focus();
+  });
 }
 
 /* ---------- Werkzeugseiten ------------------------------------------------ */

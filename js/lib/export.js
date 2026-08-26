@@ -210,6 +210,176 @@ export async function sheetToPdfBlob(sheet, page, scale = 2.5){
   return pdfAusJpegSeiten(seiten);
 }
 
+/* ---------- Kacheldruck: Grossformat auf A4-Blaetter verteilen ------------ */
+/* Nach dem Vorbild von PosteRazor: das Plakat wird in A4-Kacheln zerlegt,
+   die jeder Buerodrucker schafft. Jede Kachel traegt 10 mm Ueberlappung zum
+   Nachbarblatt (gestrichelte Klebelinie), dazu kommt ein Uebersichtsblatt
+   mit Klebeplan und einer 100-mm-Kontrolllinie — misst sie nicht genau
+   100 mm, hat der Druckdialog skaliert. */
+
+const K_RAND = 10;    /* weisser Rand je Blatt — Buerodrucker drucken nicht randlos */
+const K_UEBER = 10;   /* Ueberlappung zum Nachbarblatt */
+const K_PPM = 6;      /* Pixel je Millimeter der Kachel-Seiten (≈152 dpi) */
+
+function kachelRaster(wmm, hmm){
+  const kw = 210 - 2 * K_RAND, kh = 297 - 2 * K_RAND;
+  const schrittW = kw - K_UEBER, schrittH = kh - K_UEBER;
+  return {
+    kw, kh, schrittW, schrittH,
+    spalten: Math.max(1, Math.ceil((wmm - K_UEBER) / schrittW)),
+    reihen:  Math.max(1, Math.ceil((hmm - K_UEBER) / schrittH))
+  };
+}
+
+function a4Canvas(){
+  const c = document.createElement('canvas');
+  c.width = 210 * K_PPM; c.height = 297 * K_PPM;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, c.width, c.height);
+  return { c, ctx };
+}
+
+function alsSeite(c){
+  return { ...jpegBytes(c.toDataURL('image/jpeg', 0.92), c.width, c.height), wmm:210, hmm:297 };
+}
+
+function kachelName(spalte, reihe){
+  return String.fromCharCode(65 + spalte) + (reihe + 1);
+}
+
+function kachelSchrift(ctx, mm, fett){
+  ctx.font = `${fett ? '700 ' : ''}${Math.round(mm * K_PPM)}px "Kumbh Sans", Arial, sans-serif`;
+}
+
+/** Uebersichtsblatt: Klebeplan, Anleitung, Kontrolllinie. */
+function uebersichtsSeite(quelle, wmm, hmm, raster){
+  const { c, ctx } = a4Canvas();
+  const mm = v => v * K_PPM;
+
+  ctx.fillStyle = '#2A3350';
+  kachelSchrift(ctx, 7, true);
+  ctx.fillText(`Kacheldruck: ${raster.spalten} × ${raster.reihen} Blätter A4`, mm(20), mm(28));
+  ctx.fillStyle = '#5B6474';
+  kachelSchrift(ctx, 4);
+  ctx.fillText(`Plakat ${wmm} × ${hmm} mm · ${raster.spalten * raster.reihen} Kacheln · 10 mm Überlappung`, mm(20), mm(36));
+
+  /* Klebeplan: das Plakat verkleinert, darueber das Kachelgitter. */
+  const boxW = 170, boxH = 130;
+  const s = Math.min(boxW / wmm, boxH / hmm);
+  const pw = wmm * s, ph = hmm * s;
+  const px = 20 + (boxW - pw) / 2, py = 46;
+  ctx.drawImage(quelle, mm(px), mm(py), mm(pw), mm(ph));
+  ctx.strokeStyle = '#2A3350'; ctx.lineWidth = 2;
+  ctx.strokeRect(mm(px), mm(py), mm(pw), mm(ph));
+  ctx.strokeStyle = '#01B1E2'; ctx.lineWidth = 1.5;
+  ctx.fillStyle = '#01B1E2';
+  kachelSchrift(ctx, 3.6, true);
+  for (let r = 0; r < raster.reihen; r++){
+    for (let sp = 0; sp < raster.spalten; sp++){
+      const x = px + sp * raster.schrittW * s, y = py + r * raster.schrittH * s;
+      const w = Math.min(raster.kw, wmm - sp * raster.schrittW) * s;
+      const h = Math.min(raster.kh, hmm - r * raster.schrittH) * s;
+      ctx.strokeRect(mm(x), mm(y), mm(w), mm(h));
+      ctx.fillText(kachelName(sp, r), mm(x + 2), mm(y + 5));
+    }
+  }
+
+  /* Anleitung. */
+  ctx.fillStyle = '#2A3350';
+  kachelSchrift(ctx, 4);
+  const zeilen = [
+    '1.  Alle Blätter auf A4 drucken — Skalierung 100 % («Tatsächliche Grösse»).',
+    '2.  Kontrolllinie unten nachmessen: genau 100 mm — sonst skaliert der Drucker.',
+    '3.  Weisse Ränder bis zum grauen Rahmen abschneiden (Rahmen = 190 × 277 mm).',
+    '4.  Blätter Reihe für Reihe kleben: das nächste Blatt bis zur blauen',
+    '     gestrichelten Linie über das vorige legen (10 mm Überlappung).'
+  ];
+  zeilen.forEach((z, i) => ctx.fillText(z, mm(20), mm(192 + i * 8)));
+
+  /* Kontrolllinie: exakt 100 mm mit Zehner-Marken. */
+  const ly = 250;
+  ctx.strokeStyle = '#2A3350'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(mm(20), mm(ly)); ctx.lineTo(mm(120), mm(ly));
+  for (let i = 0; i <= 10; i++){
+    ctx.moveTo(mm(20 + i * 10), mm(ly)); ctx.lineTo(mm(20 + i * 10), mm(ly - (i % 5 ? 2.5 : 4)));
+  }
+  ctx.stroke();
+  kachelSchrift(ctx, 3.5);
+  ctx.fillText('Kontrolllinie — muss gedruckt genau 100 mm messen', mm(20), mm(ly + 7));
+
+  return alsSeite(c);
+}
+
+/** Eine Kachel: Bildausschnitt, grauer Schneide-Rahmen, blaue Klebelinien. */
+function kachelSeite(quelle, wmm, hmm, raster, spalte, reihe){
+  const { c, ctx } = a4Canvas();
+  const mm = v => v * K_PPM;
+  const qx = quelle.width / wmm, qy = quelle.height / hmm;
+
+  const sx = spalte * raster.schrittW, sy = reihe * raster.schrittH;
+  const sw = Math.min(raster.kw, wmm - sx), sh = Math.min(raster.kh, hmm - sy);
+  ctx.drawImage(quelle, sx * qx, sy * qy, sw * qx, sh * qy,
+                mm(K_RAND), mm(K_RAND), mm(sw), mm(sh));
+
+  /* Schneide-Rahmen (hellgrau) um den bedruckten Bereich. */
+  ctx.strokeStyle = '#B9C0CC'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(mm(K_RAND), mm(K_RAND), mm(sw), mm(sh));
+
+  /* Klebelinien: dort endet das naechste Blatt nach dem Aufkleben. */
+  ctx.strokeStyle = '#01B1E2'; ctx.lineWidth = 2;
+  ctx.setLineDash([mm(2), mm(1.6)]);
+  ctx.beginPath();
+  if (spalte < raster.spalten - 1){
+    ctx.moveTo(mm(K_RAND + sw - K_UEBER), mm(K_RAND));
+    ctx.lineTo(mm(K_RAND + sw - K_UEBER), mm(K_RAND + sh));
+  }
+  if (reihe < raster.reihen - 1){
+    ctx.moveTo(mm(K_RAND), mm(K_RAND + sh - K_UEBER));
+    ctx.lineTo(mm(K_RAND + sw), mm(K_RAND + sh - K_UEBER));
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#5B6474';
+  kachelSchrift(ctx, 3.5, true);
+  ctx.fillText(`Blatt ${kachelName(spalte, reihe)}`, mm(K_RAND), mm(7));
+  kachelSchrift(ctx, 3.2);
+  ctx.fillText(`Reihe ${reihe + 1}/${raster.reihen} · Spalte ${spalte + 1}/${raster.spalten} · Skalierung 100 %`,
+               mm(K_RAND + 22), mm(7));
+
+  return alsSeite(c);
+}
+
+/**
+ * Grossformat als A4-Kachel-PDF: Uebersichtsblatt + eine Kachel je Seite.
+ * Bei mehrseitigen Vorlagen wird das erste Blatt gekachelt.
+ * @param {HTMLElement} sheet  das .sheet-Element
+ * @param {string} page        Format-Kennung, z. B. 'a0'
+ * @returns {Promise<Blob>}
+ */
+export async function sheetToKachelPdf(sheet, page){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  const raster = kachelRaster(wmm, hmm);
+  const erste = sheet.querySelector('[data-page]') || sheet;
+  const quelle = await elementToCanvas(erste, 4);
+
+  const seiten = [uebersichtsSeite(quelle, wmm, hmm, raster)];
+  for (let r = 0; r < raster.reihen; r++){
+    for (let s = 0; s < raster.spalten; s++){
+      seiten.push(kachelSeite(quelle, wmm, hmm, raster, s, r));
+    }
+  }
+  return pdfAusJpegSeiten(seiten);
+}
+
+/** Lohnt sich Kacheln fuer dieses Format? (groesser als ein A4-Blatt) */
+export function kachelbar(page){
+  const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
+  return wmm * hmm > 210 * 297 + 1;
+}
+
 export function downloadBlob(blob, filename){
   const a = document.createElement('a');
   const href = URL.createObjectURL(blob);
