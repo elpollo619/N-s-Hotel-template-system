@@ -26,7 +26,7 @@ import { esc, e, qs } from './lib/dom.js';
 import { logo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
 import * as store from './lib/storage.js';
-import { setPageSize, printSheet, sheetToPng, sheetToPdfBlob, downloadBlob } from './lib/export.js';
+import { setPageSize, printSheet, sheetToPng, sheetToPdfBlob, sheetToKachelPdf, kachelbar, downloadBlob } from './lib/export.js';
 import { teilenKodieren, teilenLesen, teilenAdresse, teilenKopieren, TEILEN_MAX } from './lib/teilen.js';
 import { lesbarkeit } from './lib/lesbarkeit.js';
 import { kontrastBefund } from './lib/kontrast.js';
@@ -64,6 +64,7 @@ const PAGE_NAME = {
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine
    Aufraeum-Funktion zurueck. Sie wird vor dem naechsten Zeichnen aufgerufen. */
 let activeUnmount = null;
+let tastenAbmelden = null;   /* Ctrl+Z-Handler der zuletzt geoeffneten Vorlage */
 function unmountActive(){
   if (activeUnmount){ try{ activeUnmount(); }catch(err){ console.warn(err); } activeUnmount = null; }
 }
@@ -602,6 +603,7 @@ function listHtml(f, arr, base){
         <div class="vz-item-btns">
           <button type="button" class="vz-mini" data-move="${i}" data-dir="-1" title="${esc(t('rowUp'))}">&#8593;</button>
           <button type="button" class="vz-mini" data-move="${i}" data-dir="1" title="${esc(t('rowDown'))}">&#8595;</button>
+          <button type="button" class="vz-mini" data-dup="${i}" title="${esc(t('rowDup'))}">&#10697;</button>
           <button type="button" class="vz-mini vz-mini--del" data-del="${i}" title="${esc(t('rowDel'))}">&#215;</button>
         </div>
       </div>
@@ -611,6 +613,7 @@ function listHtml(f, arr, base){
   return `<div class="vz-field"><label>${esc(f.label)}</label>
     <div class="vz-list" data-list="${esc(base)}">${items}</div>
     ${canAdd ? `<button type="button" class="vz-btn vz-btn--sm" data-add="${esc(base)}" style="margin-top:8px">+ ${esc(t('add'))}</button>` : ''}
+    ${canAdd ? `<button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-paste="${esc(base)}" style="margin-top:8px">${esc(t('listPaste'))}</button>` : ''}
     ${f.hint ? `<span class="vz-hint">${f.hint}</span>` : ''}</div>`;
 }
 
@@ -754,12 +757,14 @@ function renderEditor(id, geteilt, suchwert){
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
           <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
+          <button class="vz-btn" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
           <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
           <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
@@ -815,12 +820,12 @@ function renderEditor(id, geteilt, suchwert){
         panel: document.getElementById('vz-extra'),
         state,
         /* Nur sichern — ohne Neuzeichnen, damit das Ziehen fluessig bleibt. */
-        save: () => saveState(tpl, state),
+        save: () => { verlaufMerken(); saveState(tpl, state); },
         /* Alles neu zeichnen, z. B. nach einem Formatwechsel. */
-        repaint: () => { saveState(tpl, state); paint(); },
+        repaint: () => { verlaufMerken(); saveState(tpl, state); paint(); },
         /* Auch das Formular neu aufbauen — wenn eine Vorlagen-Funktion den
            Zustand asynchron ändert (z. B. ein geladener Karten-Ausschnitt). */
-        rebuild: () => { saveState(tpl, state); paint(); rebuild(); }
+        rebuild: () => { verlaufMerken(); saveState(tpl, state); paint(); rebuild(); }
       }) || null;
     }
     fitScaler();
@@ -829,6 +834,9 @@ function renderEditor(id, geteilt, suchwert){
     checkKontrast();
     zeigeObjektHinweis();
     zeichneLeiste();
+    /* Kacheldruck lohnt sich erst oberhalb von A4. */
+    const kachelnBtn = document.getElementById('vz-kacheln');
+    if (kachelnBtn) kachelnBtn.hidden = !kachelbar(page);
   }
 
   /** Der Massstab, mit dem gerade gezeichnet wird. */
@@ -986,7 +994,67 @@ function renderEditor(id, geteilt, suchwert){
     };
   }
 
-  function commit(){ saveState(tpl, state); paint(); }
+  function commit(){ verlaufMerken(); saveState(tpl, state); paint(); }
+
+  /* ---------- Rueckgaengig (Ctrl+Z) ---------------------------------------
+     Ein Verlauf aus ganzen Zustands-Schnappschuessen. Getippte Zeichen
+     werden gebuendelt: erst nach 600 ms Ruhe entsteht ein Eintrag — sonst
+     waere jeder Buchstabe ein eigener Schritt. In Textfeldern gilt weiter
+     das eingebaute Rueckgaengig des Browsers (es loest ein input-Ereignis
+     aus und landet damit ebenfalls im Zustand). */
+  const verlauf = { rueck:[], vor:[], letzte: JSON.stringify(state), timer: 0 };
+  function verlaufMerken(){
+    clearTimeout(verlauf.timer);
+    verlauf.timer = setTimeout(() => {
+      const jetzt = JSON.stringify(state);
+      if (jetzt === verlauf.letzte) return;
+      verlauf.rueck.push(verlauf.letzte);
+      /* Hoechstens 60 Schritte — und bei Entwuerfen mit eingebetteten Fotos
+         zusaetzlich ein Speicherdeckel, sonst frisst der Verlauf den RAM. */
+      if (verlauf.rueck.length > 60) verlauf.rueck.shift();
+      let bytes = verlauf.rueck.reduce((s, x) => s + x.length, 0);
+      while (verlauf.rueck.length > 1 && bytes > 30e6) bytes -= verlauf.rueck.shift().length;
+      verlauf.vor.length = 0;
+      verlauf.letzte = jetzt;
+    }, 600);
+  }
+  function widerrufen(richtung){
+    clearTimeout(verlauf.timer);
+    const jetzt = JSON.stringify(state);
+    if (jetzt !== verlauf.letzte){
+      verlauf.rueck.push(verlauf.letzte);
+      verlauf.vor.length = 0;
+      verlauf.letzte = jetzt;
+    }
+    const von = richtung < 0 ? verlauf.rueck : verlauf.vor;
+    const nach = richtung < 0 ? verlauf.vor : verlauf.rueck;
+    if (!von.length) return false;
+    nach.push(verlauf.letzte);
+    verlauf.letzte = von.pop();
+    Object.keys(state).forEach(k => { delete state[k]; });
+    Object.assign(state, JSON.parse(verlauf.letzte));
+    saveState(tpl, state); paint(); rebuild();
+    return true;
+  }
+  if (tastenAbmelden) tastenAbmelden();
+  const tastenHandler = ev => {
+    if (!document.body.contains(sheet)) return;   /* Editor schon verlassen */
+    if (!(ev.ctrlKey || ev.metaKey)) return;
+    const k = ev.key.toLowerCase();
+    if (k !== 'z' && k !== 'y') return;
+    const el = document.activeElement;
+    /* Im Textfeld arbeitet das eingebaute Rueckgaengig zeichenweise weiter;
+       Kaestchen und Auswahlfelder haben keins — dort greift der Verlauf. */
+    const tippfeld = el && (
+      (el.tagName === 'INPUT' && !['checkbox', 'radio', 'file', 'range', 'color'].includes(el.type)) ||
+      el.tagName === 'TEXTAREA' || el.isContentEditable);
+    if (tippfeld) return;
+    ev.preventDefault();
+    const wieder = k === 'y' || ev.shiftKey;
+    if (widerrufen(wieder ? 1 : -1)) toast(t(wieder ? 'redoDone' : 'undoDone'));
+  };
+  document.addEventListener('keydown', tastenHandler);
+  tastenAbmelden = () => document.removeEventListener('keydown', tastenHandler);
 
   /* Live-Bindung: nur die Vorschau neu zeichnen, damit der Fokus bleibt. */
   form.addEventListener('input', ev => {
@@ -1112,7 +1180,45 @@ function renderEditor(id, geteilt, suchwert){
       if (j >= 0 && j < arr.length){ const x = arr[i]; arr[i] = arr[j]; arr[j] = x; commit(); rebuild(); }
       return;
     }
+    const dup = ev.target.closest('[data-dup]');
+    if (dup){
+      const key = dup.closest('[data-list]').dataset.list;
+      const f = tpl.fields.find(x => x.k === key);
+      const arr = state[key] || [];
+      if (!f.max || arr.length < f.max){
+        const i = Number(dup.dataset.dup);
+        arr.splice(i + 1, 0, structuredClone(arr[i]));
+        commit(); rebuild();
+      }
+      return;
+    }
+    const paste = ev.target.closest('[data-paste]');
+    if (paste){ listeEinfuegen(paste.dataset.paste); return; }
   });
+
+  /* Eine ganze Liste auf einmal: Zeilen aus Excel oder den Notizen einfuegen.
+     Je Zeile ein Eintrag; Tab oder Semikolon trennt die Spalten und fuellt
+     die Text- und Zahlenfelder des Eintrags der Reihe nach. */
+  async function listeEinfuegen(key){
+    const f = tpl.fields.find(x => x.k === key);
+    if (!f) return;
+    const text = await frageMehrzeilig(t('listPasteAsk'), t('listPasteHint'));
+    if (!text) return;
+    const schluessel = f.item
+      .filter(sf => !sf.type || ['text', 'textarea', 'number'].includes(sf.type))
+      .map(sf => sf.k);
+    const zeilen = text.split(/\r?\n/).map(z => z.trim()).filter(Boolean);
+    const arr = state[key] = state[key] || [];
+    let n = 0;
+    for (const zeile of zeilen){
+      if (f.max && arr.length >= f.max) break;
+      const teile = zeile.split(/\t|;/).map(x => x.trim());
+      const item = structuredClone(f.defaultItem || {});
+      schluessel.forEach((k2, i2) => { if (teile[i2]) item[k2] = teile[i2]; });
+      arr.push(item); n++;
+    }
+    if (n){ commit(); rebuild(); toast(t('listPasted').replace('%s', String(n))); }
+  }
   ['dragover','dragleave','drop'].forEach(type => {
     form.addEventListener(type, ev => {
       const slot = ev.target.closest('[data-imgslot]');
@@ -1228,6 +1334,22 @@ function renderEditor(id, geteilt, suchwert){
     }finally{ btn.disabled = false; btn.textContent = old; paint(); }
   };
 
+  /* Kacheldruck: das Grossformat als Stapel von A4-Blaettern samt
+     Klebeplan — fuer den Buerodrucker statt der Druckerei. */
+  document.getElementById('vz-kacheln').onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    try{
+      exportVorbereiten();
+      const blob = await sheetToKachelPdf(sheet, pageOf(tpl, state));
+      downloadBlob(blob, `ns-hotel-${tpl.id}-kacheln-a4.pdf`);
+      toast(t('kachelnDone'));
+    }catch(err){
+      console.warn(err);
+      toast(t('pdfFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; paint(); }
+  };
+
   document.getElementById('vz-reset').onclick = () => {
     if (!confirm(t('resetAsk'))) return;
     store.remove(draftKey(tpl.id));
@@ -1239,12 +1361,13 @@ function renderEditor(id, geteilt, suchwert){
      automatisch auch in der Sicherungsdatei. */
   const standWahl = document.getElementById('vz-staende');
   const standDel  = document.getElementById('vz-stand-del');
+  const standDup  = document.getElementById('vz-stand-dup');
   function standListe(){
     const a = staende(tpl.id);
     standWahl.innerHTML = `<option value="">${esc(t('standNone'))}</option>`
       + a.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
     standWahl.hidden = !a.length;
-    standDel.hidden = true;
+    standDel.hidden = standDup.hidden = true;
   }
   standListe();
   document.getElementById('vz-stand').onclick = () => {
@@ -1253,23 +1376,38 @@ function renderEditor(id, geteilt, suchwert){
     if (standSpeichern(tpl.id, name, state)){
       standListe();
       standWahl.value = String(name).trim().slice(0, 60);
-      standDel.hidden = !standWahl.value;
+      standDel.hidden = standDup.hidden = !standWahl.value;
+      toast(t('standDone'));
+    }
+  };
+  /* Einen gespeicherten Stand unter neuem Namen kopieren — «Placa I16»
+     wird so mit zwei Klicks zur Vorlage fuer «Placa I18». */
+  standDup.onclick = () => {
+    const name = standWahl.value;
+    const s = name ? stand(tpl.id, name) : null;
+    if (!s) return;
+    const neu = prompt(t('standDupAsk'), name + ' 2');
+    if (neu == null) return;
+    if (standSpeichern(tpl.id, neu, s.zustand)){
+      standListe();
+      standWahl.value = String(neu).trim().slice(0, 60);
+      standDel.hidden = standDup.hidden = !standWahl.value;
       toast(t('standDone'));
     }
   };
   standWahl.onchange = () => {
     const name = standWahl.value;
-    standDel.hidden = !name;
+    standDel.hidden = standDup.hidden = !name;
     if (!name) return;
     const s = stand(tpl.id, name);
     if (!s) return;
-    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = true; return; }
+    if (!confirm(t('standLoadAsk'))){ standWahl.value = ''; standDel.hidden = standDup.hidden = true; return; }
     Object.keys(state).forEach(k => { delete state[k]; });
     Object.assign(state, JSON.parse(JSON.stringify(s.zustand)));
     commit(); rebuild();
     toast(t('standLoaded'));
     standWahl.value = name;
-    standDel.hidden = false;
+    standDel.hidden = standDup.hidden = false;
   };
   standDel.onclick = () => {
     const name = standWahl.value;
@@ -1358,6 +1496,33 @@ function toast(msg){
   el.classList.add('is-on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('is-on'), 2600);
+}
+
+/* ---------- Mehrzeilige Eingabe ------------------------------------------- */
+/* window.prompt schluckt Zeilenumbrueche — fuer «Liste einfuegen» braucht es
+   ein eigenes kleines Fenster mit Textfeld. Klick daneben bricht ab. */
+function frageMehrzeilig(titel, hinweis){
+  return new Promise(res => {
+    const wrap = e('div', { class:'vz-dialog no-print' });
+    wrap.innerHTML = `
+      <div class="vz-dialog-box" role="dialog" aria-label="${esc(titel)}">
+        <h3>${esc(titel)}</h3>
+        <textarea rows="8"></textarea>
+        ${hinweis ? `<span class="vz-hint">${esc(hinweis)}</span>` : ''}
+        <div class="vz-dialog-btns">
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--ghost" data-weg>${esc(t('cancel'))}</button>
+          <button type="button" class="vz-btn vz-btn--sm vz-btn--navy" data-ok>${esc(t('ok'))}</button>
+        </div>
+      </div>`;
+    const fertig = wert => { wrap.remove(); res(wert); };
+    wrap.addEventListener('click', ev => {
+      if (ev.target === wrap || ev.target.closest('[data-weg]')){ fertig(null); return; }
+      if (ev.target.closest('[data-ok]')) fertig(wrap.querySelector('textarea').value);
+    });
+    wrap.addEventListener('keydown', ev => { if (ev.key === 'Escape') fertig(null); });
+    document.body.appendChild(wrap);
+    wrap.querySelector('textarea').focus();
+  });
 }
 
 /* ---------- Werkzeugseiten ------------------------------------------------ */

@@ -47,8 +47,21 @@ heruntergeladene Kopie veraltet — für den täglichen Gebrauch ist der Link be
    Datei für die Druckerei oder fürs Handy braucht: **PDF / Teilen** — auf
    dem Telefon öffnet sich das Teilen-Menü (WhatsApp, Mail …), am Rechner
    wird die PDF-Datei gespeichert. Wer es weitergeben will: **Link teilen**.
+6. Grossformate (A3 bis A0) ohne Druckerei: **A4-Kacheln** zerlegt das
+   Plakat in A4-Blätter für den Bürodrucker — Blatt 1 ist der Klebeplan
+   mit Anleitung und einer 100-mm-Kontrolllinie, jede Kachel trägt 10 mm
+   Überlappung und eine blaue Klebelinie.
 
 Nützlich zu wissen:
+
+* **Ctrl+Z macht rückgängig** (Ctrl+Y stellt wieder her) — auch das Löschen
+  einer Zeile oder einen verschobenen Pin. In Textfeldern gilt weiter das
+  gewohnte Rückgängig des Browsers.
+* Listen (Preise, Kontakte, Legenden …) können **Zeilen kopieren** und über
+  «Liste einfügen …» ganze Aufstellungen aus Excel übernehmen — je Zeile ein
+  Eintrag, Tab oder Semikolon trennt die Spalten.
+* Gespeicherte **Stände** lassen sich kopieren: einen fertigen Aushang als
+  Ausgangspunkt für die nächste Liegenschaft nehmen, statt neu zu tippen.
 
 * Die **Suche** geht quer durch alles: Vorlagen, die 42 Textbausteine, die
   16 Sicherheitszeichen und die Abfallfraktionen — und durch alle sechs
@@ -1059,6 +1072,9 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   Seitengrösse stimmt millimetergenau mit dem gewählten Papier überein —
   bis A0. «PDF / Teilen» reicht die Datei auf dem Telefon direkt an
   WhatsApp und Co. weiter (Web-Share), am Rechner wird sie gespeichert.
+* **Kacheldruck nach PosteRazor-Art.** «A4-Kacheln» zerlegt ein Grossformat
+  in A4-Seiten mit 10 mm Überlappung, Klebeplan und 100-mm-Kontrolllinie —
+  ein A0-Plakat lässt sich so am Bürodrucker drucken und zusammenkleben.
 * **Eine Seite, garantiert.** Nach jedem Tastendruck wird die Blatthöhe gegen
   das Papierformat geprüft; der Test in `tests/print.mjs` misst zusätzlich das
   echte PDF.
