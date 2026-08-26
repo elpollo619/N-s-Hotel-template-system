@@ -1094,6 +1094,9 @@ Doppelklick startet und sich per Mail oder USB-Stick weitergeben lässt.
   la vista previa mande. En el móvil se convierte en un cajón.
 * El equipo entra por un enlace, edita textos y exporta **PDF** o **PNG**.
   Sin login, sin backend; los borradores se guardan en el navegador de cada uno.
+* ¿Hacerla **privada, solo para el equipo**? Se pone Cloudflare Access delante
+  (login por correo, gratis hasta 50 personas) sin tocar el código — pasos en
+  [docs/privat-zugang.md](docs/privat-zugang.md).
 * Desde tu carpeta de Drive «carteles Ns Hotel» ya se incorporaron: el **SVG
   exacto del teléfono v6**, los **tokens verificados** contra el `parking.css`
   real, la **dirección correcta** (Allmendstrasse 14) y la **marca dibujada**
