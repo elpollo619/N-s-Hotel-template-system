@@ -52,6 +52,9 @@ check((await page.locator('#vz-sheet').innerText()).includes('Taxi Kerzers'), 'N
 await page.locator('[data-list="rows"] .vz-item').last().locator('[data-del]').click();
 check(await page.locator('.t-aushang-row').count() === vorher, 'Zeile gelöscht');
 page.on('dialog', d => d.accept());
+/* Seltene Aktionen liegen jetzt unter «Mehr» — vor dem Klick aufklappen. */
+const mehrAuf = () => page.evaluate(() => { const d = document.querySelector('.vz-mehr'); if (d) d.open = true; });
+await mehrAuf();
 await page.click('#vz-reset');
 await page.waitForTimeout(200);
 await zumEditor('notruf');
@@ -62,12 +65,14 @@ await page.waitForTimeout(150);
 check(await page.locator('#vz-fit.vz-fit--warn').count() === 1, 'Überlauf wird gemeldet');
 
 /* 5 · Zurücksetzen stellt das Original wieder her */
+await mehrAuf();
 await page.click('#vz-reset');
 await page.waitForTimeout(250);
 check(await page.locator('#vz-sheet h1').innerText() === 'Welche Taste wofür?', 'Zurücksetzen stellt das Original her');
 check(await page.locator('#vz-fit.vz-fit--ok').count() === 1, 'Blatt passt wieder auf eine Seite');
 
 /* 6 · Entwurf als Datei sichern */
+await mehrAuf();
 const [dl] = await Promise.all([
   page.waitForEvent('download', { timeout:15000 }),
   page.click('#vz-json-save')

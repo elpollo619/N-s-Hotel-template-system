@@ -82,6 +82,8 @@ if (!(n2 === 8 && neu === 'Neu Eins'))
 console.log(`Liste einfügen: ${n1} → ${n2} Einträge (max 8), zuerst «${neu}»`);
 
 /* --- Stand kopieren ------------------------------------------------------- */
+/* Stände liegen jetzt unter «Mehr» — vor dem Klick aufklappen. */
+await page.evaluate(() => { const d = document.querySelector('.vz-mehr'); if (d) d.open = true; });
 await page.evaluate(() => { window.prompt = () => 'Prueba'; });
 await page.click('#vz-stand');
 await page.waitForTimeout(200);

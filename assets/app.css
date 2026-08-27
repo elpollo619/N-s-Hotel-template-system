@@ -1112,27 +1112,161 @@ a{color:var(--cyan)}
                       bottom left,bottom left,bottom right,bottom right;
 }
 
-/* ---------- Geführter Einstieg (Startseite) ----------------------------- */
-.vz-ziele{display:flex;flex-direction:column;gap:8px}
-.vz-ziel{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
-.vz-ziel>summary{display:flex;align-items:center;gap:12px;cursor:pointer;
-  padding:14px 16px;font-weight:600;color:var(--navy);list-style:none}
+/* ==========================================================================
+   Rediseño «cómo se usa» — Assistent, geführter Einstieg, Editor-Aktionen
+   Ein Akzent (Cyan), Marke-Töne aus brand-tokens. Keine zweite Farbe.
+   ========================================================================== */
+
+/* ---------- Banner «Zum ersten Mal hier?» (Startseite) ------------------ */
+/* Die Tür für Neue: navy wie die Marke, ein Cyan-Knopf als einziger Akzent. */
+.vz-neubanner{
+  display:flex;align-items:center;gap:16px;margin:0 0 6px;
+  background:var(--navy);color:#fff;border-radius:16px;
+  padding:16px 18px;text-decoration:none;
+  transition:.16s transform,.16s box-shadow;
+}
+.vz-neubanner:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(42,51,80,.22)}
+.vz-neubanner-ico{
+  flex:0 0 auto;display:grid;place-items:center;width:46px;height:46px;
+  border-radius:12px;background:rgba(255,255,255,.12);color:#fff;
+}
+.vz-neubanner-txt{flex:1;min-width:0}
+.vz-neubanner-txt b{
+  display:block;font-family:var(--font-display);font-size:15.5px;font-weight:700;
+  margin-bottom:2px;
+}
+.vz-neubanner-txt i{
+  display:block;font-style:normal;font-size:12.5px;line-height:1.5;
+  color:rgba(255,255,255,.78);max-width:70ch;
+}
+.vz-neubanner-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;
+  background:var(--cyan);color:#fff;border-radius:999px;
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  padding:10px 17px;white-space:nowrap;
+}
+.vz-neubanner-btn em{font-style:normal;font-size:15px}
+.vz-neubanner:hover .vz-neubanner-btn{background:#00a0cc}
+@media (max-width:640px){
+  .vz-neubanner{flex-wrap:wrap;gap:12px}
+  .vz-neubanner-btn{width:100%;justify-content:center}
+}
+
+/* ---------- Geführter Einstieg: Ziel-Akkordeon (Startseite) ------------- */
+.vz-ziele{display:flex;flex-direction:column;gap:9px}
+.vz-ziel{border:1px solid var(--line);border-radius:13px;background:#fff;overflow:hidden;
+  transition:.14s border-color,.14s box-shadow}
+.vz-ziel:hover{border-color:var(--cyan)}
+.vz-ziel[open]{box-shadow:0 8px 22px rgba(42,51,80,.10)}
+.vz-ziel>summary{display:flex;align-items:center;gap:13px;cursor:pointer;
+  padding:13px 15px;list-style:none}
 .vz-ziel>summary::-webkit-details-marker{display:none}
 .vz-ziel>summary:hover{background:var(--bg-2)}
-.vz-ziel-ico{flex:none;display:flex;color:var(--primary)}
-.vz-ziel>summary em{margin-left:auto;color:var(--muted);font-style:normal;
-  transition:transform .18s}
-.vz-ziel[open]>summary em{transform:rotate(90deg)}
+.vz-ziel-ico{
+  flex:0 0 auto;display:grid;place-items:center;width:40px;height:40px;
+  border-radius:11px;background:var(--cyan-tint);color:var(--cyan);
+}
+.vz-ziel-txt{flex:1;min-width:0}
+.vz-ziel-txt b{display:block;font-family:var(--font-display);font-size:14.5px;font-weight:700;color:var(--navy)}
+.vz-ziel-txt i{display:block;font-style:normal;font-size:12px;line-height:1.45;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vz-ziel-pfeil{flex:0 0 auto;margin-left:6px;color:var(--muted);font-style:normal;
+  font-size:19px;line-height:1;transition:transform .18s}
+.vz-ziel[open] .vz-ziel-pfeil{transform:rotate(90deg);color:var(--cyan)}
 .vz-ziel[open]>summary{border-bottom:1px solid var(--line)}
-.vz-ziel>.vz-cards{padding:14px 16px}
+.vz-ziel>.vz-cards{padding:15px}
 
-/* ---------- «So gehtʼs» im Editor --------------------------------------- */
-.vz-sogehts{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;
-  background:var(--bg-2)}
-.vz-sogehts>summary{cursor:pointer;padding:9px 13px;font-size:13px;font-weight:600;
-  color:var(--navy);list-style:none}
-.vz-sogehts>summary::-webkit-details-marker{display:none}
-.vz-sogehts>summary::before{content:"›  ";color:var(--muted)}
-.vz-sogehts[open]>summary::before{content:"⌄  "}
-.vz-sogehts ol{margin:0;padding:2px 13px 12px 30px;display:flex;flex-direction:column;gap:5px}
-.vz-sogehts li{font-size:12.5px;line-height:1.5;color:var(--ink)}
+/* ---------- Assistent: Schrittleiste ------------------------------------ */
+.vz-stepbar{
+  display:flex;align-items:center;gap:8px;list-style:none;margin:0 0 24px;padding:0;
+  flex-wrap:wrap;
+}
+.vz-stepbar-li{display:flex;align-items:center;gap:9px}
+.vz-stepbar-n{
+  flex:0 0 auto;display:grid;place-items:center;width:26px;height:26px;border-radius:999px;
+  background:var(--bg-2);color:var(--muted);
+  font-family:var(--font-display);font-size:13px;font-weight:700;
+  border:1.5px solid var(--line);
+}
+.vz-stepbar-txt{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.vz-stepbar-li.is-now .vz-stepbar-n{background:var(--cyan);border-color:var(--cyan);color:#fff}
+.vz-stepbar-li.is-now .vz-stepbar-txt{color:var(--navy)}
+.vz-stepbar-li.is-done .vz-stepbar-n{background:var(--cyan-tint);border-color:var(--cyan);color:var(--cyan)}
+.vz-stepbar-li.is-done .vz-stepbar-txt{color:var(--ink-soft)}
+.vz-stepbar-strich{flex:1 1 18px;min-width:14px;max-width:44px;height:2px;
+  background:var(--line);border-radius:2px}
+
+/* ---------- Assistent: Ziel-Karten (Schritt 1) -------------------------- */
+.vz-zielraster{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px;
+}
+.vz-zielkarte{
+  position:relative;display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:18px 18px 17px;text-decoration:none;
+  transition:.16s border-color,.16s box-shadow,.16s transform;
+}
+.vz-zielkarte:hover{border-color:var(--cyan);box-shadow:0 12px 28px rgba(42,51,80,.13);transform:translateY(-2px)}
+.vz-zielkarte-ico{
+  display:grid;place-items:center;width:48px;height:48px;border-radius:13px;
+  background:var(--cyan-tint);color:var(--cyan);margin-bottom:13px;
+}
+.vz-zielkarte b{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--navy);margin:0 44px 5px 0}
+.vz-zielkarte i{font-style:normal;font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+.vz-zielkarte-n{
+  position:absolute;top:17px;right:17px;font-style:normal;
+  font-size:12px;font-weight:700;color:var(--muted);background:var(--bg-2);
+  border-radius:999px;padding:2px 9px;font-variant-numeric:tabular-nums;
+}
+.vz-zielkarte:hover .vz-zielkarte-n{background:var(--cyan-tint);color:var(--cyan)}
+
+/* ---------- Nav-Zeile «Schritt für Schritt» ----------------------------- */
+.vz-nav-zeile--neu{color:var(--navy)}
+.vz-nav-zeile--neu .vz-nav-ico{color:var(--cyan);opacity:1}
+.vz-nav-zeile--neu.is-aktiv .vz-nav-ico{color:#fff}
+
+/* ---------- Startseite: Zahlen als ruhiger Fuss ------------------------- */
+.vz-block--zahlen .vz-zahl{background:var(--bg-2);border-color:var(--line-2,var(--line))}
+.vz-block--zahlen .vz-zahl b{font-size:24px;color:var(--ink-soft)}
+
+/* ---------- «So gehtʼs» im Editor: immer sichtbar ----------------------- */
+/* Für Neue der wichtigste Satz im Editor — darum nicht mehr zugeklappt,
+   sondern eine ruhige, nummerierte Karte, die immer offen steht. */
+.vz-sogehts{
+  margin:0 0 16px;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg-2);padding:12px 14px 13px;
+}
+.vz-sogehts-titel{
+  margin:0 0 9px;font-family:var(--font-display);font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.vz-sogehts ol{margin:0;padding:0;list-style:none;counter-reset:sg;
+  display:flex;flex-direction:column;gap:8px}
+.vz-sogehts li{
+  counter-increment:sg;position:relative;padding-left:29px;
+  font-size:12.5px;line-height:1.5;color:var(--ink);
+}
+.vz-sogehts li::before{
+  content:counter(sg);position:absolute;left:0;top:-1px;
+  display:grid;place-items:center;width:20px;height:20px;border-radius:999px;
+  background:var(--cyan);color:#fff;
+  font-family:var(--font-display);font-size:11px;font-weight:700;
+}
+
+/* ---------- Editor: Aktionen gruppiert ---------------------------------- */
+.vz-btn--breit{width:100%;padding:12px 15px;font-size:14px}
+.vz-actions-export{display:flex;flex-wrap:wrap;gap:8px}
+.vz-actions-export .vz-btn{flex:1 1 auto}
+.vz-mehr{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.vz-mehr-kopf{
+  display:flex;align-items:baseline;gap:8px;cursor:pointer;list-style:none;
+  padding:10px 13px;font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--navy);
+}
+.vz-mehr-kopf::-webkit-details-marker{display:none}
+.vz-mehr-kopf::before{content:"›";color:var(--muted);font-size:14px;transition:transform .16s;display:inline-block}
+.vz-mehr[open] .vz-mehr-kopf::before{transform:rotate(90deg);color:var(--cyan)}
+.vz-mehr-kopf span{font-family:var(--font-body);font-weight:500;font-size:11.5px;color:var(--muted)}
+.vz-mehr[open] .vz-mehr-kopf{border-bottom:1px solid var(--line)}
+.vz-mehr-inhalt{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 13px}
+.vz-btn--zuruecksetzen{color:var(--red);border-color:#f3c2bd}
+.vz-btn--zuruecksetzen:hover{background:var(--red);border-color:var(--red);color:#fff}

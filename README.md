@@ -833,6 +833,7 @@ erledigt, nicht nach der Art des Dokuments:
 
 ```
 #/              Startseite — Stand, offene Entwürfe, die Arbeitsbereiche
+#/neu[/<ziel>]  Assistent — geführter Einstieg: Ziel · Vorlage · Editor
 #/b/<bereich>   ein Arbeitsbereich mit seinen Vorlagen
 #/t/<vorlage>   der Editor
 #/s/<seite>     Werkzeug: Anleitung · Eigene Textbausteine · Marke und Schrift
