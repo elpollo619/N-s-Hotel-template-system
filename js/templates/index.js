@@ -71,6 +71,7 @@ import pinnwand from './pinnwand.js';
 import parkplatznah from './parkplatznah.js';
 import kalender from './kalender.js';
 import checkliste from './checkliste.js';
+import ptouch from './ptouch.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -141,7 +142,8 @@ export const TEMPLATES = {
   pinnwand,
   parkplatznah,
   kalender,
-  checkliste
+  checkliste,
+  ptouch
 };
 
 export const ORDER = [

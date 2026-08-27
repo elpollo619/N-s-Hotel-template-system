@@ -139,7 +139,7 @@ async function inlineImages(root){
  * @param {string} filename    z. B. "ns-hotel-notruf.png"
  * @param {number} scale       Standard 3 (druckfeine Auflösung)
  */
-async function elementToCanvas(el, scale){
+export async function elementToCanvas(el, scale){
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
 
   const w = el.offsetWidth;
@@ -378,6 +378,32 @@ export async function sheetToKachelPdf(sheet, page){
 export function kachelbar(page){
   const [wmm, hmm] = PAGE_MM[page] || PAGE_MM['a4'];
   return wmm * hmm > 210 * 297 + 1;
+}
+
+/* ---------- Einzel-Element in genau bemasstes PDF/PNG -------------------- */
+/* Für Endlosband-Etiketten (P-touch): ein Element wird auf ein Canvas
+   gezeichnet und als PDF-Seite in exakter Bandgrösse (mm) eingebettet.
+   `elemente` können mehrere sein (ein Bogen Etiketten = je Etikett eine
+   Seite in Bandgrösse). */
+export async function elementeZuPdfBlob(elemente, groessen, scale = 5){
+  const liste = Array.isArray(elemente) ? elemente : [elemente];
+  const masse = Array.isArray(groessen) ? groessen : [groessen];
+  const seiten = [];
+  for (let i = 0; i < liste.length; i++){
+    const canvas = await elementToCanvas(liste[i], scale);
+    const uri = canvas.toDataURL('image/jpeg', 0.95);
+    const { wmm, hmm } = masse[i] || masse[0];
+    seiten.push({ ...jpegBytes(uri, canvas.width, canvas.height), wmm, hmm });
+  }
+  return pdfAusJpegSeiten(seiten);
+}
+
+/** Ein Element als PNG-Blob (hohe Auflösung, transparenter Rand entfernt sich nicht). */
+export async function elementZuPngBlob(el, scale = 5){
+  const canvas = await elementToCanvas(el, scale);
+  const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+  if (!blob) throw new Error('Canvas leer');
+  return blob;
 }
 
 export function downloadBlob(blob, filename){
