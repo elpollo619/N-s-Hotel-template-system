@@ -240,7 +240,37 @@ const DICT = {
     companyNote:'Die drei ersten sind fest hinterlegt. Wer für ein anderes Haus arbeitet, legt hier eine eigene an — sie steht danach in jeder Vorlage im Feld «Absender».',
     edit:'Ändern',
     cancel:'Abbrechen',
-    help:'Hilfe'
+    help:'Hilfe',
+
+    /* Geführter Einstieg (Assistent) und Startseite */
+    neuStart:'Schritt für Schritt',
+    neuHeroKicker:'Zum ersten Mal hier?',
+    neuHeroText:'Der Assistent fragt nur, was Sie brauchen, und bringt Sie in drei Schritten zum fertigen Blatt.',
+    neuHeroBtn:'Geführt starten',
+    neuTitle:'Was möchten Sie erstellen?',
+    neuLede:'Wählen Sie ein Ziel — der Assistent zeigt danach nur die passenden Vorlagen.',
+    neuPickTitle:'Welche Vorlage passt?',
+    neuPickLede:'Vorlage antippen — sie öffnet sich gleich zum Anpassen und Drucken.',
+    neuStepZiel:'Ziel',
+    neuStepVorlage:'Vorlage',
+    neuStepEditor:'Anpassen',
+    neuBack:'Anderes Ziel',
+    neuAll:'Lieber alle Bereiche durchsehen',
+    neuAssistent:'Assistent',
+    heroStartHint:'Neu hier? Der Assistent führt Sie hin.',
+    intentAushangEx:'Hinweis, Mitteilung, Termin, Ausser Betrieb',
+    intentSchildEx:'Zimmer-, Tür-, Klingelschild, Aufkleber, Wegweiser',
+    intentGastEx:'Willkommen, Check-in, Gästemappe, WLAN, Lobby-Screen',
+    intentEtikettEx:'Etiketten, P-touch-Bänder, QR-Plakat',
+    intentBriefEx:'Mieterbrief, Serienbrief, Kündigung, Übergabe',
+    intentAnfahrtEx:'Orientierungskarte, Luftbild, Plan-Editor, Parkschild',
+    intentSicherEx:'Sicherheitszeichen, Fluchtweg, Notfallblatt, Notruf',
+
+    /* Editor: Aktionen gruppiert */
+    actMore:'Mehr',
+    actMoreHint:'Sichern, Teilen, Stände, Zurücksetzen',
+    actExportGroup:'Als Bild oder Datei',
+    numbersTitle:'Die Zentrale in Zahlen'
   },
   en:{
     tagline:'Template Centre',
@@ -480,7 +510,37 @@ const DICT = {
     companyNote:'The first three are fixed. Working for another house? Add your own here — it then appears in every template under “Sender”.',
     edit:'Edit',
     cancel:'Cancel',
-    help:'Help'
+    help:'Help',
+
+    /* Guided start (assistant) and start page */
+    neuStart:'Step by step',
+    neuHeroKicker:'First time here?',
+    neuHeroText:'The assistant asks only what you need and takes you to a finished sheet in three steps.',
+    neuHeroBtn:'Start guided',
+    neuTitle:'What would you like to create?',
+    neuLede:'Pick a goal — the assistant then shows only the matching templates.',
+    neuPickTitle:'Which template fits?',
+    neuPickLede:'Tap a template — it opens straight away, ready to edit and print.',
+    neuStepZiel:'Goal',
+    neuStepVorlage:'Template',
+    neuStepEditor:'Edit',
+    neuBack:'Another goal',
+    neuAll:'Rather browse all areas',
+    neuAssistent:'Assistant',
+    heroStartHint:'New here? The assistant will guide you.',
+    intentAushangEx:'Notice, message, appointment, out of service',
+    intentSchildEx:'Room, door, doorbell sign, sticker, signpost',
+    intentGastEx:'Welcome, check-in, guest folder, Wi-Fi, lobby screen',
+    intentEtikettEx:'Labels, P-touch tape, QR poster',
+    intentBriefEx:'Tenant letter, mail merge, notice, handover',
+    intentAnfahrtEx:'Orientation map, aerial view, plan editor, parking sign',
+    intentSicherEx:'Safety signs, escape route, emergency sheet, numbers',
+
+    /* Editor: grouped actions */
+    actMore:'More',
+    actMoreHint:'Save, share, versions, reset',
+    actExportGroup:'As image or file',
+    numbersTitle:'The centre in numbers'
   }
 };
 

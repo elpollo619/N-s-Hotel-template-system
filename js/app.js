@@ -268,6 +268,11 @@ function mountSeitenleiste(){
         <span class="vz-nav-txt">${esc(t('startPage'))}</span>
         <em>${alleVorlagen().length}</em>
       </a>
+      <a class="vz-nav-zeile vz-nav-zeile--neu" href="#/neu" data-nav="neu"
+         title="${esc(t('neuStart'))}">
+        <span class="vz-nav-ico">${icon('flag', 19)}</span>
+        <span class="vz-nav-txt">${esc(t('neuStart'))}</span>
+      </a>
 
       <p class="vz-nav-titel">${esc(t('areas'))}</p>
       ${BEREICHE.map(b => `
@@ -447,24 +452,14 @@ function renderStart(){
     titel: t('heroTitle'),
     lede: t('heroLede'),
     inhalt: `
-      <div class="vz-zahlen">${zahlen.map(k => `
-        <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
-      </div>
-
-      <section class="vz-block">
-        <h2>${esc(t('guidedTitle'))}</h2>
-        <p class="vz-block-note">${esc(t('guidedNote'))}</p>
-        <div class="vz-ziele">${START_ZIELE.map((z, i) => {
-          const ids = z.ids.filter(id => TEMPLATES[id]);
-          if (!ids.length) return '';
-          /* Karten erst beim Öffnen einfügen — die Startseite bleibt beim
-             Laden eine Wand aus Zielen, nicht aus Vorlagen. */
-          return `<details class="vz-ziel" data-ziel="${i}">
-            <summary><span class="vz-ziel-ico">${icon(z.icon, 20)}</span>${esc(t(z.key))}<em aria-hidden="true">›</em></summary>
-            <div class="vz-cards vz-cards--klein" data-ziel-karten></div>
-          </details>`;
-        }).join('')}</div>
-      </section>
+      <a class="vz-neubanner" href="#/neu">
+        <span class="vz-neubanner-ico">${icon('flag', 24)}</span>
+        <span class="vz-neubanner-txt">
+          <b>${esc(t('neuHeroKicker'))}</b>
+          <i>${esc(t('neuHeroText'))}</i>
+        </span>
+        <span class="vz-neubanner-btn">${esc(t('neuHeroBtn'))}<em aria-hidden="true">→</em></span>
+      </a>
 
       ${offen.length ? `
       <section class="vz-block">
@@ -479,6 +474,25 @@ function renderStart(){
           </a>`).join('')}
         </div>
       </section>` : ''}
+
+      <section class="vz-block">
+        <h2>${esc(t('guidedTitle'))}</h2>
+        <p class="vz-block-note">${esc(t('guidedNote'))}</p>
+        <div class="vz-ziele">${START_ZIELE.map((z, i) => {
+          const ids = z.ids.filter(id => TEMPLATES[id]);
+          if (!ids.length) return '';
+          /* Karten erst beim Öffnen einfügen — die Startseite bleibt beim
+             Laden eine Wand aus Zielen, nicht aus Vorlagen. */
+          return `<details class="vz-ziel" data-ziel="${i}">
+            <summary>
+              <span class="vz-ziel-ico">${icon(z.icon, 22)}</span>
+              <span class="vz-ziel-txt"><b>${esc(t(z.key))}</b><i>${esc(t(z.key + 'Ex'))}</i></span>
+              <em class="vz-ziel-pfeil" aria-hidden="true">›</em>
+            </summary>
+            <div class="vz-cards vz-cards--klein" data-ziel-karten></div>
+          </details>`;
+        }).join('')}</div>
+      </section>
 
       ${angeheftet.length ? `
       <section class="vz-block">
@@ -508,6 +522,13 @@ function renderStart(){
           <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
         </ol>
         <p class="vz-hilfe-fuss"><a class="vz-textlink" href="#/s/hilfe">${esc(t('helpMore'))}</a></p>
+      </section>
+
+      <section class="vz-block vz-block--zahlen">
+        <h2>${esc(t('numbersTitle'))}</h2>
+        <div class="vz-zahlen">${zahlen.map(k => `
+          <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
+        </div>
       </section>`
   });
 
@@ -573,6 +594,72 @@ function renderBereich(id){
         <h2>${esc(t('tools'))}</h2>
         <div class="vz-werkzeuge">${werkzeug}</div>
       </section>` : ''}`
+  });
+}
+
+/* ---------- Assistent (geführter Einstieg) -------------------------------- */
+/* Der Assistent ist die Tür für alle, die die Zentrale nicht kennen: nicht
+   «welche Vorlage», sondern «was willst du tun» — und dann nur die Vorlagen,
+   die dazu passen. Drei Schritte: Ziel, Vorlage, Anpassen. Schritt drei ist
+   der ganz normale Editor; der Assistent bringt nur bis dorthin. */
+function neuStepbar(aktiv){
+  const namen = [t('neuStepZiel'), t('neuStepVorlage'), t('neuStepEditor')];
+  return `<ol class="vz-stepbar" aria-label="${esc(t('neuAssistent'))}">${
+    namen.map((s, i) => {
+      const n = i + 1;
+      const zustand = n < aktiv ? ' is-done' : n === aktiv ? ' is-now' : '';
+      return `<li class="vz-stepbar-li${zustand}">
+        <span class="vz-stepbar-n">${n}</span><span class="vz-stepbar-txt">${esc(s)}</span>
+      </li>`;
+    }).join('<span class="vz-stepbar-strich" aria-hidden="true"></span>')}</ol>`;
+}
+
+function seiteNeu(zielKey){
+  setPageSize('a4');
+  const ziel = zielKey ? START_ZIELE.find(z => z.key === zielKey) : null;
+
+  /* Schritt 2 — die Vorlagen eines Ziels. */
+  if (ziel){
+    const ids = ziel.ids.filter(id => TEMPLATES[id]);
+    if (!ids.length){ location.replace('#/neu'); return; }
+    seite({
+      nav: 'neu',
+      krumenTeile: [[t('startPage'), '#/'], [t('neuAssistent'), '#/neu'], [t(ziel.key), null]],
+      eyebrow: t(ziel.key),
+      titel: t('neuPickTitle'),
+      lede: t('neuPickLede'),
+      inhalt: `
+        ${neuStepbar(2)}
+        <div class="vz-cards">${ids.map(karte).join('')}</div>
+        <p class="vz-hilfe-fuss">
+          <a class="vz-textlink" href="#/neu">‹ ${esc(t('neuBack'))}</a>
+        </p>`
+    });
+    return;
+  }
+
+  /* Schritt 1 — das Ziel. */
+  seite({
+    nav: 'neu',
+    krumenTeile: [[t('startPage'), '#/'], [t('neuAssistent'), null]],
+    eyebrow: t('neuAssistent'),
+    titel: t('neuTitle'),
+    lede: t('neuLede'),
+    inhalt: `
+      ${neuStepbar(1)}
+      <div class="vz-zielraster">${START_ZIELE.map(z => {
+        const ids = z.ids.filter(id => TEMPLATES[id]);
+        if (!ids.length) return '';
+        return `<a class="vz-zielkarte" href="#/neu/${esc(z.key)}">
+          <span class="vz-zielkarte-ico">${icon(z.icon, 26)}</span>
+          <b>${esc(t(z.key))}</b>
+          <i>${esc(t(z.key + 'Ex'))}</i>
+          <em class="vz-zielkarte-n" aria-hidden="true">${ids.length}</em>
+        </a>`;
+      }).join('')}</div>
+      <p class="vz-hilfe-fuss">
+        <a class="vz-textlink" href="#/">${esc(t('neuAll'))} ›</a>
+      </p>`
   });
 }
 
@@ -803,26 +890,33 @@ function renderEditor(id, geteilt, suchwert){
           <h2>${esc(tpl.title)}</h2>
           <p>${esc(tpl.sub || '')}</p>
         </div>
-        <details class="vz-sogehts no-print">
-          <summary>${esc(t('soGehts'))}</summary>
+        <div class="vz-sogehts no-print">
+          <p class="vz-sogehts-titel">${esc(t('soGehts'))}</p>
           <ol>${(Array.isArray(tpl.schritte) && tpl.schritte.length
               ? tpl.schritte
               : [t('genStep1'), t('genStep2'), t('genStep3')])
             .map(s => `<li>${esc(s)}</li>`).join('')}</ol>
-        </details>
+        </div>
         <div class="vz-actions">
-          <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
-          <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
-          <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
-          <button class="vz-btn" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
-          <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
+          <button class="vz-btn vz-btn--navy vz-btn--breit" id="vz-print">${esc(t('print'))}</button>
+          <div class="vz-actions-export">
+            <button class="vz-btn vz-btn--sm" id="vz-png">${esc(t('png'))}</button>
+            <button class="vz-btn vz-btn--sm" id="vz-pdf">${esc(t('pdfBtn'))}</button>
+            <button class="vz-btn vz-btn--sm" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
+          </div>
+          <details class="vz-mehr no-print">
+            <summary class="vz-mehr-kopf">${esc(t('actMore'))}<span>${esc(t('actMoreHint'))}</span></summary>
+            <div class="vz-mehr-inhalt">
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
+              <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost vz-btn--zuruecksetzen" id="vz-reset">${esc(t('reset'))}</button>
+            </div>
+          </details>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-objekthinweis" id="vz-objekthinweis" hidden></div>
@@ -2334,6 +2428,10 @@ function route(){
      ist dort das Wichtigste auf dem Schirm; die Navigation muss nur noch
      erreichbar bleiben, nicht lesbar. */
   document.body.classList.toggle('vz-im-editor', /^#\/t\//.test(hash));
+
+  /* #/neu[/<ziel>] — der geführte Einstieg (Assistent) */
+  const n = /^#\/neu(?:\/([\w-]+))?/.exec(hash);
+  if (n){ seiteNeu(n[1] || null); return; }
 
   /* #/b/<bereich> — ein Arbeitsbereich */
   const b = /^#\/b\/([\w-]+)/.exec(hash);

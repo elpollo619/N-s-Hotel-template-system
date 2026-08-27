@@ -1257,30 +1257,164 @@ a{color:var(--cyan)}
                       bottom left,bottom left,bottom right,bottom right;
 }
 
-/* ---------- Geführter Einstieg (Startseite) ----------------------------- */
-.vz-ziele{display:flex;flex-direction:column;gap:8px}
-.vz-ziel{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
-.vz-ziel>summary{display:flex;align-items:center;gap:12px;cursor:pointer;
-  padding:14px 16px;font-weight:600;color:var(--navy);list-style:none}
+/* ==========================================================================
+   Rediseño «cómo se usa» — Assistent, geführter Einstieg, Editor-Aktionen
+   Ein Akzent (Cyan), Marke-Töne aus brand-tokens. Keine zweite Farbe.
+   ========================================================================== */
+
+/* ---------- Banner «Zum ersten Mal hier?» (Startseite) ------------------ */
+/* Die Tür für Neue: navy wie die Marke, ein Cyan-Knopf als einziger Akzent. */
+.vz-neubanner{
+  display:flex;align-items:center;gap:16px;margin:0 0 6px;
+  background:var(--navy);color:#fff;border-radius:16px;
+  padding:16px 18px;text-decoration:none;
+  transition:.16s transform,.16s box-shadow;
+}
+.vz-neubanner:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(42,51,80,.22)}
+.vz-neubanner-ico{
+  flex:0 0 auto;display:grid;place-items:center;width:46px;height:46px;
+  border-radius:12px;background:rgba(255,255,255,.12);color:#fff;
+}
+.vz-neubanner-txt{flex:1;min-width:0}
+.vz-neubanner-txt b{
+  display:block;font-family:var(--font-display);font-size:15.5px;font-weight:700;
+  margin-bottom:2px;
+}
+.vz-neubanner-txt i{
+  display:block;font-style:normal;font-size:12.5px;line-height:1.5;
+  color:rgba(255,255,255,.78);max-width:70ch;
+}
+.vz-neubanner-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;
+  background:var(--cyan);color:#fff;border-radius:999px;
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  padding:10px 17px;white-space:nowrap;
+}
+.vz-neubanner-btn em{font-style:normal;font-size:15px}
+.vz-neubanner:hover .vz-neubanner-btn{background:#00a0cc}
+@media (max-width:640px){
+  .vz-neubanner{flex-wrap:wrap;gap:12px}
+  .vz-neubanner-btn{width:100%;justify-content:center}
+}
+
+/* ---------- Geführter Einstieg: Ziel-Akkordeon (Startseite) ------------- */
+.vz-ziele{display:flex;flex-direction:column;gap:9px}
+.vz-ziel{border:1px solid var(--line);border-radius:13px;background:#fff;overflow:hidden;
+  transition:.14s border-color,.14s box-shadow}
+.vz-ziel:hover{border-color:var(--cyan)}
+.vz-ziel[open]{box-shadow:0 8px 22px rgba(42,51,80,.10)}
+.vz-ziel>summary{display:flex;align-items:center;gap:13px;cursor:pointer;
+  padding:13px 15px;list-style:none}
 .vz-ziel>summary::-webkit-details-marker{display:none}
 .vz-ziel>summary:hover{background:var(--bg-2)}
-.vz-ziel-ico{flex:none;display:flex;color:var(--primary)}
-.vz-ziel>summary em{margin-left:auto;color:var(--muted);font-style:normal;
-  transition:transform .18s}
-.vz-ziel[open]>summary em{transform:rotate(90deg)}
+.vz-ziel-ico{
+  flex:0 0 auto;display:grid;place-items:center;width:40px;height:40px;
+  border-radius:11px;background:var(--cyan-tint);color:var(--cyan);
+}
+.vz-ziel-txt{flex:1;min-width:0}
+.vz-ziel-txt b{display:block;font-family:var(--font-display);font-size:14.5px;font-weight:700;color:var(--navy)}
+.vz-ziel-txt i{display:block;font-style:normal;font-size:12px;line-height:1.45;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vz-ziel-pfeil{flex:0 0 auto;margin-left:6px;color:var(--muted);font-style:normal;
+  font-size:19px;line-height:1;transition:transform .18s}
+.vz-ziel[open] .vz-ziel-pfeil{transform:rotate(90deg);color:var(--cyan)}
 .vz-ziel[open]>summary{border-bottom:1px solid var(--line)}
-.vz-ziel>.vz-cards{padding:14px 16px}
+.vz-ziel>.vz-cards{padding:15px}
 
-/* ---------- «So gehtʼs» im Editor --------------------------------------- */
-.vz-sogehts{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;
-  background:var(--bg-2)}
-.vz-sogehts>summary{cursor:pointer;padding:9px 13px;font-size:13px;font-weight:600;
-  color:var(--navy);list-style:none}
-.vz-sogehts>summary::-webkit-details-marker{display:none}
-.vz-sogehts>summary::before{content:"›  ";color:var(--muted)}
-.vz-sogehts[open]>summary::before{content:"⌄  "}
-.vz-sogehts ol{margin:0;padding:2px 13px 12px 30px;display:flex;flex-direction:column;gap:5px}
-.vz-sogehts li{font-size:12.5px;line-height:1.5;color:var(--ink)}
+/* ---------- Assistent: Schrittleiste ------------------------------------ */
+.vz-stepbar{
+  display:flex;align-items:center;gap:8px;list-style:none;margin:0 0 24px;padding:0;
+  flex-wrap:wrap;
+}
+.vz-stepbar-li{display:flex;align-items:center;gap:9px}
+.vz-stepbar-n{
+  flex:0 0 auto;display:grid;place-items:center;width:26px;height:26px;border-radius:999px;
+  background:var(--bg-2);color:var(--muted);
+  font-family:var(--font-display);font-size:13px;font-weight:700;
+  border:1.5px solid var(--line);
+}
+.vz-stepbar-txt{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.vz-stepbar-li.is-now .vz-stepbar-n{background:var(--cyan);border-color:var(--cyan);color:#fff}
+.vz-stepbar-li.is-now .vz-stepbar-txt{color:var(--navy)}
+.vz-stepbar-li.is-done .vz-stepbar-n{background:var(--cyan-tint);border-color:var(--cyan);color:var(--cyan)}
+.vz-stepbar-li.is-done .vz-stepbar-txt{color:var(--ink-soft)}
+.vz-stepbar-strich{flex:1 1 18px;min-width:14px;max-width:44px;height:2px;
+  background:var(--line);border-radius:2px}
+
+/* ---------- Assistent: Ziel-Karten (Schritt 1) -------------------------- */
+.vz-zielraster{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px;
+}
+.vz-zielkarte{
+  position:relative;display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:18px 18px 17px;text-decoration:none;
+  transition:.16s border-color,.16s box-shadow,.16s transform;
+}
+.vz-zielkarte:hover{border-color:var(--cyan);box-shadow:0 12px 28px rgba(42,51,80,.13);transform:translateY(-2px)}
+.vz-zielkarte-ico{
+  display:grid;place-items:center;width:48px;height:48px;border-radius:13px;
+  background:var(--cyan-tint);color:var(--cyan);margin-bottom:13px;
+}
+.vz-zielkarte b{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--navy);margin:0 44px 5px 0}
+.vz-zielkarte i{font-style:normal;font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+.vz-zielkarte-n{
+  position:absolute;top:17px;right:17px;font-style:normal;
+  font-size:12px;font-weight:700;color:var(--muted);background:var(--bg-2);
+  border-radius:999px;padding:2px 9px;font-variant-numeric:tabular-nums;
+}
+.vz-zielkarte:hover .vz-zielkarte-n{background:var(--cyan-tint);color:var(--cyan)}
+
+/* ---------- Nav-Zeile «Schritt für Schritt» ----------------------------- */
+.vz-nav-zeile--neu{color:var(--navy)}
+.vz-nav-zeile--neu .vz-nav-ico{color:var(--cyan);opacity:1}
+.vz-nav-zeile--neu.is-aktiv .vz-nav-ico{color:#fff}
+
+/* ---------- Startseite: Zahlen als ruhiger Fuss ------------------------- */
+.vz-block--zahlen .vz-zahl{background:var(--bg-2);border-color:var(--line-2,var(--line))}
+.vz-block--zahlen .vz-zahl b{font-size:24px;color:var(--ink-soft)}
+
+/* ---------- «So gehtʼs» im Editor: immer sichtbar ----------------------- */
+/* Für Neue der wichtigste Satz im Editor — darum nicht mehr zugeklappt,
+   sondern eine ruhige, nummerierte Karte, die immer offen steht. */
+.vz-sogehts{
+  margin:0 0 16px;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg-2);padding:12px 14px 13px;
+}
+.vz-sogehts-titel{
+  margin:0 0 9px;font-family:var(--font-display);font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.vz-sogehts ol{margin:0;padding:0;list-style:none;counter-reset:sg;
+  display:flex;flex-direction:column;gap:8px}
+.vz-sogehts li{
+  counter-increment:sg;position:relative;padding-left:29px;
+  font-size:12.5px;line-height:1.5;color:var(--ink);
+}
+.vz-sogehts li::before{
+  content:counter(sg);position:absolute;left:0;top:-1px;
+  display:grid;place-items:center;width:20px;height:20px;border-radius:999px;
+  background:var(--cyan);color:#fff;
+  font-family:var(--font-display);font-size:11px;font-weight:700;
+}
+
+/* ---------- Editor: Aktionen gruppiert ---------------------------------- */
+.vz-btn--breit{width:100%;padding:12px 15px;font-size:14px}
+.vz-actions-export{display:flex;flex-wrap:wrap;gap:8px}
+.vz-actions-export .vz-btn{flex:1 1 auto}
+.vz-mehr{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
+.vz-mehr-kopf{
+  display:flex;align-items:baseline;gap:8px;cursor:pointer;list-style:none;
+  padding:10px 13px;font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--navy);
+}
+.vz-mehr-kopf::-webkit-details-marker{display:none}
+.vz-mehr-kopf::before{content:"›";color:var(--muted);font-size:14px;transition:transform .16s;display:inline-block}
+.vz-mehr[open] .vz-mehr-kopf::before{transform:rotate(90deg);color:var(--cyan)}
+.vz-mehr-kopf span{font-family:var(--font-body);font-weight:500;font-size:11.5px;color:var(--muted)}
+.vz-mehr[open] .vz-mehr-kopf{border-bottom:1px solid var(--line)}
+.vz-mehr-inhalt{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 13px}
+.vz-btn--zuruecksetzen{color:var(--red);border-color:#f3c2bd}
+.vz-btn--zuruecksetzen:hover{background:var(--red);border-color:var(--red);color:#fff}
 
 /* ===== assets/templates.css ===== */
 /* ==========================================================================
@@ -7986,7 +8120,37 @@ const DICT = {
     companyNote:'Die drei ersten sind fest hinterlegt. Wer für ein anderes Haus arbeitet, legt hier eine eigene an — sie steht danach in jeder Vorlage im Feld «Absender».',
     edit:'Ändern',
     cancel:'Abbrechen',
-    help:'Hilfe'
+    help:'Hilfe',
+
+    /* Geführter Einstieg (Assistent) und Startseite */
+    neuStart:'Schritt für Schritt',
+    neuHeroKicker:'Zum ersten Mal hier?',
+    neuHeroText:'Der Assistent fragt nur, was Sie brauchen, und bringt Sie in drei Schritten zum fertigen Blatt.',
+    neuHeroBtn:'Geführt starten',
+    neuTitle:'Was möchten Sie erstellen?',
+    neuLede:'Wählen Sie ein Ziel — der Assistent zeigt danach nur die passenden Vorlagen.',
+    neuPickTitle:'Welche Vorlage passt?',
+    neuPickLede:'Vorlage antippen — sie öffnet sich gleich zum Anpassen und Drucken.',
+    neuStepZiel:'Ziel',
+    neuStepVorlage:'Vorlage',
+    neuStepEditor:'Anpassen',
+    neuBack:'Anderes Ziel',
+    neuAll:'Lieber alle Bereiche durchsehen',
+    neuAssistent:'Assistent',
+    heroStartHint:'Neu hier? Der Assistent führt Sie hin.',
+    intentAushangEx:'Hinweis, Mitteilung, Termin, Ausser Betrieb',
+    intentSchildEx:'Zimmer-, Tür-, Klingelschild, Aufkleber, Wegweiser',
+    intentGastEx:'Willkommen, Check-in, Gästemappe, WLAN, Lobby-Screen',
+    intentEtikettEx:'Etiketten, P-touch-Bänder, QR-Plakat',
+    intentBriefEx:'Mieterbrief, Serienbrief, Kündigung, Übergabe',
+    intentAnfahrtEx:'Orientierungskarte, Luftbild, Plan-Editor, Parkschild',
+    intentSicherEx:'Sicherheitszeichen, Fluchtweg, Notfallblatt, Notruf',
+
+    /* Editor: Aktionen gruppiert */
+    actMore:'Mehr',
+    actMoreHint:'Sichern, Teilen, Stände, Zurücksetzen',
+    actExportGroup:'Als Bild oder Datei',
+    numbersTitle:'Die Zentrale in Zahlen'
   },
   en:{
     tagline:'Template Centre',
@@ -8226,7 +8390,37 @@ const DICT = {
     companyNote:'The first three are fixed. Working for another house? Add your own here — it then appears in every template under “Sender”.',
     edit:'Edit',
     cancel:'Cancel',
-    help:'Help'
+    help:'Help',
+
+    /* Guided start (assistant) and start page */
+    neuStart:'Step by step',
+    neuHeroKicker:'First time here?',
+    neuHeroText:'The assistant asks only what you need and takes you to a finished sheet in three steps.',
+    neuHeroBtn:'Start guided',
+    neuTitle:'What would you like to create?',
+    neuLede:'Pick a goal — the assistant then shows only the matching templates.',
+    neuPickTitle:'Which template fits?',
+    neuPickLede:'Tap a template — it opens straight away, ready to edit and print.',
+    neuStepZiel:'Goal',
+    neuStepVorlage:'Template',
+    neuStepEditor:'Edit',
+    neuBack:'Another goal',
+    neuAll:'Rather browse all areas',
+    neuAssistent:'Assistant',
+    heroStartHint:'New here? The assistant will guide you.',
+    intentAushangEx:'Notice, message, appointment, out of service',
+    intentSchildEx:'Room, door, doorbell sign, sticker, signpost',
+    intentGastEx:'Welcome, check-in, guest folder, Wi-Fi, lobby screen',
+    intentEtikettEx:'Labels, P-touch tape, QR poster',
+    intentBriefEx:'Tenant letter, mail merge, notice, handover',
+    intentAnfahrtEx:'Orientation map, aerial view, plan editor, parking sign',
+    intentSicherEx:'Safety signs, escape route, emergency sheet, numbers',
+
+    /* Editor: grouped actions */
+    actMore:'More',
+    actMoreHint:'Save, share, versions, reset',
+    actExportGroup:'As image or file',
+    numbersTitle:'The centre in numbers'
   }
 };
 
@@ -21574,6 +21768,11 @@ function mountSeitenleiste(){
         <span class="vz-nav-txt">${esc(t('startPage'))}</span>
         <em>${alleVorlagen().length}</em>
       </a>
+      <a class="vz-nav-zeile vz-nav-zeile--neu" href="#/neu" data-nav="neu"
+         title="${esc(t('neuStart'))}">
+        <span class="vz-nav-ico">${icon('flag', 19)}</span>
+        <span class="vz-nav-txt">${esc(t('neuStart'))}</span>
+      </a>
 
       <p class="vz-nav-titel">${esc(t('areas'))}</p>
       ${BEREICHE.map(b => `
@@ -21753,24 +21952,14 @@ function renderStart(){
     titel: t('heroTitle'),
     lede: t('heroLede'),
     inhalt: `
-      <div class="vz-zahlen">${zahlen.map(k => `
-        <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
-      </div>
-
-      <section class="vz-block">
-        <h2>${esc(t('guidedTitle'))}</h2>
-        <p class="vz-block-note">${esc(t('guidedNote'))}</p>
-        <div class="vz-ziele">${START_ZIELE.map((z, i) => {
-          const ids = z.ids.filter(id => TEMPLATES[id]);
-          if (!ids.length) return '';
-          /* Karten erst beim Öffnen einfügen — die Startseite bleibt beim
-             Laden eine Wand aus Zielen, nicht aus Vorlagen. */
-          return `<details class="vz-ziel" data-ziel="${i}">
-            <summary><span class="vz-ziel-ico">${icon(z.icon, 20)}</span>${esc(t(z.key))}<em aria-hidden="true">›</em></summary>
-            <div class="vz-cards vz-cards--klein" data-ziel-karten></div>
-          </details>`;
-        }).join('')}</div>
-      </section>
+      <a class="vz-neubanner" href="#/neu">
+        <span class="vz-neubanner-ico">${icon('flag', 24)}</span>
+        <span class="vz-neubanner-txt">
+          <b>${esc(t('neuHeroKicker'))}</b>
+          <i>${esc(t('neuHeroText'))}</i>
+        </span>
+        <span class="vz-neubanner-btn">${esc(t('neuHeroBtn'))}<em aria-hidden="true">→</em></span>
+      </a>
 
       ${offen.length ? `
       <section class="vz-block">
@@ -21785,6 +21974,25 @@ function renderStart(){
           </a>`).join('')}
         </div>
       </section>` : ''}
+
+      <section class="vz-block">
+        <h2>${esc(t('guidedTitle'))}</h2>
+        <p class="vz-block-note">${esc(t('guidedNote'))}</p>
+        <div class="vz-ziele">${START_ZIELE.map((z, i) => {
+          const ids = z.ids.filter(id => TEMPLATES[id]);
+          if (!ids.length) return '';
+          /* Karten erst beim Öffnen einfügen — die Startseite bleibt beim
+             Laden eine Wand aus Zielen, nicht aus Vorlagen. */
+          return `<details class="vz-ziel" data-ziel="${i}">
+            <summary>
+              <span class="vz-ziel-ico">${icon(z.icon, 22)}</span>
+              <span class="vz-ziel-txt"><b>${esc(t(z.key))}</b><i>${esc(t(z.key + 'Ex'))}</i></span>
+              <em class="vz-ziel-pfeil" aria-hidden="true">›</em>
+            </summary>
+            <div class="vz-cards vz-cards--klein" data-ziel-karten></div>
+          </details>`;
+        }).join('')}</div>
+      </section>
 
       ${angeheftet.length ? `
       <section class="vz-block">
@@ -21814,6 +22022,13 @@ function renderStart(){
           <li><b>${esc(t('step3'))}</b><span>${esc(t('step3sub'))}</span></li>
         </ol>
         <p class="vz-hilfe-fuss"><a class="vz-textlink" href="#/s/hilfe">${esc(t('helpMore'))}</a></p>
+      </section>
+
+      <section class="vz-block vz-block--zahlen">
+        <h2>${esc(t('numbersTitle'))}</h2>
+        <div class="vz-zahlen">${zahlen.map(k => `
+          <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
+        </div>
       </section>`
   });
 
@@ -21879,6 +22094,72 @@ function renderBereich(id){
         <h2>${esc(t('tools'))}</h2>
         <div class="vz-werkzeuge">${werkzeug}</div>
       </section>` : ''}`
+  });
+}
+
+/* ---------- Assistent (geführter Einstieg) -------------------------------- */
+/* Der Assistent ist die Tür für alle, die die Zentrale nicht kennen: nicht
+   «welche Vorlage», sondern «was willst du tun» — und dann nur die Vorlagen,
+   die dazu passen. Drei Schritte: Ziel, Vorlage, Anpassen. Schritt drei ist
+   der ganz normale Editor; der Assistent bringt nur bis dorthin. */
+function neuStepbar(aktiv){
+  const namen = [t('neuStepZiel'), t('neuStepVorlage'), t('neuStepEditor')];
+  return `<ol class="vz-stepbar" aria-label="${esc(t('neuAssistent'))}">${
+    namen.map((s, i) => {
+      const n = i + 1;
+      const zustand = n < aktiv ? ' is-done' : n === aktiv ? ' is-now' : '';
+      return `<li class="vz-stepbar-li${zustand}">
+        <span class="vz-stepbar-n">${n}</span><span class="vz-stepbar-txt">${esc(s)}</span>
+      </li>`;
+    }).join('<span class="vz-stepbar-strich" aria-hidden="true"></span>')}</ol>`;
+}
+
+function seiteNeu(zielKey){
+  setPageSize('a4');
+  const ziel = zielKey ? START_ZIELE.find(z => z.key === zielKey) : null;
+
+  /* Schritt 2 — die Vorlagen eines Ziels. */
+  if (ziel){
+    const ids = ziel.ids.filter(id => TEMPLATES[id]);
+    if (!ids.length){ location.replace('#/neu'); return; }
+    seite({
+      nav: 'neu',
+      krumenTeile: [[t('startPage'), '#/'], [t('neuAssistent'), '#/neu'], [t(ziel.key), null]],
+      eyebrow: t(ziel.key),
+      titel: t('neuPickTitle'),
+      lede: t('neuPickLede'),
+      inhalt: `
+        ${neuStepbar(2)}
+        <div class="vz-cards">${ids.map(karte).join('')}</div>
+        <p class="vz-hilfe-fuss">
+          <a class="vz-textlink" href="#/neu">‹ ${esc(t('neuBack'))}</a>
+        </p>`
+    });
+    return;
+  }
+
+  /* Schritt 1 — das Ziel. */
+  seite({
+    nav: 'neu',
+    krumenTeile: [[t('startPage'), '#/'], [t('neuAssistent'), null]],
+    eyebrow: t('neuAssistent'),
+    titel: t('neuTitle'),
+    lede: t('neuLede'),
+    inhalt: `
+      ${neuStepbar(1)}
+      <div class="vz-zielraster">${START_ZIELE.map(z => {
+        const ids = z.ids.filter(id => TEMPLATES[id]);
+        if (!ids.length) return '';
+        return `<a class="vz-zielkarte" href="#/neu/${esc(z.key)}">
+          <span class="vz-zielkarte-ico">${icon(z.icon, 26)}</span>
+          <b>${esc(t(z.key))}</b>
+          <i>${esc(t(z.key + 'Ex'))}</i>
+          <em class="vz-zielkarte-n" aria-hidden="true">${ids.length}</em>
+        </a>`;
+      }).join('')}</div>
+      <p class="vz-hilfe-fuss">
+        <a class="vz-textlink" href="#/">${esc(t('neuAll'))} ›</a>
+      </p>`
   });
 }
 
@@ -22109,26 +22390,33 @@ function renderEditor(id, geteilt, suchwert){
           <h2>${esc(tpl.title)}</h2>
           <p>${esc(tpl.sub || '')}</p>
         </div>
-        <details class="vz-sogehts no-print">
-          <summary>${esc(t('soGehts'))}</summary>
+        <div class="vz-sogehts no-print">
+          <p class="vz-sogehts-titel">${esc(t('soGehts'))}</p>
           <ol>${(Array.isArray(tpl.schritte) && tpl.schritte.length
               ? tpl.schritte
               : [t('genStep1'), t('genStep2'), t('genStep3')])
             .map(s => `<li>${esc(s)}</li>`).join('')}</ol>
-        </details>
+        </div>
         <div class="vz-actions">
-          <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
-          <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
-          <button class="vz-btn" id="vz-pdf">${esc(t('pdfBtn'))}</button>
-          <button class="vz-btn" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-reset">${esc(t('reset'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
-          <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
-          <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
+          <button class="vz-btn vz-btn--navy vz-btn--breit" id="vz-print">${esc(t('print'))}</button>
+          <div class="vz-actions-export">
+            <button class="vz-btn vz-btn--sm" id="vz-png">${esc(t('png'))}</button>
+            <button class="vz-btn vz-btn--sm" id="vz-pdf">${esc(t('pdfBtn'))}</button>
+            <button class="vz-btn vz-btn--sm" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
+          </div>
+          <details class="vz-mehr no-print">
+            <summary class="vz-mehr-kopf">${esc(t('actMore'))}<span>${esc(t('actMoreHint'))}</span></summary>
+            <div class="vz-mehr-inhalt">
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-share">${esc(t('share'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-save">${esc(t('saveJson'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-json-load">${esc(t('loadJson'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand">${esc(t('standSave'))}</button>
+              <select class="vz-staende" id="vz-staende" title="${esc(t('standNone'))}"></select>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-dup" hidden>${esc(t('standDup'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost" id="vz-stand-del" hidden>${esc(t('standDel'))}</button>
+              <button class="vz-btn vz-btn--sm vz-btn--ghost vz-btn--zuruecksetzen" id="vz-reset">${esc(t('reset'))}</button>
+            </div>
+          </details>
           <input type="file" id="vz-json-file" accept="application/json" hidden>
         </div>
         <div class="vz-objekthinweis" id="vz-objekthinweis" hidden></div>
@@ -23640,6 +23928,10 @@ function route(){
      ist dort das Wichtigste auf dem Schirm; die Navigation muss nur noch
      erreichbar bleiben, nicht lesbar. */
   document.body.classList.toggle('vz-im-editor', /^#\/t\//.test(hash));
+
+  /* #/neu[/<ziel>] — der geführte Einstieg (Assistent) */
+  const n = /^#\/neu(?:\/([\w-]+))?/.exec(hash);
+  if (n){ seiteNeu(n[1] || null); return; }
 
   /* #/b/<bereich> — ein Arbeitsbereich */
   const b = /^#\/b\/([\w-]+)/.exec(hash);

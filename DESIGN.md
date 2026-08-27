@@ -110,10 +110,39 @@ Stück erledigt. Nicht nach Papierformat und nicht nach Dokumentart.
 
 ```
 #/            Startseite   Stand, offene Entwürfe, die Bereiche
+#/neu[/<ziel>] Assistent: geführter Einstieg — Ziel, Vorlage, Editor
 #/b/<id>      Arbeitsbereich mit seinen Vorlagen
 #/t/<id>      Editor
 #/s/<id>      Werkzeug: Anleitung, eigene Bausteine, Marke
 ```
+
+## Zwei Türen für zwei Menschen
+
+Die Zentrale hat bewusst zwei Eingänge, damit sie für Neue **und** für
+Geübte klar bleibt:
+
+* **Der Assistent** (`#/neu`) ist die Tür für alle, die sie nicht kennen.
+  Er fragt nicht «welche Vorlage», sondern «was willst du tun» — drei
+  Schritte, jeder für sich klar: **Ziel → Vorlage → Anpassen**. Schritt drei
+  ist der ganz normale Editor; der Assistent bringt nur bis dorthin. Auf der
+  Startseite steht er als navy Banner zuoberst und in der Seitenleiste als
+  «Schritt für Schritt».
+* **Die Startseite selbst** ist die Tür für Geübte: der geführte Einstieg
+  («Was möchten Sie machen?») klappt die passenden Vorlagen an Ort und Stelle
+  auf, ohne Seitenwechsel, und daneben stehen die Arbeitsbereiche zum
+  Durchsehen. Die Kennzahlen der Zentrale stehen leise am Fuss, nicht als
+  erstes — sie sagen, wie gross sie ist, nicht was zu tun ist.
+
+## Der Editor führt, statt zu überfordern
+
+Im Editor stehen die **«So gehtʼs»**-Schritte offen und nummeriert zuoberst
+im Formular — nicht mehr eingeklappt, weil genau sie der Neue braucht. Die
+Knöpfe sind nach Häufigkeit geordnet, nicht in einer Reihe:
+
+1. **Drucken / PDF** — der eine Knopf, den jeder braucht, gross und navy.
+2. **PNG · PDF / Teilen** — die zweite Art, das Blatt herauszugeben.
+3. **Mehr** — Sichern, Teilen, Stände, Zurücksetzen: alles, was selten
+   gebraucht wird, aufgeräumt hinter einem Klick.
 
 Die Bereiche stehen in `js/bereiche.js`. **Eine Vorlage gehört in genau einen
 Bereich** — steht sie in zweien, sucht man wieder überall.

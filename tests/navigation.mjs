@@ -41,8 +41,8 @@ const [bZahl, sZahl, vZahl] = await page.evaluate(() =>
 
 pruefe('Die Startseite zeigt jeden Arbeitsbereich als Kachel',
   start.kacheln === bZahl, `${start.kacheln} von ${bZahl}`);
-pruefe('Die Seitenleiste führt Startseite, alle Bereiche und alle Werkzeuge',
-  start.navZeilen === 1 + bZahl + sZahl, String(start.navZeilen));
+pruefe('Die Seitenleiste führt Startseite, Assistent, alle Bereiche und alle Werkzeuge',
+  start.navZeilen === 2 + bZahl + sZahl, String(start.navZeilen));
 pruefe('Die Startseite ist keine Wand aus Vorlagen',
   start.karten === 0, `${start.karten} Karten`);
 pruefe('Die Zahlenreihe nennt alle Vorlagen',
