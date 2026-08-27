@@ -37,7 +37,10 @@ import { sicherungAlsDatei, sicherungLaden } from './lib/sicherung.js';
 import { staende, standSpeichern, stand, standLoeschen } from './lib/staende.js';
 import { schriftHinweis, schriftBefund, MARKEN_SCHRIFTEN } from './lib/schrift.js';
 import { icon, iconListe, GRUPPEN, ICON_KEYS } from './lib/icons.js';
-import { SPRACH_IDS, sprachSet } from './lib/sprachen.js';
+import { SPRACH_IDS, sprachSet, sprachListe } from './lib/sprachen.js';
+
+/* Sprachen der Oberfläche — Deutsch immer zuerst (Amtssprache am Ort). */
+const UI_SPRACHEN = ['de', 'en', 'fr', 'it', 'es'];
 import { PRESETS } from './presets.js';
 import { eigeneBausteine, bausteinLoeschen, sammlungAlsDatei, sammlungLaden } from './lib/eigene.js';
 import { ROLLEN, FAMILIEN, EIGEN_FAMILIE, familienFuer, wahl, setzeWahl, wahlZuruecksetzen,
@@ -81,6 +84,16 @@ function pageOf(tpl, state){
     gewaehlt ist. */
 function istMehrseitig(tpl, state){
   return Boolean(typeof tpl.multipage === 'function' ? tpl.multipage(state) : tpl.multipage);
+}
+
+/* Kann diese Vorlage «eine Seite je Sprache» ausgeben? Nur, wenn sie ein
+   Sprachfeld hat (Textbausteine in sechs Sprachen) und ihr Blatt allein aus
+   render() entsteht — ohne interaktiven mount, der Inhalt (QR, Bild, Karte)
+   erst nachträglich einhängt und in der stillen Kopie fehlen würde. */
+function mehrsprachigMoeglich(tpl){
+  return !tpl.mount &&
+    Array.isArray(tpl.fields) &&
+    tpl.fields.some(f => f && f.k === 'sprachen');
 }
 
 /** Die druckbaren Seiten eines Blattes — einseitig ist das Blatt selbst. */
@@ -174,8 +187,7 @@ function mountTopbar(){
       ${icon('arrowD', 17, 2)}<span>${esc(t('appInstall'))}</span>
     </button>
     <div class="vz-lang" role="group" aria-label="${esc(t('uiLang'))}">
-      <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
-      <button data-lang="en" aria-pressed="${getLang() === 'en'}">EN</button>
+      ${UI_SPRACHEN.map(l => `<button data-lang="${l}" aria-pressed="${getLang() === l}">${l.toUpperCase()}</button>`).join('')}
     </div>`;
 
   bar.querySelectorAll('[data-lang]').forEach(b => {
@@ -982,6 +994,7 @@ function renderEditor(id, geteilt, suchwert){
           <div class="vz-actions-export">
             <button class="vz-btn vz-btn--sm" id="vz-png">${esc(t('png'))}</button>
             <button class="vz-btn vz-btn--sm" id="vz-pdf">${esc(t('pdfBtn'))}</button>
+            <button class="vz-btn vz-btn--sm" id="vz-pdf-sprachen" hidden title="${esc(t('pdfLangHint'))}">${esc(t('pdfLang'))}</button>
             <button class="vz-btn vz-btn--sm" id="vz-kacheln" hidden title="${esc(t('kachelnHint'))}">${esc(t('kachelnBtn'))}</button>
           </div>
           <details class="vz-mehr no-print">
@@ -1068,6 +1081,11 @@ function renderEditor(id, geteilt, suchwert){
     /* Kacheldruck lohnt sich erst oberhalb von A4. */
     const kachelnBtn = document.getElementById('vz-kacheln');
     if (kachelnBtn) kachelnBtn.hidden = !kachelbar(page);
+    /* «PDF je Sprache» nur bei Vorlagen, die überhaupt Sprachen kennen und
+       rein aus render() entstehen (ohne interaktiven mount, der Inhalt erst
+       nachträglich zeichnet). */
+    const langBtn = document.getElementById('vz-pdf-sprachen');
+    if (langBtn) langBtn.hidden = !mehrsprachigMoeglich(tpl);
   }
 
   /** Der Massstab, mit dem gerade gezeichnet wird. */
@@ -1563,6 +1581,43 @@ function renderEditor(id, geteilt, suchwert){
       console.warn(err);
       toast(t('pdfFail'));
     }finally{ btn.disabled = false; btn.textContent = old; paint(); }
+  };
+
+  /* «PDF je Sprache»: derselbe Aushang, aber eine eigene Seite je gewählter
+     Sprache — einsprachig, zum getrennten Aushängen. Für jede Sprache wird das
+     Blatt mit genau dieser einen Sprache gerendert und als eigene Druckseite
+     angehängt; alle zusammen ergeben ein PDF. */
+  const langBtn0 = document.getElementById('vz-pdf-sprachen');
+  if (langBtn0) langBtn0.onclick = async (ev) => {
+    const btn = ev.currentTarget; const old = btn.textContent;
+    btn.disabled = true; btn.textContent = '…';
+    try{
+      const ids = sprachListe(state.sprachen);
+      const page = pageOf(tpl, state);
+      const stapel = document.createElement('div');
+      stapel.className = `sheet sheet--multi sheet--${esc(page)}`;
+      stapel.style.cssText = 'position:fixed;left:-99999px;top:0;pointer-events:none';
+      for (const L of ids){
+        const seite = document.createElement('article');
+        seite.setAttribute('data-page', '');
+        seite.className = tpl.root;
+        seite.innerHTML = tpl.render({ ...state, sprachen:[L] });
+        stapel.appendChild(seite);
+      }
+      document.body.appendChild(stapel);
+      let blob;
+      try{ blob = await sheetToPdfBlob(stapel, page); }
+      finally{ stapel.remove(); }
+      const file = new File([blob], `ns-hotel-${tpl.id}-sprachen.pdf`, { type:'application/pdf' });
+      const fertig = t('pdfLangDone').replace('%s', String(ids.length));
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        try{ await navigator.share({ files:[file] }); toast(t('pdfShared')); }
+        catch(err){ if (!err || err.name !== 'AbortError'){ downloadBlob(blob, file.name); toast(fertig); } }
+      } else { downloadBlob(blob, file.name); toast(fertig); }
+    }catch(err){
+      console.warn(err);
+      toast(t('pdfFail'));
+    }finally{ btn.disabled = false; btn.textContent = old; }
   };
 
   /* Kacheldruck: das Grossformat als Stapel von A4-Blaettern samt

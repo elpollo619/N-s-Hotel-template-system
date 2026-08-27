@@ -225,8 +225,20 @@ Nach den Web Interface Guidelines. Diese fünf sind Pflicht:
 ## Sprache
 
 Die Oberfläche spricht **Deutsch** (Schweizer Rechtschreibung: *ss* statt *ß*,
-*Grösse*, *Strasse*). Englisch ist umschaltbar. Die Aushänge selbst können
-sechs Sprachen: DE EN FR IT PT ES.
+*Grösse*, *Strasse*) — das ist die Hauptsprache und der Rückfall, wenn eine
+Übersetzung fehlt. Umschaltbar ist sie auf **Englisch, Französisch,
+Italienisch und Spanisch**; die Wahl steht im Kopf und gilt nur im eigenen
+Browser. Die Aushänge selbst — der gedruckte Inhalt — kennen sechs Sprachen:
+DE EN FR IT PT ES. Das sind **zwei getrennte Dinge**: `js/lib/i18n.js` ist die
+Sprache der Bedienung, `js/lib/sprachen.js` die des Blattes. Wer die eine
+umstellt, stellt die andere nicht mit um.
+
+Vorlagen mit Sprachfeld (die Textbausteine liegen in sechs Sprachen vor)
+können ihr Blatt **je Sprache als eigene Seite** ausgeben: ein Knopf «PDF je
+Sprache» rendert den Aushang einmal pro gewählter Sprache und legt die Seiten
+in ein PDF. Frei getippter Text wird dabei nicht übersetzt — er steht auf jeder
+Seite so, wie er eingegeben wurde; die Übersetzung kommt allein aus den
+mitgelieferten Bausteinen.
 
 Beschriftungen sagen, was passiert, nicht wie es gebaut ist: «Drucken / PDF»,
 nicht «Export». Fehlermeldungen sagen, was schiefging **und was zu tun ist**.
