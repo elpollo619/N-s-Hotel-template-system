@@ -12,7 +12,10 @@ const PAGE_MM = {
   'a4':[210,297], 'a4-land':[297,210], 'a5':[148,210], 'a5-land':[210,148],
   'a3':[297,420], 'a3-land':[420,297], 'letter':[216,279], 'letter-land':[279,216],
   'a2':[420,594], 'a2-land':[594,420], 'a1':[594,841], 'a1-land':[841,594],
-  'a0':[841,1189], 'a0-land':[1189,841]
+  'a0':[841,1189], 'a0-land':[1189,841],
+  /* Bildschirm 16:9 — 1920×1080 px bei 96 dpi in mm, für den seltenen
+     Fall eines PDF; die eigentliche Ausgabe für den Screen ist das PNG. */
+  'bildschirm':[508, 285.75], 'bildschirm-hoch':[285.75, 508]
 };
 
 const PAGE_CSS = {
@@ -29,7 +32,9 @@ const PAGE_CSS = {
   'a1':      '@page{size:594mm 841mm;margin:0}',
   'a1-land': '@page{size:841mm 594mm;margin:0}',
   'a0':      '@page{size:841mm 1189mm;margin:0}',
-  'a0-land': '@page{size:1189mm 841mm;margin:0}'
+  'a0-land': '@page{size:1189mm 841mm;margin:0}',
+  'bildschirm':      '@page{size:508mm 285.75mm;margin:0}',
+  'bildschirm-hoch': '@page{size:285.75mm 508mm;margin:0}'
 };
 
 /** Papierformat für den Druck setzen. */

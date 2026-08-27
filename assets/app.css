@@ -411,6 +411,8 @@ a{color:var(--cyan)}
   color:var(--ink);font-family:var(--font-body);
   -webkit-print-color-adjust:exact;print-color-adjust:exact;
 }
+.sheet--bildschirm{width:1920px;min-height:1080px}
+.sheet--bildschirm-hoch{width:1080px;min-height:1920px}
 .sheet--a4{width:210mm;min-height:297mm}
 .sheet--a4-land{width:297mm;min-height:210mm}
 .sheet--a5{width:148mm;min-height:210mm}

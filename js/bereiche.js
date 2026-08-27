@@ -35,7 +35,7 @@ export const BEREICHE = [
     lede: 'Was im Zimmer liegt und an der Wand hängt — von der Mappe auf dem Tisch bis zum WLAN-Code neben dem Bett.',
     ids: ['checkin', 'gaestemappe', 'willkommen', 'zimmerschild', 'tuerhaenger',
           'tischaufsteller', 'foto', 'aushang', 'qrplakat', 'feedback', 'zattoo', 'notruf',
-          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten', 'fruehstuecktuer']
+          'gutschein', 'speisekarte', 'veranstaltung', 'wlankarten', 'fruehstuecktuer', 'infoscreen']
   },
   {
     id: 'hausordnung',
