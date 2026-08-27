@@ -28,10 +28,17 @@ const ICONS = {
   stairs:'<path d="M-10 8 L-10 3 L-3 3 L-3 -2 L4 -2 L4 -7 L11 -7" fill="none" stroke-width="2.4" stroke-linejoin="round"/>',
   lift:'<rect x="-8" y="-11" width="16" height="22" rx="2" fill="none" stroke-width="2.2"/><path d="M-3 -3 L0 -7 L3 -3 Z M-3 3 L0 7 L3 3 Z" stroke="none"/>',
   p:'<path d="M-4 8 L-4 -8 L2 -8 A5 5 0 0 1 2 2 L-4 2" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>',
-  flag:'<path d="M-7 11 L-7 -11 L8 -8 L2 -3 L8 2 L-7 4" fill="currentfill" stroke-width="2" stroke-linejoin="round"/>'
+  flag:'<path d="M-7 11 L-7 -11 L8 -8 L2 -3 L8 2 L-7 4" fill="currentfill" stroke-width="2" stroke-linejoin="round"/>',
+  /* Rettungs- und Brandschutzzeichen (ISO 7010) für den Fluchtwegplan.
+     Weisses Symbol auf farbiger Scheibe: grün = Rettung, rot = Brand. */
+  exit:'<circle cx="-6" cy="-7.5" r="2.4" stroke="none" fill="currentfill"/><path d="M-6 -4 L-3 -1 M-6 -4 L-7.5 4 M-6 -4 L-2.5 3.5 M-3 -1 L-9 -2" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 0 L10 0 M6.5 -4 L10.5 0 L6.5 4" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  extinguisher:'<rect x="-4" y="-4.5" width="8" height="12.5" rx="2.4" fill="currentfill" stroke="none"/><path d="M-1 -4.5 L-1 -9 L5.5 -9" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  firstaid:'<path d="M-2.5 -8 h5 v5.5 h5.5 v5 h-5.5 v5.5 h-5 v-5.5 h-5.5 v-5 h5.5 z" fill="currentfill" stroke="none"/>',
+  assembly:'<circle cx="0" cy="0" r="1.9" fill="currentfill" stroke="none"/><path d="M0 -10.5 L0 -4.5 M-2.2 -6.7 L0 -4.5 L2.2 -6.7 M0 10.5 L0 4.5 M-2.2 6.7 L0 4.5 L2.2 6.7 M-10.5 0 L-4.5 0 M-6.7 -2.2 L-4.5 0 L-6.7 2.2 M10.5 0 L4.5 0 M6.7 -2.2 L4.5 0 L6.7 2.2" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 };
 export const ICON_LIST = [['walk','zu Fuss'],['car','Auto'],['door','Eingang'],['bed','Zimmer'],
-  ['info','Info'],['key','Check-in'],['stairs','Treppe'],['lift','Lift'],['p','Parkplatz'],['flag','Ziel']];
+  ['info','Info'],['key','Check-in'],['stairs','Treppe'],['lift','Lift'],['p','Parkplatz'],['flag','Ziel'],
+  ['exit','Notausgang'],['extinguisher','Feuerlöscher'],['firstaid','Erste Hilfe'],['assembly','Sammelplatz']];
 
 /* Ausgangsplan, ausgerichtet auf das hinterlegte Luftbild (swisstopo,
    zentriert auf Allmendstrasse 14). Die Flächen sind eine erste Näherung —

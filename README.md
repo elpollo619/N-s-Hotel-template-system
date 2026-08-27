@@ -120,6 +120,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 |---|---|---|
 | **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — 42 fertige Textbausteine in sechs Sprachen, Kopfbalken navy / cyan / rot je nach Ton |
 | **Sicherheitszeichen** | A5/A4, mehrseitig | Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 3864-1 / ISO 7010 — 16 fertige Zeichen in sechs Sprachen, eine Seite je Schild |
+| **Fluchtwegplan** | A4/A3/A2 | Grundriss des Stockwerks mit grünem Fluchtweg, Notausgängen, Feuerlöscher, Erste-Hilfe und Sammelplatz (ISO-7010-Zeichen) und «Sie sind hier». Auf demselben Plan-Editor wie der Lageplan — Symbole frei ziehen; Legende automatisch |
 | **Etikettenbogen** | A4 hoch, mehrseitig | Klebeetiketten auf Avery-Bogen (L7160, L7163, L7165, L7651) oder freiem Raster — Schlüssel, Schränke, Vorräte |
 | **Infoscreen · Lobby-TV** | Bildschirm 16:9 / 9:16 | Kein Papier, sondern ein Bild für den Fernseher/Screen in der Lobby: Begrüssung, Infozeilen (Frühstück, Check-out …) und WLAN-QR. «Als PNG» liefert genau 1920 × 1080 px zum Einspielen (USB, Digital Signage) |
 | **Serienbrief** | A4 hoch, mehrseitig | Ein Brief an viele: Empfängerliste aus Excel einfügen, Text einmal schreiben — mit {{name}} und {{adresse}} als Platzhalter wird pro Person eine eigene Briefseite erzeugt. Gleicher Briefkopf wie der Mieterbrief |
@@ -850,7 +851,7 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 | **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Öffentlicher Parkplatz, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte, Infoscreen (Lobby-TV) |
 | **Hausordnung** | Hinweis / Aushang, Mieterbrief, Serienbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
-| **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
+| **Sicherheit** | Sicherheitszeichen, Fluchtwegplan, Grossflächenplakat, Notfallblatt, Standort-Schild |
 | **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Etikettendruck P-touch, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt, Türschild, Monatskalender, Checkliste |
 | **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung, Inventarliste |
 | **Team und Werkzeug** | Kurzanleitung — dazu die sechs Werkzeugseiten |
