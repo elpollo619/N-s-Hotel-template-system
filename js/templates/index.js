@@ -3,8 +3,8 @@
    nach Arbeitsbereich, nicht nach Dokumentart. Diese Datei kennt nur die
    Vorlagen selbst. */
 import notruf from './notruf.js';
-import rezeption from './rezeption.js';
-import sticker from './sticker.js';
+
+import aufkleber from './aufkleber.js';
 import aushang from './aushang.js';
 import parkplatz from './parkplatz.js';
 import anfahrt from './anfahrt.js';
@@ -89,8 +89,7 @@ export const TEMPLATES = {
   grossplakat,
   kurzanleitung,
   notruf,
-  rezeption,
-  'rezeption-sticker': sticker,
+  aufkleber,
   aushang,
   parkplatz,
   'anfahrt-karte': anfahrt,
@@ -156,7 +155,7 @@ export const ORDER = [
   'hinweis', 'sicherheit', 'mieterbrief', 'parkschild', 'waschplan', 'sammelstelle',
   'etiketten', 'qrplakat', 'kurzanleitung',
   'foto', 'grossplakat',
-  'notruf', 'rezeption', 'rezeption-sticker', 'aushang',
+  'notruf', 'aufkleber', 'aushang',
   'parkplatz', 'anfahrt-karte', 'anfahrt-luftbild', 'plan-editor', 'zattoo', 'gaestemappe',
   'checkin', 'tuerhaenger', 'tischaufsteller', 'zimmerschild', 'willkommen', 'feedback',
   'zeiten', 'termin', 'klingelschild', 'kontakte', 'bauarbeiten', 'preisliste',
