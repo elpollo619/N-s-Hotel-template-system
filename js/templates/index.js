@@ -73,6 +73,7 @@ import kalender from './kalender.js';
 import checkliste from './checkliste.js';
 import ptouch from './ptouch.js';
 import serienbrief from './serienbrief.js';
+import infoscreen from './infoscreen.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -145,7 +146,8 @@ export const TEMPLATES = {
   kalender,
   checkliste,
   ptouch,
-  serienbrief
+  serienbrief,
+  infoscreen
 };
 
 export const ORDER = [

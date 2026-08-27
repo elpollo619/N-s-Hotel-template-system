@@ -47,7 +47,8 @@ import { ROLLEN, FAMILIEN, EIGEN_FAMILIE, familienFuer, wahl, setzeWahl, wahlZur
 const PAGE_MAX_H = { 'a4':1123, 'a4-land':794, 'a5':794, 'a5-land':559,
                      'a3':1587, 'a3-land':1123, 'letter':1056, 'letter-land':816,
                      'a2':2245, 'a2-land':1587, 'a1':3179, 'a1-land':2245,
-                     'a0':4494, 'a0-land':3179 };
+                     'a0':4494, 'a0-land':3179,
+                     'bildschirm':1080, 'bildschirm-hoch':1920 };
 
 /* Klartext fuer die Leiste ueber der Vorschau — damit man sieht, auf welchem
    Papier man gerade arbeitet, ohne im Formular nachzusehen. */
@@ -58,7 +59,9 @@ const PAGE_NAME = {
   'letter':'Letter hoch',              'letter-land':'Letter quer',
   'a2':'A2 hoch · 420 × 594 mm',       'a2-land':'A2 quer · 594 × 420 mm',
   'a1':'A1 hoch · 594 × 841 mm',       'a1-land':'A1 quer · 841 × 594 mm',
-  'a0':'A0 hoch · 841 × 1189 mm',      'a0-land':'A0 quer · 1189 × 841 mm'
+  'a0':'A0 hoch · 841 × 1189 mm',      'a0-land':'A0 quer · 1189 × 841 mm',
+  'bildschirm':'Bildschirm 16:9 · 1920 × 1080 px',
+  'bildschirm-hoch':'Bildschirm 9:16 · 1080 × 1920 px'
 };
 
 /* Interaktive Vorlagen (z. B. der Plan-Editor) geben beim Einhaengen eine

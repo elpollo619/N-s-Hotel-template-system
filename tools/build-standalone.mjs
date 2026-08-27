@@ -112,6 +112,7 @@ const MODULES = [
   'js/templates/checkliste.js',
   'js/templates/ptouch.js',
   'js/templates/serienbrief.js',
+  'js/templates/infoscreen.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

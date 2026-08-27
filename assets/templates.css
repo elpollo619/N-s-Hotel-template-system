@@ -2917,3 +2917,43 @@
 /* Ausgabe-Knöpfe im Seitenpanel */
 .vz-pt-export{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .vz-pt-export .vz-hint{flex-basis:100%;margin:2px 0 0}
+
+/* ---------- Infoscreen · Lobby-TV (16:9 / 9:16, in Bildschirm-Pixeln) --- */
+.t-info{padding:0;background:#0F1424;color:#fff}
+.t-info-flaeche{position:relative;width:100%;height:100%;min-height:inherit;
+  overflow:hidden;display:flex}
+.t-info-flaeche.is-navy{background:linear-gradient(150deg,#242C4A 0%,#161B30 60%,#0F1424 100%)}
+.t-info-flaeche.is-nacht{background:radial-gradient(120% 120% at 20% 10%,#1A1F2E 0%,#090B12 70%)}
+.t-info-flaeche.is-cyan{background:linear-gradient(150deg,#EAF6FB 0%,#CFEAF4 100%);color:#12203A}
+.t-info-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:.28;filter:saturate(.9)}
+.is-cyan .t-info-bg{opacity:.35}
+.t-info-inhalt{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;
+  padding:96px 110px 72px}
+.t-info-kopf{display:flex;align-items:flex-start;justify-content:space-between;gap:40px}
+.t-info-eyebrow{margin:0 0 14px;font-size:34px;letter-spacing:.18em;text-transform:uppercase;
+  color:#01B1E2;font-weight:700}
+.is-cyan .t-info-eyebrow{color:#0785A8}
+.t-info-titel{margin:0;font-family:var(--font-display);font-size:104px;line-height:1.02;
+  font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.t-info-unter{margin:26px 0 0;font-size:42px;line-height:1.3;color:rgba(255,255,255,.82);max-width:22ch}
+.is-cyan .t-info-unter{color:rgba(18,32,58,.8)}
+.t-info-logo{flex:none}
+.t-info-body{flex:1;display:flex;align-items:flex-end;justify-content:space-between;gap:60px}
+.t-info-zeilen{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:26px}
+.t-info-zeilen li{display:flex;align-items:baseline;gap:32px}
+.t-info-l{min-width:360px;font-size:46px;font-weight:700}
+.t-info-w{font-size:46px;color:#01B1E2;font-weight:600}
+.is-cyan .t-info-w{color:#0785A8}
+.t-info-qr{flex:none;display:flex;flex-direction:column;align-items:center;gap:16px;
+  background:#fff;padding:26px 26px 20px;border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.t-info-qr svg{display:block;width:260px;height:260px}
+.t-info-qr span{font-size:26px;font-weight:700;color:#12203A}
+.t-info-foot{display:flex;justify-content:space-between;gap:40px;margin-top:56px;
+  padding-top:28px;border-top:2px solid rgba(255,255,255,.18);
+  font-size:30px;color:rgba(255,255,255,.7)}
+.is-cyan .t-info-foot{border-color:rgba(18,32,58,.16);color:rgba(18,32,58,.66)}
+/* Hochkant: Kopf und Body stapeln grosszügiger. */
+.sheet--bildschirm-hoch .t-info-inhalt{padding:120px 90px 90px}
+.sheet--bildschirm-hoch .t-info-titel{font-size:120px}
+.sheet--bildschirm-hoch .t-info-body{flex-direction:column;align-items:flex-start;gap:70px}
