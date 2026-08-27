@@ -169,6 +169,10 @@ function mountTopbar(){
     </div>
     ${objektWaehler('vz-objektwahl', 'vz-objekt')}
     <span class="vz-heute" title="${esc(t('today'))}">${esc(heuteText())}</span>
+    <button class="vz-install no-print" id="vz-install" hidden
+            title="${esc(t('appInstall'))}" aria-label="${esc(t('appInstall'))}">
+      ${icon('arrowD', 17, 2)}<span>${esc(t('appInstall'))}</span>
+    </button>
     <div class="vz-lang" role="group" aria-label="${esc(t('uiLang'))}">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
       <button data-lang="en" aria-pressed="${getLang() === 'en'}">EN</button>
@@ -182,7 +186,83 @@ function mountTopbar(){
 
   objektWaehlerBinden(bar);
   mountSuche();
+  installKnopfBinden();
 }
+
+/* ---------- Als App installieren (PWA) ------------------------------------ */
+/* Die Zentrale ist eine PWA — sie lässt sich wie eine App aufs Handy oder den
+   Rechner legen. Nur wusste das niemand, weil der Browser den Weg versteckt.
+   Darum ein sichtbarer Knopf: auf Android/Chrome/Edge löst er die native
+   Installation aus, auf dem iPhone (das keinen solchen Aufruf kennt) zeigt er
+   in zwei Sätzen, wie «Zum Startbildschirm» geht. Steht die App schon als App,
+   verschwindet der Knopf. */
+let installAufruf = null;
+
+function schonAlsApp(){
+  return matchMedia('(display-mode: standalone)').matches ||
+         matchMedia('(display-mode: window-controls-overlay)').matches ||
+         navigator.standalone === true;
+}
+function istApple(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+/* Der Knopf ist sinnvoll, wenn ein Installationsaufruf bereitliegt (Android,
+   Chrome, Edge) oder wenn wir auf Apple sind und noch im Browser stehen. */
+function installMoeglich(){
+  return !schonAlsApp() && (installAufruf || istApple());
+}
+function aktualisiereInstall(){
+  const knopf = document.getElementById('vz-install');
+  if (knopf) knopf.hidden = !installMoeglich();
+}
+function installKnopfBinden(){
+  const knopf = document.getElementById('vz-install');
+  if (!knopf) return;
+  aktualisiereInstall();
+  knopf.onclick = async () => {
+    if (installAufruf){
+      installAufruf.prompt();
+      try{ await installAufruf.userChoice; }catch(_){}
+      installAufruf = null;
+      aktualisiereInstall();
+      return;
+    }
+    if (istApple()) zeigeAppleAnleitung();
+  };
+}
+
+/* Auf dem iPhone gibt es keinen Aufruf — nur der Weg über «Teilen». */
+function zeigeAppleAnleitung(){
+  const bg = document.createElement('div');
+  bg.className = 'vz-dialog';
+  bg.innerHTML = `
+    <div class="vz-dialog-box" role="dialog" aria-modal="true" aria-label="${esc(t('appIosTitle'))}">
+      <h3>${esc(t('appIosTitle'))}</h3>
+      <p class="vz-tip" style="margin:0">${esc(t('appIosText'))}</p>
+      <div class="vz-dialog-btns">
+        <button type="button" class="vz-btn vz-btn--navy" id="vz-ios-ok">${esc(t('appIosClose'))}</button>
+      </div>
+    </div>`;
+  document.body.append(bg);
+  const zu = () => bg.remove();
+  bg.querySelector('#vz-ios-ok').onclick = zu;
+  bg.addEventListener('click', ev => { if (ev.target === bg) zu(); });
+}
+
+/* Der Browser meldet, dass die App installierbar ist — den Aufruf aufheben,
+   um ihn beim Klick auf den Knopf auszulösen. */
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault();
+  installAufruf = ev;
+  aktualisiereInstall();
+});
+window.addEventListener('appinstalled', () => {
+  installAufruf = null;
+  aktualisiereInstall();
+  toast(t('appInstalled'));
+});
 
 /* ---------- Aktive Liegenschaft ------------------------------------------- */
 /* Das Haus, an dem gerade gearbeitet wird. Steht im Kopf, weil es fuer jede

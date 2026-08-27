@@ -179,6 +179,18 @@ a{color:var(--cyan)}
 .vz-lang button{background:none;border:0;color:#fff;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;opacity:.65}
 .vz-lang button[aria-pressed="true"]{background:var(--cyan);opacity:1}
 
+/* «App installieren» — nur sichtbar, wenn der Browser es anbietet. */
+.vz-install{
+  display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;
+  border:1px solid var(--cyan);background:var(--cyan);color:#fff;
+  border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;
+  font-family:var(--font-display);cursor:pointer;white-space:nowrap;
+  transition:.15s background,.15s border-color;
+}
+.vz-install:hover{background:#00a0cc;border-color:#00a0cc}
+.vz-install svg{flex:0 0 auto}
+@media (max-width:820px){ .vz-install span{display:none} .vz-install{padding:8px 10px} }
+
 /* ---------- Buttons ---------------------------------------------------- */
 .vz-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -8150,7 +8162,15 @@ const DICT = {
     actMore:'Mehr',
     actMoreHint:'Sichern, Teilen, Stände, Zurücksetzen',
     actExportGroup:'Als Bild oder Datei',
-    numbersTitle:'Die Zentrale in Zahlen'
+    numbersTitle:'Die Zentrale in Zahlen',
+
+    /* Als App installieren (PWA) */
+    appInstall:'App installieren',
+    appInstalled:'Als App installiert — jetzt auf dem Startbildschirm.',
+    appIosTitle:'Als App aufs iPhone oder iPad',
+    appIosText:'Unten (Safari: das Teilen-Symbol ▵) auf «Teilen» tippen und «Zum Startbildschirm» wählen. Danach liegt die Zentrale wie eine App auf dem Display — sie öffnet ohne Adressleiste und läuft auch ohne Internet.',
+    appIosClose:'Verstanden',
+    appDesktopHint:'Tipp: Im Browser oben in der Adressleiste steht ein Installieren-Symbol — damit liegt die Zentrale als eigenes Fenster auf dem Rechner.'
   },
   en:{
     tagline:'Template Centre',
@@ -8420,7 +8440,15 @@ const DICT = {
     actMore:'More',
     actMoreHint:'Save, share, versions, reset',
     actExportGroup:'As image or file',
-    numbersTitle:'The centre in numbers'
+    numbersTitle:'The centre in numbers',
+
+    /* Install as an app (PWA) */
+    appInstall:'Install app',
+    appInstalled:'Installed as an app — now on your home screen.',
+    appIosTitle:'Add to iPhone or iPad',
+    appIosText:'Tap «Share» (in Safari the ▵ share icon at the bottom) and choose «Add to Home Screen». The centre then sits like an app on your display — it opens without an address bar and works without internet.',
+    appIosClose:'Got it',
+    appDesktopHint:'Tip: your browser shows an install icon in the address bar — that puts the centre in its own window on the computer.'
   }
 };
 
@@ -21669,6 +21697,10 @@ function mountTopbar(){
     </div>
     ${objektWaehler('vz-objektwahl', 'vz-objekt')}
     <span class="vz-heute" title="${esc(t('today'))}">${esc(heuteText())}</span>
+    <button class="vz-install no-print" id="vz-install" hidden
+            title="${esc(t('appInstall'))}" aria-label="${esc(t('appInstall'))}">
+      ${icon('arrowD', 17, 2)}<span>${esc(t('appInstall'))}</span>
+    </button>
     <div class="vz-lang" role="group" aria-label="${esc(t('uiLang'))}">
       <button data-lang="de" aria-pressed="${getLang() === 'de'}">DE</button>
       <button data-lang="en" aria-pressed="${getLang() === 'en'}">EN</button>
@@ -21682,7 +21714,83 @@ function mountTopbar(){
 
   objektWaehlerBinden(bar);
   mountSuche();
+  installKnopfBinden();
 }
+
+/* ---------- Als App installieren (PWA) ------------------------------------ */
+/* Die Zentrale ist eine PWA — sie lässt sich wie eine App aufs Handy oder den
+   Rechner legen. Nur wusste das niemand, weil der Browser den Weg versteckt.
+   Darum ein sichtbarer Knopf: auf Android/Chrome/Edge löst er die native
+   Installation aus, auf dem iPhone (das keinen solchen Aufruf kennt) zeigt er
+   in zwei Sätzen, wie «Zum Startbildschirm» geht. Steht die App schon als App,
+   verschwindet der Knopf. */
+let installAufruf = null;
+
+function schonAlsApp(){
+  return matchMedia('(display-mode: standalone)').matches ||
+         matchMedia('(display-mode: window-controls-overlay)').matches ||
+         navigator.standalone === true;
+}
+function istApple(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+/* Der Knopf ist sinnvoll, wenn ein Installationsaufruf bereitliegt (Android,
+   Chrome, Edge) oder wenn wir auf Apple sind und noch im Browser stehen. */
+function installMoeglich(){
+  return !schonAlsApp() && (installAufruf || istApple());
+}
+function aktualisiereInstall(){
+  const knopf = document.getElementById('vz-install');
+  if (knopf) knopf.hidden = !installMoeglich();
+}
+function installKnopfBinden(){
+  const knopf = document.getElementById('vz-install');
+  if (!knopf) return;
+  aktualisiereInstall();
+  knopf.onclick = async () => {
+    if (installAufruf){
+      installAufruf.prompt();
+      try{ await installAufruf.userChoice; }catch(_){}
+      installAufruf = null;
+      aktualisiereInstall();
+      return;
+    }
+    if (istApple()) zeigeAppleAnleitung();
+  };
+}
+
+/* Auf dem iPhone gibt es keinen Aufruf — nur der Weg über «Teilen». */
+function zeigeAppleAnleitung(){
+  const bg = document.createElement('div');
+  bg.className = 'vz-dialog';
+  bg.innerHTML = `
+    <div class="vz-dialog-box" role="dialog" aria-modal="true" aria-label="${esc(t('appIosTitle'))}">
+      <h3>${esc(t('appIosTitle'))}</h3>
+      <p class="vz-tip" style="margin:0">${esc(t('appIosText'))}</p>
+      <div class="vz-dialog-btns">
+        <button type="button" class="vz-btn vz-btn--navy" id="vz-ios-ok">${esc(t('appIosClose'))}</button>
+      </div>
+    </div>`;
+  document.body.append(bg);
+  const zu = () => bg.remove();
+  bg.querySelector('#vz-ios-ok').onclick = zu;
+  bg.addEventListener('click', ev => { if (ev.target === bg) zu(); });
+}
+
+/* Der Browser meldet, dass die App installierbar ist — den Aufruf aufheben,
+   um ihn beim Klick auf den Knopf auszulösen. */
+window.addEventListener('beforeinstallprompt', ev => {
+  ev.preventDefault();
+  installAufruf = ev;
+  aktualisiereInstall();
+});
+window.addEventListener('appinstalled', () => {
+  installAufruf = null;
+  aktualisiereInstall();
+  toast(t('appInstalled'));
+});
 
 /* ---------- Aktive Liegenschaft ------------------------------------------- */
 /* Das Haus, an dem gerade gearbeitet wird. Steht im Kopf, weil es fuer jede
