@@ -270,7 +270,15 @@ const DICT = {
     actMore:'Mehr',
     actMoreHint:'Sichern, Teilen, Stände, Zurücksetzen',
     actExportGroup:'Als Bild oder Datei',
-    numbersTitle:'Die Zentrale in Zahlen'
+    numbersTitle:'Die Zentrale in Zahlen',
+
+    /* Als App installieren (PWA) */
+    appInstall:'App installieren',
+    appInstalled:'Als App installiert — jetzt auf dem Startbildschirm.',
+    appIosTitle:'Als App aufs iPhone oder iPad',
+    appIosText:'Unten (Safari: das Teilen-Symbol ▵) auf «Teilen» tippen und «Zum Startbildschirm» wählen. Danach liegt die Zentrale wie eine App auf dem Display — sie öffnet ohne Adressleiste und läuft auch ohne Internet.',
+    appIosClose:'Verstanden',
+    appDesktopHint:'Tipp: Im Browser oben in der Adressleiste steht ein Installieren-Symbol — damit liegt die Zentrale als eigenes Fenster auf dem Rechner.'
   },
   en:{
     tagline:'Template Centre',
@@ -540,7 +548,15 @@ const DICT = {
     actMore:'More',
     actMoreHint:'Save, share, versions, reset',
     actExportGroup:'As image or file',
-    numbersTitle:'The centre in numbers'
+    numbersTitle:'The centre in numbers',
+
+    /* Install as an app (PWA) */
+    appInstall:'Install app',
+    appInstalled:'Installed as an app — now on your home screen.',
+    appIosTitle:'Add to iPhone or iPad',
+    appIosText:'Tap «Share» (in Safari the ▵ share icon at the bottom) and choose «Add to Home Screen». The centre then sits like an app on your display — it opens without an address bar and works without internet.',
+    appIosClose:'Got it',
+    appDesktopHint:'Tip: your browser shows an install icon in the address bar — that puts the centre in its own window on the computer.'
   }
 };
 
