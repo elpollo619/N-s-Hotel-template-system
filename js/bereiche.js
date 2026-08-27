@@ -43,7 +43,7 @@ export const BEREICHE = [
     title: 'Hausordnung',
     kurz: 'Hausordnung',
     lede: 'Was im Haus gilt und wer wofür da ist — als Aushang an der Wand oder als Brief an die Mieterschaft. 42 fertige Bausteine in sechs Sprachen.',
-    ids: ['hinweis', 'mieterbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
+    ids: ['hinweis', 'mieterbrief', 'serienbrief', 'termin', 'bauarbeiten', 'kontakte', 'fundgegenstaende', 'paket',
           'hausversammlung', 'umzug', 'ruhezeiten', 'hausordnung', 'mitteilung', 'pinnwand']
   },
   {

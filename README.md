@@ -121,6 +121,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **Hinweis / Aushang** | A4 hoch | Die Arbeitsvorlage für die bestehenden Zettel aus `J:\Immobilien\Plakate` — 42 fertige Textbausteine in sechs Sprachen, Kopfbalken navy / cyan / rot je nach Ton |
 | **Sicherheitszeichen** | A5/A4, mehrseitig | Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 3864-1 / ISO 7010 — 16 fertige Zeichen in sechs Sprachen, eine Seite je Schild |
 | **Etikettenbogen** | A4 hoch, mehrseitig | Klebeetiketten auf Avery-Bogen (L7160, L7163, L7165, L7651) oder freiem Raster — Schlüssel, Schränke, Vorräte |
+| **Serienbrief** | A4 hoch, mehrseitig | Ein Brief an viele: Empfängerliste aus Excel einfügen, Text einmal schreiben — mit {{name}} und {{adresse}} als Platzhalter wird pro Person eine eigene Briefseite erzeugt. Gleicher Briefkopf wie der Mieterbrief |
 | **Etikettendruck · P-touch** | Endlosband 9–36 mm | Einzeletiketten fürs Brother-P-touch-Endlosband. Eine Liste macht Serien (alle Zimmernummern, Ordnerrücken) in einem Rutsch; «PNG je Etikett» für den P-touch Editor, «PDF (Bandgrösse)» in exakter mm-Grösse für den Druckertreiber |
 | **Mieterbrief** | A4 hoch | Schreiben mit Briefkopf: Hauseingangstür, Besucherparkplatz, Brandmelder |
 | **Parkplatz-Schild** | A5/A4, mehrseitig | Reserviert / Privat / Besucher — eine Seite je Platznummer |
@@ -847,7 +848,7 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 |---|---|
 | **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Öffentlicher Parkplatz, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte |
-| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
+| **Hausordnung** | Hinweis / Aushang, Mieterbrief, Serienbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
 | **Sicherheit** | Sicherheitszeichen, Grossflächenplakat, Notfallblatt, Standort-Schild |
 | **Unterhalt und Ordnung** | Waschplan, Sammelstelle, Etikettenbogen, Etikettendruck P-touch, Zeiten-Tafel, Preisliste, Klingelschilder, Ausser Betrieb, Turnusplan, Reservationsblatt, Türschild, Monatskalender, Checkliste |
 | **Verwaltung und Übergabe** | Übergabeprotokoll, Schlüsselquittung, Zählerstände, Mängelmeldung, Wohnung zu vermieten, Besichtigung, Neu im Haus, Vollmacht, Protokoll, Kündigungsbestätigung, Inventarliste |

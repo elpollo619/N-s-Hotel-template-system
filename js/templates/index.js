@@ -72,6 +72,7 @@ import parkplatznah from './parkplatznah.js';
 import kalender from './kalender.js';
 import checkliste from './checkliste.js';
 import ptouch from './ptouch.js';
+import serienbrief from './serienbrief.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -143,7 +144,8 @@ export const TEMPLATES = {
   parkplatznah,
   kalender,
   checkliste,
-  ptouch
+  ptouch,
+  serienbrief
 };
 
 export const ORDER = [
