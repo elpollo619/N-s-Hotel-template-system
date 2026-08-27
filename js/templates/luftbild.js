@@ -18,7 +18,7 @@ function marker(kind, x, y, label){
 export default {
   id:'anfahrt-luftbild',
   title:'Luftbild mit Pins',
-  sub:'Eigenes Luftbild, Pins frei platzierbar · A4 quer',
+  sub:'Eigenes Luftbild (swisstopo/Foto) als Grund, Pins darauf setzen · A4 quer',
   badge:'Anfahrt',
   badgeCyan:true,
   page:'a4-land',

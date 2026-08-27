@@ -22,7 +22,7 @@ const PAGES = {
 export default {
   id:'plan-editor',
   title:'Plan-Editor',
-  sub:'Lageplan frei bearbeiten · Format wählbar',
+  sub:'Volle Kontrolle: Flächen, Wege, Pins, Beschriftungen frei zeichnen · Format wählbar',
   badge:'Anfahrt',
   badgeCyan:true,
   page:'a4-land',

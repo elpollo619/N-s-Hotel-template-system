@@ -16,7 +16,7 @@ const TUERSCHILD_TON = { navy:'#2A3350', cyan:'#01B1E2', weiss:'#FFFFFF' };
 export default {
   id:'tuerschild',
   title:'Türschild',
-  sub:'Einzelnes Raumschild: Büro, Sitzungszimmer, WC · A5 quer',
+  sub:'Ein einzelner Raum — Büro, WC, Lager. Für Hotelzimmer in Serie das Zimmerschild · A5 quer',
   badge:'Beschriften',
   root:'t-tsc',
   page:'a5-land',
