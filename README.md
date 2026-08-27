@@ -83,9 +83,13 @@ Nützlich zu wissen:
   **Zurücksetzen** stellt das Original wieder her.
 * **Entwurf sichern** legt eine kleine Datei ab, die eine Kollegin mit
   **Entwurf laden** wieder öffnen kann.
-* Die Oberfläche gibt es auf Deutsch und Englisch (oben rechts). Der **Inhalt**
-  der Aushänge lässt sich in sechs Sprachen setzen — siehe
-  [Sprachen auf dem Aushang](#sprachen-auf-dem-aushang).
+* Die Oberfläche gibt es auf **Deutsch (Haupt- und Rückfallsprache),
+  Englisch, Französisch, Italienisch und Spanisch** (oben rechts, auf dem
+  Telefon in der Schublade). Der **Inhalt** der Aushänge lässt sich davon
+  unabhängig in sechs Sprachen setzen — siehe
+  [Sprachen auf dem Aushang](#sprachen-auf-dem-aushang). Vorlagen mit
+  Sprachfeld können ihr Blatt zudem als **PDF mit einer Seite je Sprache**
+  ausgeben («PDF je Sprache» im Editor).
 * Beim **Hinweis** zuerst den fertigen Textbaustein wählen und
   **Baustein übernehmen** drücken — danach ist alles frei überschreibbar.
   Dann die **Liegenschaft** wählen: Kürzel und Adresse setzen sich von selbst.
@@ -300,7 +304,7 @@ Server, der die Sammlung verteilt — dafür ist die Datei da.
 
 ## Sprachen auf dem Aushang
 
-Nicht zu verwechseln mit der Sprache der Bedienoberfläche (DE/EN oben rechts).
+Nicht zu verwechseln mit der Sprache der Bedienoberfläche (DE/EN/FR/IT/ES oben rechts).
 Hier geht es um die Sprachen, die auf dem **gedruckten Blatt** stehen.
 
 Sechs Sprachen sind hinterlegt:
