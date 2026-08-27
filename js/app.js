@@ -407,6 +407,18 @@ function seite({ nav, krumenTeile, eyebrow, titel, lede, inhalt }){
 }
 
 /* ---------- Startseite ---------------------------------------------------- */
+/* Geführter Einstieg auf der Startseite: nicht «welche Vorlage?», sondern
+   «was willst du tun?». Jedes Ziel klappt die passenden Vorlagen auf. */
+const START_ZIELE = [
+  { key:'intentAushang', icon:'info',      ids:['hinweis','aushang','mitteilung','termin','ausserbetrieb','bauarbeiten'] },
+  { key:'intentSchild',  icon:'door',      ids:['zimmerschild','tuerschild','klingelschild','standortschild','wegweiser','parkschild','rezeption'] },
+  { key:'intentGast',    icon:'reception', ids:['willkommen','checkin','gaestemappe','wlankarten','infoscreen','zimmerschild'] },
+  { key:'intentEtikett', icon:'printer',   ids:['etiketten','ptouch','papier','qrplakat'] },
+  { key:'intentBrief',   icon:'calendar',  ids:['mieterbrief','serienbrief','kuendigung','uebergabe','maengelmeldung','schluesselquittung'] },
+  { key:'intentAnfahrt', icon:'car',       ids:['plan-editor','parkplatz','anfahrt-luftbild','parkschild','besucherkarte'] },
+  { key:'intentSicher',  icon:'exit',      ids:['sicherheit','fluchtweg','notfallblatt','notruf'] }
+];
+
 function renderStart(){
   setPageSize('a4');
 
@@ -438,6 +450,21 @@ function renderStart(){
       <div class="vz-zahlen">${zahlen.map(k => `
         <div class="vz-zahl"><b>${k.z}</b><span>${esc(k.l)}</span></div>`).join('')}
       </div>
+
+      <section class="vz-block">
+        <h2>${esc(t('guidedTitle'))}</h2>
+        <p class="vz-block-note">${esc(t('guidedNote'))}</p>
+        <div class="vz-ziele">${START_ZIELE.map((z, i) => {
+          const ids = z.ids.filter(id => TEMPLATES[id]);
+          if (!ids.length) return '';
+          /* Karten erst beim Öffnen einfügen — die Startseite bleibt beim
+             Laden eine Wand aus Zielen, nicht aus Vorlagen. */
+          return `<details class="vz-ziel" data-ziel="${i}">
+            <summary><span class="vz-ziel-ico">${icon(z.icon, 20)}</span>${esc(t(z.key))}<em aria-hidden="true">›</em></summary>
+            <div class="vz-cards vz-cards--klein" data-ziel-karten></div>
+          </details>`;
+        }).join('')}</div>
+      </section>
 
       ${offen.length ? `
       <section class="vz-block">
@@ -484,7 +511,22 @@ function renderStart(){
       </section>`
   });
 
+  verdrahteZiele();
   zeigeSchrift();
+}
+
+/* Die Vorlagen-Karten eines Ziels erst beim ersten Öffnen einfügen. */
+function verdrahteZiele(){
+  document.querySelectorAll('.vz-ziel').forEach(det => {
+    det.addEventListener('toggle', () => {
+      if (!det.open) return;
+      const box = det.querySelector('[data-ziel-karten]');
+      if (!box || box.dataset.gefuellt) return;
+      const z = START_ZIELE[Number(det.dataset.ziel)];
+      box.innerHTML = z.ids.filter(id => TEMPLATES[id]).map(karte).join('');
+      box.dataset.gefuellt = '1';
+    });
+  });
 }
 
 /* Der Schrifthinweis kann erst beurteilt werden, wenn der Browser mit dem
@@ -756,6 +798,13 @@ function renderEditor(id, geteilt, suchwert){
           <h2>${esc(tpl.title)}</h2>
           <p>${esc(tpl.sub || '')}</p>
         </div>
+        <details class="vz-sogehts no-print">
+          <summary>${esc(t('soGehts'))}</summary>
+          <ol>${(Array.isArray(tpl.schritte) && tpl.schritte.length
+              ? tpl.schritte
+              : [t('genStep1'), t('genStep2'), t('genStep3')])
+            .map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+        </details>
         <div class="vz-actions">
           <button class="vz-btn vz-btn--navy" id="vz-print">${esc(t('print'))}</button>
           <button class="vz-btn" id="vz-png">${esc(t('png'))}</button>
