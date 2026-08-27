@@ -1111,3 +1111,28 @@ a{color:var(--cyan)}
   background-position:top left,top left,top right,top right,
                       bottom left,bottom left,bottom right,bottom right;
 }
+
+/* ---------- Geführter Einstieg (Startseite) ----------------------------- */
+.vz-ziele{display:flex;flex-direction:column;gap:8px}
+.vz-ziel{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+.vz-ziel>summary{display:flex;align-items:center;gap:12px;cursor:pointer;
+  padding:14px 16px;font-weight:600;color:var(--navy);list-style:none}
+.vz-ziel>summary::-webkit-details-marker{display:none}
+.vz-ziel>summary:hover{background:var(--bg-2)}
+.vz-ziel-ico{flex:none;display:flex;color:var(--primary)}
+.vz-ziel>summary em{margin-left:auto;color:var(--muted);font-style:normal;
+  transition:transform .18s}
+.vz-ziel[open]>summary em{transform:rotate(90deg)}
+.vz-ziel[open]>summary{border-bottom:1px solid var(--line)}
+.vz-ziel>.vz-cards{padding:14px 16px}
+
+/* ---------- «So gehtʼs» im Editor --------------------------------------- */
+.vz-sogehts{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;
+  background:var(--bg-2)}
+.vz-sogehts>summary{cursor:pointer;padding:9px 13px;font-size:13px;font-weight:600;
+  color:var(--navy);list-style:none}
+.vz-sogehts>summary::-webkit-details-marker{display:none}
+.vz-sogehts>summary::before{content:"›  ";color:var(--muted)}
+.vz-sogehts[open]>summary::before{content:"⌄  "}
+.vz-sogehts ol{margin:0;padding:2px 13px 12px 30px;display:flex;flex-direction:column;gap:5px}
+.vz-sogehts li{font-size:12.5px;line-height:1.5;color:var(--ink)}
