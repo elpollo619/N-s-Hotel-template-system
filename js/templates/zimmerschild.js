@@ -19,7 +19,7 @@ const ZIMMER_PAGES = { 'a5-land':'a5-land', a5:'a5', 'a4-land':'a4-land', a4:'a4
 export default {
   id:'zimmerschild',
   title:'Zimmerschild',
-  sub:'Nummer und Name an der Tür · eine Seite je Zimmer',
+  sub:'Hotelzimmer in Serie — je Zimmer eine Seite. Für einen einzelnen Raum das Türschild',
   badge:'Zimmer',
   root:'t-zimmer',
   fern:true,

@@ -10,7 +10,7 @@ import { BRAND, contactLine } from '../brand-config.js';
 export default {
   id:'anfahrt-karte',
   title:'Orientierungskarte',
-  sub:'Anfahrt und Parken mit gezeichnetem Plan · A4 quer',
+  sub:'Schneller Start mit fertig gezeichnetem Plan — ohne eigenes Bild · A4 quer',
   badge:'Anfahrt',
   badgeCyan:true,
   page:'a4-land',
