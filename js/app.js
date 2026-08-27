@@ -411,7 +411,7 @@ function seite({ nav, krumenTeile, eyebrow, titel, lede, inhalt }){
    «was willst du tun?». Jedes Ziel klappt die passenden Vorlagen auf. */
 const START_ZIELE = [
   { key:'intentAushang', icon:'info',      ids:['hinweis','aushang','mitteilung','termin','ausserbetrieb','bauarbeiten'] },
-  { key:'intentSchild',  icon:'door',      ids:['zimmerschild','tuerschild','klingelschild','standortschild','wegweiser','parkschild','rezeption'] },
+  { key:'intentSchild',  icon:'door',      ids:['zimmerschild','tuerschild','klingelschild','standortschild','wegweiser','parkschild','aufkleber'] },
   { key:'intentGast',    icon:'reception', ids:['willkommen','checkin','gaestemappe','wlankarten','infoscreen','zimmerschild'] },
   { key:'intentEtikett', icon:'printer',   ids:['etiketten','ptouch','papier','qrplakat'] },
   { key:'intentBrief',   icon:'calendar',  ids:['mieterbrief','serienbrief','kuendigung','uebergabe','maengelmeldung','schluesselquittung'] },
@@ -757,7 +757,12 @@ function setPath(state, path, value){
 }
 
 /* ---------- Editor -------------------------------------------------------- */
+/* Zusammengelegte Vorlagen: alte Adressen und gespeicherte Links bleiben
+   gültig, sie zeigen auf die neue, vereinte Vorlage. */
+const TEMPLATE_ALIAS = { 'rezeption':'aufkleber', 'rezeption-sticker':'aufkleber' };
+
 function renderEditor(id, geteilt, suchwert){
+  id = TEMPLATE_ALIAS[id] || id;
   const tpl = TEMPLATES[id];
   if (!tpl){ view().innerHTML = `<div class="vz-seite"><p class="vz-leer">${esc(t('notFound'))}</p></div>`;
     markiereNav('start'); return; }

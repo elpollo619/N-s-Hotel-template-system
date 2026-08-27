@@ -2966,3 +2966,7 @@
 .t-flucht-leg-sym svg{display:block;width:9mm;height:9mm}
 .t-flucht-hinweis{margin:3mm 0 0;padding:2.5mm 4mm;border-radius:2mm;
   background:#FDECEC;color:#8A1E1E;font-size:9.5pt;font-weight:600}
+
+/* ---------- Aufkleber (vereint Pfeil + rund; nutzt t-rez-* / t-sticker-*) - */
+.t-auf{display:flex;flex-direction:column}
+.t-auf>.t-rezeption,.t-auf>.t-sticker{flex:1;min-height:100%}

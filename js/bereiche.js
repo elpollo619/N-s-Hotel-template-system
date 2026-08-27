@@ -24,7 +24,7 @@ export const BEREICHE = [
     kurz: 'Ankommen',
     lede: 'Alles, was jemand sieht, bevor er im Haus ist: den Weg hierher, den Platz fürs Auto, die Tür zur Rezeption.',
     ids: ['anfahrt-karte', 'anfahrt-luftbild', 'plan-editor',
-          'parkplatz', 'parkplatznah', 'parkschild', 'rezeption', 'rezeption-sticker',
+          'parkplatz', 'parkplatznah', 'parkschild', 'aufkleber',
           'wegweiser', 'empfangstafel', 'besucherkarte']
   },
   {

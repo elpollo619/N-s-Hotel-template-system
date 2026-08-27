@@ -134,8 +134,7 @@ Zum Kopieren, wenn die Zentrale im Haus bekannt gemacht wird:
 | **QR-Aushang** | A4 hoch | WLAN-Zugang, Link, Telefonnummer oder Adresse als grosser Code — mit Anleitung in bis zu sechs Sprachen |
 | **Kurzanleitung** | A4 hoch | Zum Aufhängen neben dem Drucker: QR-Code auf die Zentrale, die vier Schritte, die Druckeinstellungen |
 | **Notruf-Aushang (Telefon)** | A4 hoch | Tastenbelegung am Check-in-Telefon mit dem Original-Telefonschema aus v6 und den Notrufnummern |
-| **Pfeil-Aufkleber Rezeption** | A4 Druckvorlage | Wegweiser in Originalgrösse, dunkel / hell / cyan, vier Pfeilrichtungen |
-| **Aufkleber-Druckbogen** | A4 hoch | Runde Aufkleber in Originalgrösse inkl. Massstab-Kontrolle |
+| **Aufkleber** | A4 hoch | Aufkleber in Originalgrösse — Form wählbar: eckig mit Pfeil (Wegweiser, bis 4/Blatt) oder rund (Punkt mit Symbol, bis 24/Bogen, mit Massstab-Kontrolle). Zusammengelegt aus den früheren zwei Aufkleber-Vorlagen |
 | **Gäste-Info (universell)** | A4 hoch | WLAN, Frühstück, Öffnungszeiten … beliebig viele Infozeilen mit Symbol |
 | **Parkplatz-Info** | A4 hoch | Lageplan plus Text in bis zu sechs Sprachen |
 | **Öffentlicher Parkplatz** | A4 hoch, mehrseitig | Wegweiser zum öffentlichen Parkplatz nebenan: Lageplan (gezeichnet, eigenes Bild **oder** swisstopo-Ausschnitt per Link — wird ins Blatt gebacken; frei einpassbar: Ziehen, Rad-Zoom, Drehen, Pinch), Tarif, Bezahlen, Kennzeichen-Hinweis — eine Seite je Sprache |
@@ -848,7 +847,7 @@ Schiene aus Icons, auf dem Telefon wird sie zur Schublade.
 
 | Bereich | Was darin steckt |
 |---|---|
-| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Öffentlicher Parkplatz, Parkplatz-Schild, Rezeption-Pfeil, Aufkleberbogen, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
+| **Ankommen und Parkieren** | Orientierungskarte, Luftbild, Plan-Editor, Parkplatz-Info, Öffentlicher Parkplatz, Parkplatz-Schild, Aufkleber, Wegweiser, Empfang-Tafel, Besucher-Parkkarte |
 | **Zimmer und Gäste** | Self-Check-in, Gästemappe, Willkommenskarte, Zimmerschild, Türhänger, Tischaufsteller, Foto-Aushang, Gäste-Info, QR-Aushang, Feedback, Zattoo, Notruf, Gutschein, Speisekarte, Veranstaltungsplakat, WLAN-Kärtchen, Frühstück-Türkarte, Infoscreen (Lobby-TV) |
 | **Hausordnung** | Hinweis / Aushang, Mieterbrief, Serienbrief, Termin-Aushang, Umbau/Baustelle, Kontakt-Tafel, Fundgegenstände, Paketablage, Hausversammlung, Umzugsanzeige, Ruhezeiten, Hausordnung, Wichtige Mitteilung, Pinnwand-Karte |
 | **Sicherheit** | Sicherheitszeichen, Fluchtwegplan, Grossflächenplakat, Notfallblatt, Standort-Schild |
