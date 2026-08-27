@@ -74,6 +74,7 @@ import checkliste from './checkliste.js';
 import ptouch from './ptouch.js';
 import serienbrief from './serienbrief.js';
 import infoscreen from './infoscreen.js';
+import fluchtweg from './fluchtweg.js';
 
 export const TEMPLATES = {
   hinweis,
@@ -147,7 +148,8 @@ export const TEMPLATES = {
   checkliste,
   ptouch,
   serienbrief,
-  infoscreen
+  infoscreen,
+  fluchtweg
 };
 
 export const ORDER = [

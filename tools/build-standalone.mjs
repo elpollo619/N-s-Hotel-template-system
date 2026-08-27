@@ -113,6 +113,7 @@ const MODULES = [
   'js/templates/ptouch.js',
   'js/templates/serienbrief.js',
   'js/templates/infoscreen.js',
+  'js/templates/fluchtweg.js',
   'js/templates/index.js',
   'js/lib/suche.js',
   'js/app.js'

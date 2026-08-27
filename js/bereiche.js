@@ -52,7 +52,7 @@ export const BEREICHE = [
     title: 'Sicherheit',
     kurz: 'Sicherheit',
     lede: 'Verbot, Warnung, Gebot, Rettung und Brandschutz in der Formensprache von ISO 7010 — und dasselbe gross genug für den Hof.',
-    ids: ['sicherheit', 'grossplakat', 'notfallblatt', 'standortschild']
+    ids: ['sicherheit', 'fluchtweg', 'grossplakat', 'notfallblatt', 'standortschild']
   },
   {
     id: 'unterhalt',

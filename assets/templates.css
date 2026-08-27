@@ -2957,3 +2957,12 @@
 .sheet--bildschirm-hoch .t-info-inhalt{padding:120px 90px 90px}
 .sheet--bildschirm-hoch .t-info-titel{font-size:120px}
 .sheet--bildschirm-hoch .t-info-body{flex-direction:column;align-items:flex-start;gap:70px}
+
+/* ---------- Fluchtwegplan (nutzt t-plan, plus Legende) ------------------ */
+.t-flucht-etage{margin:2mm 0 0;font-size:10pt;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+.t-flucht-legende{display:flex;flex-wrap:wrap;gap:5mm 9mm;padding:4mm 0 0}
+.t-flucht-leg{display:flex;align-items:center;gap:2.5mm;font-size:9.5pt;font-weight:600;color:var(--ink)}
+.t-flucht-leg-sym{flex:none;display:flex}
+.t-flucht-leg-sym svg{display:block;width:9mm;height:9mm}
+.t-flucht-hinweis{margin:3mm 0 0;padding:2.5mm 4mm;border-radius:2mm;
+  background:#FDECEC;color:#8A1E1E;font-size:9.5pt;font-weight:600}
