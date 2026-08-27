@@ -353,6 +353,9 @@ function mountSeitenleiste(){
 
   leiste.innerHTML = `
     ${objektWaehler('vz-objektwahl-nav', 'vz-objekt-nav')}
+    <div class="vz-lang-nav" role="group" aria-label="${esc(t('uiLang'))}">
+      ${UI_SPRACHEN.map(l => `<button data-lang-nav="${l}" aria-pressed="${getLang() === l}">${l.toUpperCase()}</button>`).join('')}
+    </div>
     <nav aria-label="${esc(t('areas'))}">
       <a class="vz-nav-zeile vz-nav-zeile--start" href="#/" data-nav="start"
          title="${esc(t('startPage'))}">
@@ -385,6 +388,11 @@ function mountSeitenleiste(){
     if (ev.target.closest('.vz-nav-zeile')) schubladeZeigen(false);
   });
   objektWaehlerBinden(leiste);
+  /* Sprachwahl in der Schublade — auf dem Telefon der Ort dafür, weil im Kopf
+     kein Platz für fünf Sprachen bleibt. */
+  leiste.querySelectorAll('[data-lang-nav]').forEach(b => {
+    b.onclick = () => { setLang(b.dataset.langNav); mountRahmen(); route(); };
+  });
 }
 
 /** Kopfzeile und Seitenleiste zusammen aufbauen (nach Sprachwechsel). */
