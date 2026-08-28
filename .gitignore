@@ -11,3 +11,6 @@ tests/out/
 # eingecheckt werden, solange die Dateien nicht ueberall liegen.
 assets/fonts/*.otf
 assets/fonts/*.ttf
+
+# Skripte für Screenshots (nur lokal)
+shots-temp.mjs

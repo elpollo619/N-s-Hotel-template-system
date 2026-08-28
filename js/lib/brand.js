@@ -17,6 +17,31 @@ export function logo(variant = 'color', height = 34){
 }
 
 /**
+ * Marke der Zentrale = die verwaltende Firma (Hans Amonn AG), nicht das Hotel.
+ * Nutzt das echte Firmenlogo, sobald es in brand-config.js steht; solange nicht,
+ * ein schlichtes «HA»-Monogramm als sichtbarer Platzhalter (kein erfundenes
+ * Logo, nur die Initialen der Firma auf ihrem eigenen Werkzeug).
+ */
+export function firmenLogo(variant = 'color', height = 34){
+  const src = variant === 'white' ? BRAND.companyLogoWhite : BRAND.companyLogo;
+  if (src) return `<img class="ns-logo" src="${esc(src)}" alt="${esc(BRAND.company)}" style="height:${height}px;width:auto;display:block">`;
+  return firmenMonogramm(variant, height);
+}
+
+/** Platzhalter-Monogramm «HA» — bis das echte Firmenlogo hinterlegt ist. */
+function firmenMonogramm(variant = 'color', size = 34){
+  const hell = variant === 'white';
+  const feld = hell ? 'rgba(255,255,255,.16)' : '#2A3350';
+  const rand = hell ? 'rgba(255,255,255,.34)' : 'transparent';
+  return `<svg class="ns-logo" viewBox="0 0 40 40" height="${size}" role="img"
+      aria-label="${esc(BRAND.company)}" style="display:block;width:auto">
+    <rect x="1" y="1" width="38" height="38" rx="9" style="fill:${feld};stroke:${rand};stroke-width:1.5"/>
+    <text x="20" y="27" text-anchor="middle"
+      style="fill:#fff;font-family:var(--font-display);font-weight:800;font-size:18px;letter-spacing:.02em">HA</text>
+  </svg>`;
+}
+
+/**
  * Inline-Wortmarke als Fallback — übernommen aus der Referenz-Umsetzung:
  * Teardrop-Pin mit dem N's-Mark, daneben "N's" in Navy und "Hotel" in Cyan.
  */
