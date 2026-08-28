@@ -23,7 +23,7 @@ import { alleObjekte, alleAbsender, eigeneObjekte, eigeneAbsender, objekt, objek
          aktivesObjektId, aktivesObjekt, setzeAktivesObjekt, objektVorgabe,
          bestandAlsDatei, bestandLaden } from './objekte.js';
 import { esc, e, qs } from './lib/dom.js';
-import { logo } from './lib/brand.js';
+import { logo, firmenLogo } from './lib/brand.js';
 import { t, getLang, setLang } from './lib/i18n.js';
 import * as store from './lib/storage.js';
 import { setPageSize, printSheet, sheetToPng, sheetToPdfBlob, sheetToKachelPdf, kachelbar, downloadBlob } from './lib/export.js';
@@ -171,7 +171,7 @@ function mountTopbar(){
       <span></span><span></span><span></span>
     </button>
     <a class="vz-brand" href="#/" id="vz-home">
-      ${logo('white', 30)}
+      ${firmenLogo('white', 30)}
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
     </a>
     <div class="vz-suche" role="search">

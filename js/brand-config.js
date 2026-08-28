@@ -7,9 +7,17 @@
    Pfad eintragen — oder `node tools/install-brand-assets.mjs` ausführen.
    ========================================================================== */
 export const BRAND = {
+  // --- N's Hotel (eine Liegenschaft) — Logo für Aushänge des Hotels ---
   logo:      "assets/brand/logo.png",        // farbig auf hell
   logoWhite: "assets/brand/logo-white.png",  // weiss auf dunkel/cyan
   favicon:   "assets/brand/favicon.png",     // der N's-"Mark" im Pin
+
+  // --- Hans Amonn AG (die Firma, die alles verwaltet) — Marke der Zentrale ---
+  // Solange null, zeigt die Oberfläche ein schlichtes «HA»-Monogramm als
+  // Platzhalter. Sobald das echte Firmenlogo in assets/brand/ liegt, hier den
+  // Pfad eintragen (farbig + weiss) — dann steht es oben in der Zentrale.
+  companyLogo:      null,   // z. B. "assets/brand/hans-amonn.png"       (farbig auf hell)
+  companyLogoWhite: null,   // z. B. "assets/brand/hans-amonn-white.png" (weiss auf dunkel)
   aerial:    "assets/img/aerial-site.jpg",   // Luftbild swisstopo (swissimage, 10 cm)
   phonePhoto:null,   // "assets/img/phone-yealink.jpg" — Foto des Tischtelefons
 
