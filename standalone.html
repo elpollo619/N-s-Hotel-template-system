@@ -175,6 +175,10 @@ a{color:var(--cyan)}
 .vz-brand svg{height:30px;width:auto;display:block}
 .vz-brand-txt{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.02em;white-space:nowrap}
 .vz-brand-txt small{display:block;font-family:var(--font-body);font-weight:500;font-size:11px;opacity:.7;letter-spacing:.06em;text-transform:uppercase}
+/* Das Firmenlogo (AMONN ARCHITEKTUR) ist ein breites Wortbild. Auf dem Telefon
+   verdrängt es alles andere — dort tritt an seine Stelle die kurze Marke «AMONN». */
+.vz-brand .ns-logo{max-height:30px;width:auto}
+.vz-brand-kurz{display:none;font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:.02em;color:#fff}
 .vz-lang{display:flex;border:1px solid rgba(255,255,255,.28);border-radius:999px;overflow:hidden}
 .vz-lang button{background:none;border:0;color:#fff;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;opacity:.65}
 .vz-lang button[aria-pressed="true"]{background:var(--cyan);opacity:1}
@@ -1030,9 +1034,11 @@ a{color:var(--cyan)}
   .vz-mini{min-width:44px}
 }
 @media (max-width:640px){
-  /* Auf dem Telefon zaehlt jeder Millimeter im Kopf: das Logo bleibt, der
-     Schriftzug weicht dem Suchfeld. */
+  /* Auf dem Telefon zaehlt jeder Millimeter im Kopf: das breite Wortbild
+     weicht der kurzen Marke «AMONN», der Schriftzug weicht dem Suchfeld. */
   .vz-brand-txt{display:none}
+  .vz-brand .ns-logo{display:none!important}
+  .vz-brand-kurz{display:inline}
   .vz-topbar{gap:10px;padding:0 14px}
   input,select,textarea,
   .vz-field input[type=text],.vz-field input[type=number],
@@ -4462,8 +4468,8 @@ const BRAND = {
   // Solange null, zeigt die Oberfläche ein schlichtes «HA»-Monogramm als
   // Platzhalter. Sobald das echte Firmenlogo in assets/brand/ liegt, hier den
   // Pfad eintragen (farbig + weiss) — dann steht es oben in der Zentrale.
-  companyLogo:      null,   // z. B. "assets/brand/hans-amonn.png"       (farbig auf hell)
-  companyLogoWhite: null,   // z. B. "assets/brand/hans-amonn-white.png" (weiss auf dunkel)
+  companyLogo:      "assets/brand/hans-amonn.webp",       // AMONN ARCHITEKTUR, farbig auf hell
+  companyLogoWhite: "assets/brand/hans-amonn-white.png",  // dieselbe Marke, weiss auf dunkel
   aerial:    "assets/img/aerial-site.jpg",   // Luftbild swisstopo (swissimage, 10 cm)
   phonePhoto:null,   // "assets/img/phone-yealink.jpg" — Foto des Tischtelefons
 
@@ -7928,7 +7934,7 @@ const DICT = {
     tagline:'Vorlagen-Zentrale',
     heroEyebrow:'Immer in unserer Handschrift',
     heroTitle:'Vorlagen-Zentrale',
-    heroLede:'Aushänge, Aufkleber und Karten für N’s Hotel — Texte anpassen, fertig drucken. Immer in der gleichen Marke, ohne Grafikprogramm.',
+    heroLede:'Aushänge, Aufkleber und Karten der Hans Amonn AG — Texte anpassen, fertig drucken. Immer in der gleichen Marke, ohne Grafikprogramm.',
     back:'Alle Vorlagen',
     print:'Drucken / PDF',
     png:'PNG speichern',
@@ -8209,7 +8215,7 @@ const DICT = {
     tagline:'Template Centre',
     heroEyebrow:'Always in our handwriting',
     heroTitle:'Template Centre',
-    heroLede:'Notices, stickers and maps for N’s Hotel — edit the text, print it out. Always on brand, no design software needed.',
+    heroLede:'Notices, stickers and maps of Hans Amonn AG — edit the text, print it out. Always on brand, no design software needed.',
     back:'All templates',
     print:'Print / PDF',
     png:'Save PNG',
@@ -8490,7 +8496,7 @@ const DICT = {
     tagline:'Centrale des modèles',
     heroEyebrow:'Toujours à notre image',
     heroTitle:'Centrale des modèles',
-    heroLede:'Affiches, autocollants et cartes pour N’s Hotel — adaptez le texte, imprimez. Toujours dans la même identité, sans logiciel graphique.',
+    heroLede:'Affiches, autocollants et cartes de Hans Amonn AG — adaptez le texte, imprimez. Toujours dans la même identité, sans logiciel graphique.',
     back:'Tous les modèles',
     print:'Imprimer / PDF',
     png:'Enregistrer PNG',
@@ -8771,7 +8777,7 @@ const DICT = {
     tagline:'Centrale dei modelli',
     heroEyebrow:'Sempre nel nostro stile',
     heroTitle:'Centrale dei modelli',
-    heroLede:'Avvisi, adesivi e cartoline per N’s Hotel — adatta il testo, stampa. Sempre nella stessa immagine, senza programma di grafica.',
+    heroLede:'Avvisi, adesivi e cartoline della Hans Amonn AG — adatta il testo, stampa. Sempre nella stessa immagine, senza programma di grafica.',
     back:'Tutti i modelli',
     print:'Stampa / PDF',
     png:'Salva PNG',
@@ -9052,7 +9058,7 @@ const DICT = {
     tagline:'Central de plantillas',
     heroEyebrow:'Siempre con nuestro sello',
     heroTitle:'Central de plantillas',
-    heroLede:'Avisos, adhesivos y tarjetas para N’s Hotel — adapta el texto e imprime. Siempre con la misma marca, sin programa de diseño.',
+    heroLede:'Avisos, adhesivos y tarjetas de Hans Amonn AG — adapta el texto e imprime. Siempre con la misma marca, sin programa de diseño.',
     back:'Todas las plantillas',
     print:'Imprimir / PDF',
     png:'Guardar PNG',
@@ -22603,6 +22609,7 @@ function mountTopbar(){
     </button>
     <a class="vz-brand" href="#/" id="vz-home">
       ${firmenLogo('white', 30)}
+      <span class="vz-brand-kurz" aria-hidden="true">AMONN</span>
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
     </a>
     <div class="vz-suche" role="search">

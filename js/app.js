@@ -172,6 +172,7 @@ function mountTopbar(){
     </button>
     <a class="vz-brand" href="#/" id="vz-home">
       ${firmenLogo('white', 30)}
+      <span class="vz-brand-kurz" aria-hidden="true">AMONN</span>
       <span class="vz-brand-txt">${esc(t('tagline'))}<small>Hans Amonn AG · Kerzers</small></span>
     </a>
     <div class="vz-suche" role="search">

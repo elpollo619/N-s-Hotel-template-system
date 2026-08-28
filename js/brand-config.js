@@ -16,8 +16,8 @@ export const BRAND = {
   // Solange null, zeigt die Oberfläche ein schlichtes «HA»-Monogramm als
   // Platzhalter. Sobald das echte Firmenlogo in assets/brand/ liegt, hier den
   // Pfad eintragen (farbig + weiss) — dann steht es oben in der Zentrale.
-  companyLogo:      null,   // z. B. "assets/brand/hans-amonn.png"       (farbig auf hell)
-  companyLogoWhite: null,   // z. B. "assets/brand/hans-amonn-white.png" (weiss auf dunkel)
+  companyLogo:      "assets/brand/hans-amonn.webp",       // AMONN ARCHITEKTUR, farbig auf hell
+  companyLogoWhite: "assets/brand/hans-amonn-white.png",  // dieselbe Marke, weiss auf dunkel
   aerial:    "assets/img/aerial-site.jpg",   // Luftbild swisstopo (swissimage, 10 cm)
   phonePhoto:null,   // "assets/img/phone-yealink.jpg" — Foto des Tischtelefons
 
