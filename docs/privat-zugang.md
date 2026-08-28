@@ -41,14 +41,33 @@ Desde ahora, cada push a `main` se publica solo también ahí.
    código → dentro. En el móvil, la PWA instalada sigue funcionando; tras
    el login la sesión dura lo elegido en el punto 4.
 
-## Paso 3 — Decidir qué pasa con la página pública
+## Paso 3 — Cerrar las puertas públicas (para que sea privado de verdad)
 
-* La dirección de GitHub Pages (`elpollo619.github.io/...`) seguiría
-  abierta. Para apagarla: en GitHub, **Settings → Pages → Unpublish site**.
-* El repo puede seguir siendo público (el código no contiene secretos:
-  ni claves WLAN ni las fuentes compradas) o hacerse privado en
-  **Settings → General → Danger Zone → Change visibility**. Cloudflare
-  Pages sigue funcionando con el repo privado.
+El login de Cloudflare solo protege la URL de producción
+(`https://n-s-hotel-template-system.pages.dev/`, que redirige a
+`nshotel.cloudflareaccess.com`). Hay **dos puertas públicas** que hay que
+cerrar aparte:
+
+**a) GitHub Pages** (`https://elpollo619.github.io/N-s-Hotel-template-system/`)
+* Ya está quitado el workflow que la re-publicaba (`.github/workflows/pages.yml`),
+  así que no se vuelve a actualizar.
+* Para **bajar la web ya publicada** (requiere admin del repo):
+  GitHub → **Settings → Pages → Build and deployment → Source: None**.
+  Sin este paso, la última versión sigue visible.
+
+**b) Vistas previa de Cloudflare** (`…-n-s-hotel-template-system.pages.dev`
+   de cada rama) — hoy **abiertas sin login**. Dos opciones en el panel de
+   Cloudflare:
+* **Recomendado:** en **Zero Trust → Access → Applications**, editar la app y
+  poner el dominio como comodín **`*.n-s-hotel-template-system.pages.dev`**
+  (además del de producción). Así el login cubre también las previews.
+* O bien desactivar las previews: **Workers & Pages → el proyecto →
+  Settings → Builds & deployments → Preview deployments → None**.
+
+**El repositorio** puede seguir público (el código no tiene secretos: ni
+claves WLAN ni las fuentes compradas) o hacerse privado en **Settings →
+General → Danger Zone → Change visibility**. Cloudflare Pages sigue
+funcionando con el repo privado.
 
 ## Qué NO cambia
 
